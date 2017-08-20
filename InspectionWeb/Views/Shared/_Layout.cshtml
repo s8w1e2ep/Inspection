@@ -1,0 +1,16 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @Html.Partial("resource")
+</head>
+<body class="hold-transition skin-green sidebar-mini">
+    <div class="wrapper">
+        @Html.Partial("header")
+        @Html.Partial("menu")
+        @RenderBody()
+        @Html.Partial("footer")
+    </div>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
