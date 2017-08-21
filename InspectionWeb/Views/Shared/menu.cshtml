@@ -25,23 +25,28 @@
                             <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li class="">
-                                <a href="">
-                                    <i class="fa fa-circle-o"></i>新增使用者
-                                </a>
-                            </li>
-                            <li class="">
-                                <a href="#">
-                                    <i class="fa fa-circle-o"></i>使用者管理
-                                </a>
-                            </li>
+                            <li><a href=""><i class="fa fa-circle-o"></i>新增使用者</a></li>
+                            <li><a href="#"><i class="fa fa-circle-o"></i>使用者管理</a></li>
                         </ul>
                     </li>
                 </ul>
             </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-dashboard"></i>
+                    <span>統計資料</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="@Url.Action("Exhibition", "Statistic")"><i class="fa fa-circle-o"></i>展示廳正常率</a></li>
+                    <li><a href="@Url.Action("ExhibitionItem", "Statistic")"><i class="fa fa-circle-o"></i>展項正常率</a></li>
+                    <li><a href="@Url.Action("Facility", "Statistic")"><i class="fa fa-circle-o"></i>體驗設施正常率</a></li>
+                    <li><a href="@Url.Action("RankItem", "Statistic")"><i class="fa fa-circle-o"></i>異常排行-展項</a></li>
+                    <li><a href="@Url.Action("RankReport", "Statistic")"><i class="fa fa-circle-o"></i>異常排行-通報來源</a></li>
+                </ul>
+            </li>
         </ul>
     </section>
-    <!-- /.sidebar -->
 </aside>
 
 
