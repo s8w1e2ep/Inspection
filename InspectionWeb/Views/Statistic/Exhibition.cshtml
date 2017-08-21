@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "展示廳正常率";
+}
+
+<div class="wrapper">
+    <div class="content-wrapper">
+        <section class="content-header" style="margin-bottom: 15px;">
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+                <li class="active">展示廳正常率</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <form class="form-horizontal">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="startDatePicker">開始日期</label>
+                            <div class="input-group col-sm-8">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-clock-o"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="startDatePicker">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group ">
+                            <label class="control-label col-sm-2" for="endDatePicker">結束日期</label>
+                            <div class="input-group col-sm-8">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-clock-o"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="endDatePicker">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="control-label col-sm-1" for="exhibitionSelect">展示廳</label>
+                            <select class="form-control" id="exhibitionSelect" style="width: 40%;">
+                                <option value="exhibition1">展示廳-1</option>
+                                <option value="exhibition2">展示廳-2</option>
+                                <option value="exhibition3">展示廳-3</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <hr />
+            <!-- Main content -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4>人工巡檢</h4>
+                    <div class="box" style="border-top-color: #0094ff;">
+                        <div class="box-body">
+                            <table id="fieldTable" class="row-border" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>巡檢項目個數</th>
+                                        <th>正常個數</th>
+                                        <th>正常率</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="t1">
+                                        <td>a</td>
+                                        <td>b</td>
+                                        <td>c</td>
+                                        <td>d</td>
+                                    </tr>
+                                    <tr id="t2">
+                                        <td>g</td>
+                                        <td>h</td>
+                                        <td>r</td>
+                                        <td>a</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Main content -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4>自動通報</h4>
+                    <div class="box" style="border-top-color: #0094ff;">
+                        <div class="box-body">
+                            <table id="fieldTable2" class="row-border" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>巡檢項目個數</th>
+                                        <th>正常個數</th>
+                                        <th>正常率</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="a1">
+                                        <td>a</td>
+                                        <td>b</td>
+                                        <td>c</td>
+                                        <td>d</td>
+                                    </tr>
+                                    <tr id="a2">
+                                        <td>c</td>
+                                        <td>d</td>
+                                        <td>a</td>
+                                        <td>b</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<script src="~/Scripts/exhibition.js"></script>
