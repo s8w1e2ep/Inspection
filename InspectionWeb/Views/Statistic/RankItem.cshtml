@@ -1,0 +1,91 @@
+﻿@{
+    ViewBag.Title = "異常排行-展項";
+}
+
+<div class="content-wrapper">
+    <section class="content-header" style="margin-bottom: 15px;">
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+            <li class="active">異常排行-展項</li>
+        </ol>
+    </section>
+    <section class="content">
+        <div class="row">
+            <form class="form-horizontal">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="startDatePicker">開始日期</label>
+                        <div class="input-group col-sm-8">
+                            <div class="input-group-addon">
+                                <i class="fa fa-clock-o"></i>
+                            </div>
+                            <input type="text" class="form-control pull-right" id="startDatePicker">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group ">
+                        <label class="control-label col-sm-2" for="endDatePicker">結束日期</label>
+                        <div class="input-group col-sm-8">
+                            <div class="input-group-addon">
+                                <i class="fa fa-clock-o"></i>
+                            </div>
+                            <input type="text" class="form-control pull-right" id="endDatePicker">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <hr />
+        <!-- Main content -->
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>前10名異常比例</h4>
+                <hr />
+                <h4>展項</h4>
+                <div class="box" style="border-top-color: #0094ff;">
+                    <div class="box-body">
+                        <table id="fieldTable" class="row-border" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>展項</th>
+                                    <th>展示廳</th>
+                                    <th>巡檢異常次數</th>
+                                    <th>自動通報異常次數</th>
+                                    <th>累計異常次數</th>
+                                    <th>累計異常佔比</th>
+                                    <th>詳細異常列表</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="t1">
+                                    <td>a</td>
+                                    <td>b</td>
+                                    <td>c</td>
+                                    <td>d</td>
+                                    <td>b</td>
+                                    <td>c</td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                    </td>
+                                </tr>
+                                <tr id="t2">
+                                    <td>g</td>
+                                    <td>h</td>
+                                    <td>r</td>
+                                    <td>a</td>
+                                    <td>b</td>
+                                    <td>c</td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script src="~/Scripts/rankItem.js"></script>
