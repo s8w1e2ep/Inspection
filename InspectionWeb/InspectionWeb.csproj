@@ -214,6 +214,7 @@
     <Compile Include="Class\IdGenerator.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Controllers\StatisticController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -357,9 +358,14 @@
       <DependentUpon>inspection.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\exhibition.js" />
+    <Content Include="Scripts\exhibitionItem.js" />
+    <Content Include="Scripts\facility.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\rankItem.js" />
+    <Content Include="Scripts\rankReport.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Unity.Mvc4.README.txt" />
@@ -381,6 +387,11 @@
     <Content Include="Views\Shared\footer.cshtml" />
     <Content Include="Views\Shared\menu.cshtml" />
     <Content Include="Views\Shared\header.cshtml" />
+    <Content Include="Views\Statistic\Exhibition.cshtml" />
+    <Content Include="Views\Statistic\ExhibitionItem.cshtml" />
+    <Content Include="Views\Statistic\Facility.cshtml" />
+    <Content Include="Views\Statistic\RankItem.cshtml" />
+    <Content Include="Views\Statistic\RankReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
