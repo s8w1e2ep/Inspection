@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "人員列表";
+}
+
+<div class="content-wrapper">
+    <section class="content-header" style="margin-bottom: 15px;">
+        <ol class="breadcrumb">
+            <li><a href="/"><i class="fa fa-dashboard"></i>home</a></li>
+            <li class="active">人員列表</li>
+        </ol>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-header">
+                        <h3 class="box-title">人員列表</h3>
+                    </div>
+                    <div class="box-body">
+                        <table id="userTable" class="row-border" cellspacing="0" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>帳號</th>
+                                    <th>姓名</th>
+                                    <th>權限群組</th>
+                                    <th>代理人</th>
+                                    <th>建立日期</th>
+                                    <th>操作選項</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>admin@localhost</td>
+                                    <td>Hello</td>
+                                    <td>World</td>
+                                    <td>!</td>
+                                    <td>2017-08-08 00:00:00</td>
+                                    <td>
+                                        <a href="@Url.Action("Edit", "User")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                        <a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- delete dialog -->
+        <div class="modal modal-danger" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">刪除確認</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>是否刪除此人員？刪除此人員會將一併刪除所有的相關資料。</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">否</button>
+                        <button id="modalYes" type="button" class="btn btn-outline" data-dismiss="modal">是</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script src="~/Scripts/listUser.js"></script>
