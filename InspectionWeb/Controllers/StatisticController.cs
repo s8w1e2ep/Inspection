@@ -12,12 +12,6 @@ namespace InspectionWeb.Controllers
         {
         }
 
-        // GET: /Statistic
-        public ActionResult Index()
-        {
-            return View("ExhibitionItem");
-        }
-
         // GET: /Statistic/Exhibition
         public ActionResult Exhibition()
         {
