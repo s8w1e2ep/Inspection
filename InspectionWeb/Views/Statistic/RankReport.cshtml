@@ -11,38 +11,41 @@
     </section>
     <section class="content">
         <div class="row">
-            <form class="form-horizontal">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="startDatePicker">開始日期</label>
-                        <div class="input-group col-sm-8">
-                            <div class="input-group-addon">
-                                <i class="fa fa-clock-o"></i>
+            <div class="col-md-12">
+                <div class="box box-info" style="padding: 5px;">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">篩選條件</h3>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label class="control-label col-md-2" for="startDatePicker">開始日期</label>
+                            <div class="input-group col-md-8">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-clock-o"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="startDatePicker">
                             </div>
-                            <input type="text" class="form-control pull-right" id="startDatePicker">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label class="control-label col-md-2" for="endDatePicker">結束日期</label>
+                            <div class="input-group col-md-8">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-clock-o"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="endDatePicker">
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="form-group ">
-                        <label class="control-label col-sm-2" for="endDatePicker">結束日期</label>
-                        <div class="input-group col-sm-8">
-                            <div class="input-group-addon">
-                                <i class="fa fa-clock-o"></i>
-                            </div>
-                            <input type="text" class="form-control pull-right" id="endDatePicker">
-                        </div>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
-        <hr />
         <!-- Main content -->
         <div class="row">
             <div class="col-xs-12">
                 <h4>前10名異常比例</h4>
                 <hr />
-                <h4>展項</h4>
+                <h4>通報來源</h4>
                 <div class="box" style="border-top-color: #0094ff;">
                     <div class="box-body">
                         <table id="fieldTable" class="row-border" cellspacing="0" width="100%">

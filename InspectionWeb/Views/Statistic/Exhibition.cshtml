@@ -6,48 +6,51 @@
     <div class="content-wrapper">
         <section class="content-header" style="margin-bottom: 15px;">
             <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+                <li>
+                    <a href="#"><i class="fa fa-dashboard"></i>Home</a>
+                </li>
                 <li class="active">展示廳正常率</li>
             </ol>
         </section>
         <section class="content">
             <div class="row">
-                <form class="form-horizontal">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="startDatePicker">開始日期</label>
-                            <div class="input-group col-sm-8">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-clock-o"></i>
+                <div class="col-md-12">
+                    <div class="box box-info" style="padding: 5px;">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">篩選條件</h3>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label class="control-label col-md-2" for="startDatePicker">開始日期</label>
+                                <div class="input-group col-md-8">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="startDatePicker">
                                 </div>
-                                <input type="text" class="form-control pull-right" id="startDatePicker">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="control-label col-md-2" for="endDatePicker">結束日期</label>
+                                <div class="input-group col-md-8">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="endDatePicker">
+                                </div>
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <label class="control-label col-md-1" for="exhibitionSelect">展示廳</label>
+                                <select class="form-control" id="exhibitionSelect" style="width: 40%;">
+                                    <option value="exhibition1">展示廳-1</option>
+                                    <option value="exhibition2">展示廳-2</option>
+                                    <option value="exhibition3">展示廳-3</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group ">
-                            <label class="control-label col-sm-2" for="endDatePicker">結束日期</label>
-                            <div class="input-group col-sm-8">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-clock-o"></i>
-                                </div>
-                                <input type="text" class="form-control pull-right" id="endDatePicker">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label class="control-label col-sm-1" for="exhibitionSelect">展示廳</label>
-                            <select class="form-control" id="exhibitionSelect" style="width: 40%;">
-                                <option value="exhibition1">展示廳-1</option>
-                                <option value="exhibition2">展示廳-2</option>
-                                <option value="exhibition3">展示廳-3</option>
-                            </select>
-                        </div>
-                    </div>
-                </form>
+                </div>
             </div>
-            <hr />
             <!-- Main content -->
             <div class="row">
                 <div class="col-xs-12">
