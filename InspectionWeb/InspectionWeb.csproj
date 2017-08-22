@@ -215,6 +215,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -326,6 +327,8 @@
       <DependentUpon>inspection.edmx</DependentUpon>
       <LastGenOutput>inspection.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\addGroup.js" />
+    <Content Include="Scripts\addUser.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -358,11 +361,15 @@
       <DependentUpon>inspection.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\editGroup.js" />
+    <Content Include="Scripts\editUser.js" />
     <Content Include="Scripts\exhibition.js" />
     <Content Include="Scripts\exhibitionItem.js" />
     <Content Include="Scripts\facility.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\listGroup.js" />
+    <Content Include="Scripts\listUser.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\rankItem.js" />
     <Content Include="Scripts\rankReport.js" />
@@ -392,6 +399,12 @@
     <Content Include="Views\Statistic\Facility.cshtml" />
     <Content Include="Views\Statistic\RankItem.cshtml" />
     <Content Include="Views\Statistic\RankReport.cshtml" />
+    <Content Include="Views\User\Add.cshtml" />
+    <Content Include="Views\User\List.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\User\AddGroup.cshtml" />
+    <Content Include="Views\User\ListGroup.cshtml" />
+    <Content Include="Views\User\EditGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
