@@ -12,13 +12,13 @@ namespace InspectionWeb
             // Web API 設定和服務
 
             // Web API 路由
-            /*config.MapHttpAttributeRoutes();
+            config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "{controller}/{action}/{id}",
+                routeTemplate: "api/{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional }
-            );*/
+            );
         }
     }
 }
