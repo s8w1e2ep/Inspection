@@ -59,6 +59,7 @@ namespace InspectionWeb
             container.RegisterType<IExhibitionItemService, ExhibitionItemService>();
             container.RegisterType<IReportDeviceService, ReportDeviceService>();
             container.RegisterType<IReportSourceService, ReportSourceService>();
+            //container.RegisterType<IUserService, UserService>();
         }
     }
 }

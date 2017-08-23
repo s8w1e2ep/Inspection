@@ -297,6 +297,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Interface\ISoftwareVersionService.cs" />
+    <Compile Include="Services\Interface\IUserService.cs" />
     <Compile Include="Services\SoftwareVersionService.cs" />
     <Compile Include="Services\ReportSourceService.cs" />
     <Compile Include="Services\Interface\IReportSourceService.cs" />
@@ -310,6 +311,7 @@
     <Compile Include="Services\Interface\IAbnormalRecordService.cs" />
     <Compile Include="Services\Misc\IResult.cs" />
     <Compile Include="Services\Misc\Result.cs" />
+    <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -405,6 +407,8 @@
     <Content Include="Views\User\AddGroup.cshtml" />
     <Content Include="Views\User\ListGroup.cshtml" />
     <Content Include="Views\User\EditGroup.cshtml" />
+    <Content Include="Views\User\EditPassword.cshtml" />
+    <Content Include="Views\User\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
