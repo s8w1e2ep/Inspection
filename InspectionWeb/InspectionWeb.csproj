@@ -212,7 +212,7 @@
     <Compile Include="Class\WebApi\UserReportPost.cs" />
     <Compile Include="Class\WebApi\AutoReportPost.cs" />
     <Compile Include="Class\IdGenerator.cs" />
-    <Compile Include="Controllers\FieldController.cs" />
+    <Compile Include="Controllers\InformationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
@@ -406,7 +406,7 @@
     <Content Include="Views\User\AddGroup.cshtml" />
     <Content Include="Views\User\ListGroup.cshtml" />
     <Content Include="Views\User\EditGroup.cshtml" />
-    <Content Include="Views\Field\AddField.cshtml" />
+    <Content Include="Views\Information\AddField.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

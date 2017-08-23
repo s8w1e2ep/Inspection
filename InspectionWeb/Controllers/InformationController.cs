@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace InspectionWeb.Controllers
 {
-    public class FieldController : Controller
+    public class InformationController : Controller
     {
         // GET: Field
         public ActionResult Index()
@@ -19,5 +19,6 @@ namespace InspectionWeb.Controllers
         {
             return View();
         }
+        
     }
 }
