@@ -1,4 +1,7 @@
-﻿//function changePassword() {
+﻿var newPassword;
+var repeatPassword;
+
+//function changePassword() {
 //    var originalPassword = $('#originalPassword').val();
 
 //    $.post('@Url.Content("~/User/changePassword/")',
@@ -73,19 +76,19 @@ $(document).ready(function () {
     setGroupEditable();
 
     // get field delete modal result
-    $('#changePasswordModal .modal-footer button').on('click', function (e) {
-        if ($(this).index() == 1) {
-            newPassword = $.trim($('#newPassword').val());
-            repeatPassword = $.trim($('#repeatPassword').val());
-            if (newPassword == '' || repeatPassword == '') {
-                alert('密碼不能為空白!');
-                return;
-            }
-            if (newPassword == repeatPassword) {
-                changePassword();
-            } else {
-                alert('新密碼輸入錯誤!');
-            }
-        }
-    });
+    //$('#changePasswordModal .modal-footer button').on('click', function (e) {
+    //    if ($(this).index() == 1) {
+    //        newPassword = $.trim($('#newPassword').val());
+    //        repeatPassword = $.trim($('#repeatPassword').val());
+    //        if (newPassword == '' || repeatPassword == '') {
+    //            alert('密碼不能為空白!');
+    //            return;
+    //        }
+    //        if (newPassword == repeatPassword) {
+    //            changePassword();
+    //        } else {
+    //            alert('新密碼輸入錯誤!');
+    //        }
+    //    }
+    //});
 });
