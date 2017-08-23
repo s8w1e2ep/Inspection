@@ -19,6 +19,12 @@ namespace InspectionWeb.Controllers
         {
             return View();
         }
+
+        // GET: /Field/EditField
+        public ActionResult EditField()
+        {
+            return View();
+        }
         
     }
 }
