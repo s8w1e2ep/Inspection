@@ -13,8 +13,11 @@
         ],
     });
 
+    
     $('#myModal .modal-footer button').on('click', function (e) {
         var $target = $(e.target);
+
+
         if ($target.index() == 1) {
             deleteUser();
         }
