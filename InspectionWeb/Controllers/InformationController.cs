@@ -54,5 +54,12 @@ namespace InspectionWeb.Controllers
         {
             return View();
         }
+
+
+        //GET: /Information/AddDevice
+        public ActionResult AddDevice()
+        {
+            return View();
+        }
     }
 }
