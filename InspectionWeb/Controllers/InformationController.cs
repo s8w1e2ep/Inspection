@@ -14,13 +14,13 @@ namespace InspectionWeb.Controllers
             return View();
         }
 
-        // GET: /Field/AddField
+        // GET: /Information/AddField
         public ActionResult AddField()
         {
             return View();
         }
 
-        // GET: /Field/EditField
+        // GET: /Information/EditField
         public ActionResult EditField()
         {
             return View();
