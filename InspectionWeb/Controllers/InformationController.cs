@@ -42,5 +42,11 @@ namespace InspectionWeb.Controllers
         {
             return View();
         }
+
+        //GET: /Information/ListExhibition
+        public ActionResult ListExhibition()
+        {
+            return View();
+        }
     }
 }
