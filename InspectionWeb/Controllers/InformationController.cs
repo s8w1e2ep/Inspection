@@ -67,5 +67,11 @@ namespace InspectionWeb.Controllers
         {
             return View();
         }
+
+        //GET: /Information/ListDevice
+        public ActionResult ListDevice()
+        {
+            return View();
+        }
     }
 }
