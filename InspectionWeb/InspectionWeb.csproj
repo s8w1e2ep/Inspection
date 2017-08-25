@@ -408,6 +408,7 @@
     <Content Include="Views\User\EditGroup.cshtml" />
     <Content Include="Views\Information\AddField.cshtml" />
     <Content Include="Views\Information\EditField.cshtml" />
+    <Content Include="Views\Information\AddExhibition.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
