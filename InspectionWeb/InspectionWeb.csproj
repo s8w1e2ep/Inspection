@@ -412,6 +412,7 @@
     <Content Include="Views\Information\EditExhibition.cshtml" />
     <Content Include="Views\Information\ListField.cshtml" />
     <Content Include="Views\Information\ListExhibition.cshtml" />
+    <Content Include="Views\Information\EditExhibitItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
