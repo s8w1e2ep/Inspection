@@ -37,5 +37,10 @@ namespace InspectionWeb.Controllers
         {
             return View();
         }
+
+        public ActionResult ListField()
+        {
+            return View();
+        }
     }
 }
