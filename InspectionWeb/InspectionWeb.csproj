@@ -417,6 +417,7 @@
     <Content Include="Views\Information\EditDevice.cshtml" />
     <Content Include="Views\Information\ListDevice.cshtml" />
     <Content Include="Views\Information\AddNotifyDevice.cshtml" />
+    <Content Include="Views\Information\EditNotifyDevice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
