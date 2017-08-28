@@ -11,7 +11,7 @@
             data['value'] = params.value.join(",");
 
             return data;
-        },
+        }
     });
 }
 
