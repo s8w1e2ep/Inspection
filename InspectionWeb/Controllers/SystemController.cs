@@ -19,5 +19,11 @@ namespace InspectionWeb.Controllers
         {
             return View();
         }
+
+        // GET: System/EditSoftware
+        public ActionResult EditSoftware()
+        {
+            return View();
+        }
     }
 }
