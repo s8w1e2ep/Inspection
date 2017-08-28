@@ -1,13 +1,18 @@
-﻿@{
+﻿@model InspectionWeb.Models.ViewModel.UserDetailViewModel
+
+@{
     ViewBag.Title = "人員檢視/修改";
 }
+
+<script>
+    var userId = '@Model.userId';
+</script>
 
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
         <ol class="breadcrumb">
-            <li>
-                <a href="/"><i class="fa fa-dashboard"></i>Home</a>
-            </li>
+            <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>Home</a></li>
+            <li><a href="@Url.Action("List")">人員列表</a></li>
             <li class="active">人員檢視/修改</li>
         </ol>
     </section>
@@ -32,57 +37,57 @@
                             <tbody>
                                 <tr>
                                     <td>使用者帳號</td>
-                                    <td>007</td>
+                                    <td>@Model.userCode</td>
                                 </tr>
                                 <tr>
                                     <td>密碼</td>
                                     <td>
-                                        <a href="@Url.Action("EditPassword", "User")" class="btn btn-sm btn-warning">
+                                        <a href="#" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#changePasswordModal">
                                             <i class="fa fa-lock"></i> 修改密碼
                                         </a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>姓名</td>
-                                    <td><a href="#" id="name" data-type="text" data-pk="" data-url="" data-title="輸入人員姓名">Hello</a></td>
+                                    <td><a href="#" id="name" data-type="text" data-pk="@Model.userId" data-url="@Url.Action("UpdateUser")" data-title="輸入人員姓名">@Model.name</a></td>
                                 </tr>
                                 <tr>
                                     <td>代理人</td>
                                     <td>
-                                        <a href="#" id="agent" data-name="agentId" data-type="select" data-pk="" data-url="" data-title="選擇代理人">Agent - 1</a>
+                                        <a href="#" id="agent" data-name="agentId" data-type="select" data-pk="@Model.userId" data-url="@Url.Action("UpdateUser")" data-title="選擇代理人">@Model.agent</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>權限群組</td>
                                     <td>
-                                        <a href="#" id="group" data-name="groupId" data-type="select" data-pk="" data-url="" data-title="選擇權限群組">Group - 1</a>
+                                        <a href="#" id="group" data-name="groupId" data-type="select" data-pk="@Model.userId" data-url="@Url.Action("UpdateUser")" data-title="選擇權限群組">@Model.groupId</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>E-mail</td>
                                     <td>
-                                        <a href="#" id="email" data-type="text" data-pk="" data-url="" data-title="輸入E-mail">admin@localhost</a>
+                                        <a href="#" id="email" data-type="text" data-pk="@Model.userId" data-url="@Url.Action("UpdateUser")" data-title="輸入E-mail">@Model.email</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>電話</td>
                                     <td>
-                                        <a href="#" id="phone" data-type="text" data-pk="" data-url="" data-title="輸入電話">110</a>
+                                        <a href="#" id="phone" data-type="text" data-pk="@Model.userId" data-url="@Url.Action("UpdateUser")" data-title="輸入電話">@Model.tel</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>啟用</td>
                                     <td>
-                                        <a href="#" id="active" data-name="active" data-type="checklist" data-pk="" data-url="" data-title="啟用">1</a>
+                                        <a href="#" id="active" data-name="active" data-type="checklist" data-pk="@Model.userId" data-url="@Url.Action("UpdateUser")" data-title="啟用">@Model.active</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>建立日期</td>
-                                    <td>2017-08-08 00:00:00</td>
+                                    <td>@Model.createTime</td>
                                 </tr>
                                 <tr>
                                     <td>最後更新日期</td>
-                                    <td>2017-08-08 00:00:00</td>
+                                    <td>@Model.lastUpdateTime</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -133,7 +138,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">否</button>
-                        <button id="modalYes" type="button" class="btn btn-outline" data-dismiss="modal">是</button>
+                        <button id="modalYes1" type="button" class="btn btn-outline" data-dismiss="modal">是</button>
                     </div>
                 </div>
             </div>
@@ -172,7 +177,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">取消</button>
-                        <button id="modalYes" type="button" class="btn btn-outline" data-dismiss="modal">確定</button>
+                        <button id="modalYes2" type="button" class="btn btn-outline" data-dismiss="modal">確定</button>
                     </div>
                 </div>
             </div>
