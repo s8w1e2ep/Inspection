@@ -213,6 +213,7 @@
     <Compile Include="Class\WebApi\AutoReportPost.cs" />
     <Compile Include="Class\IdGenerator.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ReportJobController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -409,6 +410,14 @@
     <Content Include="Views\User\EditGroup.cshtml" />
     <Content Include="Views\User\EditPassword.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
+    <Content Include="Views\ReportJob\AddExhibition.cshtml" />
+    <Content Include="Views\ReportJob\AddExperience.cshtml" />
+    <Content Include="Views\ReportJob\AddOther.cshtml" />
+    <Content Include="Views\ReportJob\EditExhibition.cshtml" />
+    <Content Include="Views\ReportJob\EditExperience.cshtml" />
+    <Content Include="Views\ReportJob\EditOther.cshtml" />
+    <Content Include="Views\ReportJob\Query.cshtml" />
+    <Content Include="Views\ReportJob\DetailedData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
