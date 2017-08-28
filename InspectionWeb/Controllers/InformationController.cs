@@ -85,5 +85,11 @@ namespace InspectionWeb.Controllers
         {
             return View();
         }
+
+        //GET: /Information/ListNotifyDevice
+        public ActionResult ListNotifyDevice()
+        {
+            return View();
+        }
     }
 }
