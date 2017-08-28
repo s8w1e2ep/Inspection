@@ -12,12 +12,12 @@ namespace InspectionWeb.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class roomActiveRecord
+    public partial class sysdiagrams
     {
-        public string activityId { get; set; }
-        public string roomId { get; set; }
-        public Nullable<short> active { get; set; }
-        public string description { get; set; }
-        public Nullable<System.DateTime> createTime { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

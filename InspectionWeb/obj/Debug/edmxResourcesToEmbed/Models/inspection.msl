@@ -1,19 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="inspectionModelStoreContainer" CdmEntityContainer="inspectionEntities">
-    <EntitySetMapping Name="abnormalDefinition">
-      <EntityTypeMapping TypeName="inspectionModel.abnormalDefinition">
-        <MappingFragment StoreEntitySet="abnormalDefinition">
-          <ScalarProperty Name="abnormalName" ColumnName="abnormalName" />
-          <ScalarProperty Name="abnormalId" ColumnName="abnormalId" />
-          <ScalarProperty Name="abnormalCode" ColumnName="abnormalCode" />
-          <ScalarProperty Name="description" ColumnName="description" />
-          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
-          <ScalarProperty Name="createTime" ColumnName="createTime" />
-          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="abnormalRecord">
       <EntityTypeMapping TypeName="inspectionModel.abnormalRecord">
         <MappingFragment StoreEntitySet="abnormalRecord">
@@ -214,9 +201,7 @@
           <ScalarProperty Name="roomId" ColumnName="roomId" />
           <ScalarProperty Name="active" ColumnName="active" />
           <ScalarProperty Name="description" ColumnName="description" />
-          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
           <ScalarProperty Name="createTime" ColumnName="createTime" />
-          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -245,21 +230,6 @@
           <ScalarProperty Name="inspectorId1" ColumnName="inspectorId1" />
           <ScalarProperty Name="inspectorId2" ColumnName="inspectorId2" />
           <ScalarProperty Name="setupId" ColumnName="setupId" />
-          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
-          <ScalarProperty Name="createTime" ColumnName="createTime" />
-          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="softwareVersion">
-      <EntityTypeMapping TypeName="inspectionModel.softwareVersion">
-        <MappingFragment StoreEntitySet="softwareVersion">
-          <ScalarProperty Name="softwareCode" ColumnName="softwareCode" />
-          <ScalarProperty Name="softwareId" ColumnName="softwareId" />
-          <ScalarProperty Name="softwareName" ColumnName="softwareName" />
-          <ScalarProperty Name="description" ColumnName="description" />
-          <ScalarProperty Name="fileName" ColumnName="fileName" />
-          <ScalarProperty Name="version" ColumnName="version" />
           <ScalarProperty Name="isDelete" ColumnName="isDelete" />
           <ScalarProperty Name="createTime" ColumnName="createTime" />
           <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
@@ -309,6 +279,69 @@
           <ScalarProperty Name="isDelete" ColumnName="isDelete" />
           <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="solutionId" ColumnName="solutionId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="sp_alterdiagram1" FunctionName="inspectionModel.Store.sp_alterdiagram" />
+    <FunctionImportMapping FunctionImportName="sp_creatediagram1" FunctionName="inspectionModel.Store.sp_creatediagram" />
+    <FunctionImportMapping FunctionImportName="sp_dropdiagram1" FunctionName="inspectionModel.Store.sp_dropdiagram" />
+    <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition1" FunctionName="inspectionModel.Store.sp_helpdiagramdefinition">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="inspectionModel.sp_helpdiagramdefinition1_Result">
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_helpdiagrams1" FunctionName="inspectionModel.Store.sp_helpdiagrams">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="inspectionModel.sp_helpdiagrams1_Result">
+          <ScalarProperty Name="Database" ColumnName="Database" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Owner" ColumnName="Owner" />
+          <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_renamediagram1" FunctionName="inspectionModel.Store.sp_renamediagram" />
+    <FunctionImportMapping FunctionImportName="sp_upgraddiagrams1" FunctionName="inspectionModel.Store.sp_upgraddiagrams" />
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="inspectionModel.sysdiagrams">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="definition" ColumnName="definition" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="abnormalDefinition">
+      <EntityTypeMapping TypeName="inspectionModel.abnormalDefinition">
+        <MappingFragment StoreEntitySet="abnormalDefinition">
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="abnormalName" ColumnName="abnormalName" />
+          <ScalarProperty Name="abnormalCode" ColumnName="abnormalCode" />
+          <ScalarProperty Name="abnormalId" ColumnName="abnormalId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="softwareVersion">
+      <EntityTypeMapping TypeName="inspectionModel.softwareVersion">
+        <MappingFragment StoreEntitySet="softwareVersion">
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="fileName" ColumnName="fileName" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="softwareName" ColumnName="softwareName" />
+          <ScalarProperty Name="softwareCode" ColumnName="softwareCode" />
+          <ScalarProperty Name="softwareId" ColumnName="softwareId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
