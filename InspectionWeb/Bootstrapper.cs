@@ -3,12 +3,12 @@ using Microsoft.Practices.Unity;
 using Unity.Mvc4;
 using System.Web.Configuration;
 using InspectionWeb.Models.DbContextFactory;
-using InspectionWeb.Services.Interface;
 using InspectionWeb.Models;
 using InspectionWeb.Models.Interface;
 using InspectionWeb.Models.Repository;
-using InspectionWeb.Service;
 using System.Web.Http;
+using InspectionWeb.Services;
+using InspectionWeb.Services.Interface;
 
 namespace InspectionWeb
 {
@@ -52,6 +52,7 @@ namespace InspectionWeb
             container.RegisterType<IRepository<exhibitionItem>, GenericRepository<exhibitionItem>>();
             container.RegisterType<IRepository<reportDevice>, GenericRepository<reportDevice>>();
             container.RegisterType<IRepository<reportSource>, GenericRepository<reportSource>>();
+            container.RegisterType<IRepository<user>, GenericRepository<user>>();
 
             //Service
             container.RegisterType<IAbnormalDefinitionService, AbnormalDefinitionService>();
@@ -59,7 +60,7 @@ namespace InspectionWeb
             container.RegisterType<IExhibitionItemService, ExhibitionItemService>();
             container.RegisterType<IReportDeviceService, ReportDeviceService>();
             container.RegisterType<IReportSourceService, ReportSourceService>();
-            //container.RegisterType<IUserService, UserService>();
+            container.RegisterType<IUserService, UserService>();
         }
     }
 }
