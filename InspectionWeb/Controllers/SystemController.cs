@@ -13,5 +13,11 @@ namespace InspectionWeb.Controllers
         {
             return View();
         }
+
+        // GET: System/AddSoftware
+        public ActionResult AddSoftware()
+        {
+            return View();
+        }
     }
 }

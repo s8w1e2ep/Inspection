@@ -420,10 +420,10 @@
     <Content Include="Views\Information\AddNotifyDevice.cshtml" />
     <Content Include="Views\Information\EditNotifyDevice.cshtml" />
     <Content Include="Views\Information\ListNotifyDevice.cshtml" />
+    <Content Include="Views\System\AddSoftware.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\System\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
