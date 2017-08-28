@@ -25,5 +25,11 @@ namespace InspectionWeb.Controllers
         {
             return View();
         }
+
+        // GET: System/ListSoftware
+        public ActionResult ListSoftware()
+        {
+            return View();
+        }
     }
 }
