@@ -53,6 +53,7 @@ namespace InspectionWeb
             container.RegisterType<IRepository<reportDevice>, GenericRepository<reportDevice>>();
             container.RegisterType<IRepository<reportSource>, GenericRepository<reportSource>>();
             container.RegisterType<IRepository<user>, GenericRepository<user>>();
+            container.RegisterType<IRepository<userGroup>, GenericRepository<userGroup>>();
 
             //Service
             container.RegisterType<IAbnormalDefinitionService, AbnormalDefinitionService>();
@@ -61,6 +62,7 @@ namespace InspectionWeb
             container.RegisterType<IReportDeviceService, ReportDeviceService>();
             container.RegisterType<IReportSourceService, ReportSourceService>();
             container.RegisterType<IUserService, UserService>();
+            container.RegisterType<IUserGroupService, UserGroupService>();
         }
     }
 }
