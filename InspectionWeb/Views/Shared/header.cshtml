@@ -21,7 +21,7 @@
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
                 @*@if (Session["authenticated"]!=null && (bool)Session["authenticated"]==true)*@
-                @if ((bool)Session["authenticated"])
+                @if (Session["authenticated"] != null && (bool)Session["authenticated"])
                 {
                     // check authorization
                     if (Session["userId"] != null)
