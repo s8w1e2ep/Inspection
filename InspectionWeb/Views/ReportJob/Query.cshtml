@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "整體通報查詢";
+}
+
+<div class="wrapper">
+    <div class="content-wrapper">
+        <section class="content-header" style="margin-bottom: 15px;">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/"><i class="fa fa-dashboard"></i>Home</a>
+                </li>
+                <li class="active">整體通報查詢</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-info" style="padding: 5px;">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">篩選條件</h3>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label class="control-label col-md-2" for="startDatePicker">開始日期</label>
+                                <div class="input-group col-md-8">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="startDatePicker">
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="control-label col-md-2" for="endDatePicker">結束日期</label>
+                                <div class="input-group col-md-8">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="endDatePicker">
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="control-label col-md-2" >通報來源</label>
+                                <select class="form-control select2" style="width: 50%;">
+                                    <option selected="selected">巡檢填單</option>
+                                    <option>6000填單</option>
+                                    <option>NM</option>
+                                    <option>通報按鈕</option>
+                                    <option>監控軟體</option>
+                                    <option>app</option>
+                                    <option>其它</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="control-label col-md-2">異常種類</label>
+                                <select class="form-control select2" style="width: 50%;">
+                                    <option selected="selected">異常種類-1</option>
+                                    <option>異常種類-2-</option>
+                                    <option>異常種類-3-</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="control-label col-md-2">是否結案</label>
+                                <select class="form-control select2" style="width: 50%;">
+                                    <option selected="selected">是</option>
+                                    <option>否-</option>
+                                </select>
+                            </div>
+                            <div class="box-body">
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-success pull-right">查詢</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-info">
+                        <div class="box-header">
+                            <h3 class="box-title">通報列表</h3>
+                        </div>
+                        <div class="box-body">
+                            <table id="userTable" class="row-border" cellspacing="0" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>通報來源</th>
+                                        <th>展示廳</th>
+                                        <th>展項/體驗設施</th>
+                                        <th>故障日期時間</th>
+                                        <th>故障排除日期時間</th>
+                                        <th>是否結案</th>
+                                        <th>詳細資料</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>You see see you</td>
+                                        <td>Hello</td>
+                                        <td>Hello</td>
+                                        <td>World</td>
+                                        <td>2017-08-08 00:00:00</td>
+                                        <td>2017-08-08 00:00:00</td>
+                                        <td>
+                                            <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                            @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<script src="~/Scripts/exhibition.js"></script>
+@*<script src="~/Scripts/listGroup.js"></script>*@
+

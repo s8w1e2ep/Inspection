@@ -83,7 +83,6 @@
                             <li><a href="@Url.Action("ListField", "Information")"><i class="fa fa-circle-o"></i>場域列表</a></li>
                         </ul>
                     </li>
-                    
                     @*展示廳管理*@
                     <li class="">
                         <a href="#">
@@ -97,7 +96,6 @@
                             <li><a href="@Url.Action("ListExhibition", "Information")"><i class="fa fa-circle-o"></i>展示廳列表</a></li>
                         </ul>
                     </li>
-                    
                     @*體驗設施管理*@
                     <li class="">
                         <a href="#">
@@ -125,6 +123,47 @@
                             <li><a href="@Url.Action("ListNotifyDevic", "Information")"><i class="fa fa-circle-o"></i>通報裝置列表</a></li>
                         </ul>
                     </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-dashboard"></i>
+                    <span>6000 通報作業</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="">
+                        <a href="#">
+                            <i class="fa fa-edit"></i>
+                            <span>展示廳</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="@Url.Action("AddExhibition", "ReportJob")"><i class="fa fa-circle-o"></i>新增通報</a></li>
+                            <li><a href="@Url.Action("EditExhibition", "ReportJob")"><i class="fa fa-circle-o"></i>檢視/修改 通報</a></li>
+                        </ul>
+                    </li>
+                    <li class="">
+                        <a href="#">
+                            <i class="fa fa-edit"></i>
+                            <span>體驗設施</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="@Url.Action("AddExperience", "ReportJob")"><i class="fa fa-circle-o"></i>新增通報</a></li>
+                            <li><a href="@Url.Action("EditExperience", "ReportJob")"><i class="fa fa-circle-o"></i>檢視/修改 通報</a></li>
+                        </ul>
+                    </li>
+                    <li class="">
+                        <a href="#">
+                            <i class="fa fa-edit"></i>
+                            <span>其他設施</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="@Url.Action("AddOther", "ReportJob")"><i class="fa fa-circle-o"></i>新增通報</a></li>
+                            <li><a href="@Url.Action("EditOther", "ReportJob")"><i class="fa fa-circle-o"></i>檢視/修改 通報</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="@Url.Action("Query", "ReportJob")"><i class="fa fa-circle-o"></i>整體通報查詢</a></li>
                 </ul>
             </li>
         </ul>
