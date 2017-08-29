@@ -22,6 +22,12 @@ namespace InspectionWeb.Models.Misc
             return id;
         }
 
+        public string GetUserGroupNewID()
+        {
+            string id = "group" + this.GetUniqID().Replace(",", "_");
+            return id;
+        }
+
         public string GetFieldNewID()
         {
             string id = "field_" + this.GetUniqID().Replace(",", "_");
