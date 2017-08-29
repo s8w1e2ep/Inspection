@@ -212,9 +212,11 @@
     <Compile Include="Class\WebApi\UserReportPost.cs" />
     <Compile Include="Class\WebApi\AutoReportPost.cs" />
     <Compile Include="Class\IdGenerator.cs" />
+    <Compile Include="Controllers\InformationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
+    <Compile Include="Controllers\SystemController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -426,8 +428,27 @@
     <Content Include="Views\User\AddGroup.cshtml" />
     <Content Include="Views\User\ListGroup.cshtml" />
     <Content Include="Views\User\EditGroup.cshtml" />
+
     <Content Include="Views\User\EditPassword.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
+
+    <Content Include="Views\Information\AddField.cshtml" />
+    <Content Include="Views\Information\EditField.cshtml" />
+    <Content Include="Views\Information\AddExhibition.cshtml" />
+    <Content Include="Views\Information\EditExhibition.cshtml" />
+    <Content Include="Views\Information\ListField.cshtml" />
+    <Content Include="Views\Information\ListExhibition.cshtml" />
+    <Content Include="Views\Information\EditExhibitItem.cshtml" />
+    <Content Include="Views\Information\AddDevice.cshtml" />
+    <Content Include="Views\Information\EditDevice.cshtml" />
+    <Content Include="Views\Information\ListDevice.cshtml" />
+    <Content Include="Views\Information\AddNotifyDevice.cshtml" />
+    <Content Include="Views\Information\EditNotifyDevice.cshtml" />
+    <Content Include="Views\Information\ListNotifyDevice.cshtml" />
+    <Content Include="Views\System\AddSoftware.cshtml" />
+    <Content Include="Views\System\EditSoftware.cshtml" />
+    <Content Include="Views\System\ListSoftware.cshtml" />
+
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
