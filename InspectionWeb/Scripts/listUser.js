@@ -22,12 +22,13 @@ $(document).ready(function () {
         "info": false,
         "searching": true,
         "columnDefs": [
-            { "targets": 0, "width": "20%", "orderable": true },
-            { "targets": 1, "width": "20%", "orderable": true },
-            { "targets": 2, "width": "20%", "orderable": true },
+            { "targets": 0, "width": "15%", "orderable": true },
+            { "targets": 1, "width": "15%", "orderable": true },
+            { "targets": 2, "width": "15%", "orderable": true },
             { "targets": 3, "width": "15%", "orderable": true },
             { "targets": 4, "width": "15%", "orderable": true },
-            { "targets": 5, "width": "10%", "orderable": false }
+            { "targets": 5, "width": "15%", "orderable": true },
+            { "targets": 6, "width": "10%", "orderable": false }
         ]
     });
 

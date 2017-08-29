@@ -27,6 +27,7 @@
                                     <th>權限群組</th>
                                     <th>代理人</th>
                                     <th>建立日期</th>
+                                    <th>最後更新日期</th>
                                     <th>操作選項</th>
                                 </tr>
                             </thead>
@@ -39,6 +40,7 @@
                                         <td>@item.groupId</td>
                                         <td>@item.agent</td>
                                         <td>@Html.DisplayFor(modelItem => item.createTime)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.lastUpdateTime)</td>
                                         <td>
                                             <a href="@Url.Action("Edit", new { id = item.userId })" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
                                             <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.userId')" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>
