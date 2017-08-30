@@ -22,7 +22,6 @@
                         <table id="groupTable" class="row-border" cellspacing="0" style="width: 100%;">
                             <thead>
                                 <tr>
-                                    <th>群組編號</th>
                                     <th>群組名稱</th>
                                     <th>系統管理</th>
                                     <th>使用者管理</th>
@@ -37,7 +36,6 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr id="@item.groupId">
-                                        <td>@item.groupId</td>
                                         <td>@item.groupName</td>
                                         <td>@item.system</td>
                                         <td>@item.user</td>

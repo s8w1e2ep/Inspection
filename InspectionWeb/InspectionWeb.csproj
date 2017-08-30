@@ -315,10 +315,13 @@
     <Compile Include="Models\userGroup.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModel\GroupAddViewModel.cs" />
+    <Compile Include="Models\ViewModel\GroupDetailViewModel.cs" />
     <Compile Include="Models\ViewModel\UserAddViewModel.cs" />
     <Compile Include="Models\ViewModel\UserDetailViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Interface\ISoftwareVersionService.cs" />
+    <Compile Include="Services\Interface\IUserGroupService.cs" />
     <Compile Include="Services\Interface\IUserService.cs" />
     <Compile Include="Services\SoftwareVersionService.cs" />
     <Compile Include="Services\ReportSourceService.cs" />
@@ -333,6 +336,7 @@
     <Compile Include="Services\Interface\IAbnormalRecordService.cs" />
     <Compile Include="Services\Misc\IResult.cs" />
     <Compile Include="Services\Misc\Result.cs" />
+    <Compile Include="Services\UserGroupService.cs" />
     <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
