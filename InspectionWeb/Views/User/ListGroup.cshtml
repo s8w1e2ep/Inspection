@@ -44,7 +44,7 @@
                                         <td>@Html.DisplayFor(modelItem => item.createTime)</td>
                                         <td>@Html.DisplayFor(modelItem => item.lastUpdateTime)</td>
                                         <td>
-                                            <a href="@Url.Action("EditGroup", new { id = item.groupId })" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                            <a href="@Url.Action("EditGroup", new { groupId = item.groupId })" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
                                             <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.groupId')" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>
                                         </td>
                                     </tr>
