@@ -1,0 +1,349 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="inspectionModelStoreContainer" CdmEntityContainer="inspectionEntities">
+    <EntitySetMapping Name="abnormalRecord">
+      <EntityTypeMapping TypeName="inspectionModel.abnormalRecord">
+        <MappingFragment StoreEntitySet="abnormalRecord">
+          <ScalarProperty Name="sourceId" ColumnName="sourceId" />
+          <ScalarProperty Name="recordId" ColumnName="recordId" />
+          <ScalarProperty Name="itemId" ColumnName="itemId" />
+          <ScalarProperty Name="deviceId" ColumnName="deviceId" />
+          <ScalarProperty Name="abnormalId" ColumnName="abnormalId" />
+          <ScalarProperty Name="happenedTime" ColumnName="happenedTime" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="fixMethod" ColumnName="fixMethod" />
+          <ScalarProperty Name="isClose" ColumnName="isClose" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="company">
+      <EntityTypeMapping TypeName="inspectionModel.company">
+        <MappingFragment StoreEntitySet="company">
+          <ScalarProperty Name="companyId" ColumnName="companyId" />
+          <ScalarProperty Name="companyName" ColumnName="companyName" />
+          <ScalarProperty Name="logo" ColumnName="logo" />
+          <ScalarProperty Name="tel" ColumnName="tel" />
+          <ScalarProperty Name="fax" ColumnName="fax" />
+          <ScalarProperty Name="website" ColumnName="website" />
+          <ScalarProperty Name="invoiceId" ColumnName="invoiceId" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="exhibitionItem">
+      <EntityTypeMapping TypeName="inspectionModel.exhibitionItem">
+        <MappingFragment StoreEntitySet="exhibitionItem">
+          <ScalarProperty Name="itemCode" ColumnName="itemCode" />
+          <ScalarProperty Name="roomId" ColumnName="roomId" />
+          <ScalarProperty Name="itemId" ColumnName="itemId" />
+          <ScalarProperty Name="itemName" ColumnName="itemName" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="picture" ColumnName="picture" />
+          <ScalarProperty Name="companyId" ColumnName="companyId" />
+          <ScalarProperty Name="fieldId" ColumnName="fieldId" />
+          <ScalarProperty Name="x" ColumnName="x" />
+          <ScalarProperty Name="y" ColumnName="y" />
+          <ScalarProperty Name="isLock" ColumnName="isLock" />
+          <ScalarProperty Name="active" ColumnName="active" />
+          <ScalarProperty Name="periodReportTime" ColumnName="periodReportTime" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="exhibitionRoom">
+      <EntityTypeMapping TypeName="inspectionModel.exhibitionRoom">
+        <MappingFragment StoreEntitySet="exhibitionRoom">
+          <ScalarProperty Name="roomId" ColumnName="roomId" />
+          <ScalarProperty Name="roomName" ColumnName="roomName" />
+          <ScalarProperty Name="fieldId" ColumnName="fieldId" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="picture" ColumnName="picture" />
+          <ScalarProperty Name="inspectionUserId" ColumnName="inspectionUserId" />
+          <ScalarProperty Name="companyId" ColumnName="companyId" />
+          <ScalarProperty Name="active" ColumnName="active" />
+          <ScalarProperty Name="floor" ColumnName="floor" />
+          <ScalarProperty Name="x" ColumnName="x" />
+          <ScalarProperty Name="y" ColumnName="y" />
+          <ScalarProperty Name="width" ColumnName="width" />
+          <ScalarProperty Name="height" ColumnName="height" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="fieldMap">
+      <EntityTypeMapping TypeName="inspectionModel.fieldMap">
+        <MappingFragment StoreEntitySet="fieldMap">
+          <ScalarProperty Name="fieldId" ColumnName="fieldId" />
+          <ScalarProperty Name="fieldName" ColumnName="fieldName" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="mapFileName" ColumnName="mapFileName" />
+          <ScalarProperty Name="photo" ColumnName="photo" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="itemCheckRecord">
+      <EntityTypeMapping TypeName="inspectionModel.itemCheckRecord">
+        <MappingFragment StoreEntitySet="itemCheckRecord">
+          <ScalarProperty Name="checkId" ColumnName="checkId" />
+          <ScalarProperty Name="itemId" ColumnName="itemId" />
+          <ScalarProperty Name="checkDate" ColumnName="checkDate" />
+          <ScalarProperty Name="inspectorId" ColumnName="inspectorId" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="checkTimeType" ColumnName="checkTimeType" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="itemInspectionDispatch">
+      <EntityTypeMapping TypeName="inspectionModel.itemInspectionDispatch">
+        <MappingFragment StoreEntitySet="itemInspectionDispatch">
+          <ScalarProperty Name="dispatchId" ColumnName="dispatchId" />
+          <ScalarProperty Name="itemId" ColumnName="itemId" />
+          <ScalarProperty Name="checkDate" ColumnName="checkDate" />
+          <ScalarProperty Name="inspectorId1" ColumnName="inspectorId1" />
+          <ScalarProperty Name="inspectorId2" ColumnName="inspectorId2" />
+          <ScalarProperty Name="setupUserId" ColumnName="setupUserId" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="manRepairRecord">
+      <EntityTypeMapping TypeName="inspectionModel.manRepairRecord">
+        <MappingFragment StoreEntitySet="manRepairRecord">
+          <ScalarProperty Name="dispatchId" ColumnName="dispatchId" />
+          <ScalarProperty Name="fillUserId" ColumnName="fillUserId" />
+          <ScalarProperty Name="repairUserrId" ColumnName="repairUserrId" />
+          <ScalarProperty Name="fixNote" ColumnName="fixNote" />
+          <ScalarProperty Name="cost" ColumnName="cost" />
+          <ScalarProperty Name="expectDate" ColumnName="expectDate" />
+          <ScalarProperty Name="imgFile1" ColumnName="imgFile1" />
+          <ScalarProperty Name="imgDesc1" ColumnName="imgDesc1" />
+          <ScalarProperty Name="imgFile2" ColumnName="imgFile2" />
+          <ScalarProperty Name="imgDesc2" ColumnName="imgDesc2" />
+          <ScalarProperty Name="imgFile3" ColumnName="imgFile3" />
+          <ScalarProperty Name="imgDesc3" ColumnName="imgDesc3" />
+          <ScalarProperty Name="imgFixFile1" ColumnName="imgFixFile1" />
+          <ScalarProperty Name="imgFixDesc1" ColumnName="imgFixDesc1" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="noCheckDate">
+      <EntityTypeMapping TypeName="inspectionModel.noCheckDate">
+        <MappingFragment StoreEntitySet="noCheckDate">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="noCheckDate1" ColumnName="noCheckDate" />
+          <ScalarProperty Name="checkTimeType" ColumnName="checkTimeType" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="setupUserId" ColumnName="setupUserId" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="reportDevice">
+      <EntityTypeMapping TypeName="inspectionModel.reportDevice">
+        <MappingFragment StoreEntitySet="reportDevice">
+          <ScalarProperty Name="deviceId" ColumnName="deviceId" />
+          <ScalarProperty Name="sourceId" ColumnName="sourceId" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="deviceCode" ColumnName="deviceCode" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="photo" ColumnName="photo" />
+          <ScalarProperty Name="itemId" ColumnName="itemId" />
+          <ScalarProperty Name="fieldId" ColumnName="fieldId" />
+          <ScalarProperty Name="x" ColumnName="x" />
+          <ScalarProperty Name="y" ColumnName="y" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="reportSource">
+      <EntityTypeMapping TypeName="inspectionModel.reportSource">
+        <MappingFragment StoreEntitySet="reportSource">
+          <ScalarProperty Name="sourceCode" ColumnName="sourceCode" />
+          <ScalarProperty Name="sourceId" ColumnName="sourceId" />
+          <ScalarProperty Name="sourceName" ColumnName="sourceName" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="roomActiveRecord">
+      <EntityTypeMapping TypeName="inspectionModel.roomActiveRecord">
+        <MappingFragment StoreEntitySet="roomActiveRecord">
+          <ScalarProperty Name="activityId" ColumnName="activityId" />
+          <ScalarProperty Name="roomId" ColumnName="roomId" />
+          <ScalarProperty Name="active" ColumnName="active" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="roomCheckRecord">
+      <EntityTypeMapping TypeName="inspectionModel.roomCheckRecord">
+        <MappingFragment StoreEntitySet="roomCheckRecord">
+          <ScalarProperty Name="checkId" ColumnName="checkId" />
+          <ScalarProperty Name="dispatchId" ColumnName="dispatchId" />
+          <ScalarProperty Name="roomId" ColumnName="roomId" />
+          <ScalarProperty Name="checkDate" ColumnName="checkDate" />
+          <ScalarProperty Name="inspectorId" ColumnName="inspectorId" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="checkTimeType" ColumnName="checkTimeType" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="roomInspectionDispatch">
+      <EntityTypeMapping TypeName="inspectionModel.roomInspectionDispatch">
+        <MappingFragment StoreEntitySet="roomInspectionDispatch">
+          <ScalarProperty Name="dispatchId" ColumnName="dispatchId" />
+          <ScalarProperty Name="checkDate" ColumnName="checkDate" />
+          <ScalarProperty Name="roomId" ColumnName="roomId" />
+          <ScalarProperty Name="inspectorId1" ColumnName="inspectorId1" />
+          <ScalarProperty Name="inspectorId2" ColumnName="inspectorId2" />
+          <ScalarProperty Name="setupId" ColumnName="setupId" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="user">
+      <EntityTypeMapping TypeName="inspectionModel.user">
+        <MappingFragment StoreEntitySet="user">
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="userCode" ColumnName="userCode" />
+          <ScalarProperty Name="groupId" ColumnName="groupId" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="userName" ColumnName="userName" />
+          <ScalarProperty Name="picture" ColumnName="picture" />
+          <ScalarProperty Name="agent" ColumnName="agent" />
+          <ScalarProperty Name="tel" ColumnName="tel" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="active" ColumnName="active" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="userGroup">
+      <EntityTypeMapping TypeName="inspectionModel.userGroup">
+        <MappingFragment StoreEntitySet="userGroup">
+          <ScalarProperty Name="groupId" ColumnName="groupId" />
+          <ScalarProperty Name="groupName" ColumnName="groupName" />
+          <ScalarProperty Name="superUserOnly" ColumnName="superUserOnly" />
+          <ScalarProperty Name="systemManagement" ColumnName="systemManagement" />
+          <ScalarProperty Name="userManagement" ColumnName="userManagement" />
+          <ScalarProperty Name="dispatchManagement" ColumnName="dispatchManagement" />
+          <ScalarProperty Name="normalUser" ColumnName="normalUser" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="quickSolution">
+      <EntityTypeMapping TypeName="inspectionModel.quickSolution">
+        <MappingFragment StoreEntitySet="quickSolution">
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="solutionId" ColumnName="solutionId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="sp_alterdiagram1" FunctionName="inspectionModel.Store.sp_alterdiagram" />
+    <FunctionImportMapping FunctionImportName="sp_creatediagram1" FunctionName="inspectionModel.Store.sp_creatediagram" />
+    <FunctionImportMapping FunctionImportName="sp_dropdiagram1" FunctionName="inspectionModel.Store.sp_dropdiagram" />
+    <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition1" FunctionName="inspectionModel.Store.sp_helpdiagramdefinition">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="inspectionModel.sp_helpdiagramdefinition1_Result">
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_helpdiagrams1" FunctionName="inspectionModel.Store.sp_helpdiagrams">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="inspectionModel.sp_helpdiagrams1_Result">
+          <ScalarProperty Name="Database" ColumnName="Database" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Owner" ColumnName="Owner" />
+          <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_renamediagram1" FunctionName="inspectionModel.Store.sp_renamediagram" />
+    <FunctionImportMapping FunctionImportName="sp_upgraddiagrams1" FunctionName="inspectionModel.Store.sp_upgraddiagrams" />
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="inspectionModel.sysdiagrams">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="definition" ColumnName="definition" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="abnormalDefinition">
+      <EntityTypeMapping TypeName="inspectionModel.abnormalDefinition">
+        <MappingFragment StoreEntitySet="abnormalDefinition">
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="abnormalName" ColumnName="abnormalName" />
+          <ScalarProperty Name="abnormalCode" ColumnName="abnormalCode" />
+          <ScalarProperty Name="abnormalId" ColumnName="abnormalId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="softwareVersion">
+      <EntityTypeMapping TypeName="inspectionModel.softwareVersion">
+        <MappingFragment StoreEntitySet="softwareVersion">
+          <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+          <ScalarProperty Name="createTime" ColumnName="createTime" />
+          <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="fileName" ColumnName="fileName" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="softwareName" ColumnName="softwareName" />
+          <ScalarProperty Name="softwareCode" ColumnName="softwareCode" />
+          <ScalarProperty Name="softwareId" ColumnName="softwareId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

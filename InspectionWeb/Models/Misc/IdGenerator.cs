@@ -22,12 +22,15 @@ namespace InspectionWeb.Models.Misc
             return id;
         }
 
+<<<<<<< HEAD
         public string GetUserGroupNewID()
         {
             string id = "group" + this.GetUniqID().Replace(",", "_");
             return id;
         }
 
+=======
+>>>>>>> abnormal
         public string GetFieldNewID()
         {
             string id = "field_" + this.GetUniqID().Replace(",", "_");
@@ -46,6 +49,21 @@ namespace InspectionWeb.Models.Misc
             return id;
         }
 
+<<<<<<< HEAD
+=======
+        public string GetAbnormalDefinitionNewID()
+        {
+            string id = "abnormalDefinition_" + this.GetUniqID().Replace(",", "_");
+            return id;
+        }
+
+        public string GetReportSourceNewID()
+        {
+            string id = "reportSource_" + this.GetUniqID().Replace(",", "_");
+            return id;
+        }
+
+>>>>>>> abnormal
         public string GetID(string Header)
         {
             string id = Header + "_" + this.GetUniqID().Replace(",", "_");

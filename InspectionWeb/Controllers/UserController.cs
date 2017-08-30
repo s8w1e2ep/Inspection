@@ -14,12 +14,19 @@ namespace InspectionWeb.Controllers
     public class UserController : Controller
     {
         private IUserService _userService;
+<<<<<<< HEAD
         private IUserGroupService _userGroupService;
 
         public UserController(IUserService service, IUserGroupService service2)
         {
             this._userService = service;
             this._userGroupService = service2;
+=======
+
+        public UserController(IUserService service)
+        {
+            this._userService = service;
+>>>>>>> abnormal
         }
 
         // GET: /User/Login
@@ -146,11 +153,16 @@ namespace InspectionWeb.Controllers
             else
             {
                 var user = this._userService.GetByID(id);
+<<<<<<< HEAD
                 if (user == null)
                 {
                     return RedirectToAction("List");
                 }
                 UserDetailViewModel vm = this.User2ViewModel(user);
+=======
+                UserDetailViewModel vm = this.User2ViewModel(user);
+
+>>>>>>> abnormal
                 return View(vm);
             }
         }
@@ -204,6 +216,7 @@ namespace InspectionWeb.Controllers
         [HttpPost]
         public ActionResult UpdateUser(UserJson userJson)
         {
+<<<<<<< HEAD
             var id = userJson.pk;
             var user = this._userService.GetByID(id);
             if (user != null && ModelState.IsValid)
@@ -218,6 +231,16 @@ namespace InspectionWeb.Controllers
                 {
                     return RedirectToAction("Edit");
                 }      
+=======
+            var id = userJson.key;
+            var user = this._userService.GetByID(id);
+
+            if (user != null && ModelState.IsValid)
+            {
+                this._userService.Update(user, userJson.name, userJson.value);
+                var updatedUser = this._userService.GetByID(id);
+                return View("Edit", this.User2ViewModel(updatedUser));
+>>>>>>> abnormal
             }
             else
             {
@@ -225,7 +248,11 @@ namespace InspectionWeb.Controllers
             }
         }
 
+<<<<<<< HEAD
         // DELETE: /User/DeleteUser
+=======
+        // DELETE: /User/deleteUser
+>>>>>>> abnormal
         public ActionResult DeleteUser(string userId)
         {
             if (string.IsNullOrEmpty(userId))
@@ -281,6 +308,7 @@ namespace InspectionWeb.Controllers
 
         // POST: /User/AddUserGroup
         [HttpPost]
+<<<<<<< HEAD
         public ActionResult AddUserGroup(string groupName)
         {
             if (!string.IsNullOrEmpty(groupName) && ModelState.IsValid)
@@ -333,6 +361,39 @@ namespace InspectionWeb.Controllers
             }
 
             return RedirectToAction("ListGroup");
+=======
+        public ActionResult addGroup(string name)
+        {
+            return RedirectToAction("ListGroup");
+        }
+
+        private UserDetailViewModel User2ViewModel(user instance)
+        {
+            UserDetailViewModel vm = new UserDetailViewModel();
+
+            vm.userId = instance.userId;
+            vm.userCode = instance.userCode;
+            vm.groupId = instance.groupId;
+            vm.email = instance.email;
+            vm.password = instance.password;
+            vm.name = instance.userName;
+            vm.agent = instance.agent;
+            vm.picture = instance.agent;
+            vm.active = instance.active;
+            vm.isDelete = (short)instance.isDelete;
+            vm.createTime = instance.createTime;
+            vm.lastUpdateTime = instance.lastUpdateTime;
+
+            return vm;
+        }
+
+        public class UserJson
+        {
+            public string name { get; set; }
+            public string key { get; set; }
+            public string value { get; set; }
+
+>>>>>>> abnormal
         }
 
         private UserDetailViewModel User2ViewModel(user instance)

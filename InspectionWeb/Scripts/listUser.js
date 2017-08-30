@@ -27,8 +27,12 @@ $(document).ready(function () {
             { "targets": 2, "width": "15%", "orderable": true },
             { "targets": 3, "width": "15%", "orderable": true },
             { "targets": 4, "width": "15%", "orderable": true },
+<<<<<<< HEAD
             { "targets": 5, "width": "15%", "orderable": true },
             { "targets": 6, "width": "10%", "orderable": false }
+=======
+            { "targets": 5, "width": "10%", "orderable": false }
+>>>>>>> abnormal
         ]
     });
 
