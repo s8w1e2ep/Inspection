@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "AddReoprtSource";
+}
+
+<script>
+
+    function fieldValidation(field) {
+        if ($.trim($(field).val()) == '') {
+            $(field + 'Div').addClass('has-error');
+            $(field + 'Div').val('');
+            return false;
+        } else {
+            $(field + 'Div').removeClass('has-error');
+        }
+        return true;
+    }
+
+    function formValidation() {
+        if (fieldValidation('#sourceCode') && fieldValidation('#sourceName')) {
+            return true;
+        }
+
+        return false;
+    }
+
+</script>
+
+
+
+<div class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>故障來源定義<small>故障報告來源定義資料管理</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+                <li class="active">新增故障來源定義資料</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-6">
+                    <!-- general form elements -->
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">新增故障來源定義資料</h3>
+                        </div><!-- /.box-header -->
+                        <!-- form start -->
+                        <form class="form-horizontal" method="post" action="@Url.Action("AddReportSource")" onsubmit="return formValidation();">
+                            <div class="box-body">
+                                @if (!string.IsNullOrEmpty(Model.ErrorMsg))
+                                {
+                                    <div class="form-group has-error">
+                                        <label class="col-sm-2"></label>
+                                        <label class="col-sm-10">Model.ErrorMsg</label>
+                                    </div>
+                                }
+                                <div id="sourceCodeDiv" class="form-group">
+                                    <label for="sourceCode" class="col-sm-2 control-label">來源編號</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="sourceCode" name="sourceCode" placeholder="輸入來源編號">
+                                    </div>
+                                </div>
+                                <div id="sourceNameDiv" class="form-group">
+                                    <label for="sourceName" class="col-sm-2 control-label">來源名稱</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="sourceName" name="sourceName" placeholder="輸入來源名稱">
+                                    </div>
+                                </div>
+                            </div><!-- /.box-body -->
+                            <div class="box-footer" style="text-align: right;">
+                                <button type="submit" class="btn btn-success">確定新增</button>
+                            </div>
+                        </form>
+                    </div><!-- /.box -->
+                </div>
+            </div>
+        </section><!-- /.content -->
+    </div><!-- /.content-wrapper -->
+</div><!-- ./wrapper -->

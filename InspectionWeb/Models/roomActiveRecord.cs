@@ -18,8 +18,6 @@ namespace InspectionWeb.Models
         public string roomId { get; set; }
         public Nullable<short> active { get; set; }
         public string description { get; set; }
-        public Nullable<byte> isDelete { get; set; }
         public Nullable<System.DateTime> createTime { get; set; }
-        public Nullable<System.DateTime> lastUpdateTime { get; set; }
     }
 }

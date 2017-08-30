@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using InspectionWeb.Models;
 
-namespace InspectionWeb.Service
+namespace InspectionWeb.Services
 {
     public class ReportDeviceService : IReportDeviceService
     {

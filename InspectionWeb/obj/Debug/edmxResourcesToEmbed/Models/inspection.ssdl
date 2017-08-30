@@ -179,9 +179,9 @@
       <PropertyRef Name="deviceId" />
     </Key>
     <Property Name="deviceId" Type="nvarchar" MaxLength="32" Nullable="false" />
+    <Property Name="deviceCode" Type="nvarchar" MaxLength="32" />
     <Property Name="sourceId" Type="nvarchar" MaxLength="32" />
     <Property Name="name" Type="nvarchar" MaxLength="64" />
-    <Property Name="deviceCode" Type="nvarchar" MaxLength="32" />
     <Property Name="description" Type="text" />
     <Property Name="photo" Type="nvarchar" MaxLength="128" />
     <Property Name="itemId" Type="nvarchar" MaxLength="32" />
@@ -212,9 +212,7 @@
     <Property Name="roomId" Type="nvarchar" MaxLength="32" />
     <Property Name="active" Type="smallint" />
     <Property Name="description" Type="text" />
-    <Property Name="isDelete" Type="tinyint" />
     <Property Name="createTime" Type="datetime" />
-    <Property Name="lastUpdateTime" Type="datetime" />
   </EntityType>
   <EntityType Name="roomCheckRecord">
     <Key>
@@ -259,6 +257,16 @@
     <Property Name="createTime" Type="datetime" />
     <Property Name="lastUpdateTime" Type="datetime" />
   </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
   <EntityType Name="user">
     <Key>
       <PropertyRef Name="userId" />
@@ -292,6 +300,37 @@
     <Property Name="createTime" Type="datetime" />
     <Property Name="lastUpdateTime" Type="datetime" />
   </EntityType>
+  <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+  <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <EntityContainer Name="inspectionModelStoreContainer">
     <EntitySet Name="abnormalDefinition" EntityType="Self.abnormalDefinition" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="abnormalRecord" EntityType="Self.abnormalRecord" Schema="dbo" store:Type="Tables" />
@@ -310,6 +349,7 @@
     <EntitySet Name="roomCheckRecord" EntityType="Self.roomCheckRecord" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="roomInspectionDispatch" EntityType="Self.roomInspectionDispatch" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="softwareVersion" EntityType="Self.softwareVersion" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="userGroup" EntityType="Self.userGroup" Schema="dbo" store:Type="Tables" />
   </EntityContainer>

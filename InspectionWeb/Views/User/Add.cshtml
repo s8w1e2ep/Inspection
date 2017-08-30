@@ -1,11 +1,13 @@
-﻿@{
+﻿@model InspectionWeb.Models.ViewModel.UserAddViewModel
+
+@{
     ViewBag.Title = "新增人員";
 }
 
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
         <ol class="breadcrumb">
-            <li><a href="/"><i class="fa fa-dashboard"></i>Home</a></li>
+            <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>Home</a></li>
             <li class="active">新增人員</li>
         </ol>
     </section>
@@ -18,8 +20,15 @@
                         <h3 class="box-title">新增人員</h3>
                     </div>
                     <!-- form start -->
-                    <form class="form-horizontal" method="post" action="@Url.Action("addUser")" onsubmit="return formValidation();">
+                    <form class="form-horizontal" method="post" action="@Url.Action("AddUser")" onsubmit="return formValidation();">
                         <div class="box-body">
+                            @if (!string.IsNullOrEmpty(@Model.ErrorMsg))
+                            {
+                                <div class="form-group has-error">
+                                    <label class="col-sm-2"></label>
+                                    <label class="col-sm-10">@Model.ErrorMsg</label>
+                                </div>
+                            }
                             <div id="nameDiv" class="form-group">
                                 <label for="account" class="col-md-2 control-label">帳號</label>
                                 <div class="col-md-10">

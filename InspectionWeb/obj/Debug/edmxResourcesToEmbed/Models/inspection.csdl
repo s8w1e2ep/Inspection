@@ -1,17 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="inspectionModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-  <EntityType Name="abnormalDefinition">
-    <Key>
-      <PropertyRef Name="abnormalId" />
-    </Key>
-    <Property Name="abnormalId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="abnormalCode" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-    <Property Name="abnormalName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-    <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="isDelete" Type="Byte" />
-    <Property Name="createTime" Type="DateTime" Precision="3" />
-    <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
-  </EntityType>
   <EntityType Name="abnormalRecord">
     <Key>
       <PropertyRef Name="recordId" />
@@ -202,9 +190,7 @@
     <Property Name="roomId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
     <Property Name="active" Type="Int16" />
     <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="isDelete" Type="Byte" />
     <Property Name="createTime" Type="DateTime" Precision="3" />
-    <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="roomCheckRecord">
     <Key>
@@ -231,20 +217,6 @@
     <Property Name="inspectorId1" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
     <Property Name="inspectorId2" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
     <Property Name="setupId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-    <Property Name="isDelete" Type="Byte" />
-    <Property Name="createTime" Type="DateTime" Precision="3" />
-    <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
-  </EntityType>
-  <EntityType Name="softwareVersion">
-    <Key>
-      <PropertyRef Name="softwareId" />
-    </Key>
-    <Property Name="softwareId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="softwareCode" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-    <Property Name="softwareName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-    <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="fileName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="version" Type="String" MaxLength="14" FixedLength="false" Unicode="true" />
     <Property Name="isDelete" Type="Byte" />
     <Property Name="createTime" Type="DateTime" Precision="3" />
     <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
@@ -283,7 +255,6 @@
     <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityContainer Name="inspectionEntities" annotation:LazyLoadingEnabled="true">
-    <EntitySet Name="abnormalDefinition" EntityType="Self.abnormalDefinition" />
     <EntitySet Name="abnormalRecord" EntityType="Self.abnormalRecord" />
     <EntitySet Name="company" EntityType="Self.company" />
     <EntitySet Name="exhibitionItem" EntityType="Self.exhibitionItem" />
@@ -298,17 +269,137 @@
     <EntitySet Name="roomActiveRecord" EntityType="Self.roomActiveRecord" />
     <EntitySet Name="roomCheckRecord" EntityType="Self.roomCheckRecord" />
     <EntitySet Name="roomInspectionDispatch" EntityType="Self.roomInspectionDispatch" />
-    <EntitySet Name="softwareVersion" EntityType="Self.softwareVersion" />
     <EntitySet Name="user" EntityType="Self.user" />
     <EntitySet Name="userGroup" EntityType="Self.userGroup" />
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(inspectionModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(inspectionModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
     <EntitySet Name="quickSolution" EntityType="inspectionModel.quickSolution" />
+    <FunctionImport Name="sp_alterdiagram1">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram1">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram1">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition1" ReturnType="Collection(inspectionModel.sp_helpdiagramdefinition1_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams1" ReturnType="Collection(inspectionModel.sp_helpdiagrams1_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram1">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams1" />
+    <EntitySet Name="sysdiagrams" EntityType="inspectionModel.sysdiagrams" />
+    <EntitySet Name="abnormalDefinition" EntityType="inspectionModel.abnormalDefinition" />
+    <EntitySet Name="softwareVersion" EntityType="inspectionModel.softwareVersion" />
   </EntityContainer>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
   <EntityType Name="quickSolution">
     <Key>
       <PropertyRef Name="solutionId" />
     </Key>
     <Property Name="solutionId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
     <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="isDelete" Type="Byte" />
+    <Property Name="createTime" Type="DateTime" Precision="3" />
+    <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <ComplexType Name="sp_helpdiagramdefinition1_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams1_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="abnormalDefinition">
+    <Key>
+      <PropertyRef Name="abnormalId" />
+    </Key>
+    <Property Name="abnormalId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+    <Property Name="abnormalCode" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+    <Property Name="abnormalName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="isDelete" Type="Byte" />
+    <Property Name="createTime" Type="DateTime" Precision="3" />
+    <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="softwareVersion">
+    <Key>
+      <PropertyRef Name="softwareId" />
+    </Key>
+    <Property Name="softwareId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+    <Property Name="softwareCode" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+    <Property Name="softwareName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="fileName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="version" Type="String" MaxLength="14" FixedLength="false" Unicode="true" />
     <Property Name="isDelete" Type="Byte" />
     <Property Name="createTime" Type="DateTime" Precision="3" />
     <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />

@@ -212,7 +212,11 @@
     <Compile Include="Class\WebApi\UserReportPost.cs" />
     <Compile Include="Class\WebApi\AutoReportPost.cs" />
     <Compile Include="Class\IdGenerator.cs" />
+    <Compile Include="Controllers\AbnormalDefinitionController.cs" />
+    <Compile Include="Controllers\CheckRecordController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InspectionDispatchController.cs" />
+    <Compile Include="Controllers\ReportSourceController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -265,6 +269,9 @@
     <Compile Include="Models\manRepairRecord.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Misc\DateTimeHelper.cs" />
+    <Compile Include="Models\Misc\Encrypt.cs" />
+    <Compile Include="Models\Misc\IdGenerator.cs" />
     <Compile Include="Models\noCheckDate.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
@@ -289,27 +296,63 @@
     <Compile Include="Models\softwareVersion.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition1_Result.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams1_Result.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagrams.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\user.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\userGroup.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModel\AddAbnormalDefinitionViewModel.cs" />
+    <Compile Include="Models\ViewModel\ItemCheckRecordViewModel.cs" />
+    <Compile Include="Models\ViewModel\ItemInspectionDispatchViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListAbnormalDefinitionViewModel.cs" />
+    <Compile Include="Models\ViewModel\NoCheckDateViewModel.cs" />
+    <Compile Include="Models\ViewModel\GetAllRoomDispatchViewModel.cs" />
+    <Compile Include="Models\ViewModel\ReportSourceViewModel.cs" />
+    <Compile Include="Models\ViewModel\RoomCheckRecordViewModel.cs" />
+    <Compile Include="Models\ViewModel\RoomInspectionDispatchViewModel.cs" />
+    <Compile Include="Models\ViewModel\UserAddViewModel.cs" />
+    <Compile Include="Models\ViewModel\UserDetailViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Interface\ISoftwareVersionService.cs" />
-    <Compile Include="Services\SoftwareVersionService.cs" />
-    <Compile Include="Services\ReportSourceService.cs" />
-    <Compile Include="Services\Interface\IReportSourceService.cs" />
-    <Compile Include="Services\Interface\IAbnormalDefinitionService.cs" />
-    <Compile Include="Services\Interface\IExhibitionItemService.cs" />
-    <Compile Include="Services\Interface\IReportDeviceService.cs" />
     <Compile Include="Services\AbnormalDefinitionService.cs" />
-    <Compile Include="Services\ExhibitionItemService.cs" />
-    <Compile Include="Services\ReportDeviceService.cs" />
     <Compile Include="Services\AbnormalRecordService.cs" />
+    <Compile Include="Services\ExhibitionItemService.cs" />
+    <Compile Include="Services\Interface\IAbnormalDefinitionService.cs" />
     <Compile Include="Services\Interface\IAbnormalRecordService.cs" />
+    <Compile Include="Services\Interface\IExhibitionItemService.cs" />
+    <Compile Include="Services\Interface\IItemCheckRecordService.cs" />
+    <Compile Include="Services\Interface\IItemInspectionDispatchService.cs" />
+    <Compile Include="Services\Interface\IReportDeviceService.cs" />
+    <Compile Include="Services\Interface\IReportSourceService.cs" />
+    <Compile Include="Services\Interface\IRoomCheckRecordService.cs" />
+    <Compile Include="Services\Interface\IRoomInspectionDispatchService.cs" />
+    <Compile Include="Services\Interface\ISoftwareVersionService.cs" />
+    <Compile Include="Services\Interface\IUserService.cs" />
+    <Compile Include="Services\ItemCheckRecordService.cs" />
+    <Compile Include="Services\ItemInspectionDispatchService.cs" />
     <Compile Include="Services\Misc\IResult.cs" />
     <Compile Include="Services\Misc\Result.cs" />
+    <Compile Include="Services\ReportDeviceService.cs" />
+    <Compile Include="Services\ReportSourceService.cs" />
+    <Compile Include="Services\RoomCheckRecordService.cs" />
+    <Compile Include="Services\RoomInspectioDispatchService.cs" />
+    <Compile Include="Services\SoftwareVersionService.cs" />
+    <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -405,6 +448,24 @@
     <Content Include="Views\User\AddGroup.cshtml" />
     <Content Include="Views\User\ListGroup.cshtml" />
     <Content Include="Views\User\EditGroup.cshtml" />
+    <Content Include="Views\User\EditPassword.cshtml" />
+    <Content Include="Views\User\Login.cshtml" />
+    <Content Include="Views\AbnormalDefinition\AddAbnormalDefinition.cshtml" />
+    <Content Include="Views\AbnormalDefinition\EditAbnormalDefinition.cshtml" />
+    <Content Include="Views\AbnormalDefinition\ListAbnormalDefinition.cshtml" />
+    <Content Include="Views\CheckRecord\AddItemCheckRecord.cshtml" />
+    <Content Include="Views\CheckRecord\AddRoomCheckRecord.cshtml" />
+    <Content Include="Views\ReportSource\EditReportSource.cshtml" />
+    <Content Include="Views\ReportSource\ListReportSource.cshtml" />
+    <Content Include="Views\InspectionDispatch\QueryInspectionByDate.cshtml" />
+    <Content Include="Views\InspectionDispatch\QueryInspectionByItem.cshtml" />
+    <Content Include="Views\InspectionDispatch\QueryInspectionByRoom.cshtml" />
+    <Content Include="Views\InspectionDispatch\QueryInspectionByUserId.cshtml" />
+    <Content Include="Views\ReportSource\AddReportSource.cshtml" />
+    <Content Include="Views\InspectionDispatch\AddNonInspectionDispatchDate.cshtml" />
+    <Content Include="Views\InspectionDispatch\ListItemInspectionDispatch.cshtml" />
+    <Content Include="Views\InspectionDispatch\ListNonInspectionDispatchDate.cshtml" />
+    <Content Include="Views\InspectionDispatch\ListRoomInspectionDispatch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

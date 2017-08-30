@@ -56,6 +56,64 @@
                     <li><a href="@Url.Action("RankReport", "Statistic")"><i class="fa fa-circle-o"></i>異常排行-通報來源</a></li>
                 </ul>
             </li>
+            <li>
+                <a href="#"><i class="fa fa-dashboard"></i> <span>派工/巡檢管理</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="#"><i class="fa fa-edit"></i> <span>派工</span> <i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="@Url.Action("ListRoomInspectionDispatch", "InspectionDispatch")"><i class="fa fa-circle-o"></i>展示廳派工</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("ListItemInspectionDispatch", "InspectionDispatch")"><i class="fa fa-circle-o"></i>體驗設施派工</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("AddNonInspectionDispatchDate", "InspectionDispatch")"><i class="fa fa-circle-o"></i>新增非巡檢日期</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("ListNonInspectionDispatchDate", "InspectionDispatch")"><i class="fa fa-circle-o"></i>非巡檢日期檢視/修改</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("QueryInspectionByRoom", "InspectionDispatch")"><i class="fa fa-circle-o"></i>巡檢查詢</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-edit"></i> <span>巡檢紀錄</span> <i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="@Url.Action("AddRoomCheckRecord", "CheckRecord")"><i class="fa fa-circle-o"></i>展示廳巡檢紀錄</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("AddItemCheckRecord", "CheckRecord")"><i class="fa fa-circle-o"></i>體驗設施巡檢紀錄</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-dashboard"></i> <span>異常定義管理</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="@Url.Action("AddAbnormalDefinition", "AbnormalDefinition")"><i class="fa fa-circle-o"></i>新增異常定義</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("ListAbnormalDefinition", "AbnormalDefinition")"><i class="fa fa-circle-o"></i>異常定義檢視/修改</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-dashboard"></i> <span>故障來源定義管理</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="@Url.Action("AddReportSource", "ReportSource")"><i class="fa fa-circle-o"></i>新增故障來源定義</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("ListReportSource", "ReportSource")"><i class="fa fa-circle-o"></i>故障來源定義檢視/修改</a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </section>
 </aside>
