@@ -212,18 +212,15 @@
     <Compile Include="Class\WebApi\UserReportPost.cs" />
     <Compile Include="Class\WebApi\AutoReportPost.cs" />
     <Compile Include="Class\IdGenerator.cs" />
-<<<<<<< HEAD
     <Compile Include="Controllers\InformationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MaintenanceWorkController.cs" />
     <Compile Include="Controllers\ReportJobController.cs" />
-=======
     <Compile Include="Controllers\AbnormalDefinitionController.cs" />
     <Compile Include="Controllers\CheckRecordController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InspectionDispatchController.cs" />
     <Compile Include="Controllers\ReportSourceController.cs" />
->>>>>>> abnormal
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
     <Compile Include="Controllers\SystemController.cs" />
@@ -277,10 +274,8 @@
     <Compile Include="Models\manRepairRecord.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
-<<<<<<< HEAD
-=======
+
     <Compile Include="Models\Misc\DateTimeHelper.cs" />
->>>>>>> abnormal
     <Compile Include="Models\Misc\Encrypt.cs" />
     <Compile Include="Models\Misc\IdGenerator.cs" />
     <Compile Include="Models\noCheckDate.cs">
@@ -328,7 +323,7 @@
     <Compile Include="Models\userGroup.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
-<<<<<<< HEAD
+
     <Compile Include="Models\ViewModel\GroupAddViewModel.cs" />
     <Compile Include="Models\ViewModel\GroupDetailViewModel.cs" />
     <Compile Include="Models\ViewModel\UserAddViewModel.cs" />
@@ -343,7 +338,6 @@
     <Compile Include="Services\Interface\IAbnormalDefinitionService.cs" />
     <Compile Include="Services\Interface\IExhibitionItemService.cs" />
     <Compile Include="Services\Interface\IReportDeviceService.cs" />
-=======
     <Compile Include="Models\ViewModel\AddAbnormalDefinitionViewModel.cs" />
     <Compile Include="Models\ViewModel\ItemCheckRecordViewModel.cs" />
     <Compile Include="Models\ViewModel\ItemInspectionDispatchViewModel.cs" />
@@ -356,7 +350,6 @@
     <Compile Include="Models\ViewModel\UserAddViewModel.cs" />
     <Compile Include="Models\ViewModel\UserDetailViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
->>>>>>> abnormal
     <Compile Include="Services\AbnormalDefinitionService.cs" />
     <Compile Include="Services\AbnormalRecordService.cs" />
     <Compile Include="Services\ExhibitionItemService.cs" />
@@ -375,15 +368,12 @@
     <Compile Include="Services\ItemInspectionDispatchService.cs" />
     <Compile Include="Services\Misc\IResult.cs" />
     <Compile Include="Services\Misc\Result.cs" />
-<<<<<<< HEAD
     <Compile Include="Services\UserGroupService.cs" />
-=======
     <Compile Include="Services\ReportDeviceService.cs" />
     <Compile Include="Services\ReportSourceService.cs" />
     <Compile Include="Services\RoomCheckRecordService.cs" />
     <Compile Include="Services\RoomInspectioDispatchService.cs" />
     <Compile Include="Services\SoftwareVersionService.cs" />
->>>>>>> abnormal
     <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -483,7 +473,6 @@
     <Content Include="Views\User\EditGroup.cshtml" />
     <Content Include="Views\User\EditPassword.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Information\AddField.cshtml" />
     <Content Include="Views\Information\EditField.cshtml" />
     <Content Include="Views\Information\AddExhibition.cshtml" />
@@ -513,7 +502,6 @@
     <Content Include="Views\MaintenanceWork\PendingList.cshtml" />
     <Content Include="Views\MaintenanceWork\Query.cshtml" />
     <Content Include="Views\MaintenanceWork\WriteDetailedData.cshtml" />
-=======
     <Content Include="Views\AbnormalDefinition\AddAbnormalDefinition.cshtml" />
     <Content Include="Views\AbnormalDefinition\EditAbnormalDefinition.cshtml" />
     <Content Include="Views\AbnormalDefinition\ListAbnormalDefinition.cshtml" />
@@ -530,7 +518,6 @@
     <Content Include="Views\InspectionDispatch\ListItemInspectionDispatch.cshtml" />
     <Content Include="Views\InspectionDispatch\ListNonInspectionDispatchDate.cshtml" />
     <Content Include="Views\InspectionDispatch\ListRoomInspectionDispatch.cshtml" />
->>>>>>> abnormal
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

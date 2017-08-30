@@ -1,6 +1,5 @@
 ﻿var newPassword;
 var repeatPassword;
-<<<<<<< HEAD
 
 $.fn.editable.defaults.mode = 'inline';
 
@@ -59,8 +58,6 @@ $(document).ready(function () {
             $('#last').html(response.lastUpdateTime);
         }
     });
-=======
->>>>>>> abnormal
 
     $('#active').editable({
         value: ['@Model.active'],
@@ -87,7 +84,6 @@ $(document).ready(function () {
         newPassword = $.trim($('#newPassword').val());
         repeatPassword = $.trim($('#repeatPassword').val());
 
-<<<<<<< HEAD
         if (newPassword === '' || repeatPassword === '') {
             alert('密碼不能為空白!');
             return;
@@ -97,8 +93,8 @@ $(document).ready(function () {
         } else {
             alert('新密碼輸入錯誤!');
         }
-    });  
-=======
+    });
+
     $('#modalYes2').click(function () {
         newPassword = $.trim($('#newPassword').val());
         repeatPassword = $.trim($('#repeatPassword').val());
@@ -181,5 +177,5 @@ $(document).ready(function () {
             ]
         });
     }
->>>>>>> abnormal
+
 });

@@ -40,10 +40,7 @@
                                         <td>@item.groupId</td>
                                         <td>@item.agent</td>
                                         <td>@Html.DisplayFor(modelItem => item.createTime)</td>
-<<<<<<< HEAD
                                         <td>@Html.DisplayFor(modelItem => item.lastUpdateTime)</td>
-=======
->>>>>>> abnormal
                                         <td>
                                             <a href="@Url.Action("Edit", new { id = item.userId })" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
                                             <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.userId')" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>
