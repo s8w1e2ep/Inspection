@@ -50,6 +50,10 @@ namespace InspectionWeb
             container.RegisterType<IRepository<abnormalDefinition>, GenericRepository<abnormalDefinition>>();
             container.RegisterType<IRepository<abnormalRecord>, GenericRepository<abnormalRecord>>();
             container.RegisterType<IRepository<exhibitionItem>, GenericRepository<exhibitionItem>>();
+            container.RegisterType<IRepository<itemInspectionDispatch>, GenericRepository<itemInspectionDispatch>>();
+            container.RegisterType<IRepository<roomInspectionDispatch>, GenericRepository<roomInspectionDispatch>>();
+            container.RegisterType<IRepository<itemInspectionDispatchDetail>, GenericRepository<itemInspectionDispatchDetail>>();
+            container.RegisterType<IRepository<roomInspectionDispatchDetail>, GenericRepository<roomInspectionDispatchDetail>>();
             container.RegisterType<IRepository<reportDevice>, GenericRepository<reportDevice>>();
             container.RegisterType<IRepository<reportSource>, GenericRepository<reportSource>>();
             container.RegisterType<IRepository<user>, GenericRepository<user>>();
@@ -60,6 +64,8 @@ namespace InspectionWeb
             container.RegisterType<IExhibitionItemService, ExhibitionItemService>();
             container.RegisterType<IReportDeviceService, ReportDeviceService>();
             container.RegisterType<IReportSourceService, ReportSourceService>();
+            container.RegisterType<IItemInspectionDispatchService, ItemInspectionDispatchService>();
+            container.RegisterType<IRoomInspectionDispatchService, RoomInspectionDispatchService>();
             container.RegisterType<IUserService, UserService>();
         }
     }

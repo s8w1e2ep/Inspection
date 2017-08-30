@@ -52,6 +52,12 @@ namespace InspectionWeb.Models.Misc
             return id;
         }
 
+        public string GetRoomInspectionDispatchNewID()
+        {
+            string id = "roomInspectionDispatch_" + this.GetUniqID().Replace(",", "_");
+            return id;
+        }
+
         public string GetID(string Header)
         {
             string id = Header + "_" + this.GetUniqID().Replace(",", "_");

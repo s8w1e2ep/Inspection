@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using InspectionWeb.Models;
 
-namespace InspectionWeb.Service
+namespace InspectionWeb.Services
 {
     public class ItemCheckRecordService : IItemCheckRecordService
     {
@@ -14,7 +14,7 @@ namespace InspectionWeb.Service
 
         public ItemCheckRecordService(IRepository<itemCheckRecord> repository)
         {
-            _repository = repository;
+            this._repository = repository;
         }
 
         public IResult Create(itemCheckRecord instance)

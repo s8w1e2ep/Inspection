@@ -293,6 +293,8 @@
     <Compile Include="Models\roomInspectionDispatch.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\itemInspectionDispatchDetail.cs" />
+    <Compile Include="Models\roomInspectionDispatchDetail.cs" />
     <Compile Include="Models\softwareVersion.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
@@ -334,12 +336,14 @@
     <Compile Include="Services\ExhibitionItemService.cs" />
     <Compile Include="Services\Interface\IAbnormalDefinitionService.cs" />
     <Compile Include="Services\Interface\IAbnormalRecordService.cs" />
+    <Compile Include="Services\Interface\IExhibitionRoomService.cs" />
     <Compile Include="Services\Interface\IExhibitionItemService.cs" />
     <Compile Include="Services\Interface\IItemCheckRecordService.cs" />
     <Compile Include="Services\Interface\IItemInspectionDispatchService.cs" />
     <Compile Include="Services\Interface\IReportDeviceService.cs" />
     <Compile Include="Services\Interface\IReportSourceService.cs" />
     <Compile Include="Services\Interface\IRoomCheckRecordService.cs" />
+    <Compile Include="Services\Interface\IInspectionDispatchService.cs" />
     <Compile Include="Services\Interface\IRoomInspectionDispatchService.cs" />
     <Compile Include="Services\Interface\ISoftwareVersionService.cs" />
     <Compile Include="Services\Interface\IUserService.cs" />

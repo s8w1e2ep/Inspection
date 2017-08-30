@@ -4,11 +4,9 @@ using InspectionWeb.Models;
 
 namespace InspectionWeb.Services.Interface
 {
-    public interface IRoomInspectionDispatchService
+    public interface IInspectionDispatchService
     {
         IResult Create(roomInspectionDispatch instance);
-
-        IResult Create(System.DateTime date, IEnumerable<exhibitionRoom> rooms);
 
         IResult Update(roomInspectionDispatch instance);
 
@@ -16,16 +14,12 @@ namespace InspectionWeb.Services.Interface
 
         IResult Delete(string dispatchId);
 
-        bool IsExists(System.DateTime date);
-
-        bool IsExists(string dispatchId);
-
-        bool checkRoomInsert();
+        bool IsExist(System.DateTime date);
 
         roomInspectionDispatch GetById(string dispatchId);
 
         IEnumerable<roomInspectionDispatch> GetAll();
 
-        IEnumerable<roomInspectionDispatchDetail> GetAllByDate(System.DateTime date);
+        IEnumerable<roomInspectionDispatch> GetAllByDate(System.DateTime date);
     }
 }
