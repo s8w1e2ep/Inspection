@@ -34,7 +34,7 @@ namespace InspectionWeb.Services
                 DateTime now = DateTime.Now;
                 IdGenerator idGen = new IdGenerator();
 
-                source.sourceId = idGen.GetReportSourceNewID();
+                source.sourceId = idGen.GetID("reportSource");
                 source.sourceCode = sourceCode;
                 source.sourceName = sourceName;
                 source.description = "";

@@ -60,7 +60,7 @@ namespace InspectionWeb.Services
                 {
                     IdGenerator idg = new IdGenerator();
                     Encrypt encoder = new Encrypt();
-                    string userId = idg.GetUserNewID();
+                    string userId = idg.GetID("user");
                     string encodePassword = encoder.EncryptSHA(password);
                     DateTime nowTime = DateTime.Now;
 
@@ -73,6 +73,7 @@ namespace InspectionWeb.Services
                     newUser.lastUpdateTime = nowTime;
 
                     this._repository.Create(newUser);
+                    result.Message = userId; 
                     result.Success = true;
                 }
                 catch (Exception ex)
@@ -119,7 +120,7 @@ namespace InspectionWeb.Services
 
             try
             {
-                if (key == "active")
+                if (key == "active" || key == "isDelete")
                 {
                     int iValue;
                     bool ret = JsonValue2Int(value, out iValue);
@@ -238,7 +239,6 @@ namespace InspectionWeb.Services
 
         public bool IsExists(string userId)
         {
-
             return this._repository.GetAll().Any(x => x.isDelete == 0 && x.userId == userId);
         }
 
@@ -254,7 +254,7 @@ namespace InspectionWeb.Services
 
         public IEnumerable<user> GetAll()
         {
-            return _repository.GetAll();
+            return _repository.GetAll().Where(x => x.isDelete == 0);
         }
 
         public user Login(string account, string password)

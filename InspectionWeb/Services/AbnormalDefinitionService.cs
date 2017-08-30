@@ -34,7 +34,7 @@ namespace InspectionWeb.Services
                 DateTime now = DateTime.Now;
                 IdGenerator idGen = new IdGenerator();
 
-                abnormal.abnormalId = idGen.GetAbnormalDefinitionNewID();
+                abnormal.abnormalId = idGen.GetID("abnormalDefinition");
                 abnormal.abnormalCode = abnormaCode;
                 abnormal.abnormalName = abnormalName;
                 abnormal.description = "";
