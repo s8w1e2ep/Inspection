@@ -218,7 +218,6 @@
     <Compile Include="Controllers\ReportJobController.cs" />
     <Compile Include="Controllers\AbnormalDefinitionController.cs" />
     <Compile Include="Controllers\CheckRecordController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InspectionDispatchController.cs" />
     <Compile Include="Controllers\ReportSourceController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
@@ -274,7 +273,6 @@
     <Compile Include="Models\manRepairRecord.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
-
     <Compile Include="Models\Misc\DateTimeHelper.cs" />
     <Compile Include="Models\Misc\Encrypt.cs" />
     <Compile Include="Models\Misc\IdGenerator.cs" />
@@ -323,21 +321,10 @@
     <Compile Include="Models\userGroup.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
-
     <Compile Include="Models\ViewModel\GroupAddViewModel.cs" />
     <Compile Include="Models\ViewModel\GroupDetailViewModel.cs" />
-    <Compile Include="Models\ViewModel\UserAddViewModel.cs" />
-    <Compile Include="Models\ViewModel\UserDetailViewModel.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Interface\ISoftwareVersionService.cs" />
     <Compile Include="Services\Interface\IUserGroupService.cs" />
-    <Compile Include="Services\Interface\IUserService.cs" />
-    <Compile Include="Services\SoftwareVersionService.cs" />
-    <Compile Include="Services\ReportSourceService.cs" />
     <Compile Include="Services\Interface\IReportSourceService.cs" />
-    <Compile Include="Services\Interface\IAbnormalDefinitionService.cs" />
-    <Compile Include="Services\Interface\IExhibitionItemService.cs" />
-    <Compile Include="Services\Interface\IReportDeviceService.cs" />
     <Compile Include="Models\ViewModel\AddAbnormalDefinitionViewModel.cs" />
     <Compile Include="Models\ViewModel\ItemCheckRecordViewModel.cs" />
     <Compile Include="Models\ViewModel\ItemInspectionDispatchViewModel.cs" />
@@ -359,7 +346,6 @@
     <Compile Include="Services\Interface\IItemCheckRecordService.cs" />
     <Compile Include="Services\Interface\IItemInspectionDispatchService.cs" />
     <Compile Include="Services\Interface\IReportDeviceService.cs" />
-    <Compile Include="Services\Interface\IReportSourceService.cs" />
     <Compile Include="Services\Interface\IRoomCheckRecordService.cs" />
     <Compile Include="Services\Interface\IRoomInspectionDispatchService.cs" />
     <Compile Include="Services\Interface\ISoftwareVersionService.cs" />

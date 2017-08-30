@@ -7,10 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> abnormal
 namespace InspectionWeb.Services
 {
     public class AbnormalDefinitionService : IAbnormalDefinitionService
