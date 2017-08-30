@@ -62,21 +62,19 @@ $(document).ready(function () {
     $('#active').editable({
         value: ['@Model.active'],
         source: {
-            1: 'Yes',
+            1: '是',
         },
-        emptytext: 'No',
+        emptytext: '否',
         params: function (params) {
-            console.log(params);
             var data = {};
             data['name'] = params.name;
             data['pk'] = params.pk;
             data['value'] = params.value.join(",");
-            console.log(data);
 
             return data;
         },
-        success: function () {
-            location.reload();
+        success: function (response) {
+            $('#last').html(response.lastUpdateTime);
         }
     });
 
