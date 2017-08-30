@@ -218,6 +218,18 @@
                     </li>
                 </ul>
             </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-dashboard"></i>
+                    <span>維修作業</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="@Url.Action("PendingList", "MaintenanceWork")"><i class="fa fa-circle-o"></i>待修清單</a></li>
+                    <li><a href="@Url.Action("ExtendedWork", "MaintenanceWork")"><i class="fa fa-circle-o"></i>展延作業</a></li>
+                    <li><a href="@Url.Action("Query", "MaintenanceWork")"><i class="fa fa-circle-o"></i>維修綜合查詢</a></li>
+                </ul>
+            </li>
         </ul>
     </section>
 </aside>

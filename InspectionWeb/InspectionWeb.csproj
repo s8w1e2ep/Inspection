@@ -214,6 +214,7 @@
     <Compile Include="Class\IdGenerator.cs" />
     <Compile Include="Controllers\InformationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MaintenanceWorkController.cs" />
     <Compile Include="Controllers\ReportJobController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
@@ -390,6 +391,7 @@
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\editGroup.js" />
+    <Content Include="Scripts\editPendingListDetailedData.js" />
     <Content Include="Scripts\editUser.js" />
     <Content Include="Scripts\exhibition.js" />
     <Content Include="Scripts\exhibitionItem.js" />
@@ -459,6 +461,11 @@
     <Content Include="Views\ReportJob\EditOther.cshtml" />
     <Content Include="Views\ReportJob\Query.cshtml" />
     <Content Include="Views\ReportJob\DetailedData.cshtml" />
+    <Content Include="Views\MaintenanceWork\DetailedData.cshtml" />
+    <Content Include="Views\MaintenanceWork\ExtendedWork.cshtml" />
+    <Content Include="Views\MaintenanceWork\PendingList.cshtml" />
+    <Content Include="Views\MaintenanceWork\Query.cshtml" />
+    <Content Include="Views\MaintenanceWork\WriteDetailedData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

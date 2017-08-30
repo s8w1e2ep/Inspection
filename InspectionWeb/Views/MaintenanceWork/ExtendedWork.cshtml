@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "展延作業";
+}
+<div class="wrapper">
+    <div class="content-wrapper">
+        <section class="content-header" style="margin-bottom: 15px;">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/"><i class="fa fa-dashboard"></i>Home</a>
+                </li>
+                <li class="active">展延作業</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-info">
+                        <div class="box-body">
+                            <table id="userTable" class="row-border" cellspacing="0" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>通報來源</th>
+                                        <th>展示廳</th>
+                                        <th>展項/體驗設施</th>
+                                        <th>異常情況說明</th>
+                                        <th>故障日期時間</th>
+                                        <th>預估完工日期</th>
+                                        <th>修改日期</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>自動通報</td>
+                                        <td>4F 交通夢想館</td>
+                                        <td>飛行車</td>
+                                        <td>不會動</td>
+                                        <td>2017-08-28 13:47:23</td>
+                                        <td>2017-08-30 10:00:00</td>
+                                        <td><input id="account" type="text" class="form-control" name="account" placeholder="yyyy-mm-dd hh:mm:ss"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<script src="~/Scripts/exhibition.js"></script>
+
+
