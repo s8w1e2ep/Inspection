@@ -85,30 +85,21 @@ namespace InspectionWeb.Controllers
         [HttpPost]
         public ActionResult UpdateAbnormalDefinition(updateAbnormalDefinitionJson abnormalDefinitionJson)
         {
-            bool updateFlag = true;
             var abnormalId = abnormalDefinitionJson.pk;
             var abnormalDefinition = this._AbnormalDefinitionService.GetById(abnormalId);
             if (abnormalDefinition != null && ModelState.IsValid)
             {
-                if(abnormalDefinitionJson.name == "abnormalCode")
+                IResult result = this._AbnormalDefinitionService.Update(abnormalDefinition, abnormalDefinitionJson.name, abnormalDefinitionJson.value);
+                abnormalDefinition = this._AbnormalDefinitionService.GetById(abnormalId);
+                if (result.Success)
                 {
-                    updateFlag = !this._AbnormalDefinitionService.InRepeat(abnormalDefinitionJson.value);
+                   string lastUpdateTime = abnormalDefinition.lastUpdateTime.ToString();
+                   return Json(new { result = 1, abnormalId = abnormalId, lastUpdateTime = lastUpdateTime });
                 }
-                if (updateFlag)
+                else
                 {
-                    IResult result = this._AbnormalDefinitionService.Update(abnormalDefinition, abnormalDefinitionJson.name, abnormalDefinitionJson.value);
-                    abnormalDefinition = this._AbnormalDefinitionService.GetById(abnormalId);
-                    if (result.Success)
-                    {
-                        string lastUpdateTime = abnormalDefinition.lastUpdateTime.ToString();
-                        return Json(new { result = 1, abnormalId = abnormalId, lastUpdateTime = lastUpdateTime });
-                    }
-                    else
-                    {
-                        return Json(new { result = 0, abnormalId = abnormalId });
-                    }
+                   return Json(new { result = 0, abnormalId = abnormalId });
                 }
-                return Json(new { result = 0, abnormalId = abnormalId });
             }
             else
             {
@@ -122,14 +113,12 @@ namespace InspectionWeb.Controllers
             if (string.IsNullOrEmpty(abnormalId))
             {
                 return RedirectToAction("ListAbnormalDefintion");
-
             }
             else
             {
                 var abnormal = _AbnormalDefinitionService.GetById(abnormalId);
                 ListAbnormalDefinitionViewModel viewModel = new ListAbnormalDefinitionViewModel();
                 viewModel = AbnormalDefinition2ViewModel(abnormal);
-
                 return View(viewModel);
             }
 

@@ -19,9 +19,9 @@ namespace InspectionWeb.Services
             _repository = repository;
         }
 
-        public IResult Create(string abnormaCode, string abnormalName)
+        public IResult Create(string abnormalCode, string abnormalName)
         {
-            if (string.IsNullOrEmpty(abnormaCode))
+            if (string.IsNullOrEmpty(abnormalCode))
             {
                 throw new ArgumentNullException();
             }
@@ -32,11 +32,16 @@ namespace InspectionWeb.Services
 
             try
             {
+                if (this.IsRepeat(abnormalCode))
+                {
+                    result.ErrorMsg = "異常編號重複";
+                    return result;
+                }
                 DateTime now = DateTime.Now;
                 IdGenerator idGen = new IdGenerator();
 
                 abnormal.abnormalId = idGen.GetAbnormalDefinitionNewID();
-                abnormal.abnormalCode = abnormaCode;
+                abnormal.abnormalCode = abnormalCode;
                 abnormal.abnormalName = abnormalName;
                 abnormal.description = "";
                 abnormal.isDelete = 0;
@@ -53,7 +58,7 @@ namespace InspectionWeb.Services
                 if (((System.Data.SqlClient.SqlException)((ex.InnerException).InnerException)).Number == 2627)
                 {
                     result.ErrorMsg = ex.ToString();
-                    //result.ErrorMsg = "";
+                    result.ErrorMsg = "其他未知錯誤";
                 }
             }
 
@@ -161,7 +166,7 @@ namespace InspectionWeb.Services
             return this._repository.GetAll().Any(x => x.abnormalId == abnormalId);
         }
 
-        public bool InRepeat(string abnormalCode)
+        public bool IsRepeat(string abnormalCode)
         {
             return this._repository.GetAll().Any(x => x.isDelete == 0 && x.abnormalCode == abnormalCode);
         }
