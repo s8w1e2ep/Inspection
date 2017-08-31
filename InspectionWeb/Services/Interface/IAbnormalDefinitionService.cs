@@ -21,8 +21,6 @@ namespace InspectionWeb.Services.Interface
 
         bool IsRepeat(string abnormalCode);
 
-        string GetId(string abnormalCode);
-
         abnormalDefinition GetByAbnormalCode(string abnormalCode);
 
         abnormalDefinition GetById(string abnormal);

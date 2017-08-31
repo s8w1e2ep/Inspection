@@ -27,12 +27,11 @@ namespace InspectionWeb.Services
             }
 
             IResult result = new Result(false);
-
             abnormalDefinition abnormal = new abnormalDefinition();
 
             try
             {
-                if (this.IsRepeat(abnormalCode))
+                if (IsRepeat(abnormalCode))
                 {
                     result.ErrorMsg = "異常編號重複";
                     return result;
@@ -40,7 +39,7 @@ namespace InspectionWeb.Services
                 DateTime now = DateTime.Now;
                 IdGenerator idGen = new IdGenerator();
 
-                abnormal.abnormalId = idGen.GetAbnormalDefinitionNewID();
+                abnormal.abnormalId = idGen.GetID("abnormalDefinition");
                 abnormal.abnormalCode = abnormalCode;
                 abnormal.abnormalName = abnormalName;
                 abnormal.description = "";
@@ -49,6 +48,7 @@ namespace InspectionWeb.Services
                 abnormal.lastUpdateTime = now;
 
                 this._repository.Create(abnormal);
+                result.ErrorMsg = abnormal.abnormalId;
                 result.Success = true;
             }
             catch (Exception ex)
@@ -58,7 +58,7 @@ namespace InspectionWeb.Services
                 if (((System.Data.SqlClient.SqlException)((ex.InnerException).InnerException)).Number == 2627)
                 {
                     result.ErrorMsg = ex.ToString();
-                    result.ErrorMsg = "其他未知錯誤";
+                    //result.ErrorMsg = "其他未知錯誤";
                 }
             }
 
@@ -145,8 +145,11 @@ namespace InspectionWeb.Services
 
             try
             {
-                var instance = this.GetById(abnormalId);
-                instance.isDelete = 1;
+                abnormalDefinition instance = this.GetById(abnormalId);
+                Dictionary<string, object> DicUpdate = new Dictionary<string, object>();
+                DicUpdate.Add("isDelete", Convert.ToByte(1));
+                DicUpdate.Add("lastUpdateTime", DateTime.Now);
+                this._repository.Update(instance, DicUpdate);
                 result.Success = true;
             }
             catch (Exception ex)
@@ -154,11 +157,6 @@ namespace InspectionWeb.Services
                 result.Exception = ex;
             }
             return result;
-        }
-
-        public string GetId(string abnormalCode)
-        {
-            return this._repository.Get(x => x.abnormalCode == abnormalCode && x.isDelete == 0).abnormalId;
         }
 
         public bool IsExists(string abnormalId)
@@ -183,7 +181,7 @@ namespace InspectionWeb.Services
 
         public IEnumerable<abnormalDefinition> GetAll()
         {
-            return this._repository.GetAll().Where(x => x.isDelete == 0);
+            return this._repository.GetAll().Where(x => x.isDelete == 0).OrderBy(x => x.createTime);
         }
     }
 }

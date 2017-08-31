@@ -50,7 +50,7 @@ namespace InspectionWeb.Controllers
             {
 
                 IResult result = _AbnormalDefinitionService.Create(abnormalCode, abnormalName);
-
+                System.Diagnostics.Debug.WriteLine("msg: " + result.ErrorMsg);
                 if (result.Success == false)
                 {
                     AddAbnormalDefinitionViewModel ad = new AddAbnormalDefinitionViewModel();
@@ -61,14 +61,13 @@ namespace InspectionWeb.Controllers
                     return View("AddAbnormalDefinition", ad);
                 }
 
-                return RedirectToAction("EditAbnormalDefinition", new { abnormalId = _AbnormalDefinitionService.GetId(abnormalCode) });
+                return RedirectToAction("EditAbnormalDefinition", new { abnormalId = result.ErrorMsg });
             }
             else
             {
                 AddAbnormalDefinitionViewModel adEmpty = new AddAbnormalDefinitionViewModel();
                 adEmpty.abnormalDefinitionName = abnormalName;
-                adEmpty.ErrorMsg = "";
-
+                adEmpty.ErrorMsg = "異常編號或名稱是空白";
                 return View("AddAbnormalDefinition", adEmpty);
             }
 

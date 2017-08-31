@@ -53,11 +53,11 @@
                         <!-- form start -->
                         <form class="form-horizontal" method="post" action="@Url.Action("AddReportSource")" onsubmit="return formValidation();">
                             <div class="box-body">
-                                @if (!string.IsNullOrEmpty(Model.ErrorMsg))
+                                @if (!string.IsNullOrEmpty(@Model.ErrorMsg))
                                 {
                                     <div class="form-group has-error">
                                         <label class="col-sm-2"></label>
-                                        <label class="col-sm-10">Model.ErrorMsg</label>
+                                        <label class="col-sm-10">@Model.ErrorMsg</label>
                                     </div>
                                 }
                                 <div id="sourceCodeDiv" class="form-group">
