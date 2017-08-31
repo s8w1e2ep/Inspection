@@ -48,89 +48,7 @@
                         </ul>
                     </li>
                 </ul>
-            </li>
-            @*統計資料*@
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-dashboard"></i>
-                    <span>統計資料</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="@Url.Action("Exhibition", "Statistic")"><i class="fa fa-circle-o"></i>展示廳正常率</a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("ExhibitionItem", "Statistic")"><i class="fa fa-circle-o"></i>展項正常率</a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Facility", "Statistic")"><i class="fa fa-circle-o"></i>體驗設施正常率</a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("RankItem", "Statistic")"><i class="fa fa-circle-o"></i>異常排行-展項</a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("RankReport", "Statistic")"><i class="fa fa-circle-o"></i>異常排行-通報來源</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-dashboard"></i>
-                    <span>6000 通報作業</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li class="">
-                        <a href="#">
-                            <i class="fa fa-edit"></i>
-                            <span>展示廳</span>
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li>
-                                <a href="@Url.Action("AddExhibition", "ReportJob")"><i class="fa fa-circle-o"></i>新增通報</a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("EditExhibition", "ReportJob")"><i class="fa fa-circle-o"></i>檢視/修改 通報</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="">
-                        <a href="#">
-                            <i class="fa fa-edit"></i>
-                            <span>體驗設施</span>
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li>
-                                <a href="@Url.Action("AddExperience", "ReportJob")"><i class="fa fa-circle-o"></i>新增通報</a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("EditExperience", "ReportJob")"><i class="fa fa-circle-o"></i>檢視/修改 通報</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="">
-                        <a href="#">
-                            <i class="fa fa-edit"></i>
-                            <span>其他設施</span>
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li>
-                                <a href="@Url.Action("AddOther", "ReportJob")"><i class="fa fa-circle-o"></i>新增通報</a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("EditOther", "ReportJob")"><i class="fa fa-circle-o"></i>檢視/修改 通報</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Query", "ReportJob")"><i class="fa fa-circle-o"></i>整體通報查詢</a>
-                    </li>
-                </ul>
-            </li>
+            </li>          
             @*圖資與設備管理*@
             <li class="treeview">
                 <a href="#">
@@ -217,18 +135,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-dashboard"></i>
-                    <span>維修作業</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="@Url.Action("PendingList", "MaintenanceWork")"><i class="fa fa-circle-o"></i>待修清單</a></li>
-                    <li><a href="@Url.Action("ExtendedWork", "MaintenanceWork")"><i class="fa fa-circle-o"></i>展延作業</a></li>
-                    <li><a href="@Url.Action("Query", "MaintenanceWork")"><i class="fa fa-circle-o"></i>維修綜合查詢</a></li>
-                </ul>
-            </li>
+            @*派工/巡檢管理*@
             <li>
                 <a href="#"><i class="fa fa-dashboard"></i> <span>派工/巡檢管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
@@ -265,6 +172,78 @@
                     </li>
                 </ul>
             </li>
+            @*通報作業*@
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-dashboard"></i>
+                    <span>6000 通報作業</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="">
+                        <a href="#">
+                            <i class="fa fa-edit"></i>
+                            <span>展示廳</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="@Url.Action("AddExhibition", "ReportJob")"><i class="fa fa-circle-o"></i>新增通報</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("EditExhibition", "ReportJob")"><i class="fa fa-circle-o"></i>檢視/修改 通報</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="">
+                        <a href="#">
+                            <i class="fa fa-edit"></i>
+                            <span>體驗設施</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="@Url.Action("AddExperience", "ReportJob")"><i class="fa fa-circle-o"></i>新增通報</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("EditExperience", "ReportJob")"><i class="fa fa-circle-o"></i>檢視/修改 通報</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="">
+                        <a href="#">
+                            <i class="fa fa-edit"></i>
+                            <span>其他設施</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="@Url.Action("AddOther", "ReportJob")"><i class="fa fa-circle-o"></i>新增通報</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("EditOther", "ReportJob")"><i class="fa fa-circle-o"></i>檢視/修改 通報</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Query", "ReportJob")"><i class="fa fa-circle-o"></i>整體通報查詢</a>
+                    </li>
+                </ul>
+            </li>
+            @*維修作業*@
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-dashboard"></i>
+                    <span>維修作業</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="@Url.Action("PendingList", "MaintenanceWork")"><i class="fa fa-circle-o"></i>待修清單</a></li>
+                    <li><a href="@Url.Action("ExtendedWork", "MaintenanceWork")"><i class="fa fa-circle-o"></i>展延作業</a></li>
+                    <li><a href="@Url.Action("Query", "MaintenanceWork")"><i class="fa fa-circle-o"></i>維修綜合查詢</a></li>
+                </ul>
+            </li>
+            @*異常定義管理*@
             <li>
                 <a href="#"><i class="fa fa-dashboard"></i> <span>異常定義管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
@@ -276,6 +255,7 @@
                     </li>
                 </ul>
             </li>
+            @*故障來源定義管理*@
             <li>
                 <a href="#"><i class="fa fa-dashboard"></i> <span>故障來源定義管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
@@ -284,6 +264,31 @@
                     </li>
                     <li>
                         <a href="@Url.Action("ListReportSource", "ReportSource")"><i class="fa fa-circle-o"></i>故障來源定義檢視/修改</a>
+                    </li>
+                </ul>
+            </li>
+            @*統計資料*@
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-dashboard"></i>
+                    <span>統計資料</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="@Url.Action("Exhibition", "Statistic")"><i class="fa fa-circle-o"></i>展示廳正常率</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("ExhibitionItem", "Statistic")"><i class="fa fa-circle-o"></i>展項正常率</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Facility", "Statistic")"><i class="fa fa-circle-o"></i>體驗設施正常率</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("RankItem", "Statistic")"><i class="fa fa-circle-o"></i>異常排行-展項</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("RankReport", "Statistic")"><i class="fa fa-circle-o"></i>異常排行-通報來源</a>
                     </li>
                 </ul>
             </li>
