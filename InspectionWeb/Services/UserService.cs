@@ -50,38 +50,38 @@ namespace InspectionWeb.Services
             IResult result = new Result(false);
             user newUser = new user();
 
-            try
+            if(IsRepeat(account))
             {
-                IdGenerator idg = new IdGenerator();
-                Encrypt encoder = new Encrypt();
-                string userId = idg.GetUserNewID();
-                string encodePassword = encoder.EncryptSHA(password);
-                DateTime nowTime = DateTime.Now;
-
-                newUser.userId = userId;
-                newUser.userCode = account;
-                newUser.password = encodePassword;
-                newUser.active = 0;
-                newUser.isDelete = 0;
-                newUser.createTime = nowTime;
-                newUser.lastUpdateTime = nowTime;
-
-                this._repository.Create(newUser);
-                result.Success = true;
+                result.ErrorMsg = "帳號已被使用,請重新申請";
             }
-            catch (Exception ex)
+            else
             {
-                result.Exception = ex;
-                result.ErrorMsg = ex.ToString();
+                try
+                {
+                    IdGenerator idg = new IdGenerator();
+                    Encrypt encoder = new Encrypt();
+                    string userId = idg.GetID("user");
+                    string encodePassword = encoder.EncryptSHA(password);
+                    DateTime nowTime = DateTime.Now;
 
-                // 要先判斷是否 isDelete 再判斷重複
-                //if (((System.Data.SqlClient.SqlException)((ex.InnerException).InnerException)).Number == 2627)
-                //{
-                //    result.ErrorMsg = "Email 已被使用,請重新申請";
-                //    //result.ErrorMsg = "";
-                //}
+                    newUser.userId = userId;
+                    newUser.userCode = account;
+                    newUser.password = encodePassword;
+                    newUser.active = 0;
+                    newUser.isDelete = 0;
+                    newUser.createTime = nowTime;
+                    newUser.lastUpdateTime = nowTime;
+
+                    this._repository.Create(newUser);
+                    result.Message = userId; 
+                    result.Success = true;
+                }
+                catch (Exception ex)
+                {
+                    result.Exception = ex;
+                    result.ErrorMsg = ex.ToString();
+                }
             }
-
             return result;
         }
 
@@ -120,26 +120,26 @@ namespace InspectionWeb.Services
 
             try
             {
-                if (key == "active")
+                if (key == "active" || key == "isDelete")
                 {
-                    short sValue;
-                    bool ret = JsonValue2Short(value, out sValue);
+                    int iValue;
+                    bool ret = JsonValue2Int(value, out iValue);
 
                     if (ret == true)
                     {
-                        value = sValue;
+                        value = Convert.ToByte(iValue);
                     }
                     else //轉換異常寫入預設值
                     {
-                        value = 1;
+                        value = Convert.ToByte(1); ;
                     }
                 }
-
                 DicUpdateUser.Add(key, value);
-                DicUpdateUser.Add("lastUpdateTime", DateTime.Now);
-
+                DateTime now = DateTime.Now;
+                DicUpdateUser.Add("lastUpdateTime", now);
                 this._repository.Update(instance, DicUpdateUser);
                 result.Success = true;
+                result.lastUpdateTime = now.ToString("yyyy-MM-dd HH:mm:ss");
             }
             catch (Exception ex)
             {
@@ -229,6 +229,7 @@ namespace InspectionWeb.Services
                 if (encodePassword == user.password)
                 {
                     this._repository.Update(user, "password", encoder.EncryptSHA(newPassword));
+                    this._repository.Update(user, "lastUpdateTime", DateTime.Now);
                     result.Success = true;
                 }
             }
@@ -238,7 +239,7 @@ namespace InspectionWeb.Services
 
         public bool IsExists(string userId)
         {
-            return this._repository.GetAll().Any(x => x.userId == userId);
+            return this._repository.GetAll().Any(x => x.isDelete == 0 && x.userId == userId);
         }
 
         public user GetByID(string userId)
@@ -253,7 +254,7 @@ namespace InspectionWeb.Services
 
         public IEnumerable<user> GetAll()
         {
-            return _repository.GetAll();
+            return _repository.GetAll().Where(x => x.isDelete == 0);
         }
 
         public user Login(string account, string password)
@@ -276,6 +277,11 @@ namespace InspectionWeb.Services
                 }
             }
             return null;
+        }
+
+        public bool IsRepeat(string userCode)
+        {
+            return this._repository.GetAll().Any(x => x.isDelete == 0 && x.userCode == userCode);
         }
     }
 }

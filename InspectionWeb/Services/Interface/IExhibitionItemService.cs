@@ -17,6 +17,8 @@ namespace InspectionWeb.Services.Interface
 
         exhibitionItem GetById(string itemId);
 
+        exhibitionItem GetByItemCode(string itemCode);
+
         IEnumerable<exhibitionItem> GetAll();
 
         IEnumerable<exhibitionItemList> GetAllIdAndName();

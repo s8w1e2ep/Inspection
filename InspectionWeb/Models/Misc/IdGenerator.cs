@@ -15,49 +15,6 @@ namespace InspectionWeb.Models.Misc
             return a.ToString("x8") + b.ToString("x5");
         }
 
-
-        public string GetUserNewID()
-        {
-            string id = "user_" + this.GetUniqID().Replace(",", "_");
-            return id;
-        }
-
-        public string GetFieldNewID()
-        {
-            string id = "field_" + this.GetUniqID().Replace(",", "_");
-            return id;
-        }
-
-        public string GetBeaconNewID()
-        {
-            string id = "beacon_" + this.GetUniqID().Replace(",", "_");
-            return id;
-        }
-
-        public string GetParkingblockNewID()
-        {
-            string id = "parkingBlock_" + this.GetUniqID().Replace(",", "_");
-            return id;
-        }
-
-        public string GetAbnormalDefinitionNewID()
-        {
-            string id = "abnormalDefinition_" + this.GetUniqID().Replace(",", "_");
-            return id;
-        }
-
-        public string GetReportSourceNewID()
-        {
-            string id = "reportSource_" + this.GetUniqID().Replace(",", "_");
-            return id;
-        }
-
-        public string GetRoomInspectionDispatchNewID()
-        {
-            string id = "roomInspectionDispatch_" + this.GetUniqID().Replace(",", "_");
-            return id;
-        }
-
         public string GetID(string Header)
         {
             string id = Header + "_" + this.GetUniqID().Replace(",", "_");

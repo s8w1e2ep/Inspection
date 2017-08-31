@@ -51,7 +51,7 @@ namespace InspectionWeb.Services
                     DateTime now = DateTime.Now;
                     IdGenerator idGen = new IdGenerator();
 
-                    roomDispatch.dispatchId = idGen.GetRoomInspectionDispatchNewID();
+                    roomDispatch.dispatchId = idGen.GetID("roomInspectionDispatch");
                     roomDispatch.checkDate = date;
                     roomDispatch.roomId = rooms.ElementAt(i).roomId;
                     roomDispatch.isDelete = 0;

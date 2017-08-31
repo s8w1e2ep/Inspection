@@ -14,10 +14,12 @@ namespace InspectionWeb.Controllers
     public class UserController : Controller
     {
         private IUserService _userService;
+        private IUserGroupService _userGroupService;
 
-        public UserController(IUserService service)
+        public UserController(IUserService service, IUserGroupService service2)
         {
             this._userService = service;
+            this._userGroupService = service2;
         }
 
         // GET: /User/Login
@@ -144,6 +146,10 @@ namespace InspectionWeb.Controllers
             else
             {
                 var user = this._userService.GetByID(id);
+                if (user == null)
+                {
+                    return RedirectToAction("List");
+                }
                 UserDetailViewModel vm = this.User2ViewModel(user);
 
                 return View(vm);
@@ -182,7 +188,9 @@ namespace InspectionWeb.Controllers
                     return View("Add", vm);
                 }
 
-                return RedirectToAction("List");
+                UserDetailViewModel vm2 = this.User2ViewModel(this._userService.GetByID(result.Message));
+
+                return RedirectToAction("Edit", vm2);
             }
             else
             {
@@ -199,14 +207,20 @@ namespace InspectionWeb.Controllers
         [HttpPost]
         public ActionResult UpdateUser(UserJson userJson)
         {
-            var id = userJson.key;
+            var id = userJson.pk;
             var user = this._userService.GetByID(id);
-
             if (user != null && ModelState.IsValid)
             {
-                this._userService.Update(user, userJson.name, userJson.value);
-                var updatedUser = this._userService.GetByID(id);
-                return View("Edit", this.User2ViewModel(updatedUser));
+                IResult result = this._userService.Update(user, userJson.name, userJson.value);
+
+                if (result.Success)
+                {
+                    return Json(result);
+                }
+                else
+                {
+                    return RedirectToAction("Edit");
+                }
             }
             else
             {
@@ -214,7 +228,7 @@ namespace InspectionWeb.Controllers
             }
         }
 
-        // DELETE: /User/deleteUser
+        // DELETE: /User/DeleteUser
         public ActionResult DeleteUser(string userId)
         {
             if (string.IsNullOrEmpty(userId))
@@ -231,7 +245,7 @@ namespace InspectionWeb.Controllers
 
             try
             {
-                _userService.Delete(userId);
+                this._userService.Update(user, "isDelete", "1");
             }
             catch (Exception)
             {
@@ -244,24 +258,123 @@ namespace InspectionWeb.Controllers
         // GET: /User/AddGroup
         public ActionResult AddGroup()
         {
-            return View();
+            GroupAddViewModel vm = new GroupAddViewModel();
+            return View(vm);
         }
 
         // GET: /User/ListGroup
         public ActionResult ListGroup()
         {
-            return View();
+            var vms = new List<GroupDetailViewModel>();
+            var groups = this._userGroupService.GetAll().ToList();
+
+            foreach (var group in groups)
+            {
+                vms.Add(this.Group2ViewModel(group));
+            }
+
+            return View(vms);
         }
 
         // GET: /User/EditGroup
-        public ActionResult EditGroup()
+        public ActionResult EditGroup(string groupId)
         {
-            return View();
+            if (string.IsNullOrEmpty(groupId))
+            {
+                return RedirectToAction("List");
+            }
+            else
+            {
+                var group = this._userGroupService.GetByID(groupId);
+                if (group == null)
+                {
+                    return RedirectToAction("List");
+                }
+                GroupDetailViewModel vm = this.Group2ViewModel(group);
+
+                return View(vm);
+            }
         }
 
+        // POST: /User/AddUserGroup
         [HttpPost]
-        public ActionResult addGroup(string name)
+        public ActionResult AddUserGroup(string groupName)
         {
+            if (!string.IsNullOrEmpty(groupName) && ModelState.IsValid)
+            {
+                IResult result = this._userGroupService.Create(groupName);
+
+                if (result.Success == false)
+                {
+                    GroupAddViewModel vm = new GroupAddViewModel();
+                    vm.GroupName = groupName;
+                    vm.ErrorMsg = result.ErrorMsg;
+
+                    return View("AddGroup", vm);
+                }
+                System.Diagnostics.Debug.WriteLine("P1 :\n\n" + result.Message);
+                GroupDetailViewModel vm2 = this.Group2ViewModel(this._userGroupService.GetByID(result.Message));
+
+                return RedirectToAction("EditGroup", vm2);
+            }
+            else
+            {
+                GroupAddViewModel vm = new GroupAddViewModel();
+                vm.GroupName = groupName;
+                vm.ErrorMsg = groupName;// "帳號或密碼空白";
+
+                return View("AddGroup", vm);
+            }
+        }
+
+        // POST: /User/UpdateUserGroup
+        [HttpPost]
+        public ActionResult UpdateUserGroup(UserJson userJson)
+        {
+            var id = userJson.pk;
+            var group = this._userGroupService.GetByID(id);
+            if (group != null && ModelState.IsValid)
+            {
+                IResult result = this._userGroupService.Update(group, userJson.name, userJson.value);
+
+                if (result.Success)
+                {
+                    return Json(result);
+                }
+                else
+                {
+                    return RedirectToAction("EditGroup");
+                }
+            }
+            else
+            {
+                return RedirectToAction("ListGroup");
+            }
+        }
+
+        // DELETE: /User/DeleteGroup
+        public ActionResult DeleteGroup(string groupId)
+        {
+            if (string.IsNullOrEmpty(groupId))
+            {
+                return RedirectToAction("ListGroup");
+            }
+
+            var group = _userGroupService.GetByID(groupId);
+
+            if (group == null)
+            {
+                return RedirectToAction("ListGroup");
+            }
+
+            try
+            {
+                this._userGroupService.Update(group, "isDelete", "1");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("ListGroup");
+            }
             return RedirectToAction("ListGroup");
         }
 
@@ -273,6 +386,7 @@ namespace InspectionWeb.Controllers
             vm.userCode = instance.userCode;
             vm.groupId = instance.groupId;
             vm.email = instance.email;
+            vm.tel = instance.tel;
             vm.password = instance.password;
             vm.name = instance.userName;
             vm.agent = instance.agent;
@@ -285,10 +399,28 @@ namespace InspectionWeb.Controllers
             return vm;
         }
 
+        private GroupDetailViewModel Group2ViewModel(userGroup instance)
+        {
+            GroupDetailViewModel vm = new GroupDetailViewModel();
+
+            vm.groupId = instance.groupId;
+            vm.groupName = instance.groupName;
+            vm.superUser = instance.superUserOnly;
+            vm.system = instance.systemManagement;
+            vm.user = instance.userManagement;
+            vm.dispatch = instance.dispatchManagement;
+            vm.normal = instance.normalUser;
+            vm.isDelete = (short)instance.isDelete;
+            vm.createTime = instance.createTime;
+            vm.lastUpdateTime = instance.lastUpdateTime;
+
+            return vm;
+        }
+
         public class UserJson
         {
             public string name { get; set; }
-            public string key { get; set; }
+            public string pk { get; set; }
             public string value { get; set; }
 
         }

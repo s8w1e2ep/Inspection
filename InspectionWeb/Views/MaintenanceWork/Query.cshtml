@@ -1,0 +1,113 @@
+﻿@{
+    ViewBag.Title = "維修綜合查詢";
+}
+<div class="wrapper">
+    <div class="content-wrapper">
+        <section class="content-header" style="margin-bottom: 15px;">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/"><i class="fa fa-dashboard"></i>Home</a>
+                </li>
+                <li class="active">維修綜合查詢</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-info" style="padding: 5px;">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">篩選條件</h3>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label class="control-label col-md-2" for="startDatePicker">開始日期</label>
+                                <div class="input-group col-md-8">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="startDatePicker">
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="control-label col-md-2" for="endDatePicker">結束日期</label>
+                                <div class="input-group col-md-8">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="endDatePicker">
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="control-label col-md-2">通報來源</label>
+                                <select class="form-control select2" style="width: 50%;">
+                                    <option selected="selected">巡檢填單</option>
+                                    <option>6000填單</option>
+                                    <option>NM</option>
+                                    <option>通報按鈕</option>
+                                    <option>監控軟體</option>
+                                    <option>app</option>
+                                    <option>其它</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="control-label col-md-2">異常種類</label>
+                                <select class="form-control select2" style="width: 50%;">
+                                    <option selected="selected">異常種類-1</option>
+                                    <option>異常種類-2-</option>
+                                    <option>異常種類-3-</option>
+                                </select>
+                            </div>
+                            <div class="box-body">
+                                <div class="col-md-1">
+                                    <button type="submit" class="btn btn-success pull-left">查詢</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-info">
+                        <div class="box-header">
+                            <h3 class="box-title">維修列表</h3>
+                        </div>
+                        <div class="box-body">
+                            <table id="userTable" class="row-border" cellspacing="0" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>通報來源</th>
+                                        <th>展示廳</th>
+                                        <th>展項/體驗設施</th>
+                                        <th>異常情況說明</th>
+                                        <th>通報人員</th>
+                                        <th>故障日期時間</th>
+                                        <th>完工日期時間</th>
+                                        <th>詳細資料</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>自動通報</td>
+                                        <td>4F 交通夢想館</td>
+                                        <td>飛行車</td>
+                                        <td>不會動</td>
+                                        <td>A8097</td>
+                                        <td>2017-08-28 13:47:23</td>
+                                        <td>2017-08-30 10:00:00</td>
+                                        <td>
+                                            <a href="@Url.Action("DetailedData", "MaintenanceWork")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                            @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<script src="~/Scripts/exhibition.js"></script>

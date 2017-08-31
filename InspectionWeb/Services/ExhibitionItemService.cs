@@ -114,6 +114,10 @@ namespace InspectionWeb.Services
             return this._repository.Get(x => x.itemId == itemId);
         }
 
+        public exhibitionItem GetByItemCode(string itemCode)
+        {
+            return this._repository.Get(x => x.itemCode == itemCode);
+        }
 
         public IEnumerable<exhibitionItem> GetAll()
         {

@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewBag.Title = "EditField";
+}
+
+<div class="content-wrapper">
+    <section class="content-header" style="margin-bottom: 15px;">
+        <ol class="breadcrumb">
+            <li><a href="/"><i class="fa fa-dashboard"></i>Home</a></li>
+            <li class="active">新增場域</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">新增場域</h3>
+                    </div>
+                        <!-- form start -->
+                    
+                    <form class="form-horizontal">
+                        <div class="box-body">
+
+                            @*場域編號*@
+                            <div class="form-group">
+                                <label for="fieldNo" class="col-sm-2 control-label">場域編號</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="fieldNo" placeholder="場域編號">
+                                </div>
+                            </div>
+
+                            @*場域名稱*@
+                            <div class="form-group">
+                                <label for="filedName" class="col-sm-2 control-label">場域名稱</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="fieldName" placeholder="場域名稱">
+                                </div>
+                            </div>
+
+                            @*說明*@
+                            <div class="form-group">
+                                <label for="fieldExplanation" class="col-sm-2 control-label">說明</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="fieldExplanation" placeholder="說明">
+                                </div>
+                            </div>
+
+                            @*版本*@
+                            <div class="form-group">
+                                <label for="fieldVersion" class="col-sm-2 control-label">版本</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="fieldVersion" placeholder="版本">
+                                </div>
+                            </div>
+
+                            @*場域示意圖*@
+                            <div class="form-group">
+                                <label for="fieldFigure" class="col-sm-2 control-label">場域示意圖</label>
+                                <input class="form-control-static" type="file" id="exampleInputFile">
+                            </div>
+                        
+                            @*場域地圖*@
+                            <div class="form-group">
+                                <label for="fieldMap" class="col-sm-2 control-label">場域地圖</label>
+                                <input class="form-control-static" type="file" id="exampleInputFile">
+                            </div>
+                            
+                            @*建立時間*@
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">建立時間</label>
+                                <div class="col-sm-10">
+                                    <p class="form-control-static">1994/02/09</p>
+                                </div>
+                            </div>
+
+                            @*最後更新時間*@
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">最後更新時間</label>
+                                <div class="col-sm-10">
+                                    <p class="form-control-static">2017/02/09</p>
+                                </div>
+                            </div> 
+                                                       
+                        </div><!-- /.box-body -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script src="~/Scripts/addGroup.js"></script>
+
+
+
