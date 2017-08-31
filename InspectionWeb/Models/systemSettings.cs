@@ -12,12 +12,14 @@ namespace InspectionWeb.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class sysdiagrams
+    public partial class systemSettings
     {
-        public string name { get; set; }
-        public int principal_id { get; set; }
-        public int diagram_id { get; set; }
-        public Nullable<int> version { get; set; }
-        public byte[] definition { get; set; }
+        public string id { get; set; }
+        public string keyName { get; set; }
+        public string description { get; set; }
+        public string value { get; set; }
+        public Nullable<byte> isDelete { get; set; }
+        public Nullable<System.DateTime> createTime { get; set; }
+        public Nullable<System.DateTime> lastUpdateTime { get; set; }
     }
 }
