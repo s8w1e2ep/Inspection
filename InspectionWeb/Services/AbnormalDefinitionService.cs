@@ -39,6 +39,7 @@ namespace InspectionWeb.Services
                 abnormal.abnormalCode = abnormaCode;
                 abnormal.abnormalName = abnormalName;
                 abnormal.description = "";
+                abnormal.isDelete = 0;
                 abnormal.createTime = now;
                 abnormal.lastUpdateTime = now;
 
@@ -115,7 +116,6 @@ namespace InspectionWeb.Services
 
             try
             {
-
                 DicUpdate.Add(propertyName, value);
                 DicUpdate.Add("lastUpdateTime", DateTime.Now);
                 this._repository.Update(instance, DicUpdate);
@@ -141,7 +141,7 @@ namespace InspectionWeb.Services
             try
             {
                 var instance = this.GetById(abnormalId);
-                this._repository.Delete(instance);
+                instance.isDelete = 1;
                 result.Success = true;
             }
             catch (Exception ex)
@@ -153,12 +153,17 @@ namespace InspectionWeb.Services
 
         public string GetId(string abnormalCode)
         {
-            return this._repository.Get(x => x.abnormalCode == abnormalCode).abnormalId;
+            return this._repository.Get(x => x.abnormalCode == abnormalCode && x.isDelete == 0).abnormalId;
         }
 
         public bool IsExists(string abnormalId)
         {
             return this._repository.GetAll().Any(x => x.abnormalId == abnormalId);
+        }
+
+        public bool InRepeat(string abnormalCode)
+        {
+            return this._repository.GetAll().Any(x => x.isDelete == 0 && x.abnormalCode == abnormalCode);
         }
 
         public abnormalDefinition GetById(string abnormalId)
@@ -168,12 +173,12 @@ namespace InspectionWeb.Services
 
         public abnormalDefinition GetByAbnormalCode(string abnormalCode)
         {
-            return this._repository.Get(x => x.abnormalCode == abnormalCode);
+            return this._repository.Get(x => x.abnormalCode == abnormalCode && x.isDelete == 0);
         }
 
         public IEnumerable<abnormalDefinition> GetAll()
         {
-            return this._repository.GetAll();
+            return this._repository.GetAll().Where(x => x.isDelete == 0);
         }
     }
 }

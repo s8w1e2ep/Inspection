@@ -85,21 +85,30 @@ namespace InspectionWeb.Controllers
         [HttpPost]
         public ActionResult UpdateAbnormalDefinition(updateAbnormalDefinitionJson abnormalDefinitionJson)
         {
+            bool updateFlag = true;
             var abnormalId = abnormalDefinitionJson.pk;
             var abnormalDefinition = this._AbnormalDefinitionService.GetById(abnormalId);
             if (abnormalDefinition != null && ModelState.IsValid)
             {
-                IResult result = this._AbnormalDefinitionService.Update(abnormalDefinition, abnormalDefinitionJson.name, abnormalDefinitionJson.value);
-                abnormalDefinition = this._AbnormalDefinitionService.GetById(abnormalId);
-                if (result.Success)
+                if(abnormalDefinitionJson.name == "abnormalCode")
                 {
-                    string lastUpdateTime = abnormalDefinition.lastUpdateTime.ToString();
-                    return Json(new { result = 1, abnormalId = abnormalId, lastUpdateTime = lastUpdateTime });
+                    updateFlag = !this._AbnormalDefinitionService.InRepeat(abnormalDefinitionJson.value);
                 }
-                else
+                if (updateFlag)
                 {
-                    return Json(new { result = 0, abnormalId = abnormalId });
+                    IResult result = this._AbnormalDefinitionService.Update(abnormalDefinition, abnormalDefinitionJson.name, abnormalDefinitionJson.value);
+                    abnormalDefinition = this._AbnormalDefinitionService.GetById(abnormalId);
+                    if (result.Success)
+                    {
+                        string lastUpdateTime = abnormalDefinition.lastUpdateTime.ToString();
+                        return Json(new { result = 1, abnormalId = abnormalId, lastUpdateTime = lastUpdateTime });
+                    }
+                    else
+                    {
+                        return Json(new { result = 0, abnormalId = abnormalId });
+                    }
                 }
+                return Json(new { result = 0, abnormalId = abnormalId });
             }
             else
             {

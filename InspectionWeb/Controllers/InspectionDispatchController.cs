@@ -17,6 +17,7 @@ namespace InspectionWeb.Controllers
     {
         private IRoomInspectionDispatchService _RoomInspectionDispatchService;
         private IItemInspectionDispatchService _ItemInspectionDispatchService;
+        private IExhibitionRoomService _ExhibitionRoomService;
         private IExhibitionItemService _ExhibitionItemService;
 
 
@@ -32,11 +33,15 @@ namespace InspectionWeb.Controllers
             public string value { get; set; }
         }
 
-        public InspectionDispatchController(IRoomInspectionDispatchService roomInpectionDispatchService, IItemInspectionDispatchService itemInspectionDispatchService, IExhibitionItemService exhibitionRoomService)
+        public InspectionDispatchController(IRoomInspectionDispatchService roomInpectionDispatchService, 
+                                            IItemInspectionDispatchService itemInspectionDispatchService, 
+                                            IExhibitionRoomService exhibitionRoomService, 
+                                            IExhibitionItemService exhibitionItemService)
         {
             this._RoomInspectionDispatchService = roomInpectionDispatchService;
             this._ItemInspectionDispatchService = itemInspectionDispatchService;
-            this._ExhibitionItemService = exhibitionRoomService;
+            this._ExhibitionRoomService = exhibitionRoomService;
+            this._ExhibitionItemService = exhibitionItemService;
         }
 
         [HttpGet]
@@ -52,7 +57,7 @@ namespace InspectionWeb.Controllers
             System.DateTime date = Convert.ToDateTime(timeJson.date);
             bool isExist = this._RoomInspectionDispatchService.IsExists(date);
             bool roomNumCheck = this._RoomInspectionDispatchService.checkRoomInsert();
-            this._ExhibitionItemService.GetAll().OrderBy(x => x.roomId);
+            IEnumerable<exhibitionRoom> rooms = this._ExhibitionRoomService.GetAll();
             //檢查有無新增展覽廳
            if (isExist)
             {
@@ -76,7 +81,7 @@ namespace InspectionWeb.Controllers
             }
             else
             {
-                IResult result = this._RoomInspectionDispatchService.Create(date);
+                IResult result = this._RoomInspectionDispatchService.Create(date, rooms);
                 if (result.Success == false)
                 {
                     //

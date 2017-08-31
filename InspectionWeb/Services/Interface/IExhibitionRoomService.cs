@@ -48,20 +48,20 @@ namespace InspectionWeb.Services.Interface
         /// </summary>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        exhibitionItem GetById(string itemId);
+        exhibitionRoom GetById(string itemId);
 
         /// <summary>
         /// get report device by id
         /// </summary>
         /// <param name="deviceCode"></param>
         /// <returns></returns>
-        exhibitionItem GetByItemCode(string itemCode);
+        exhibitionRoom GetByItemCode(string itemCode);
 
         /// <summary>
         /// get all report device
         /// </summary>
         /// <returns></returns>
-        IEnumerable<exhibitionItem> GetAll();
+        IEnumerable<exhibitionRoom> GetAll();
 
     }
 }

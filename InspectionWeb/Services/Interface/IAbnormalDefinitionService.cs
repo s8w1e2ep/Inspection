@@ -19,7 +19,9 @@ namespace InspectionWeb.Services.Interface
 
         bool IsExists(string abnormalId);
 
-        string GetId(string abnormalName);
+        bool InRepeat(string abnormalCode);
+
+        string GetId(string abnormalCode);
 
         abnormalDefinition GetByAbnormalCode(string abnormalCode);
 

@@ -18,6 +18,20 @@
         $.fn.editable.defaults.mode = 'inline';
 
         $(document).ready(function () {
+            $('#abnormalCode').editable({
+                ajaxOptions: {
+                    dataType: 'json' //assuming json response
+                },
+                success: function (response, newValue) {
+                    // console.log("succcess return");
+                    // change update time
+                    $('#lastUpdateTime').html(response.lastUpdateTime);
+                }, error: function () {
+                    console.log("update error");
+                    console.log("id: " + response.abnormalId);
+                    console.log("name: " + response.abnormalName);
+                }
+            });
             $('#abnormalName').editable({
                 ajaxOptions: {
                     dataType: 'json' //assuming json response
