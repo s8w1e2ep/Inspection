@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace InspectionWeb.Models.ViewModel
 {
@@ -7,11 +8,11 @@ namespace InspectionWeb.Models.ViewModel
     {
         public string userId { get; set; }
         public string userCode { get; set; }
-        public string groupId { get; set; }
+        public string group { set; get; }
         public string password { get; set; }
         public string name { get; set; }
         public string picture { get; set; }
-        public string agent { get; set; }
+        public string agent { set; get; }
         public string email { get; set; }
         public string tel { get; set; }
         public Nullable<short> active { get; set; }
