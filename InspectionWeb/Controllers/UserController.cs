@@ -150,7 +150,7 @@ namespace InspectionWeb.Controllers
                 {
                     return RedirectToAction("List");
                 }
-                UserDetailViewModel vm = this.User2ViewModel(user);
+                UserEditViewModel vm = this.User2EditViewModel(user);
 
                 return View(vm);
             }
@@ -380,17 +380,52 @@ namespace InspectionWeb.Controllers
 
             vm.userId = instance.userId;
             vm.userCode = instance.userCode;
-            vm.groupId = instance.groupId;
+            
+            if (this._userGroupService.IsExists(instance.groupId))
+            {
+                vm.group = (this._userGroupService.GetByID(instance.groupId)).groupName;
+            }
+            else
+            {
+                vm.group = null;
+            }
             vm.email = instance.email;
             vm.tel = instance.tel;
             vm.password = instance.password;
             vm.name = instance.userName;
-            vm.agent = instance.agent;
+            if (this._userService.IsExists(instance.agent))
+            {
+                vm.agent = (this._userService.GetByID(instance.agent)).userCode;
+            }
+            else
+            {
+                vm.agent = null;
+            }
             vm.picture = instance.agent;
             vm.active = instance.active;
             vm.isDelete = (short)instance.isDelete;
             vm.createTime = instance.createTime;
             vm.lastUpdateTime = instance.lastUpdateTime;
+
+            return vm;
+        }
+
+        private UserEditViewModel User2EditViewModel(user instance)
+        {
+            UserEditViewModel vm = new UserEditViewModel();
+            var groups = this._userGroupService.GetAll().Where(x => x.isDelete == 0 && x.groupId != instance.userId).ToList();
+            var agents = this._userService.GetAll().Where(x => x.isDelete == 0 && x.userId != instance.userId).ToList();
+
+            vm.user = User2ViewModel(instance);
+
+            foreach (var group in groups)
+            {
+                vm.groups.Add(Group2ViewModel(group));
+            }
+            foreach (var agent in agents)
+            {
+                vm.agents.Add(User2ViewModel(agent));
+            }
 
             return vm;
         }

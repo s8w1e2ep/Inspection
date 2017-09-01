@@ -228,9 +228,11 @@ namespace InspectionWeb.Services
 
                 if (encodePassword == user.password)
                 {
+                    DateTime now = DateTime.Now;
                     this._repository.Update(user, "password", encoder.EncryptSHA(newPassword));
-                    this._repository.Update(user, "lastUpdateTime", DateTime.Now);
+                    this._repository.Update(user, "lastUpdateTime", now);
                     result.Success = true;
+                    result.lastUpdateTime = now.ToString("yyyy-MM-dd HH:mm:ss");
                 }
             }
 

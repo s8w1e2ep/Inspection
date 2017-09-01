@@ -1,18 +1,91 @@
-﻿@model InspectionWeb.Models.ViewModel.UserDetailViewModel
+﻿@model InspectionWeb.Models.ViewModel.UserEditViewModel
 
 @{
     ViewBag.Title = "人員檢視/修改";
 }
 
 <script>
-    var userId = '@Model.userId';
+var userId = '@Model.user.userId';
+
+$(document).ready(function () {
+    // x-editable for user table
+    $('#userName, #email, #tel').editable({
+        success: function (response) {
+            $('#last').html(response.lastUpdateTime);
+        }
+    });
+
+    $('#active').editable({
+        value: ['@Model.user.active'],
+        source: {
+            1: '是',
+        },
+        emptytext: '否',
+        params: function (params) {
+            var data = {};
+            data['name'] = params.name;
+            data['pk'] = params.pk;
+            data['value'] = params.value.join(",");
+
+            return data;
+        },
+        success: function (response) {
+            $('#last').html(response.lastUpdateTime);
+        }
+    });
+
+    $('#agent').editable({
+        value: 'Select status',
+        source: [
+            @foreach(var item in Model.agents)
+            {
+                <text>{value: '@item.userId', text: '@item.userCode' },</text>
+            }
+        ],
+        success: function (response) {
+            $('#last').html(response.lastUpdateTime);
+        }
+    });
+
+    $('#groupId').editable({
+        value: 'Select status',
+        source: [
+            @foreach(var item in Model.groups)
+            {
+                <text>{value: '@item.groupId', text: '@item.groupName' },</text>
+            }
+        ],
+        success: function (response) {
+            $('#last').html(response.lastUpdateTime);
+        }
+    });
+
+    $('#modalYes2').click(function () {
+        newPassword = $.trim($('#newPassword').val());
+        repeatPassword = $.trim($('#repeatPassword').val());
+
+        if (newPassword === '' || repeatPassword === '') {
+            alert('密碼不能為空白!');
+            return;
+        }
+        if (newPassword === repeatPassword) {
+            changePassword();
+        } else {
+            alert('新密碼輸入錯誤!');
+        }
+    });
+});
 </script>
 
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
         <ol class="breadcrumb">
-            <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>Home</a></li>
-            <li><a href="@Url.Action("List")">人員列表</a></li>
+            <li>
+                <a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>Home</a>
+            </li>
+            <li>
+                <a href="@Url.Action("List")">人員列表</a>
+            </li>
             <li class="active">人員檢視/修改</li>
         </ol>
     </section>
@@ -23,7 +96,11 @@
             <div class="col-md-12">
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">人員檢視/修改<input id="photoUpload" type='file' onchange="" style="display: none;"><button class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="onUploadFile('#photoUpload')"><i class="fa fa-camera"></i> 上傳照片</button></h3>
+                        <h3 class="box-title">
+                            人員檢視/修改
+                            <input id="photoUpload" type='file' onchange="" style="display: none;">
+                            <button class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="onUploadFile('#photoUpload')"><i class="fa fa-camera"></i> 上傳照片</button>
+                        </h3>
                         <img class="profile-user-img img-responsive img-circle" src="../../theme/AdminLTE/dist/img/avatar.png" alt="User profile picture">
                     </div>
                     <div class="box-body">
@@ -37,7 +114,7 @@
                             <tbody>
                                 <tr>
                                     <td>使用者帳號</td>
-                                    <td>@Model.userCode</td>
+                                    <td>@Model.user.userCode</td>
                                 </tr>
                                 <tr>
                                     <td>密碼</td>
@@ -49,45 +126,47 @@
                                 </tr>
                                 <tr>
                                     <td>姓名</td>
-                                    <td><a href="#" id="userName" data-type="text" data-pk="@Model.userId" data-url="@Url.Action("UpdateUser")" data-title="輸入人員姓名">@Model.name</a></td>
+                                    <td>
+                                        <a href="#" id="userName" data-type="text" data-pk="@Model.user.userId" data-url="@Url.Action("UpdateUser")" data-title="輸入人員姓名">@Model.user.name</a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>代理人</td>
                                     <td>
-                                        <a href="#" id="agent" data-type="select" data-pk="@Model.userId" data-url="@Url.Action("UpdateUser")" data-title="選擇代理人">@Model.agent</a>
+                                        <a href="#" id="agent" data-type="select" data-pk="@Model.user.userId" data-url="@Url.Action("UpdateUser")" data-title="選擇代理人">@Model.user.agent</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>權限群組</td>
                                     <td>
-                                        <a href="#" id="groupId" data-type="select" data-pk="@Model.userId" data-url="@Url.Action("UpdateUser")" data-title="選擇權限群組">@Model.groupId</a>
+                                        <a href="#" id="groupId" data-type="select" data-pk="@Model.user.userId" data-url="@Url.Action("UpdateUser")" data-title="選擇權限群組">@Model.user.group</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>E-mail</td>
                                     <td>
-                                        <a href="#" id="email" data-type="text" data-pk="@Model.userId" data-url="@Url.Action("UpdateUser")" data-title="輸入E-mail">@Model.email</a>
+                                        <a href="#" id="email" data-type="text" data-pk="@Model.user.userId" data-url="@Url.Action("UpdateUser")" data-title="輸入E-mail">@Model.user.email</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>電話</td>
                                     <td>
-                                        <a href="#" id="tel" data-type="text" data-pk="@Model.userId" data-url="@Url.Action("UpdateUser")" data-title="輸入電話">@Model.tel</a>
+                                        <a href="#" id="tel" data-type="text" data-pk="@Model.user.userId" data-url="@Url.Action("UpdateUser")" data-title="輸入電話">@Model.user.tel</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>啟用</td>
                                     <td>
-                                        <a href="#" id="active" data-type="checklist" data-pk="@Model.userId" data-url="@Url.Action("UpdateUser")" data-title="啟用">@Model.active</a>
+                                        <a href="#" id="active" data-type="checklist" data-pk="@Model.user.userId" data-url="@Url.Action("UpdateUser")" data-title="啟用">@Model.user.active</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>建立日期</td>
-                                    <td>@Html.DisplayFor(modelItem => @Model.createTime)</td>
+                                    <td>@Html.DisplayFor(modelItem => @Model.user.createTime)</td>
                                 </tr>
                                 <tr>
                                     <td>最後更新日期</td>
-                                    <td id="last">@Html.DisplayFor(modelItem => @Model.lastUpdateTime)</td>
+                                    <td id="last">@Html.DisplayFor(modelItem => @Model.user.lastUpdateTime)</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -97,7 +176,10 @@
             <div class="col-md-12">
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">負責展示廳<button class="btn btn-sm btn-success" style="margin-left: 10px;" onclick=""><span class="glyphicon glyphicon-plus-sign"></span></button></h3>
+                        <h3 class="box-title">
+                            負責展示廳
+                            <button class="btn btn-sm btn-success" style="margin-left: 10px;" onclick=""><span class="glyphicon glyphicon-plus-sign"></span></button>
+                        </h3>
                     </div>
                     <div class="box-body">
                         <table class="table table-striped table-hover table-bordered" cellspacing="0" style="width: 100%;">
