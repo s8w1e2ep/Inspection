@@ -188,9 +188,7 @@ namespace InspectionWeb.Controllers
                     return View("Add", vm);
                 }
 
-                UserDetailViewModel vm2 = this.User2ViewModel(this._userService.GetByID(result.Message));
-
-                return RedirectToAction("Edit", vm2);
+                return RedirectToAction("Edit", new { id = result.Message });
             }
             else
             {
@@ -276,7 +274,7 @@ namespace InspectionWeb.Controllers
             return View(vms);
         }
 
-        // GET: /User/EditGroup
+        // GET: /User/EditGroup/id
         public ActionResult EditGroup(string groupId)
         {
             if (string.IsNullOrEmpty(groupId))
@@ -312,10 +310,8 @@ namespace InspectionWeb.Controllers
 
                     return View("AddGroup", vm);
                 }
-                System.Diagnostics.Debug.WriteLine("P1 :\n\n" + result.Message);
-                GroupDetailViewModel vm2 = this.Group2ViewModel(this._userGroupService.GetByID(result.Message));
 
-                return RedirectToAction("EditGroup", vm2);
+                return RedirectToAction("EditGroup", new { groupid = result.Message });
             }
             else
             {
