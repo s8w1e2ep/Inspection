@@ -142,7 +142,7 @@
           </Key>
           <Property Name="recordId" Type="nvarchar" MaxLength="32" Nullable="false" />
           <Property Name="fillUserId" Type="nvarchar" MaxLength="32" />
-          <Property Name="repairUserrId" Type="nvarchar" MaxLength="32" />
+          <Property Name="repairUserId" Type="nvarchar" MaxLength="32" />
           <Property Name="fixNote" Type="text" />
           <Property Name="cost" Type="nchar" MaxLength="10" />
           <Property Name="expectDate" Type="date" />
@@ -164,8 +164,9 @@
           </Key>
           <Property Name="id" Type="nvarchar" MaxLength="32" Nullable="false" />
           <Property Name="noCheckDate" Type="date" />
-          <Property Name="checkTimeType" Type="smallint" />
-          <Property Name="description" Type="text" />
+          <Property Name="am" Type="tinyint" />
+          <Property Name="pm" Type="tinyint" />
+          <Property Name="description" Type="nvarchar" MaxLength="100" />
           <Property Name="setupUserId" Type="nvarchar" MaxLength="32" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
@@ -473,19 +474,6 @@
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="noCheckDate">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="noCheckDate1" Type="DateTime" Precision="0" />
-          <Property Name="checkTimeType" Type="Int16" />
-          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="setupUserId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="isDelete" Type="Byte" />
-          <Property Name="createTime" Type="DateTime" Precision="3" />
-          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="reportDevice">
           <Key>
             <PropertyRef Name="deviceId" />
@@ -583,7 +571,6 @@
           <EntitySet Name="fieldMap" EntityType="Self.fieldMap" />
           <EntitySet Name="itemCheckRecord" EntityType="Self.itemCheckRecord" />
           <EntitySet Name="itemInspectionDispatch" EntityType="Self.itemInspectionDispatch" />
-          <EntitySet Name="noCheckDate" EntityType="Self.noCheckDate" />
           <EntitySet Name="reportDevice" EntityType="Self.reportDevice" />
           <EntitySet Name="reportSource" EntityType="Self.reportSource" />
           <EntitySet Name="roomActiveRecord" EntityType="Self.roomActiveRecord" />
@@ -655,8 +642,9 @@
           <EntitySet Name="softwareVersion" EntityType="inspectionModel.softwareVersion" />
           <EntitySet Name="otherAbnormalRecord" EntityType="inspectionModel.otherAbnormalRecord" />
           <EntitySet Name="systemSettings" EntityType="inspectionModel.systemSettings" />
-          <EntitySet Name="manRepairRecord" EntityType="inspectionModel.manRepairRecord" />
           <EntitySet Name="roomInspectionDispatch" EntityType="inspectionModel.roomInspectionDispatch" />
+          <EntitySet Name="manRepairRecord" EntityType="inspectionModel.manRepairRecord" />
+          <EntitySet Name="noCheckDate" EntityType="inspectionModel.noCheckDate" />
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -745,13 +733,27 @@
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="roomInspectionDispatch">
+          <Key>
+            <PropertyRef Name="dispatchId" />
+          </Key>
+          <Property Name="dispatchId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="checkDate" Type="DateTime" Precision="0" />
+          <Property Name="roomId" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="inspectorId1" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="inspectorId2" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="setupUserId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="isDelete" Type="Byte" />
+          <Property Name="createTime" Type="DateTime" Precision="3" />
+          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="manRepairRecord">
           <Key>
             <PropertyRef Name="recordId" />
           </Key>
           <Property Name="recordId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
           <Property Name="fillUserId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="repairUserrId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="repairUserId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
           <Property Name="fixNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="cost" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="expectDate" Type="DateTime" Precision="0" />
@@ -767,15 +769,15 @@
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="roomInspectionDispatch">
+        <EntityType Name="noCheckDate">
           <Key>
-            <PropertyRef Name="dispatchId" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="dispatchId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="checkDate" Type="DateTime" Precision="0" />
-          <Property Name="roomId" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="inspectorId1" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="inspectorId2" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="id" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="noCheckDate1" Type="DateTime" Precision="0" />
+          <Property Name="am" Type="Byte" />
+          <Property Name="pm" Type="Byte" />
+          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="setupUserId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
@@ -906,20 +908,6 @@
                 <ScalarProperty Name="checkDate" ColumnName="checkDate" />
                 <ScalarProperty Name="inspectorId1" ColumnName="inspectorId1" />
                 <ScalarProperty Name="inspectorId2" ColumnName="inspectorId2" />
-                <ScalarProperty Name="setupUserId" ColumnName="setupUserId" />
-                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
-                <ScalarProperty Name="createTime" ColumnName="createTime" />
-                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="noCheckDate">
-            <EntityTypeMapping TypeName="inspectionModel.noCheckDate">
-              <MappingFragment StoreEntitySet="noCheckDate">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="noCheckDate1" ColumnName="noCheckDate" />
-                <ScalarProperty Name="checkTimeType" ColumnName="checkTimeType" />
-                <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="setupUserId" ColumnName="setupUserId" />
                 <ScalarProperty Name="isDelete" ColumnName="isDelete" />
                 <ScalarProperty Name="createTime" ColumnName="createTime" />
@@ -1092,6 +1080,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="roomInspectionDispatch">
+            <EntityTypeMapping TypeName="inspectionModel.roomInspectionDispatch">
+              <MappingFragment StoreEntitySet="roomInspectionDispatch">
+                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+                <ScalarProperty Name="createTime" ColumnName="createTime" />
+                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+                <ScalarProperty Name="setupUserId" ColumnName="setupUserId" />
+                <ScalarProperty Name="inspectorId2" ColumnName="inspectorId2" />
+                <ScalarProperty Name="inspectorId1" ColumnName="inspectorId1" />
+                <ScalarProperty Name="roomId" ColumnName="roomId" />
+                <ScalarProperty Name="checkDate" ColumnName="checkDate" />
+                <ScalarProperty Name="dispatchId" ColumnName="dispatchId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="manRepairRecord">
             <EntityTypeMapping TypeName="inspectionModel.manRepairRecord">
               <MappingFragment StoreEntitySet="manRepairRecord">
@@ -1109,24 +1112,24 @@
                 <ScalarProperty Name="expectDate" ColumnName="expectDate" />
                 <ScalarProperty Name="cost" ColumnName="cost" />
                 <ScalarProperty Name="fixNote" ColumnName="fixNote" />
-                <ScalarProperty Name="repairUserrId" ColumnName="repairUserrId" />
+                <ScalarProperty Name="repairUserId" ColumnName="repairUserId" />
                 <ScalarProperty Name="fillUserId" ColumnName="fillUserId" />
                 <ScalarProperty Name="recordId" ColumnName="recordId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="roomInspectionDispatch">
-            <EntityTypeMapping TypeName="inspectionModel.roomInspectionDispatch">
-              <MappingFragment StoreEntitySet="roomInspectionDispatch">
+          <EntitySetMapping Name="noCheckDate">
+            <EntityTypeMapping TypeName="inspectionModel.noCheckDate">
+              <MappingFragment StoreEntitySet="noCheckDate">
                 <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
                 <ScalarProperty Name="createTime" ColumnName="createTime" />
                 <ScalarProperty Name="isDelete" ColumnName="isDelete" />
                 <ScalarProperty Name="setupUserId" ColumnName="setupUserId" />
-                <ScalarProperty Name="inspectorId2" ColumnName="inspectorId2" />
-                <ScalarProperty Name="inspectorId1" ColumnName="inspectorId1" />
-                <ScalarProperty Name="roomId" ColumnName="roomId" />
-                <ScalarProperty Name="checkDate" ColumnName="checkDate" />
-                <ScalarProperty Name="dispatchId" ColumnName="dispatchId" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="pm" ColumnName="pm" />
+                <ScalarProperty Name="am" ColumnName="am" />
+                <ScalarProperty Name="noCheckDate1" ColumnName="noCheckDate" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
