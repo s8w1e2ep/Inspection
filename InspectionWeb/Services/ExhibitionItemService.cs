@@ -126,10 +126,10 @@ namespace InspectionWeb.Services
 
         public IEnumerable<exhibitionItemList> GetAllIdAndName()
         {
-            string sqlString = " SELECT R.itemId, R.itemName, R.inspectionUserId"
-                    + "FROM exhibitionItem R"
-                    + "WHERE R.isDelete = 0"
-                    + "ORDER BY R.createTime";
+            string sqlString = " SELECT R.itemId, R.itemName, R.inspectionUserId "
+                    + "FROM exhibitionItem R "
+                    + "WHERE R.isDelete = 0 "
+                    + "ORDER BY R.createTime; ";
 
             using (inspectionEntities db = new inspectionEntities())
             {

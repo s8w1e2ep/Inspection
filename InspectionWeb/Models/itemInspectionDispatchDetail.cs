@@ -17,9 +17,13 @@ namespace InspectionWeb.Models
 
         public string inspectorId1 { get; set; }
 
+        public string inspectorCode1 { get; set; }
+
         public string inspectorName1 { get; set; }
 
         public string inspectorId2 { get; set; }
+
+        public string inspectorCode2 { get; set; }
 
         public string inspectorName2 { get; set; }
 

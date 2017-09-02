@@ -330,6 +330,8 @@
     </Compile>
     <Compile Include="Models\ViewModel\GroupAddViewModel.cs" />
     <Compile Include="Models\ViewModel\GroupDetailViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListRoomInspectionDispatchViewModel.cs" />
+    <Compile Include="Models\ViewModel\userListForInspectionViewModel.cs" />
     <Compile Include="Services\ExhibitionRoomService.cs" />
     <Compile Include="Services\Interface\IUserGroupService.cs" />
     <Compile Include="Services\Interface\IReportSourceService.cs" />

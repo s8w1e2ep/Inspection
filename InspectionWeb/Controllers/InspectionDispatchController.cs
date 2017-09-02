@@ -19,11 +19,12 @@ namespace InspectionWeb.Controllers
         private IItemInspectionDispatchService _ItemInspectionDispatchService;
         private IExhibitionRoomService _ExhibitionRoomService;
         private IExhibitionItemService _ExhibitionItemService;
+        private IUserService _UserService;
 
 
         public class inpectionDateJson
         {
-            public string date { get; set; }
+            public string dispatchDate { get; set; }
         }
 
         public class inspectionDispatchJson
@@ -36,67 +37,78 @@ namespace InspectionWeb.Controllers
         public InspectionDispatchController(IRoomInspectionDispatchService roomInpectionDispatchService, 
                                             IItemInspectionDispatchService itemInspectionDispatchService, 
                                             IExhibitionRoomService exhibitionRoomService, 
-                                            IExhibitionItemService exhibitionItemService)
+                                            IExhibitionItemService exhibitionItemService,
+                                            IUserService userService)
         {
             this._RoomInspectionDispatchService = roomInpectionDispatchService;
             this._ItemInspectionDispatchService = itemInspectionDispatchService;
             this._ExhibitionRoomService = exhibitionRoomService;
             this._ExhibitionItemService = exhibitionItemService;
+            this._UserService = userService;
         }
 
         [HttpGet]
         public ActionResult ListRoomInspectionDispatch()
         {
-            //go to ListRoomInspectionDispatch page wait for time query
-            return View();
+            ListRoomInspectionDispatchViewModel empty = null;
+            return View(empty);
         }
 
         [HttpPost]
         public ActionResult ListRoomInspectionDispatch(inpectionDateJson timeJson)
         {
-            System.DateTime date = Convert.ToDateTime(timeJson.date);
+            System.DateTime date = Convert.ToDateTime(timeJson.dispatchDate);
+            //System.Diagnostics.Debug.WriteLine("########date: " + date);
             bool isExist = this._RoomInspectionDispatchService.IsExists(date);
             bool roomNumCheck = this._RoomInspectionDispatchService.checkRoomInsert();
             IEnumerable<exhibitionRoom> rooms = this._ExhibitionRoomService.GetAll();
-            //檢查有無新增展覽廳
-           if (isExist)
+            //檢查有無分派的紀錄
+            if (isExist)
             {
-                if(!roomNumCheck)
+                //檢查有無新增展覽廳
+                System.Diagnostics.Debug.WriteLine("has dispatch.");
+                if (!roomNumCheck)
                 {
-                    var TotalViewModel = new List<roomInspectionDispatchDetail>();
+                    System.Diagnostics.Debug.WriteLine("number of rooms is same");
+                    List<roomInspectionDispatchDetail> roomDispatchDetail = new List<roomInspectionDispatchDetail>();
                     var roomDispatchs = this._RoomInspectionDispatchService.GetAllByDate(date);
-
                     foreach (var roomDispatch in roomDispatchs)
                     {
-                        TotalViewModel.Add(roomDispatch);
+                        roomDispatchDetail.Add(roomDispatch);
                     }
-                    return View(TotalViewModel);
+
+                    List<userListForInspectionViweModel> userList = getUserListForInspection();
+                    return View(data2ViewModel(roomDispatchDetail, userList, null));
                 }
                 else
                 {
+                    System.Diagnostics.Debug.WriteLine("number of rooms is different");
                     //找出還未建檔的展覽廳
-                    return View();
+                    return View(data2ViewModel(null, null, null));
                 }
 
             }
             else
             {
+                System.Diagnostics.Debug.WriteLine("has not dispatch yet");
                 IResult result = this._RoomInspectionDispatchService.Create(date, rooms);
                 if (result.Success == false)
                 {
-                    //
-                    return View();
+                    System.Diagnostics.Debug.WriteLine("insert error");
+                    result.ErrorMsg = "Dispatch List construct error";
+                    return View(data2ViewModel(null, null, result));
                 }
                 else
                 {
-                    var TotalViewModel = new List<roomInspectionDispatchDetail>();
+                    System.Diagnostics.Debug.WriteLine("insert success");
+                    List<roomInspectionDispatchDetail> roomDispatchDetail = new List<roomInspectionDispatchDetail>();
                     var roomDispatchs = this._RoomInspectionDispatchService.GetAllByDate(date);
-
                     foreach (var roomDispatch in roomDispatchs)
                     {
-                        TotalViewModel.Add(roomDispatch);
+                        roomDispatchDetail.Add(roomDispatch);
                     }
-                    return View(TotalViewModel);
+                    List<userListForInspectionViweModel> userList = getUserListForInspection();
+                    return View(data2ViewModel(roomDispatchDetail, userList, result));
                 }
             }
         }
@@ -126,11 +138,28 @@ namespace InspectionWeb.Controllers
             }
         }
 
-        private RoomInspectionDispatchViewModel data2ViewModel(roomInspectionDispatchDetail roomDispatch)
+        private ListRoomInspectionDispatchViewModel data2ViewModel(List<roomInspectionDispatchDetail> dispatchList, List<userListForInspectionViweModel> userList, IResult result)
         {
-            RoomInspectionDispatchViewModel viewModel = new RoomInspectionDispatchViewModel();
-
+            ListRoomInspectionDispatchViewModel viewModel = new ListRoomInspectionDispatchViewModel();
+            viewModel.roomInspectionDispatch = dispatchList;
+            viewModel.userList = userList;
+            viewModel.ErrorMsg = result.ErrorMsg;
             return viewModel;
+        }
+
+        private List<userListForInspectionViweModel> getUserListForInspection()
+        {
+            IEnumerable<user> users = this._UserService.GetAll();
+            List<userListForInspectionViweModel> userList = new List<userListForInspectionViweModel>();
+            foreach (var user in users)
+            {
+                userListForInspectionViweModel u = new userListForInspectionViweModel();
+                u.userId = user.userId;
+                u.userCode = user.userCode;
+                u.userName = user.userName;
+                userList.Add(u);
+            }
+            return userList;
         }
 
         [HttpGet]
