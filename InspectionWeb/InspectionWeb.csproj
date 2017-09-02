@@ -374,12 +374,15 @@
     <Content Include="Scripts\listGroup.js" />
     <Content Include="Scripts\listUser.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\Query.js" />
     <Content Include="Scripts\rankItem.js" />
     <Content Include="Scripts\rankReport.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Unity.Mvc4.README.txt" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

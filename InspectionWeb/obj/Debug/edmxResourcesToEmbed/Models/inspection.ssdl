@@ -7,7 +7,7 @@
     <Property Name="abnormalId" Type="nvarchar" MaxLength="32" Nullable="false" />
     <Property Name="abnormalCode" Type="nvarchar" MaxLength="32" />
     <Property Name="abnormalName" Type="nvarchar" MaxLength="64" />
-    <Property Name="description" Type="text" />
+    <Property Name="description" Type="nvarchar" MaxLength="128" />
     <Property Name="isDelete" Type="tinyint" />
     <Property Name="createTime" Type="datetime" />
     <Property Name="lastUpdateTime" Type="datetime" />
@@ -22,7 +22,8 @@
     <Property Name="deviceId" Type="nvarchar" MaxLength="32" />
     <Property Name="abnormalId" Type="nvarchar" MaxLength="32" />
     <Property Name="happenedTime" Type="datetime" />
-    <Property Name="description" Type="text" />
+    <Property Name="description" Type="nvarchar" MaxLength="128" />
+    <Property Name="fixDate" Type="datetime" />
     <Property Name="fixMethod" Type="smallint" />
     <Property Name="isClose" Type="tinyint" />
     <Property Name="isDelete" Type="tinyint" />
@@ -53,7 +54,8 @@
     <Property Name="itemId" Type="nvarchar" MaxLength="32" />
     <Property Name="itemCode" Type="nvarchar" MaxLength="32" />
     <Property Name="itemName" Type="nvarchar" MaxLength="64" />
-    <Property Name="description" Type="text" />
+    <Property Name="itemType" Type="smallint" />
+    <Property Name="description" Type="nvarchar" MaxLength="128" />
     <Property Name="picture" Type="nvarchar" MaxLength="128" />
     <Property Name="companyId" Type="nvarchar" MaxLength="32" />
     <Property Name="fieldId" Type="nvarchar" MaxLength="32" />
@@ -73,7 +75,7 @@
     <Property Name="roomId" Type="nvarchar" MaxLength="32" Nullable="false" />
     <Property Name="roomName" Type="nvarchar" MaxLength="64" />
     <Property Name="fieldId" Type="nvarchar" MaxLength="32" />
-    <Property Name="description" Type="text" />
+    <Property Name="description" Type="nvarchar" MaxLength="128" />
     <Property Name="picture" Type="nvarchar" MaxLength="128" />
     <Property Name="inspectionUserId" Type="nvarchar" MaxLength="32" />
     <Property Name="companyId" Type="nvarchar" MaxLength="32" />
@@ -93,7 +95,7 @@
     </Key>
     <Property Name="fieldId" Type="nvarchar" MaxLength="32" Nullable="false" />
     <Property Name="fieldName" Type="nvarchar" MaxLength="64" />
-    <Property Name="description" Type="text" />
+    <Property Name="description" Type="nvarchar" MaxLength="128" />
     <Property Name="mapFileName" Type="nvarchar" MaxLength="128" />
     <Property Name="photo" Type="nvarchar" MaxLength="128" />
     <Property Name="version" Type="nvarchar" MaxLength="16" />
@@ -131,11 +133,11 @@
   </EntityType>
   <EntityType Name="manRepairRecord">
     <Key>
-      <PropertyRef Name="dispatchId" />
+      <PropertyRef Name="recordId" />
     </Key>
-    <Property Name="dispatchId" Type="nvarchar" MaxLength="32" Nullable="false" />
+    <Property Name="recordId" Type="nvarchar" MaxLength="32" Nullable="false" />
     <Property Name="fillUserId" Type="nvarchar" MaxLength="32" />
-    <Property Name="repairUserrId" Type="nvarchar" MaxLength="32" />
+    <Property Name="repairUserId" Type="nvarchar" MaxLength="32" />
     <Property Name="fixNote" Type="text" />
     <Property Name="cost" Type="nchar" MaxLength="10" />
     <Property Name="expectDate" Type="date" />
@@ -157,9 +159,27 @@
     </Key>
     <Property Name="id" Type="nvarchar" MaxLength="32" Nullable="false" />
     <Property Name="noCheckDate" Type="date" />
-    <Property Name="checkTimeType" Type="smallint" />
-    <Property Name="description" Type="text" />
+    <Property Name="am" Type="tinyint" />
+    <Property Name="pm" Type="tinyint" />
+    <Property Name="description" Type="nvarchar" MaxLength="100" />
     <Property Name="setupUserId" Type="nvarchar" MaxLength="32" />
+    <Property Name="isDelete" Type="tinyint" />
+    <Property Name="createTime" Type="datetime" />
+    <Property Name="lastUpdateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="otherAbnormalRecord">
+    <Key>
+      <PropertyRef Name="recordId" />
+    </Key>
+    <Property Name="recordId" Type="nvarchar" MaxLength="32" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="32" />
+    <Property Name="sourceId" Type="nvarchar" MaxLength="32" />
+    <Property Name="abnormalId" Type="nvarchar" MaxLength="32" />
+    <Property Name="happenedTime" Type="datetime" />
+    <Property Name="description" Type="nvarchar" MaxLength="128" />
+    <Property Name="fixDate" Type="datetime" />
+    <Property Name="fixMethod" Type="smallint" />
+    <Property Name="isClose" Type="tinyint" />
     <Property Name="isDelete" Type="tinyint" />
     <Property Name="createTime" Type="datetime" />
     <Property Name="lastUpdateTime" Type="datetime" />
@@ -179,15 +199,16 @@
       <PropertyRef Name="deviceId" />
     </Key>
     <Property Name="deviceId" Type="nvarchar" MaxLength="32" Nullable="false" />
+    <Property Name="deviceCode" Type="nvarchar" MaxLength="32" />
     <Property Name="sourceId" Type="nvarchar" MaxLength="32" />
     <Property Name="name" Type="nvarchar" MaxLength="64" />
-    <Property Name="deviceCode" Type="nvarchar" MaxLength="32" />
     <Property Name="description" Type="text" />
     <Property Name="photo" Type="nvarchar" MaxLength="128" />
     <Property Name="itemId" Type="nvarchar" MaxLength="32" />
     <Property Name="fieldId" Type="nvarchar" MaxLength="32" />
     <Property Name="x" Type="int" />
     <Property Name="y" Type="int" />
+    <Property Name="periodReportTime" Type="int" />
     <Property Name="isDelete" Type="tinyint" />
     <Property Name="createTime" Type="datetime" />
     <Property Name="lastUpdateTime" Type="datetime" />
@@ -212,9 +233,7 @@
     <Property Name="roomId" Type="nvarchar" MaxLength="32" />
     <Property Name="active" Type="smallint" />
     <Property Name="description" Type="text" />
-    <Property Name="isDelete" Type="tinyint" />
     <Property Name="createTime" Type="datetime" />
-    <Property Name="lastUpdateTime" Type="datetime" />
   </EntityType>
   <EntityType Name="roomCheckRecord">
     <Key>
@@ -240,7 +259,7 @@
     <Property Name="roomId" Type="nvarchar" MaxLength="64" />
     <Property Name="inspectorId1" Type="nvarchar" MaxLength="32" />
     <Property Name="inspectorId2" Type="nvarchar" MaxLength="32" />
-    <Property Name="setupId" Type="nvarchar" MaxLength="32" />
+    <Property Name="setupUserId" Type="nvarchar" MaxLength="32" />
     <Property Name="isDelete" Type="tinyint" />
     <Property Name="createTime" Type="datetime" />
     <Property Name="lastUpdateTime" Type="datetime" />
@@ -255,6 +274,18 @@
     <Property Name="description" Type="text" />
     <Property Name="fileName" Type="nvarchar" MaxLength="128" />
     <Property Name="version" Type="nvarchar" MaxLength="14" />
+    <Property Name="isDelete" Type="tinyint" />
+    <Property Name="createTime" Type="datetime" />
+    <Property Name="lastUpdateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="systemSettings">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="nvarchar" MaxLength="32" Nullable="false" />
+    <Property Name="keyName" Type="nvarchar" MaxLength="32" />
+    <Property Name="description" Type="nvarchar" MaxLength="64" />
+    <Property Name="value" Type="nvarchar" MaxLength="32" />
     <Property Name="isDelete" Type="tinyint" />
     <Property Name="createTime" Type="datetime" />
     <Property Name="lastUpdateTime" Type="datetime" />
@@ -303,6 +334,7 @@
     <EntitySet Name="itemInspectionDispatch" EntityType="Self.itemInspectionDispatch" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="manRepairRecord" EntityType="Self.manRepairRecord" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="noCheckDate" EntityType="Self.noCheckDate" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="otherAbnormalRecord" EntityType="Self.otherAbnormalRecord" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="quickSolution" EntityType="Self.quickSolution" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="reportDevice" EntityType="Self.reportDevice" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="reportSource" EntityType="Self.reportSource" Schema="dbo" store:Type="Tables" />
@@ -310,6 +342,7 @@
     <EntitySet Name="roomCheckRecord" EntityType="Self.roomCheckRecord" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="roomInspectionDispatch" EntityType="Self.roomInspectionDispatch" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="softwareVersion" EntityType="Self.softwareVersion" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="systemSettings" EntityType="Self.systemSettings" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="userGroup" EntityType="Self.userGroup" Schema="dbo" store:Type="Tables" />
   </EntityContainer>

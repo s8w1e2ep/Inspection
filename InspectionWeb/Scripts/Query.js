@@ -1,21 +1,20 @@
-﻿$(document).ready(function () {
+﻿$(function () {
 
-    $('#startDatePicker, #endDatePicker').daterangepicker({
+    //select date and time
+    $('#dateAndTime1, #dateAndTime2').daterangepicker({
+        timePicker: true,
+        timePickerSeconds: true,
         singleDatePicker: true,
-        format: 'YYYY/MM/DD'
-    }).on('apply.daterangepicker', function (ev, picker) {
-        // todo
-        //beaconAlarmDateStart = picker.startDate.format('YYYY/MM/DD');
-        //beaconAlarmDateEnd = picker.endDate.format('YYYY/MM/DD');
-        //console.log(scheduleDateStart);
-        //console.log(scheduleDateEnd);
-        });
+        timePickerIncrement: 1,
+        format: 'YYYY/MM/DD HH:mm:ss'
+    });
 
+    $(".select2").select2();
 
     $('#ReportList').DataTable({
         "paging": false,
         "info": false,
-        "searching": false,
+        "searching": true,
         "columnDefs": [
             { "targets": 0, "width": "15%", "orderable": true },
             { "targets": 1, "width": "15%", "orderable": true },
@@ -27,5 +26,5 @@
         ],
     });
 
-    // single Date picker
+    
 });
