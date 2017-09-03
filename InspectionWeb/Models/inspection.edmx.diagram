@@ -22,10 +22,9 @@
         <EntityTypeShape EntityType="inspectionModel.quickSolution" Width="1.5" PointX="3.375" PointY="12.75" />
         <EntityTypeShape EntityType="inspectionModel.abnormalDefinition" Width="1.5" PointX="11.375" PointY="12.75" />
         <EntityTypeShape EntityType="inspectionModel.softwareVersion" Width="1.5" PointX="5.375" PointY="12.75" />
-        <EntityTypeShape EntityType="inspectionModel.otherAbnormalRecord" Width="1.5" PointX="13.375" PointY="5.75" />
-        <EntityTypeShape EntityType="inspectionModel.systemSettings" Width="1.5" PointX="13.375" PointY="9.75" />
         <EntityTypeShape EntityType="inspectionModel.manRepairRecord" Width="1.5" PointX="7.375" PointY="11.75" />
-        <EntityTypeShape EntityType="inspectionModel.roomInspectionDispatch" Width="1.5" PointX="13.375" PointY="13.75" />
+        <EntityTypeShape EntityType="inspectionModel.roomInspectionDispatch" Width="1.5" PointX="13.375" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="inspectionModel.temp" Width="1.5" PointX="15.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

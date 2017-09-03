@@ -20,6 +20,8 @@ namespace InspectionWeb.Services.Interface
         IEnumerable<exhibitionRoom> GetAll();
 
         IEnumerable<exhibitionRoomList> GetAllIdAndName();
+
+        IEnumerable<exhibitionRoom> GetUndispatchRoom(System.DateTime date);
     }
         
 }

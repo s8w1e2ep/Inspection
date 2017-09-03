@@ -84,7 +84,27 @@ namespace InspectionWeb.Controllers
                 {
                     System.Diagnostics.Debug.WriteLine("number of rooms is different");
                     //找出還未建檔的展覽廳
-                    return View(data2ViewModel(null, null, null));
+                    rooms = this._ExhibitionRoomService.GetUndispatchRoom(date);
+                    IResult result = this._RoomInspectionDispatchService.Create(date, rooms);
+                    if (result.Success == false)
+                    {
+                        System.Diagnostics.Debug.WriteLine("insert error");
+                        //result.ErrorMsg = "Dispatch List construct error";
+                        System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
+                        return View(data2ViewModel(null, null, result));
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("insert success");
+                        List<roomInspectionDispatchDetail> roomDispatchDetail = new List<roomInspectionDispatchDetail>();
+                        var roomDispatchs = this._RoomInspectionDispatchService.GetAllByDate(date);
+                        foreach (var roomDispatch in roomDispatchs)
+                        {
+                            roomDispatchDetail.Add(roomDispatch);
+                        }
+                        List<userListForInspectionViweModel> userList = getUserListForInspection();
+                        return View(data2ViewModel(roomDispatchDetail, userList, result));
+                    }
                 }
 
             }
@@ -95,7 +115,8 @@ namespace InspectionWeb.Controllers
                 if (result.Success == false)
                 {
                     System.Diagnostics.Debug.WriteLine("insert error");
-                    result.ErrorMsg = "Dispatch List construct error";
+                    System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
+                    //result.ErrorMsg = "Dispatch List construct error";
                     return View(data2ViewModel(null, null, result));
                 }
                 else
@@ -143,13 +164,21 @@ namespace InspectionWeb.Controllers
             ListRoomInspectionDispatchViewModel viewModel = new ListRoomInspectionDispatchViewModel();
             viewModel.roomInspectionDispatch = dispatchList;
             viewModel.userList = userList;
-            viewModel.ErrorMsg = result.ErrorMsg;
+            if (result!=null) {
+                viewModel.ErrorMsg = result.ErrorMsg;
+                System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
+            }
+            else
+            {
+                viewModel.ErrorMsg = null;
+            }
             return viewModel;
         }
 
         private List<userListForInspectionViweModel> getUserListForInspection()
         {
             IEnumerable<user> users = this._UserService.GetAll();
+            System.Diagnostics.Debug.WriteLine(users.Count());
             List<userListForInspectionViweModel> userList = new List<userListForInspectionViweModel>();
             foreach (var user in users)
             {
@@ -165,7 +194,8 @@ namespace InspectionWeb.Controllers
         [HttpGet]
         public ActionResult ListItemInspectionDispatch()
         {
-            return View();
+            ListItemInspectionDispatchViewModel empty = null;
+            return View(empty);
         }
 
         [HttpPost]

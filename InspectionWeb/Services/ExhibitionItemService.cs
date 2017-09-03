@@ -138,5 +138,22 @@ namespace InspectionWeb.Services
             }
 
         }
+
+        public IEnumerable<exhibitionItem> GetUndispatchItem(System.DateTime date)
+        {
+            string sqlString = " SELECT exhibitionItem.* " +
+                                "FROM exhibitionItem " +
+                                "WHERE NOT EXISTS( " +
+                                "SELECT itemInspectionDispatch.roomId " +
+                                "FROM itemInspectionDispatch " +
+                                "WHERE itemInspectionDispatch.itemId = exhibitionItem.itemId " +
+                                "AND itemInspectionDispatch.checkDate = '" + date.Date + "')";
+
+            using (inspectionEntities db = new inspectionEntities())
+            {
+                var itemList = db.Database.SqlQuery<exhibitionItem>(sqlString).ToList();
+                return itemList;
+            }
+        }
     }
 }

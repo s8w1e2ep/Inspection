@@ -23,5 +23,7 @@ namespace InspectionWeb.Services.Interface
 
         IEnumerable<exhibitionItemList> GetAllIdAndName();
 
+        IEnumerable<exhibitionItem> GetUndispatchItem(System.DateTime date);
+
     }
 }

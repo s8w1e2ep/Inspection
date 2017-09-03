@@ -281,9 +281,6 @@
     <Compile Include="Models\noCheckDate.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\otherAbnormalRecord.cs">
-      <DependentUpon>inspection.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\quickSolution.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
@@ -319,7 +316,7 @@
     <Compile Include="Models\sp_helpdiagrams_Result.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\systemSettings.cs">
+    <Compile Include="Models\temp.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\user.cs">
@@ -330,6 +327,7 @@
     </Compile>
     <Compile Include="Models\ViewModel\GroupAddViewModel.cs" />
     <Compile Include="Models\ViewModel\GroupDetailViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListItemInspectionDispatchViewModel.cs" />
     <Compile Include="Models\ViewModel\ListRoomInspectionDispatchViewModel.cs" />
     <Compile Include="Models\ViewModel\userListForInspectionViewModel.cs" />
     <Compile Include="Services\ExhibitionRoomService.cs" />
@@ -440,7 +438,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Unity.Mvc4.README.txt" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

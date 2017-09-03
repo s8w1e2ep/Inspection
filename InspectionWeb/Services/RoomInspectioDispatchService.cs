@@ -1,6 +1,7 @@
 ﻿using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
 using System;
+using System.Data.Entity.Validation;
 using System.Collections.Generic;
 using System.Linq;
 using InspectionWeb.Models;
@@ -51,29 +52,48 @@ namespace InspectionWeb.Services
                     DateTime now = DateTime.Now;
                     IdGenerator idGen = new IdGenerator();
 
-                    roomDispatch.dispatchId = idGen.GetID("roomInspectionDispatch");
+                    roomDispatch.dispatchId = idGen.GetID("roomDispatch");
                     roomDispatch.checkDate = date;
-                    roomDispatch.roomId = rooms.ElementAt(i).roomId;
-                    roomDispatch.inspectorId1 = rooms.ElementAt(i).inspectionUserId;
-                    roomDispatch.inspectorId2 = rooms.ElementAt(i).inspectionUserId;
-                    roomDispatch.setupUserId = "";
+                    roomDispatch.roomId = "ASD";// rooms.ElementAt(i).roomId;
+                    roomDispatch.inspectorId1 = "a1";// rooms.ElementAt(i).inspectionUserId;
+                    roomDispatch.inspectorId2 = "b1";// rooms.ElementAt(i).inspectionUserId;
+                    roomDispatch.setupId = "a1";
                     roomDispatch.isDelete = 0;
                     roomDispatch.createTime = now;
                     roomDispatch.lastUpdateTime = now;
 
                     this._repository.Create(roomDispatch);
+                    result.ErrorMsg = "create success";
                     result.Success = true;
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    result.Exception = ex;
+                    result.ErrorMsg = ex.ToString();
+                    System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
+                    foreach(var ve in ex.EntityValidationErrors)
+                    {
+                        foreach(var vee in ve.ValidationErrors)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Type: " + vee.PropertyName + " error: " + vee.ErrorMessage);
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
                     result.Exception = ex;
-                    if (((System.Data.SqlClient.SqlException)((ex.InnerException).InnerException)).Number == 2627)
-                    {
+                    //if (((System.Data.SqlClient.SqlException)((ex.InnerException).InnerException)).Number == 2627)
+                    //{
                         result.ErrorMsg = ex.ToString();
-                        //result.ErrorMsg = "";
-                    }
-                    result.ErrorMsg = "error";
+                        System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
+                       //result.ErrorMsg = "";
+                    //}
+                    //else
+                    //{
+                        //result.ErrorMsg = "something error";
+                    //}
                 }
+                
             }
             return result;
         }

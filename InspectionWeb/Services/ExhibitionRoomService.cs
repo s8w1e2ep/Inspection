@@ -122,10 +122,10 @@ namespace InspectionWeb.Services
 
         public IEnumerable<exhibitionRoomList> GetAllIdAndName()
         {
-            string sqlString = " SELECT R.roomId, R.roomName, R.inspectionUserId"
-                    + "FROM exhibitionRoom R"
-                    + "WHERE R.isDelete = 0"
-                    + "ORDER BY R.createTime";
+            string sqlString = " SELECT R.roomId, R.roomName, R.inspectionUserId "
+                    + "FROM exhibitionRoom R "
+                    + "WHERE R.isDelete = 0 "
+                    + "ORDER BY R.createTime ";
 
             using (inspectionEntities db = new inspectionEntities())
             {
@@ -133,6 +133,23 @@ namespace InspectionWeb.Services
                 return roomList;
             }
 
+        }
+
+        public IEnumerable<exhibitionRoom> GetUndispatchRoom(System.DateTime date)
+        {
+            string sqlString = " SELECT exhibitionRoom.* " +
+                                "FROM exhibitionRoom " +
+                                "WHERE NOT EXISTS( " +
+                                "SELECT roomInspectionDispatch.roomId " +
+                                "FROM roomInspectionDispatch " +
+                                "WHERE roomInspectionDispatch.roomId = exhibitionRoom.roomId " +
+                                "AND roomInspectionDispatch.checkDate = '"+ date.Date +"')";
+
+            using (inspectionEntities db = new inspectionEntities())
+            {
+                var roomList = db.Database.SqlQuery<exhibitionRoom>(sqlString).ToList();
+                return roomList;
+            }
         }
     }
 }
