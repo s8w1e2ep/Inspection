@@ -13,19 +13,37 @@
 <!-- column order -->
 <script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+
+
 <script>
 
-    function formValidation() {
-        return false;
-    }
     $(function () {
-        $('#dispatchDate').datepicker({
+        $('#nonCheckDate').datepicker({
             format: "yyyy/mm/dd",
             language: 'zh-TW',
             todayHighlight: true
         })
 
     });
+
+    function fieldValidation(field) {
+        if ($.trim($(field).val()) == '') {
+            $(field + 'Div').addClass('has-error');
+            $(field + 'Div').val('');
+            return false;
+        } else {
+            $(field + 'Div').removeClass('has-error');
+        }
+        return true;
+    }
+
+    function formValidation() {
+        if (fieldValidation('#nonCheckDate')) {
+            return true;
+        }
+        return false;
+    }
+    
     function setNonInspectionTable() {
         $('#nonInspectiable').DataTable({
             'paging': true,
@@ -41,7 +59,12 @@
     
 </script>
 
-
+<style>
+    input.largerCheckbox{
+        width: 20px;
+        height: 20px;
+    }
+    </style>
 
 <div class="wrapper">
     <!-- Content Wrapper. Contains page content -->
@@ -63,17 +86,30 @@
                     <!-- general form elements -->
                     <div class="box box-success">
                         <div class="box-header with-border">
-                            <form class="form-horizontal" method="post" action="@Url.Action("AddRoomInspectionDispatch")" onsubmit="return formValidation();">
-                                <div id="dispatchDateDiv" class="form-group">
-                                    <div class="col-sm-1">
-                                        <label for="dispatchDate" class="control-label">非巡檢日期</label>
+
+                            <form class="form-horizontal" method="post" action="@Url.Action("AddNonInspectionDispatchDate")" onsubmit="return formValidation();">
+                                <div id="nonCheckDateDiv" class="form-group">
+                                    <label for="nonCheckDate" class="col-sm-2 control-label">非巡檢日期</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="nonCheckDate" name="nonCheckDate">
                                     </div>
-                                    <div class="col-sm-4">
-                                        <input type="text" class="form-control pull-right" id="dispatchDate" name="dispatchDate">
+                                </div>
+                                <div id="typeDiv" class="form-group">
+                                    <div class="col-sm-12">
+                                        <label for="morning" class="col-sm-2 control-label">上午</label>
+                                        <input type="checkbox" class="col-sm-1 largerCheckbox" name="morning" id="morning" data-size="xl">
+                                        <label for="afternoon" class="col-sm-2 control-label">下午</label>
+                                        <input type="checkbox" class="col-sm-1 largerCheckbox" name="afternoon" id="afternoon" data-size="xl">
                                     </div>
-                                    <div class="col-sm-2">
-                                        <button type="submit" class="btn btn-success">確定新增</button>
+                                </div>
+                                <div id="descriptionDiv" class="form-group">
+                                    <label for="description" class="col-sm-2 control-label">原因</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control pull-right" id="description" name="description">
                                     </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-success pull-right">確定新增</button>
                                 </div>
                             </form>
                          </div><!-- /.box-header -->

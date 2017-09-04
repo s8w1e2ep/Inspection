@@ -41,7 +41,7 @@ namespace InspectionWeb.Services
                 source.sourceId = idGen.GetID("reportSource");
                 source.sourceCode = sourceCode;
                 source.sourceName = sourceName;
-                source.isDelete = 0;
+                source.isDelete = Convert.ToByte(0);
                 source.description = "";
                 source.createTime = now;
                 source.lastUpdateTime = now;

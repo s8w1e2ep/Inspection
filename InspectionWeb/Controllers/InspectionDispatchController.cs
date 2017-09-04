@@ -17,6 +17,7 @@ namespace InspectionWeb.Controllers
     {
         private IRoomInspectionDispatchService _RoomInspectionDispatchService;
         private IItemInspectionDispatchService _ItemInspectionDispatchService;
+        private INoCheckDateService _noCheckDateService;
         private IExhibitionRoomService _ExhibitionRoomService;
         private IExhibitionItemService _ExhibitionItemService;
         private IUserService _UserService;
@@ -38,18 +39,21 @@ namespace InspectionWeb.Controllers
         {
             public System.DateTime nonCheckDate { get; set; }
             public string description { get; set; }
-            public int type { get; set; }
+            public bool morning { get; set; }
+            public bool afternoon { get; set; }
         }
 
 
         public InspectionDispatchController(IRoomInspectionDispatchService roomInpectionDispatchService, 
                                             IItemInspectionDispatchService itemInspectionDispatchService, 
+                                            INoCheckDateService noCheckDateService,
                                             IExhibitionRoomService exhibitionRoomService, 
                                             IExhibitionItemService exhibitionItemService,
                                             IUserService userService)
         {
             this._RoomInspectionDispatchService = roomInpectionDispatchService;
             this._ItemInspectionDispatchService = itemInspectionDispatchService;
+            this._noCheckDateService = noCheckDateService;
             this._ExhibitionRoomService = exhibitionRoomService;
             this._ExhibitionItemService = exhibitionItemService;
             this._UserService = userService;
@@ -145,9 +149,6 @@ namespace InspectionWeb.Controllers
         {
             var roomDispatchId = dispatchJson.pk;
             var roomDispatch = this._RoomInspectionDispatchService.GetById(roomDispatchId);
-            System.Diagnostics.Debug.WriteLine(dispatchJson.pk);
-            System.Diagnostics.Debug.WriteLine(dispatchJson.name);
-            System.Diagnostics.Debug.WriteLine(dispatchJson.value);
             if (roomDispatch != null && ModelState.IsValid)
             {
                 IResult result = this._RoomInspectionDispatchService.Update(roomDispatch, dispatchJson.name, dispatchJson.value);
@@ -338,13 +339,69 @@ namespace InspectionWeb.Controllers
         [HttpGet]
         public ActionResult AddNonInspectionDispatchDate()
         {
-            return View();
+            var TotalViewModel = new List<NoCheckDateViewModel>();
+            var noCheckDates = this._noCheckDateService.GetAll().ToList();
+
+            foreach (var item in noCheckDates)
+            {
+                NoCheckDateViewModel noCheckDateViewModel = this.Data2NoChekDateViewModel(item);
+                TotalViewModel.Add(noCheckDateViewModel);
+            }
+            return View(TotalViewModel);
         }
 
         [HttpPost]
-        public ActionResult AddNonInspectionDispatchDate()
+        public ActionResult AddNonInspectionDispatchDate(nonInspectionDispatchJson noCheckDateJson)
         {
-            return View();
+            System.DateTime noCheckDate = Convert.ToDateTime(noCheckDateJson.nonCheckDate);
+            string description = noCheckDateJson.description;
+            bool type1 = noCheckDateJson.morning;
+            bool type2 = noCheckDateJson.afternoon;
+            if (type1)
+            {
+                IResult result = this._noCheckDateService.Create(noCheckDate, description, Convert.ToInt16(1));
+                System.Diagnostics.Debug.WriteLine("msg: " + result.ErrorMsg);
+                if (result.Success == false)
+                {
+                    NoCheckDateViewModel vm = new NoCheckDateViewModel();
+                    vm.ErrorMsg = result.ErrorMsg;
+                    return View(vm);
+                }
+            }
+
+            if (type2)
+            {
+                IResult result = this._noCheckDateService.Create(noCheckDate, description, Convert.ToInt16(2));
+                System.Diagnostics.Debug.WriteLine("msg: " + result.ErrorMsg);
+                if (result.Success == false)
+                {
+                    NoCheckDateViewModel vm = new NoCheckDateViewModel();
+                    vm.ErrorMsg = result.ErrorMsg;
+                    return View(vm);
+                }
+            }
+            var TotalViewModel = new List<NoCheckDateViewModel>();
+            var noCheckDates = this._noCheckDateService.GetAll().ToList();
+            foreach (var item in noCheckDates)
+            {
+                NoCheckDateViewModel noCheckDateViewModel = this.Data2NoChekDateViewModel(item);
+                TotalViewModel.Add(noCheckDateViewModel);
+            }
+            return View(TotalViewModel);
+        }
+
+        private NoCheckDateViewModel Data2NoChekDateViewModel(noCheckDate noCheckDate)
+        {
+            NoCheckDateViewModel viewModel = new NoCheckDateViewModel();
+            viewModel.id = noCheckDate.id;
+            viewModel.description = noCheckDate.description;
+            viewModel.checkTimeType = noCheckDate.checkTimeType;
+            viewModel.setupUserId = noCheckDate.setupUserId;
+            viewModel.isDelete = noCheckDate.isDelete;
+            viewModel.createTime = noCheckDate.createTime;
+            viewModel.lastUpdateTime = noCheckDate.lastUpdateTime;
+
+            return viewModel;
         }
 
         public ActionResult QueryInspectionByRoom()

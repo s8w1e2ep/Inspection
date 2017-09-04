@@ -54,6 +54,7 @@ namespace InspectionWeb
             container.RegisterType<IRepository<roomInspectionDispatch>, GenericRepository<roomInspectionDispatch>>();
             container.RegisterType<IRepository<itemInspectionDispatchDetail>, GenericRepository<itemInspectionDispatchDetail>>();
             container.RegisterType<IRepository<roomInspectionDispatchDetail>, GenericRepository<roomInspectionDispatchDetail>>();
+            container.RegisterType<IRepository<noCheckDate>, GenericRepository<noCheckDate>>();
             container.RegisterType<IRepository<exhibitionItem>, GenericRepository<exhibitionItem>>();
             container.RegisterType<IRepository<exhibitionRoom>, GenericRepository<exhibitionRoom>>();
             container.RegisterType<IRepository<reportDevice>, GenericRepository<reportDevice>>();
@@ -70,6 +71,7 @@ namespace InspectionWeb
             container.RegisterType<IExhibitionRoomService, ExhibitionRoomService>();
             container.RegisterType<IReportDeviceService, ReportDeviceService>();
             container.RegisterType<IReportSourceService, ReportSourceService>();
+            container.RegisterType<INoCheckDateService, NoCheckDateService>();
             container.RegisterType<IItemInspectionDispatchService, ItemInspectionDispatchService>();
             container.RegisterType<IRoomInspectionDispatchService, RoomInspectionDispatchService>();
             container.RegisterType<IUserService, UserService>();

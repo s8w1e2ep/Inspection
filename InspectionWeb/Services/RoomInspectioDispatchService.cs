@@ -58,7 +58,7 @@ namespace InspectionWeb.Services
                     roomDispatch.inspectorId1 = rooms.ElementAt(i).inspectionUserId;
                     roomDispatch.inspectorId2 = rooms.ElementAt(i).inspectionUserId;
                     roomDispatch.setupId = "";
-                    roomDispatch.isDelete = 0;
+                    roomDispatch.isDelete = Convert.ToByte(0);
                     roomDispatch.createTime = now;
                     roomDispatch.lastUpdateTime = now;
 

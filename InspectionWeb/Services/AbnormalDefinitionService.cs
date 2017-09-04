@@ -42,7 +42,7 @@ namespace InspectionWeb.Services
                 abnormal.abnormalCode = abnormalCode;
                 abnormal.abnormalName = abnormalName;
                 abnormal.description = "";
-                abnormal.isDelete = 0;
+                abnormal.isDelete = Convert.ToByte(0);
                 abnormal.createTime = now;
                 abnormal.lastUpdateTime = now;
 
