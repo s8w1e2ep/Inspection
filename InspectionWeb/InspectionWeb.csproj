@@ -213,6 +213,7 @@
     <Compile Include="Class\WebApi\AutoReportPost.cs" />
     <Compile Include="Class\IdGenerator.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\QuickSolutionController.cs" />
     <Compile Include="Controllers\ReportJobController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
@@ -424,6 +425,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\QuickSolution\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
