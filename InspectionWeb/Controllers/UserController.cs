@@ -350,18 +350,23 @@ namespace InspectionWeb.Controllers
 
         // POST: /User/UploadImg
         [HttpPost]
-        public ActionResult UpdateImg(HttpPostedFileBase upload, string userId)
+        public ActionResult UpdateImg(HttpPostedFileBase upload, string userId, string type)
         {
             if (upload.ContentLength > 0)
             {
                 try
                 {
-                    System.Diagnostics.Debug.WriteLine("UploadImg UserId:\n" + userId);
-                    if (userId == null)
+                    var fileName = userId;
+
+                    if (type == "jpeg")
                     {
-                        throw new ArgumentException("Parameter cannot be null", "original");
+                        fileName += ".jpg";
                     }
-                    var fileName = userId + ".jpg";
+                    else
+                    {
+                        fileName += ".png";
+                    }
+                    
                     var path = System.IO.Path.Combine(Server.MapPath("~/media/user"), fileName);
                     upload.SaveAs(path);
 
