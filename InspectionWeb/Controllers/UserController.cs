@@ -348,6 +348,45 @@ namespace InspectionWeb.Controllers
             }
         }
 
+        // POST: /User/UploadImg
+        [HttpPost]
+        public ActionResult UpdateImg(HttpPostedFileBase upload, string userId)
+        {
+            if (upload.ContentLength > 0)
+            {
+                try
+                {
+                    System.Diagnostics.Debug.WriteLine("UploadImg UserId:\n" + userId);
+                    if (userId == null)
+                    {
+                        throw new ArgumentException("Parameter cannot be null", "original");
+                    }
+                    var fileName = userId + ".jpg";
+                    var path = System.IO.Path.Combine(Server.MapPath("~/media/user"), fileName);
+                    upload.SaveAs(path);
+
+                    user instance = _userService.GetByID(userId);
+
+                    var result = _userService.Update(instance, "picture", fileName);
+
+                    if (result.Success)
+                    {
+                        result.Message = fileName;
+                        return Json(result);
+                    }  
+                }
+                catch(Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine("UploadImg ex:\n" + e.ToString());
+                }
+                return Json(null);
+            }
+            else
+            {
+                return Json(null);
+            }
+        }
+
         // DELETE: /User/DeleteGroup
         public ActionResult DeleteGroup(string groupId)
         {
@@ -401,7 +440,7 @@ namespace InspectionWeb.Controllers
             {
                 vm.agent = null;
             }
-            vm.picture = instance.agent;
+            vm.picture = instance.picture;
             vm.active = instance.active;
             vm.isDelete = (short)instance.isDelete;
             vm.createTime = instance.createTime;

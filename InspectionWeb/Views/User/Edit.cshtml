@@ -5,76 +5,80 @@
 }
 
 <script>
-var userId = '@Model.user.userId';
+    var userId = '@Model.user.userId';
+    var newPassword;
+    var repeatPassword;
 
-$(document).ready(function () {
-    // x-editable for user table
-    $('#userName, #email, #tel').editable({
-        success: function (response) {
-            $('#last').html(response.lastUpdateTime);
-        }
-    });
+    $.fn.editable.defaults.mode = 'inline';
 
-    $('#active').editable({
-        value: ['@Model.user.active'],
-        source: {
-            1: '是',
-        },
-        emptytext: '否',
-        params: function (params) {
-            var data = {};
-            data['name'] = params.name;
-            data['pk'] = params.pk;
-            data['value'] = params.value.join(",");
-
-            return data;
-        },
-        success: function (response) {
-            $('#last').html(response.lastUpdateTime);
-        }
-    });
-
-    $('#agent').editable({
-        value: 'Select status',
-        source: [
-            @foreach(var item in Model.agents)
-            {
-                <text>{value: '@item.userId', text: '@item.userCode' },</text>
+    $(document).ready(function () {
+        // x-editable for user table
+        $('#userName, #email, #tel').editable({
+            success: function (response) {
+                $('#last').html(response.lastUpdateTime);
             }
-        ],
-        success: function (response) {
-            $('#last').html(response.lastUpdateTime);
-        }
-    });
+        });
 
-    $('#groupId').editable({
-        value: 'Select status',
-        source: [
-            @foreach(var item in Model.groups)
-            {
-                <text>{value: '@item.groupId', text: '@item.groupName' },</text>
+        $('#active').editable({
+            value: ['@Model.user.active'],
+            source: {
+                1: '是',
+            },
+            emptytext: '否',
+            params: function (params) {
+                var data = {};
+                data['name'] = params.name;
+                data['pk'] = params.pk;
+                data['value'] = params.value.join(",");
+
+                return data;
+            },
+            success: function (response) {
+                $('#last').html(response.lastUpdateTime);
             }
-        ],
-        success: function (response) {
-            $('#last').html(response.lastUpdateTime);
-        }
-    });
+        });
 
-    $('#modalYes2').click(function () {
-        newPassword = $.trim($('#newPassword').val());
-        repeatPassword = $.trim($('#repeatPassword').val());
+        $('#agent').editable({
+            value: 'Select status',
+            source: [
+                @foreach(var item in Model.agents)
+                {
+                    <text>{value: '@item.userId', text: '@item.userCode' },</text>
+                }
+            ],
+            success: function (response) {
+                $('#last').html(response.lastUpdateTime);
+            }
+        });
 
-        if (newPassword === '' || repeatPassword === '') {
-            alert('密碼不能為空白!');
-            return;
-        }
-        if (newPassword === repeatPassword) {
-            changePassword();
-        } else {
-            alert('新密碼輸入錯誤!');
-        }
+        $('#groupId').editable({
+            value: 'Select status',
+            source: [
+                @foreach(var item in Model.groups)
+                {
+                    <text>{value: '@item.groupId', text: '@item.groupName' },</text>
+                }
+            ],
+            success: function (response) {
+                $('#last').html(response.lastUpdateTime);
+            }
+        });
+
+        $('#modalYes2').click(function () {
+            newPassword = $.trim($('#newPassword').val());
+            repeatPassword = $.trim($('#repeatPassword').val());
+
+            if (newPassword === '' || repeatPassword === '') {
+                alert('密碼不能為空白!');
+                return;
+            }
+            if (newPassword === repeatPassword) {
+                changePassword();
+            } else {
+                alert('新密碼輸入錯誤!');
+            }
+        });
     });
-});
 </script>
 
 <div class="content-wrapper">
@@ -98,10 +102,13 @@ $(document).ready(function () {
                     <div class="box-header with-border">
                         <h3 class="box-title">
                             人員檢視/修改
-                            <input id="photoUpload" type='file' onchange="" style="display: none;">
-                            <button class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="onUploadFile('#photoUpload')"><i class="fa fa-camera"></i> 上傳照片</button>
+                            <input id="uploadImage" type='file' onchange="uploadImage(this)" style="display: none;">
+                            <button class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="upload()"><i class="fa fa-camera"></i> 上傳照片</button>
                         </h3>
-                        <img class="profile-user-img img-responsive img-circle" src="../../theme/AdminLTE/dist/img/avatar.png" alt="User profile picture">
+                        <div class="progress" style="margin-bottom: 10px;">
+                            <div id="imgProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                        </div>
+                        <img id="photo" class="profile-user-img img-responsive img-circle" src="@if (@Model.user.picture != null) { @Url.Content("~/media/user/" + @Model.user.picture) } else { @Url.Content("~/theme/AdminLTE/dist/img/avatar.png") }" alt="User profile picture">
                     </div>
                     <div class="box-body">
                         <table class="table table-striped table-hover table-bordered" cellspacing="0" style="width: 100%;">
@@ -266,4 +273,82 @@ $(document).ready(function () {
         </div>
     </section>
 </div>
-<script src="~/Scripts/editUser.js"></script>
+<script>
+    function changePassword() {
+        var originalPassword = $('#originalPassword').val();
+        $.post(
+            '/User/EditPassword',
+            {
+                userId: userId,
+                originalPassword: originalPassword,
+                newPassword: newPassword,
+                repeatPassword: repeatPassword
+            },
+            function (data) {
+                if (data.Success) {
+                    alert('變更密碼成功');
+                    $('#last').html(data.lastUpdateTime);
+                } else {
+                    alert('變更密碼失敗');
+                }
+            },
+            'json'
+        ).fail(function () {
+            alert('變更密碼失敗');
+        });
+    }
+
+    function upload() {
+        // 觸發點擊事件
+        $('#uploadImage').trigger('click');
+    }
+
+    function uploadImage(obj) {
+        var err_filetype = '只能上傳 png, jpeg 檔';
+        var imageType = ['image/png', 'image/jpeg'];
+        console.log();
+        if ($.inArray(obj.files[0].type, imageType) < 0) {
+            alert(err_filetype);
+            return;
+        }
+        $('#imgProgress').css('width', '0%').html('0%');
+
+        var data = new FormData();
+        data.append('upload', obj.files[0]);
+        ajaxUploadFile("@Url.Content("~/User/UpdateImg?userId=")@Model.user.userId", data);
+    }
+
+    function ajaxUploadFile(url, data) {
+        console.log("URL: " + url);
+        $.ajax({
+            url: url,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            cache: false,
+            data: data,
+            // return JSON datatype
+            dataType: 'json',
+            // Custom XMLHttpRequest
+            xhr: function () {  
+                var myXhr = $.ajaxSettings.xhr();
+                if (myXhr.upload) {
+                    myXhr.upload.addEventListener('progress', function (e) {
+                        var progress = parseInt(e.loaded / e.total * 100, 10);
+                        $('#imgProgress').css('width', progress + '%').html(progress + '%');
+                    }, false);
+                }
+                return myXhr;
+            }
+        }).done(function (data) {
+            if (data.Success) {
+                $('#photo').attr('src', '@Url.Content("~/media/user/")' + data.Message + '?timestamp=' + new Date().getTime());
+                $('#imgProgress').fadeOut('slow');
+            } else {
+                alert('圖片更新失敗');
+            }
+        }).fail(function () {
+            alert("抱歉! 伺服器無法接受您的照片!");
+        });
+    }
+</script>
