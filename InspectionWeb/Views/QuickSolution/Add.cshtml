@@ -1,43 +1,39 @@
 ﻿@{
-    ViewBag.Title = "智慧巡檢管理後台";
+    ViewBag.Title = "新增常用解決方法";
 }
 
-<div class="wrapper">
-    <div class="content-wrapper">
-        <section class="content-header">
-            <ol class="breadcrumb">
-                <li><a href="/"><i class="fa fa-dashboard"></i>Home</a></li>
-                <li class="active">新增常用解決方法</li>
-            </ol>
-        </section>
-        <!-- Main content -->
-        <section class="content">
-            <div class="row">
-                <!-- left column -->
-                <div class="col-md-6">
-                    <!-- general form elements -->
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">登入</h3>
-                        </div>
-                        <form role="form" method="post" action="@Url.Action("Login", "User")">
-                            <div class="box-body">
-                                <div class="form-group">
-                                    <label for="account">帳號</label>
-                                    <input name="account" type="text" class="form-control" id="account" placeholder="輸入帳號">
-                                </div>
-                                <div class="form-group">
-                                    <label for="exampleInputPassword1">密碼</label>
-                                    <input name="password" type="password" class="form-control" id="password" placeholder="輸入密碼">
-                                </div>
-                            </div>
-                            <div class="box-footer">
-                                <button type="submit" class="btn btn-primary">確定</button>
-                            </div>
-                        </form>
+<div class="content-wrapper">
+    <section class="content-header" style="margin-bottom: 15px;">
+        <ol class="breadcrumb">
+            <li><a href="/"><i class="fa fa-dashboard"></i>Home</a></li>
+            <li class="active">新增常用解決方法</li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">新增常用解決方法</h3>
                     </div>
+                    <!-- form start -->
+                    <form class="form-horizontal" method="post" action="@Url.Action("addsolution")" onsubmit="return formValidation();">
+                        <div class="box-body">
+                            <div id="nameDiv" class="form-group">
+                                <label for="account" class="col-md-2 control-label">方法說明</label>
+                                <div class="col-md-10">
+                                    <input id="account" type="text" class="form-control" name="account" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-success pull-right">確認新增</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
 </div>
+<script src="~/Scripts/addUser.js"></script>
