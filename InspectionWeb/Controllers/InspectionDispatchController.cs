@@ -34,6 +34,14 @@ namespace InspectionWeb.Controllers
             public string value { get; set; }
         }
 
+        public class nonInspectionDispatchJson
+        {
+            public System.DateTime nonCheckDate { get; set; }
+            public string description { get; set; }
+            public int type { get; set; }
+        }
+
+
         public InspectionDispatchController(IRoomInspectionDispatchService roomInpectionDispatchService, 
                                             IItemInspectionDispatchService itemInspectionDispatchService, 
                                             IExhibitionRoomService exhibitionRoomService, 
@@ -58,9 +66,8 @@ namespace InspectionWeb.Controllers
         public ActionResult ListRoomInspectionDispatch(inpectionDateJson timeJson)
         {
             System.DateTime date = Convert.ToDateTime(timeJson.dispatchDate);
-            //System.Diagnostics.Debug.WriteLine("########date: " + date);
             bool isExist = this._RoomInspectionDispatchService.IsExists(date);
-            bool roomNumCheck = this._RoomInspectionDispatchService.checkRoomInsert();
+            bool roomNumCheck = this._RoomInspectionDispatchService.checkRoomInsert(date);
             IEnumerable<exhibitionRoom> rooms = this._ExhibitionRoomService.GetAll();
             //檢查有無分派的紀錄
             if (isExist)
@@ -77,8 +84,8 @@ namespace InspectionWeb.Controllers
                         roomDispatchDetail.Add(roomDispatch);
                     }
 
-                    List<userListForInspectionViweModel> userList = getUserListForInspection();
-                    return View(data2ViewModel(roomDispatchDetail, userList, null));
+                    List<userListForInspectionViweModel> userList = GetUserListForInspection();
+                    return View(Data2RoomViewModel(roomDispatchDetail, userList, null, date));
                 }
                 else
                 {
@@ -91,7 +98,7 @@ namespace InspectionWeb.Controllers
                         System.Diagnostics.Debug.WriteLine("insert error");
                         //result.ErrorMsg = "Dispatch List construct error";
                         System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
-                        return View(data2ViewModel(null, null, result));
+                        return View(Data2RoomViewModel(null, null, result,date));
                     }
                     else
                     {
@@ -102,8 +109,8 @@ namespace InspectionWeb.Controllers
                         {
                             roomDispatchDetail.Add(roomDispatch);
                         }
-                        List<userListForInspectionViweModel> userList = getUserListForInspection();
-                        return View(data2ViewModel(roomDispatchDetail, userList, result));
+                        List<userListForInspectionViweModel> userList = GetUserListForInspection();
+                        return View(Data2RoomViewModel(roomDispatchDetail, userList, result, date));
                     }
                 }
 
@@ -117,7 +124,7 @@ namespace InspectionWeb.Controllers
                     System.Diagnostics.Debug.WriteLine("insert error");
                     System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
                     //result.ErrorMsg = "Dispatch List construct error";
-                    return View(data2ViewModel(null, null, result));
+                    return View(Data2RoomViewModel(null, null, result, date));
                 }
                 else
                 {
@@ -128,16 +135,19 @@ namespace InspectionWeb.Controllers
                     {
                         roomDispatchDetail.Add(roomDispatch);
                     }
-                    List<userListForInspectionViweModel> userList = getUserListForInspection();
-                    return View(data2ViewModel(roomDispatchDetail, userList, result));
+                    List<userListForInspectionViweModel> userList = GetUserListForInspection();
+                    return View(Data2RoomViewModel(roomDispatchDetail, userList, result, date));
                 }
             }
         }
 
-        public ActionResult updateRoomInspectionDispatch(inspectionDispatchJson dispatchJson)
+        public ActionResult UpdateRoomInspectionDispatch(inspectionDispatchJson dispatchJson)
         {
             var roomDispatchId = dispatchJson.pk;
             var roomDispatch = this._RoomInspectionDispatchService.GetById(roomDispatchId);
+            System.Diagnostics.Debug.WriteLine(dispatchJson.pk);
+            System.Diagnostics.Debug.WriteLine(dispatchJson.name);
+            System.Diagnostics.Debug.WriteLine(dispatchJson.value);
             if (roomDispatch != null && ModelState.IsValid)
             {
                 IResult result = this._RoomInspectionDispatchService.Update(roomDispatch, dispatchJson.name, dispatchJson.value);
@@ -145,7 +155,7 @@ namespace InspectionWeb.Controllers
                 if (result.Success)
                 {
                     string lastUpdateTime = roomDispatch.lastUpdateTime.ToString();
-                    return Json(new { result = 1, roomDispatchId = roomDispatchId, lastUpdateTime = lastUpdateTime });
+                    return Json(new { result = 1, roomDispatchId = roomDispatchId });
                 }
                 else
                 {
@@ -159,11 +169,12 @@ namespace InspectionWeb.Controllers
             }
         }
 
-        private ListRoomInspectionDispatchViewModel data2ViewModel(List<roomInspectionDispatchDetail> dispatchList, List<userListForInspectionViweModel> userList, IResult result)
+        private ListRoomInspectionDispatchViewModel Data2RoomViewModel(List<roomInspectionDispatchDetail> dispatchList, List<userListForInspectionViweModel> userList, IResult result,System.DateTime checkDate)
         {
             ListRoomInspectionDispatchViewModel viewModel = new ListRoomInspectionDispatchViewModel();
             viewModel.roomInspectionDispatch = dispatchList;
             viewModel.userList = userList;
+            viewModel.checkDate = checkDate.ToString("d");
             if (result!=null) {
                 viewModel.ErrorMsg = result.ErrorMsg;
                 System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
@@ -175,7 +186,7 @@ namespace InspectionWeb.Controllers
             return viewModel;
         }
 
-        private List<userListForInspectionViweModel> getUserListForInspection()
+        private List<userListForInspectionViweModel> GetUserListForInspection()
         {
             IEnumerable<user> users = this._UserService.GetAll();
             System.Diagnostics.Debug.WriteLine(users.Count());
@@ -199,23 +210,96 @@ namespace InspectionWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult ListItemInspectionDispatch(inpectionDateJson inpectionTime)
+        public ActionResult ListItemInspectionDispatch(inpectionDateJson timeJson)
         {
-            return View();
+            System.DateTime date = Convert.ToDateTime(timeJson.dispatchDate);
+            bool isExist = this._ItemInspectionDispatchService.IsExists(date);
+            bool itemNumCheck = this._ItemInspectionDispatchService.checkItemInsert(date);
+            IEnumerable<exhibitionItem> items = this._ExhibitionItemService.GetAll();
+            //檢查有無分派的紀錄
+            if (isExist)
+            {
+                //檢查有無新增展覽廳
+                System.Diagnostics.Debug.WriteLine("has dispatch.");
+                if (!itemNumCheck)
+                {
+                    System.Diagnostics.Debug.WriteLine("number of rooms is same");
+                    List<itemInspectionDispatchDetail> itemDispatchDetail = new List<itemInspectionDispatchDetail>();
+                    var itemDispatchs = this._ItemInspectionDispatchService.GetAllByDate(date);
+                    foreach (var itemDispatch in itemDispatchs)
+                    {
+                        itemDispatchDetail.Add(itemDispatch);
+                    }
+
+                    List<userListForInspectionViweModel> userList = GetUserListForInspection();
+                    return View(Data2ItemViewModel(itemDispatchDetail, userList, null, date));
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("number of rooms is different");
+                    //找出還未建檔的展覽廳
+                    items = this._ExhibitionItemService.GetUndispatchItem(date);
+                    IResult result = this._ItemInspectionDispatchService.Create(date, items);
+                    if (result.Success == false)
+                    {
+                        System.Diagnostics.Debug.WriteLine("insert error");
+                        //result.ErrorMsg = "Dispatch List construct error";
+                        System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
+                        return View(Data2ItemViewModel(null, null, result,date));
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("insert success");
+                        List<itemInspectionDispatchDetail> itemDispatchDetail = new List<itemInspectionDispatchDetail>();
+                        var itemDispatchs = this._ItemInspectionDispatchService.GetAllByDate(date);
+                        foreach (var itemDispatch in itemDispatchs)
+                        {
+                            itemDispatchDetail.Add(itemDispatch);
+                        }
+                        List<userListForInspectionViweModel> userList = GetUserListForInspection();
+                        return View(Data2ItemViewModel(itemDispatchDetail, userList, result, date));
+                    }
+                }
+
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("has not dispatch yet");
+                IResult result = this._ItemInspectionDispatchService.Create(date, items);
+                if (result.Success == false)
+                {
+                    System.Diagnostics.Debug.WriteLine("insert error");
+                    System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
+                    //result.ErrorMsg = "Dispatch List construct error";
+                    return View(Data2ItemViewModel(null, null, result, date));
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("insert success");
+                    List<itemInspectionDispatchDetail> itemDispatchDetail = new List<itemInspectionDispatchDetail>();
+                    var itemDispatchs = this._ItemInspectionDispatchService.GetAllByDate(date);
+                    foreach (var itemDispatch in itemDispatchs)
+                    {
+                       itemDispatchDetail.Add(itemDispatch);
+                    }
+                    List<userListForInspectionViweModel> userList = GetUserListForInspection();
+                    return View(Data2ItemViewModel(itemDispatchDetail, userList, result, date));
+                }
+            }
         }
 
-        public ActionResult updateItemInspectionDispatch(inspectionDispatchJson dispatchJson)
+        public ActionResult UpdateItemInspectionDispatch(inspectionDispatchJson dispatchJson)
         {
             var itemDispatchId = dispatchJson.pk;
-            var itemDispatch = this._RoomInspectionDispatchService.GetById(itemDispatchId);
+            var itemDispatch = this._ItemInspectionDispatchService.GetById(itemDispatchId);
             if (itemDispatch != null && ModelState.IsValid)
             {
-                IResult result = this._RoomInspectionDispatchService.Update(itemDispatch, dispatchJson.name, dispatchJson.value);
-                itemDispatch = this._RoomInspectionDispatchService.GetById(itemDispatchId);
+                IResult result = this._ItemInspectionDispatchService.Update(itemDispatch, dispatchJson.name, dispatchJson.value);
+                itemDispatch = this._ItemInspectionDispatchService.GetById(itemDispatchId);
                 if (result.Success)
                 {
                     string lastUpdateTime = itemDispatch.lastUpdateTime.ToString();
-                    return Json(new { result = 1, itemDispatchId = itemDispatchId, lastUpdateTime = lastUpdateTime });
+                    return Json(new { result = 1, itemDispatchId = itemDispatchId });
                 }
                 else
                 {
@@ -225,8 +309,25 @@ namespace InspectionWeb.Controllers
             else
             {
                 return Json(new { result = 0, itemDispatchId = itemDispatchId });
-                //return RedirectToAction("ListReportSource");
             }
+        }
+
+        private ListItemInspectionDispatchViewModel Data2ItemViewModel(List<itemInspectionDispatchDetail> dispatchList, List<userListForInspectionViweModel> userList, IResult result, System.DateTime checkDate)
+        {
+            ListItemInspectionDispatchViewModel viewModel = new ListItemInspectionDispatchViewModel();
+            viewModel.itemInspectionDispatch = dispatchList;
+            viewModel.userList = userList;
+            viewModel.checkDate = checkDate.ToString("d");
+            if (result != null)
+            {
+                viewModel.ErrorMsg = result.ErrorMsg;
+                System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
+            }
+            else
+            {
+                viewModel.ErrorMsg = null;
+            }
+            return viewModel;
         }
 
         public ActionResult ListNonInspectionDispatchDate()
@@ -234,6 +335,13 @@ namespace InspectionWeb.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult AddNonInspectionDispatchDate()
+        {
+            return View();
+        }
+
+        [HttpPost]
         public ActionResult AddNonInspectionDispatchDate()
         {
             return View();

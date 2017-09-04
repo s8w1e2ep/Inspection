@@ -43,7 +43,6 @@ namespace InspectionWeb.Services
         public IResult Create(System.DateTime date, IEnumerable<exhibitionItem> items)
         {
             IResult result = new Result(false);
-            GetAll().Where(x => x.isDelete == 0);
             for (int i = 0; i < items.Count(); i++)
             {
                 itemInspectionDispatch itemDispatch = new itemInspectionDispatch();
@@ -52,18 +51,18 @@ namespace InspectionWeb.Services
                     DateTime now = DateTime.Now;
                     IdGenerator idGen = new IdGenerator();
 
-                    itemDispatch.dispatchId = idGen.GetID("itemInspectionDispatch");
+                    itemDispatch.dispatchId = idGen.GetID("itemDispatch");
                     itemDispatch.checkDate = date;
-                    itemDispatch.itemId = items.ElementAt(i).roomId;
-                    itemDispatch.inspectorId1 = "";// items.ElementAt(i).inspectionUserId;
-                    itemDispatch.inspectorId2 = "";// items.ElementAt(i).inspectionUserId;
+                    itemDispatch.itemId = items.ElementAt(i).itemId;
+                    itemDispatch.inspectorId1 = "";//items.ElementAt(i).inspectionUserId;
+                    itemDispatch.inspectorId2 = "";//items.ElementAt(i).inspectionUserId;
                     itemDispatch.setupId = "";
                     itemDispatch.isDelete = 0;
                     itemDispatch.createTime = now;
                     itemDispatch.lastUpdateTime = now;
 
                     this._repository.Create(itemDispatch);
-                    result.ErrorMsg = "create success";
+                    //result.ErrorMsg = "create success";
                     result.Success = true;
                 }
                 catch (DbEntityValidationException ex)
@@ -107,23 +106,15 @@ namespace InspectionWeb.Services
         public IResult Update(itemInspectionDispatch instance, string propertyName, object value)
         {
             Dictionary<string, object> DicUpdate = new Dictionary<string, object>();
-
             if (instance == null)
             {
                 throw new ArgumentNullException();
             }
-
             IResult result = new Result(false);
-
             try
             {
-
-                DateTime now = DateTime.Now;
-                string lastUpdateTime = now.ToString("yyyy/MM/dd HH:mm:ss");
-
                 DicUpdate.Add(propertyName, (string)value);
-                DicUpdate.Add("lastUpdateTime", lastUpdateTime);
-
+                DicUpdate.Add("lastUpdateTime", DateTime.Now);
                 _repository.Update(instance, DicUpdate);
                 result.Success = true;
             }
@@ -131,7 +122,6 @@ namespace InspectionWeb.Services
             {
                 result.Exception = ex;
             }
-
             return result;
         }
 
@@ -172,10 +162,11 @@ namespace InspectionWeb.Services
             return this._repository.Get(x => x.dispatchId == dispatchId);
         }
 
-        public bool checkItemInsert()
+        public bool checkItemInsert(System.DateTime date)
         {
             string sqlString = "SELECT COUNT(DISTINCT(itemId)) "
-                            + "FROM itemInspectionDispatch;";
+                            + "FROM itemInspectionDispatch "
+                            + "WHERE checkDate='" + date.ToString("d") + "';";
 
             string sqlString2 = "SELECT COUNT(DISTINCT(itemId)) "
                             + "FROM exhibitionItem;";
@@ -197,15 +188,15 @@ namespace InspectionWeb.Services
         {
             System.Diagnostics.Debug.WriteLine(date.Date.ToString());
             string sqlString = "IF OBJECT_ID('temp','U') IS NOT NULL DROP TABLE temp;"
-                    + "SELECT IID.dispatchId, I.itemId, I.itemName, IID.inspectorId1,  U1.userCode AS inspectorCode1, U1.userName AS inspectorName1, IID.inspectorId2 "
-                    + "INTO temp "
-                    + "FROM exhibitionItem I, "
-                    + "itemInspectionDispatch IID LEFT OUTER JOIN[user] U1 on IID.inspectorId1 = U1.userId "
-                    + "WHERE IID.itemId = I.itemId "
-                    + "AND IID.checkDate = '" + date.ToString("d") + "' "
-                    + "SELECT temp.*, U2.userCode AS inspectorCode2, U2.userName AS inspectorName2 "
-                    + "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId "
-                    + "ORDER BY temp.itemId;";
+                                + "SELECT IID.dispatchId, I.itemId, I.itemName, IID.inspectorId1, "
+                                + "U1.userCode AS inspectorCode1, U1.userName AS inspectorName1, IID.inspectorId2 "
+                                + "INTO temp "
+                                + "FROM exhibitionItem I, itemInspectionDispatch IID LEFT OUTER JOIN[user] U1 on IID.inspectorId1 = U1.userId "
+                                + "WHERE IID.itemId = I.itemId "
+                                + "AND IID.checkDate = '" + date.ToString("d") + "' "
+                                + "SELECT temp.*, U2.userCode AS inspectorCode2, U2.userName AS inspectorName2 "
+                                + "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId ";
+                               // + "ORDER BY temp.dispatchId;";
 
             using (inspectionEntities db = new inspectionEntities())
             {

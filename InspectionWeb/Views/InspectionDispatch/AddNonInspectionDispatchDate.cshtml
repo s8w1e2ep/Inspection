@@ -26,6 +26,18 @@
         })
 
     });
+    function setNonInspectionTable() {
+        $('#nonInspectiable').DataTable({
+            'paging': true,
+            'info': false,
+            'columnDefs': [
+                { 'targets': 0, 'width': "33%", 'orderable': false },
+                { 'targets': 1, 'width': "33%", 'orderable': false },
+                { 'targets': 2, 'width': "33%", 'orderable': false },
+
+            ],
+        });
+    }
     
 </script>
 
@@ -51,18 +63,20 @@
                     <!-- general form elements -->
                     <div class="box box-success">
                         <div class="box-header with-border">
-                            <div id="dispatchDateDiv" class="form-group">
-                                <div class="col-sm-1">
-                                    <label for="dispatchDate" class="control-label">非巡檢日期</label>
-                                 </div>
-                                 <div class="col-sm-4">
+                            <form class="form-horizontal" method="post" action="@Url.Action("AddRoomInspectionDispatch")" onsubmit="return formValidation();">
+                                <div id="dispatchDateDiv" class="form-group">
+                                    <div class="col-sm-1">
+                                        <label for="dispatchDate" class="control-label">非巡檢日期</label>
+                                    </div>
+                                    <div class="col-sm-4">
                                         <input type="text" class="form-control pull-right" id="dispatchDate" name="dispatchDate">
-                                 </div>
-                                <div class="col-sm-2">
-                                    <button type="submit" class="btn btn-success">確定新增</button>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button type="submit" class="btn btn-success">確定新增</button>
+                                    </div>
                                 </div>
-                           </div>
-                        </div><!-- /.box-header -->
+                            </form>
+                         </div><!-- /.box-header -->
                         <div class="box-body">
                             <table id="" class="row-border" cellspacing="0" width="100%">
                                 <thead>

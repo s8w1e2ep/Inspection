@@ -20,7 +20,7 @@ namespace InspectionWeb.Services.Interface
 
         bool IsExists(string dispatchId);
 
-        bool checkRoomInsert();
+        bool checkRoomInsert(System.DateTime data);
 
         roomInspectionDispatch GetById(string dispatchId);
 

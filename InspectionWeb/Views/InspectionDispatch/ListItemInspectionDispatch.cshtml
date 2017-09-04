@@ -15,10 +15,6 @@
 <script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
 <script>
-
-    function formValidation() {
-        return false;
-    }
     $(function () {
         setItemInspectionTable();
         $('#dispatchDate').datepicker({
@@ -26,8 +22,26 @@
             language: 'zh-TW',
             todayHighlight: true
         })
-
     });
+
+    function fieldValidation(field) {
+        if ($.trim($(field).val()) == '') {
+            $(field + 'Div').addClass('has-error');
+            $(field + 'Div').val('');
+            return false;
+        } else {
+            $(field + 'Div').removeClass('has-error');
+        }
+        return true;
+    }
+
+    function formValidation() {
+        if (fieldValidation('#dispatchDate')) {
+            return true;
+        }
+        return false;
+    }
+
     function setItemInspectionTable() {
         $('#itemInspectionTable').DataTable({
             'columnDefs': [
@@ -36,6 +50,19 @@
                 { 'targets': 2, 'width': "33%", 'orderable': false }
             ]
         });
+    }
+
+        function updateInspector(dispatchId, inspectorType, inspectionId) {
+
+         $.ajax({
+             url: '@Url.Action("UpdateItemInspectionDispatch")',
+             data: $.param({ 'pk': dispatchId, 'name': inspectorType, 'value': inspectionId }),
+             type: 'UPDATE',
+         }).done(function (msg) {
+             //console.log(msg);
+             $('#' + inspectorType + '_' + dispatchId).value = inspectionId;
+         });
+
     }
 </script>
 
@@ -60,7 +87,7 @@
                 <div class="col-md-8">
                     <!-- general form elements -->
                     <div class="box box-success">.
-                        <form class="form-horizontal" method="post" action="@Url.Action("ListRoomInspectionDispatch")" onsubmit="return formValidation();">
+                        <form class="form-horizontal" method="post" action="@Url.Action("ListItemInspectionDispatch")" onsubmit="return formValidation();">
                             @if (@Model != null && @Model.ErrorMsg != null && !string.IsNullOrEmpty(@Model.ErrorMsg))
                             {
                                 <div class="form-group has-error">
@@ -77,12 +104,17 @@
                                         <input type="text" class="form-control pull-right" id="dispatchDate" name="dispatchDate">
                                     </div>
                                     <div class="col-sm-2">
-                                        <button type="submit" class="btn btn-success">確定新增</button>
+                                        <button type="submit" class="btn btn-success">搜尋</button>
                                     </div>
                                 </div>
                             </div><!-- /.box-header -->
                             </form>
                             <div class="box-body">
+                                @if (@Model != null && @Model.checkDate != null)
+                                {
+                                    <h4>巡檢日期: @Model.checkDate</h4>
+                                    <br>
+                                }
                                 <table id="itemInspectionTable" class="row-border" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
@@ -96,11 +128,11 @@
                                         <tbody>
                                             @foreach (var item in @Model.itemInspectionDispatch)
                                             {
-                                                <tr id="@item.dispatchId">
-                                                    <td>@item.roomName</td>
+                                                <tr>
+                                                    <td>@item.itemName</td>
                                                     <td>
-                                                        <select class="form-control">
-                                                            @if (item.inspectorId1 != null)
+                                                        <select class="form-control" id="inspectorId1_@item.dispatchId" onChange="updateInspector('@item.dispatchId','inspectorId1',this.value)">
+                                                            @if (!string.IsNullOrEmpty(@item.inspectorId1) )
                                                             {
                                                                 foreach (var user in @Model.userList)
                                                                 {
@@ -125,8 +157,8 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <select class="form-control">
-                                                            @if (item.inspectorId2 != null)
+                                                        <select class="form-control" id="inspectorId2_@item.dispatchId" onChange="updateInspector('@item.dispatchId','inspectorId2',this.value)">
+                                                            @if (!string.IsNullOrEmpty(@item.inspectorId2))
                                                             {
                                                                 foreach (var user in @Model.userList)
                                                                 {
@@ -155,9 +187,8 @@
                                         </tbody>
                                     }
                                 </table>
-                                </table>
                             </div>
-</div><!-- /.box -->
+                        </div><!-- /.box -->
                 </div>
             </div>
         </section><!-- /.content -->

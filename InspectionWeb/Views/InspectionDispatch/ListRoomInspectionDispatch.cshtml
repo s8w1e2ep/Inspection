@@ -51,6 +51,21 @@
             ]
         });
     }
+
+    function updateInspector(dispatchId, inspectorType, inspectionId) {
+
+         $.ajax({
+             url: '@Url.Action("UpdateRoomInspectionDispatch")',
+             data: $.param({ 'pk': dispatchId, 'name': inspectorType, 'value': inspectionId }),
+             type: 'UPDATE',
+         }).done(function (msg) {
+             //console.log(msg);
+             $('#' + inspectorType + '_' + dispatchId).value = inspectionId;
+         });
+       
+    }
+
+
 </script>
 
 
@@ -91,13 +106,18 @@
                                         <input type="text" class="form-control pull-right" id="dispatchDate" name="dispatchDate">
                                     </div>
                                     <div class="col-sm-2">
-                                        <button type="submit" class="btn btn-success">確定新增</button>
+                                        <button type="submit" class="btn btn-success">搜尋</button>
                                     </div>
                                 </div>
                             </div><!-- /.box-header -->
                         </form>
                          
                         <div class="box-body">
+                            @if (@Model != null && @Model.checkDate != null)
+                            {
+                                <h4>巡檢日期: @Model.checkDate</h4>
+                                <br>
+                            }
                             <table id="roomInspectionTable" class="row-border" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
@@ -110,11 +130,11 @@
                                 <tbody>
                                     @foreach (var item in @Model.roomInspectionDispatch)
                                     {
-                                    <tr id="@item.dispatchId">
+                                    <tr>
                                             <td>@item.roomName</td>
                                             <td>
-                                                <select class="form-control">
-                                                    @if (item.inspectorId1 != null) {
+                                                <select class="form-control" id="inspectorId1_@item.dispatchId" onChange="updateInspector('@item.dispatchId','inspectorId1',this.value)">
+                                                    @if (!string.IsNullOrEmpty(@item.inspectorId1)) {
                                                         foreach (var user in @Model.userList){
                                                                 if (user.userId == item.inspectorId1) {
                                                                     <option selected="selected" value="@item.inspectorId1">@user.userCode  @user.userName</option>
@@ -133,12 +153,13 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <select class="form-control">
-                                                     @if (item.inspectorId2 != null) {
-                                                        foreach (var user in @Model.userList)
-                                                        {
-                                                            if (user.userId == item.inspectorId2)
-                                                            {
+                                                <select class="form-control" id="inspectorId2_@item.dispatchId" onChange="updateInspector('@item.dispatchId','inspectorId2',this.value)">
+                                                     @if (!string.IsNullOrEmpty(@item.inspectorId2))
+                                                     {
+                                                         foreach (var user in @Model.userList)
+                                                         {
+                                                             if (user.userId == item.inspectorId2)
+                                                             {
                                                                 <option selected="selected" value="@item.inspectorId2">@user.userCode  @user.userName</option>
                                                             }
                                                             else

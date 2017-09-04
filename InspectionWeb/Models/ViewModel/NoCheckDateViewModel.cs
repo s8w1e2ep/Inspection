@@ -11,7 +11,7 @@ namespace InspectionWeb.Models.ViewModel
         public string id { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
-        public DateTime noCheckDate { get; set; }
+        public Nullable<System.DateTime> noCheckDate { get; set; }
 
         public int checkTimeType { get; set; }
 
@@ -22,9 +22,9 @@ namespace InspectionWeb.Models.ViewModel
         public int isDelete { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
-        public DateTime createTime { get; set; }
+        public Nullable<System.DateTime> createTime { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
-        public DateTime lastUpdateTime { get; set; }
+        public Nullable<System.DateTime> lastUpdateTime { get; set; }
     }
 }

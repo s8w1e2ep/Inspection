@@ -144,7 +144,7 @@ namespace InspectionWeb.Services
             string sqlString = " SELECT exhibitionItem.* " +
                                 "FROM exhibitionItem " +
                                 "WHERE NOT EXISTS( " +
-                                "SELECT itemInspectionDispatch.roomId " +
+                                "SELECT itemInspectionDispatch.itemId " +
                                 "FROM itemInspectionDispatch " +
                                 "WHERE itemInspectionDispatch.itemId = exhibitionItem.itemId " +
                                 "AND itemInspectionDispatch.checkDate = '" + date.Date + "')";

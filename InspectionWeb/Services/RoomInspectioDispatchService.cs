@@ -54,16 +54,16 @@ namespace InspectionWeb.Services
 
                     roomDispatch.dispatchId = idGen.GetID("roomDispatch");
                     roomDispatch.checkDate = date;
-                    roomDispatch.roomId = "ASD";// rooms.ElementAt(i).roomId;
-                    roomDispatch.inspectorId1 = "a1";// rooms.ElementAt(i).inspectionUserId;
-                    roomDispatch.inspectorId2 = "b1";// rooms.ElementAt(i).inspectionUserId;
-                    roomDispatch.setupId = "a1";
+                    roomDispatch.roomId = rooms.ElementAt(i).roomId;
+                    roomDispatch.inspectorId1 = rooms.ElementAt(i).inspectionUserId;
+                    roomDispatch.inspectorId2 = rooms.ElementAt(i).inspectionUserId;
+                    roomDispatch.setupId = "";
                     roomDispatch.isDelete = 0;
                     roomDispatch.createTime = now;
                     roomDispatch.lastUpdateTime = now;
 
                     this._repository.Create(roomDispatch);
-                    result.ErrorMsg = "create success";
+                    //result.ErrorMsg = "create success";
                     result.Success = true;
                 }
                 catch (DbEntityValidationException ex)
@@ -82,16 +82,8 @@ namespace InspectionWeb.Services
                 catch (Exception ex)
                 {
                     result.Exception = ex;
-                    //if (((System.Data.SqlClient.SqlException)((ex.InnerException).InnerException)).Number == 2627)
-                    //{
-                        result.ErrorMsg = ex.ToString();
-                        System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
-                       //result.ErrorMsg = "";
-                    //}
-                    //else
-                    //{
-                        //result.ErrorMsg = "something error";
-                    //}
+                    result.ErrorMsg = ex.ToString();
+                    System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
                 }
                 
             }
@@ -123,23 +115,15 @@ namespace InspectionWeb.Services
         public IResult Update(roomInspectionDispatch instance, string propertyName, object value)
         {
             Dictionary<string, object> DicUpdate = new Dictionary<string, object>();
-
             if (instance == null)
             {
                 throw new ArgumentNullException();
             }
-
             IResult result = new Result(false);
-
             try
             {
-
-                DateTime now = DateTime.Now;
-                string lastUpdateTime = now.ToString("yyyy/MM/dd HH:mm:ss");
-
                 DicUpdate.Add(propertyName, (string)value);
-                DicUpdate.Add("lastUpdateTime", lastUpdateTime);
-
+                DicUpdate.Add("lastUpdateTime", DateTime.Now);
                 _repository.Update(instance, DicUpdate);
                 result.Success = true;
             }
@@ -147,7 +131,6 @@ namespace InspectionWeb.Services
             {
                 result.Exception = ex;
             }
-
             return result;
         }
 
@@ -188,10 +171,11 @@ namespace InspectionWeb.Services
             return this._repository.Get(x => x.dispatchId == dispatchId);
         }
 
-        public bool checkRoomInsert()
+        public bool checkRoomInsert(System.DateTime date)
         {
             string sqlString = "SELECT COUNT(DISTINCT(roomId)) "
-                            + "FROM roomInspectionDispatch;";
+                            + "FROM roomInspectionDispatch "
+                            + "WHERE checkDate='" + date.ToString("d") + "';";
 
             string sqlString2 = "SELECT COUNT(DISTINCT(roomId)) "
                             + "FROM exhibitionRoom;";
@@ -218,10 +202,10 @@ namespace InspectionWeb.Services
                     + "FROM exhibitionRoom R, "
                     + "roomInspectionDispatch RID LEFT OUTER JOIN[user] U1 on RID.inspectorId1 = U1.userId "
                     + "WHERE RID.roomId = R.roomId "
-                    + "AND RID.checkDate = '" + date.ToString("d") +"' "
+                    + "AND RID.checkDate = '" + date.ToString("d") + "' "
                     + "SELECT temp.*, U2.userCode AS inspectorCode2, U2.userName AS inspectorName2 "
-                    + "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId "
-                    + "ORDER BY temp.roomId;";
+                    + "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId ";
+                    //+ "ORDER BY roomId;";
 
             using (inspectionEntities db = new inspectionEntities())
             {
