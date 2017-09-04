@@ -418,7 +418,6 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\editGroup.js" />
     <Content Include="Scripts\editPendingListDetailedData.js" />
-    <Content Include="Scripts\editUser.js" />
     <Content Include="Scripts\exhibition.js" />
     <Content Include="Scripts\exhibitionItem.js" />
     <Content Include="Scripts\facility.js" />
