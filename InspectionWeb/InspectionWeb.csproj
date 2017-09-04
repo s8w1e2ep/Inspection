@@ -233,6 +233,7 @@
     <Compile Include="Models\abnormalRecord.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AuthorizeUserAttribute.cs" />
     <Compile Include="Models\company.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>

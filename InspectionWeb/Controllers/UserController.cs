@@ -9,8 +9,10 @@ using InspectionWeb.Models;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
 
+
 namespace InspectionWeb.Controllers
 {
+    [AuthorizeUser(Normal = true)]
     public class UserController : Controller
     {
         private IUserService _userService;
@@ -26,7 +28,6 @@ namespace InspectionWeb.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
-            //Session["authenticated"] = false;
             return View();
         }
 
