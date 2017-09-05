@@ -1,14 +1,4 @@
 ﻿$(function () {
-
-    //select date and time
-    $('#dateAndTime1, #dateAndTime2').daterangepicker({
-        timePicker: true,
-        timePickerSeconds: true,
-        singleDatePicker: true,
-        timePickerIncrement: 1,
-        format: 'YYYY/MM/DD HH:mm:ss'
-    });
-
     $(".select2").select2();
 
     $('#ReportList').DataTable({
@@ -25,6 +15,16 @@
             { "targets": 6, "width": "10%", "orderable": false }
         ],
     });
+    //select date and time
+    $('#dateAndTime1, #dateAndTime2').daterangepicker({
+        timePicker: true,
+        timePickerSeconds: true,
+        singleDatePicker: true,
+        timePickerIncrement: 1,
+        format: 'YYYY/MM/DD HH:mm:ss'
+    });
+
+    
 
     
 });
