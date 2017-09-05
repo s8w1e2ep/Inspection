@@ -156,9 +156,14 @@ namespace InspectionWeb.Services
             return this._repository.Get(x => x.id == Id);
         }
 
+        public IEnumerable<noCheckDate> GetAllWithTimeInterval(System.DateTime start, System.DateTime end)
+        {
+            return this._repository.GetAll().Where(x => x.noCheckDate1 <= end && x.noCheckDate1 >= start).OrderBy(x => x.noCheckDate1);
+        }
+
         public IEnumerable<noCheckDate> GetAll()
         {
-            return this._repository.GetAll().Where(x => x.isDelete == 0).OrderBy(x => x.createTime);
+            return this._repository.GetAll().Where(x => x.isDelete == 0).OrderBy(x => x.noCheckDate1);
         }
     }
 }

@@ -15,13 +15,19 @@
 <script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
 <script>
+    var toDispatchId;
+    var theDate;
+
     $(function () {
         setItemInspectionTable();
         $('#dispatchDate').datepicker({
             format: "yyyy/mm/dd",
             language: 'zh-TW',
             todayHighlight: true
-        })
+        });
+        $('#modalYes').on('click', function (e) {
+            deleteDispatch();
+        });
     });
 
     function fieldValidation(field) {
@@ -45,24 +51,42 @@
     function setItemInspectionTable() {
         $('#itemInspectionTable').DataTable({
             'columnDefs': [
-                { 'targets': 0, 'width': "33%", 'orderable': false },
-                { 'targets': 1, 'width': "33%", 'orderable': false },
-                { 'targets': 2, 'width': "33%", 'orderable': false }
+                { 'targets': 0, 'width': "25%", 'orderable': false },
+                { 'targets': 1, 'width': "25%", 'orderable': false },
+                { 'targets': 2, 'width': "25%", 'orderable': false },
+                { 'targets': 3, 'width': "25%", 'orderable': false }
             ]
         });
     }
 
-        function updateInspector(dispatchId, inspectorType, inspectionId) {
+    function updateInspector(dispatchId, inspectorType, inspectionId) {
 
-         $.ajax({
-             url: '@Url.Action("UpdateItemInspectionDispatch")',
-             data: $.param({ 'pk': dispatchId, 'name': inspectorType, 'value': inspectionId }),
-             type: 'UPDATE',
-         }).done(function (msg) {
-             //console.log(msg);
-             $('#' + inspectorType + '_' + dispatchId).value = inspectionId;
-         });
+        $.ajax({
+            url: '@Url.Action("UpdateItemInspectionDispatch")',
+            data: $.param({ 'pk': dispatchId, 'name': inspectorType, 'value': inspectionId }),
+            type: 'UPDATE',
+        }).done(function (msg) {
+            //console.log(msg);
+            $('#' + inspectorType + '_' + dispatchId).value = inspectorId;
+        });
 
+    }
+
+    function storeId(dispatchId,Date) {
+        toDispatchId = dispatchId;
+        theDate = Date;
+    }
+
+    function deleteDispatch() {
+        $.ajax({
+            url: '@Url.Action("DeleteItemInspectionDispatch")',
+            data: $.param({ 'dispatchId': toDispatchId, 'date': theDate }),
+        type: 'POST',
+        }).done(function (msg) {
+            if (msg.resule == 1) {
+                $('#' + toDispatchId).remove();
+            }  
+        });
     }
 </script>
 
@@ -76,7 +100,7 @@
             <h1>體驗設施派工</h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
-                <li class="active">Dashboard</li>
+                <li class="active">體驗設施派工</li>
             </ol>
         </section>
 
@@ -104,7 +128,7 @@
                                         <input type="text" class="form-control pull-right" id="dispatchDate" name="dispatchDate">
                                     </div>
                                     <div class="col-sm-2">
-                                        <button type="submit" class="btn btn-success">搜尋</button>
+                                        <button type="submit" class="btn btn-success">產生派工</button>
                                     </div>
                                 </div>
                             </div><!-- /.box-header -->
@@ -121,6 +145,7 @@
                                             <th>展示廳</th>
                                             <th>上午巡檢人員</th>
                                             <th>下午巡檢人員</th>
+                                            <th>操作選項</th>
                                         </tr>
                                     </thead>
                                     @if (@Model != null && @Model.itemInspectionDispatch != null)
@@ -128,7 +153,7 @@
                                         <tbody>
                                             @foreach (var item in @Model.itemInspectionDispatch)
                                             {
-                                                <tr>
+                                                <tr id="@item.dispatchId">
                                                     <td>@item.itemName</td>
                                                     <td>
                                                         <select class="form-control" id="inspectorId1_@item.dispatchId" onChange="updateInspector('@item.dispatchId','inspectorId1',this.value)">
@@ -182,6 +207,9 @@
                                                             }
                                                         </select>
                                                     </td>
+                                                    <td>
+                                                        <a href="#" data-toggle=modal data-target=#myModal><button class="btn btn-sm btn-danger" onclick="storeId('@item.dispatchId','@Model.checkDate')"><i class="glyphicon glyphicon-remove"></i></button></a>
+                                                    </td>
                                                 </tr>
                                             }
                                         </tbody>
@@ -191,6 +219,26 @@
                         </div><!-- /.box -->
                 </div>
             </div>
+
+            <div class="modal modal-success" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">刪除確認</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>是否刪除此派工資料？刪除此派工資料會將一併刪除所有的相關資料。</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">否</button>
+                            <button id="modalYes" type="button" class="btn btn-outline" data-dismiss="modal">是</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
         </section><!-- /.content -->
     </div><!-- /.content-wrapper -->
 </div><!-- ./wrapper -->

@@ -125,19 +125,20 @@ namespace InspectionWeb.Services
             return result;
         }
 
-        public IResult Delete(string abnormalId)
+        public IResult Delete(string dispatchId)
         {
             IResult result = new Result(false);
 
-            if (!IsExists(abnormalId))
+            if (!IsExists(dispatchId))
             {
                 result.Message = "找不到體驗項目派工的資料";
             }
 
             try
             {
-                var instance = this.GetById(abnormalId);
-                this._repository.Update(instance, "isDelete", 1);
+                var instance = this.GetById(dispatchId);
+                this._repository.Update(instance, "isDelete", Convert.ToByte(1));
+                this._repository.Update(instance, "lastUpdateTime", DateTime.Now);
                 result.Success = true;
             }
             catch (Exception ex)

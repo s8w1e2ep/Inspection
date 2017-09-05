@@ -15,11 +15,13 @@ namespace InspectionWeb.Services.Interface
 
         IResult Update(noCheckDate instance, string propertyName, object value);
 
-        IResult Delete(string abnormalId);
+        IResult Delete(string id);
 
-        bool IsExists(string abnormalId);
+        bool IsExists(string id);
 
-        noCheckDate GetById(string abnormal);
+        noCheckDate GetById(string id);
+
+        IEnumerable<noCheckDate> GetAllWithTimeInterval (System.DateTime start,System.DateTime end);
 
         IEnumerable<noCheckDate> GetAll();
     }

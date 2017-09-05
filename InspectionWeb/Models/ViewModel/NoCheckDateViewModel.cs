@@ -10,8 +10,7 @@ namespace InspectionWeb.Models.ViewModel
     {
         public string id { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
-        public Nullable<System.DateTime> noCheckDate { get; set; }
+        public string noCheckDate { get; set; }
 
         public Nullable<short> checkTimeType { get; set; }
 

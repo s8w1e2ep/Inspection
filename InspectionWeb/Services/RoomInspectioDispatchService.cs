@@ -134,19 +134,22 @@ namespace InspectionWeb.Services
             return result;
         }
 
-        public IResult Delete(string abnormalId)
+        public IResult Delete(string dispatchId)
         {
             IResult result = new Result(false);
 
-            if (!IsExists(abnormalId))
+            if (!IsExists(dispatchId))
             {
-                result.Message = "找不到台車資料";
+                result.Message = "找不到派工資料";
             }
 
             try
             {
-                var instance = this.GetById(abnormalId);
-                this._repository.Update(instance, "isDelete", 1);
+                var instance = this.GetById(dispatchId);
+                Dictionary<string, object> DicUpdate = new Dictionary<string, object>();
+                DicUpdate.Add("isDelete", Convert.ToByte(1));
+                DicUpdate.Add("lastUpdateTime", DateTime.Now);
+                this._repository.Update(instance, DicUpdate);
                 result.Success = true;
             }
             catch (Exception ex)

@@ -43,6 +43,12 @@ namespace InspectionWeb.Controllers
             public bool afternoon { get; set; }
         }
 
+        public class DeleteInspectionDispatchJson
+        {
+            public string dispatchId { get; set; }
+            public string date { get; set; }
+        }
+
 
         public InspectionDispatchController(IRoomInspectionDispatchService roomInpectionDispatchService, 
                                             IItemInspectionDispatchService itemInspectionDispatchService, 
@@ -187,22 +193,34 @@ namespace InspectionWeb.Controllers
             return viewModel;
         }
 
-        private List<userListForInspectionViweModel> GetUserListForInspection()
+        public ActionResult DeleteRoomInspectionDispatch(DeleteInspectionDispatchJson deleteJson)
         {
-            IEnumerable<user> users = this._UserService.GetAll();
-            System.Diagnostics.Debug.WriteLine(users.Count());
-            List<userListForInspectionViweModel> userList = new List<userListForInspectionViweModel>();
-            foreach (var user in users)
-            {
-                userListForInspectionViweModel u = new userListForInspectionViweModel();
-                u.userId = user.userId;
-                u.userCode = user.userCode;
-                u.userName = user.userName;
-                userList.Add(u);
-            }
-            return userList;
-        }
+            string dispatchId = deleteJson.dispatchId;
 
+            if (string.IsNullOrEmpty(dispatchId))
+            {
+                return Json(new { result = 0 });
+            }
+
+            var roomInspectionDispatch = this._RoomInspectionDispatchService.GetById(dispatchId);
+
+            if (roomInspectionDispatch == null)
+            {
+                return Json(new { result = 0 });
+            }
+
+            try
+            {
+                this._RoomInspectionDispatchService.Delete(dispatchId);
+            }
+            catch (Exception)
+            {
+                return Json(new { result = 0 });
+            }
+
+            return Json(new { result = 1 });
+        }
+        
         [HttpGet]
         public ActionResult ListItemInspectionDispatch()
         {
@@ -313,6 +331,33 @@ namespace InspectionWeb.Controllers
             }
         }
 
+        public ActionResult DeleteItemInspectionDispatch(DeleteInspectionDispatchJson deleteJson)
+        {
+            string dispatchId = deleteJson.dispatchId;
+            if (string.IsNullOrEmpty(dispatchId))
+            {
+                return Json(new { result = 0 });
+            }
+
+            var itemInspectionDispatch = this._ItemInspectionDispatchService.GetById(dispatchId);
+
+            if (itemInspectionDispatch == null)
+            {
+                return Json(new { result = 0 });
+            }
+
+            try
+            {
+                this._ItemInspectionDispatchService.Delete(dispatchId);
+            }
+            catch (Exception)
+            {
+                return Json(new { result = 0 });
+            }
+
+            return Json(new { result = 1 });
+        }
+
         private ListItemInspectionDispatchViewModel Data2ItemViewModel(List<itemInspectionDispatchDetail> dispatchList, List<userListForInspectionViweModel> userList, IResult result, System.DateTime checkDate)
         {
             ListItemInspectionDispatchViewModel viewModel = new ListItemInspectionDispatchViewModel();
@@ -331,17 +376,11 @@ namespace InspectionWeb.Controllers
             return viewModel;
         }
 
-        public ActionResult ListNonInspectionDispatchDate()
-        {
-            return View();
-        }
-
         [HttpGet]
-        public ActionResult AddNonInspectionDispatchDate()
+        public ActionResult ListNonInspectionDispatchDate()
         {
             var TotalViewModel = new List<NoCheckDateViewModel>();
             var noCheckDates = this._noCheckDateService.GetAll().ToList();
-
             foreach (var item in noCheckDates)
             {
                 NoCheckDateViewModel noCheckDateViewModel = this.Data2NoChekDateViewModel(item);
@@ -351,13 +390,54 @@ namespace InspectionWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddNonInspectionDispatchDate(nonInspectionDispatchJson noCheckDateJson)
+        public ActionResult ListNonInspectionDispatchDate(string nonCheckDateStart, string nonCheckDateEnd)
         {
-            System.DateTime noCheckDate = Convert.ToDateTime(noCheckDateJson.nonCheckDate);
-            string description = noCheckDateJson.description;
-            bool type1 = noCheckDateJson.morning;
-            bool type2 = noCheckDateJson.afternoon;
-            if (type1)
+            System.DateTime start = Convert.ToDateTime(nonCheckDateStart);
+            System.DateTime end = Convert.ToDateTime(nonCheckDateEnd);
+            var TotalViewModel = new List<NoCheckDateViewModel>();
+            var noCheckDates = this._noCheckDateService.GetAllWithTimeInterval(start, end).ToList();
+            foreach (var item in noCheckDates)
+            {
+                NoCheckDateViewModel noCheckDateViewModel = this.Data2NoChekDateViewModel(item);
+                TotalViewModel.Add(noCheckDateViewModel);
+            }
+            return View(TotalViewModel);
+        }
+
+        private List<userListForInspectionViweModel> GetUserListForInspection()
+        {
+            IEnumerable<user> users = this._UserService.GetAll();
+            System.Diagnostics.Debug.WriteLine(users.Count());
+            List<userListForInspectionViweModel> userList = new List<userListForInspectionViweModel>();
+            foreach (var user in users)
+            {
+                userListForInspectionViweModel u = new userListForInspectionViweModel();
+                u.userId = user.userId;
+                u.userCode = user.userCode;
+                u.userName = user.userName;
+                userList.Add(u);
+            }
+            return userList;
+        }
+
+        [HttpGet]
+        public ActionResult AddNonInspectionDispatchDate()
+        {
+            var TotalViewModel = new List<NoCheckDateViewModel>();
+            var noCheckDates = this._noCheckDateService.GetAll().ToList();
+            foreach (var item in noCheckDates)
+            {
+                NoCheckDateViewModel noCheckDateViewModel = this.Data2NoChekDateViewModel(item);
+                TotalViewModel.Add(noCheckDateViewModel);
+            }
+            return View(TotalViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult AddNonInspectionDispatchDate(string nonCheckDate, bool morning, bool afternoon, string description)
+        {
+            System.DateTime noCheckDate = Convert.ToDateTime(nonCheckDate);
+            if (morning)
             {
                 IResult result = this._noCheckDateService.Create(noCheckDate, description, Convert.ToInt16(1));
                 System.Diagnostics.Debug.WriteLine("msg: " + result.ErrorMsg);
@@ -368,8 +448,7 @@ namespace InspectionWeb.Controllers
                     return View(vm);
                 }
             }
-
-            if (type2)
+            if (afternoon)
             {
                 IResult result = this._noCheckDateService.Create(noCheckDate, description, Convert.ToInt16(2));
                 System.Diagnostics.Debug.WriteLine("msg: " + result.ErrorMsg);
@@ -394,6 +473,7 @@ namespace InspectionWeb.Controllers
         {
             NoCheckDateViewModel viewModel = new NoCheckDateViewModel();
             viewModel.id = noCheckDate.id;
+            viewModel.noCheckDate = noCheckDate.noCheckDate1.Value.ToString("d");
             viewModel.description = noCheckDate.description;
             viewModel.checkTimeType = noCheckDate.checkTimeType;
             viewModel.setupUserId = noCheckDate.setupUserId;
@@ -402,6 +482,32 @@ namespace InspectionWeb.Controllers
             viewModel.lastUpdateTime = noCheckDate.lastUpdateTime;
 
             return viewModel;
+        }
+
+        public ActionResult DeleteNonCheckDateDispatch(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return Json(new { result = 0 });
+            }
+
+            var noCheckDate = this._noCheckDateService.GetById(id);
+
+            if (noCheckDate == null)
+            {
+                return Json(new { result = 0 });
+            }
+
+            try
+            {
+                this._noCheckDateService.Delete(id);
+            }
+            catch (Exception)
+            {
+                return Json(new { result = 0 });
+            }
+
+            return Json(new { result = 1 });
         }
 
         public ActionResult QueryInspectionByRoom()
