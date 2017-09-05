@@ -51,7 +51,7 @@ namespace InspectionWeb.Controllers
         }
 
         // GET: /ReportJob/DetailedData
-        public ActionResult DetailedData()
+        public ActionResult ItemDetailedData()
         {
             return View();
         }

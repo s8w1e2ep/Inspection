@@ -423,6 +423,7 @@
     <Content Include="Scripts\exhibition.js" />
     <Content Include="Scripts\exhibitionItem.js" />
     <Content Include="Scripts\facility.js" />
+    <Content Include="Scripts\ItemDetailed.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\listGroup.js" />
@@ -491,7 +492,7 @@
     <Content Include="Views\ReportJob\EditExperience.cshtml" />
     <Content Include="Views\ReportJob\EditOther.cshtml" />
     <Content Include="Views\ReportJob\Query.cshtml" />
-    <Content Include="Views\ReportJob\DetailedData.cshtml" />
+    <Content Include="Views\ReportJob\ItemDetailedData.cshtml" />
     <Content Include="Views\QuickSolution\Add.cshtml" />
     <Content Include="Views\QuickSolution\Edit.cshtml" />
     <Content Include="Views\QuickSolution\List.cshtml" />
