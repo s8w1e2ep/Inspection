@@ -67,6 +67,7 @@ namespace InspectionWeb.Controllers
             var now = DateTime.Now;
             string roles = "Normal";
             // TODO: 依照 groupId 設定角色名稱，Ex: roles = roles + ",Manager";
+            
 
             FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
                 1,                          // version
