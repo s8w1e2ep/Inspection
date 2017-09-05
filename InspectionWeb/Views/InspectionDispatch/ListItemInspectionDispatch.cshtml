@@ -83,7 +83,8 @@
             data: $.param({ 'dispatchId': toDispatchId, 'date': theDate }),
         type: 'POST',
         }).done(function (msg) {
-            if (msg.resule == 1) {
+            console.log(msg);
+            if (msg.result == 1) {
                 $('#' + toDispatchId).remove();
             }  
         });

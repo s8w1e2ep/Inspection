@@ -84,8 +84,9 @@
         url: '@Url.Action("DeleteRoomInspectionDispatch")',
         data: $.param({ 'dispatchId': toDispatchId, 'date': theDate}),
         type: 'DELETE',
-        }).done(function (msg) {
-            if (msg.resule == 1) {
+    }).done(function (msg) {
+        console.log(msg);
+            if (msg.result == 1) {
                 $('#' + toDispatchId).remove();
             }             
         });

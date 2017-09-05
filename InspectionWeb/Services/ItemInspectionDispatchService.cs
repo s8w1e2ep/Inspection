@@ -195,6 +195,7 @@ namespace InspectionWeb.Services
                                 + "FROM exhibitionItem I, itemInspectionDispatch IID LEFT OUTER JOIN[user] U1 on IID.inspectorId1 = U1.userId "
                                 + "WHERE IID.itemId = I.itemId "
                                 + "AND IID.checkDate = '" + date.ToString("d") + "' "
+                                + "AND IID.isDelete = 0 "
                                 + "SELECT temp.*, U2.userCode AS inspectorCode2, U2.userName AS inspectorName2 "
                                 + "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId ";
                                // + "ORDER BY temp.dispatchId;";

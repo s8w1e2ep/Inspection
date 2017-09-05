@@ -206,6 +206,7 @@ namespace InspectionWeb.Services
                     + "roomInspectionDispatch RID LEFT OUTER JOIN[user] U1 on RID.inspectorId1 = U1.userId "
                     + "WHERE RID.roomId = R.roomId "
                     + "AND RID.checkDate = '" + date.ToString("d") + "' "
+                    + "AND RID.isDelete = 0 "
                     + "SELECT temp.*, U2.userCode AS inspectorCode2, U2.userName AS inspectorName2 "
                     + "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId ";
                     //+ "ORDER BY roomId;";
