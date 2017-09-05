@@ -1,13 +1,14 @@
-﻿@{
+﻿@model InspectionWeb.Models.ViewModel.GroupDetailViewModel
+
+@{
     ViewBag.Title = "群組檢視/修改";
 }
 
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
         <ol class="breadcrumb">
-            <li>
-                <a href="/"><i class="fa fa-dashboard"></i>Home</a>
-            </li>
+            <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>Home</a></li>
+            <li><a href="@Url.Action("ListGroup")">群組列表</a></li>
             <li class="active">群組檢視/修改</li>
         </ol>
     </section>
@@ -30,46 +31,46 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>使用者群組編號</td>
-                                    <td>
-                                        C#
-                                    </td>
+                                    <td>群組名稱</td>
+                                    <td><a href="#" id="groupName" data-type="text" data-pk="@Model.groupId" data-url="@Url.Action("UpdateUserGroup")" data-title="輸入群組名稱">@Model.groupName</a></td>
                                 </tr>
                                 <tr>
-                                    <td>群組名稱</td>
-                                    <td><a href="#" id="name" data-type="text" data-pk="" data-url="" data-title="輸入群組名稱">ITRI</a></td>
+                                    <td>超級使用者</td>
+                                    <td>
+                                        <a href="#" id="superUserOnly" data-type="checklist" data-pk="@Model.groupId" data-url="@Url.Action("UpdateUserGroup")" data-title="系統管理">@Model.superUser</a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>系統管理</td>
                                     <td>
-                                        <a href="#" id="system" data-name="system" data-type="checklist" data-pk="" data-url="" data-title="系統管理">1</a>
+                                        <a href="#" id="systemManagement" data-type="checklist" data-pk="@Model.groupId" data-url="@Url.Action("UpdateUserGroup")" data-title="系統管理">@Model.system</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>使用者管理</td>
                                     <td>
-                                        <a href="#" id="manager" data-name="manage" data-type="checklist" data-pk="" data-url="" data-title="使用者管理">0</a>
+                                        <a href="#" id="userManagement" data-type="checklist" data-pk="@Model.groupId" data-url="@Url.Action("UpdateUserGroup")" data-title="使用者管理">@Model.user</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>巡檢管理</td>
                                     <td>
-                                        <a href="#" id="inspect" data-name="inspect" data-type="checklist" data-pk="" data-url="" data-title="巡檢管理">0</a>
+                                        <a href="#" id="dispatchManagement" data-type="checklist" data-pk="@Model.groupId" data-url="@Url.Action("UpdateUserGroup")" data-title="巡檢管理">@Model.dispatch</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>一般使用者</td>
                                     <td>
-                                        <a href="#" id="general" data-name="general" data-type="checklist" data-pk="" data-url="" data-title="一般使用者">0</a>
+                                        <a href="#" id="normalUser" data-type="checklist" data-pk="@Model.groupId" data-url="@Url.Action("UpdateUserGroup")" data-title="一般使用者">@Model.normal</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>建立日期</td>
-                                    <td>2017-08-08 00:00:00</td>
+                                    <td>@Html.DisplayFor(modelItem => @Model.createTime)</td>
                                 </tr>
                                 <tr>
                                     <td>最後更新日期</td>
-                                    <td>2017-08-08 00:00:00</td>
+                                    <td id="last">@Html.DisplayFor(modelItem => @Model.lastUpdateTime)</td>
                                 </tr>
                             </tbody>
                         </table>

@@ -8,6 +8,7 @@ namespace InspectionWeb.Services.Misc
         Guid ID { get; }
         bool Success { get; set; }
         string Message { get; set; }
+        string lastUpdateTime { get; set; }
         Exception Exception { get; set; }
 
         string ErrorMsg { get; set; }

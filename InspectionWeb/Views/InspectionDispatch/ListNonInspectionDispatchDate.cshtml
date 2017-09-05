@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "ListNonInspetionDispatchDate";
+}
+<!-- datepicker -->
+<link href="../../Scripts/datepicker3.css" rel="stylesheet" type="text/css" />
+<script src="../../Scripts/jquery-ui.min.js"></script>
+<script src="../../Scripts/bootstrap-datepicker.js"></script>
+<script src="../../Scripts/locales/bootstrap-datepicker.zh-TW.js"></script>
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+<script>
+
+    function formValidation() {
+        return false;
+    }
+    $(function () {
+        setNonInspectionTable();
+        $('#dispatchDate').datepicker({
+            format: "yyyy/mm/dd",
+            language: 'zh-TW',
+            todayHighlight: true
+        })
+
+    });
+    function setNonInspectionTable() {
+        $('#nonInspectiable').DataTable({
+            'paging': true,
+            'info': false,
+            'columnDefs': [
+                { 'targets': 0, 'width': "33%", 'orderable': false },
+                { 'targets': 1, 'width': "33%", 'orderable': false },
+                { 'targets': 2, 'width': "33%", 'orderable': false },
+
+            ],
+        });
+    }
+
+</script>
+
+
+
+<div class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>展示廳派工</h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+                <li class="active">Dashboard</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-8">
+                    <!-- general form elements -->
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <div id="dispatchDateDiv" class="form-group">
+                                <label for="dispatchDate" class="col-sm-2 control-label">巡檢日期</label>
+                                <div class="col-sm-6">
+                                    <input class="form-control" id="dispatchDate" name="dispatchDate">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success" style="text-align: right;">確定新增</button>
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="nonInspectionTable" class="row-border" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>展示廳</th>
+                                        <th>上午巡檢人員</th>
+                                        <th>下午巡檢人員</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        <tr>
+                                            <td>items.abnormalCode</td>
+                                            <td>items.abnormalName</td>
+                                            <td>items.abnormalName</td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div><!-- /.box -->
+                </div>
+            </div>
+        </section><!-- /.content -->
+    </div><!-- /.content-wrapper -->
+</div><!-- ./wrapper -->

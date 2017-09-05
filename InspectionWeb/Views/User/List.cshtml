@@ -1,11 +1,13 @@
-﻿@{
+﻿@model IEnumerable<InspectionWeb.Models.ViewModel.UserDetailViewModel>
+
+@{
     ViewBag.Title = "人員列表";
 }
 
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
         <ol class="breadcrumb">
-            <li><a href="/"><i class="fa fa-dashboard"></i>home</a></li>
+            <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>home</a></li>
             <li class="active">人員列表</li>
         </ol>
     </section>
@@ -25,21 +27,26 @@
                                     <th>權限群組</th>
                                     <th>代理人</th>
                                     <th>建立日期</th>
+                                    <th>最後更新日期</th>
                                     <th>操作選項</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>admin@localhost</td>
-                                    <td>Hello</td>
-                                    <td>World</td>
-                                    <td>!</td>
-                                    <td>2017-08-08 00:00:00</td>
-                                    <td>
-                                        <a href="@Url.Action("Edit", "User")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                        <a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>
-                                    </td>
-                                </tr>
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="@item.userId">
+                                        <td>@item.userCode</td>
+                                        <td>@item.name</td>
+                                        <td>@item.group</td>
+                                        <td>@item.agent</td>
+                                        <td>@Html.DisplayFor(modelItem => item.createTime)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.lastUpdateTime)</td>
+                                        <td>
+                                            <a href="@Url.Action("Edit", new { id = item.userId })" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                            <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.userId')" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -57,7 +64,7 @@
                         <h4 class="modal-title">刪除確認</h4>
                     </div>
                     <div class="modal-body">
-                        <p>是否刪除此人員？刪除此人員會將一併刪除所有的相關資料。</p>
+                        <p>是否刪除此人員？刪除此人員會一併刪除所有的相關資料。</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">否</button>

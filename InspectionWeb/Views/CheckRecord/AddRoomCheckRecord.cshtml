@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewBag.Title = "AddRoomCheckRecord";
+}
+<!-- datepicker -->
+<link href="../../Scripts/datepicker3.css" rel="stylesheet" type="text/css" />
+<script src="../../Scripts/jquery-ui.min.js"></script>
+<script src="../../Scripts/bootstrap-datepicker.js"></script>
+<script src="../../Scripts/locales/bootstrap-datepicker.zh-TW.js"></script>
+<script>
+
+    function formValidation() {
+        return false;
+    }
+
+    $(function () {
+        $('#dispatchDate').datepicker({
+            format: "yyyy/mm/dd",
+            language: 'zh-TW',
+            todayHighlight: true
+        })
+
+    });
+</script>
+
+
+
+<div class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>展示廳巡檢紀錄</h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+                <li class="active">巡檢紀錄</li>
+                <li class="active">展示廳巡檢紀錄</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-8">
+                    <!-- general form elements -->
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <div id="dispatchDateDiv" class="form-group">
+                                <div class="col-sm-2">
+                                    <label for="dispatchDate" class="control-label">巡檢日期</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control pull-right" id="dispatchDate" name="dispatchDate">
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="submit" class="btn btn-success" style="text-align: right;">確定</button>
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="" class="row-border" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-3">展示廳</th>
+                                        <th class="col-md-3">上午巡檢人員</th>
+                                        <th class="col-md-3">下午巡檢人員</th>
+                                        <th class="col-md-3">結果</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>items.abnormalCode</td>
+                                        <td>items.abnormalName</td>
+                                        <td>items.abnormalName</td>
+                                        <td>
+                                            <a href="#"><button class="btn btn-sm btn-success">正常</button></a>
+                                            <a href="#"><button class="btn btn-sm btn-danger">異常通報</button></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div><!-- /.box -->
+                </div>
+            </div>
+        </section><!-- /.content -->
+    </div><!-- /.content-wrapper -->
+</div><!-- ./wrapper -->

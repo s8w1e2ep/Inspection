@@ -14,9 +14,9 @@ namespace InspectionWeb.Models
     
     public partial class manRepairRecord
     {
-        public string dispatchId { get; set; }
+        public string recordId { get; set; }
         public string fillUserId { get; set; }
-        public string repairUserrId { get; set; }
+        public string repairUserId { get; set; }
         public string fixNote { get; set; }
         public string cost { get; set; }
         public Nullable<System.DateTime> expectDate { get; set; }
