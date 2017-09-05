@@ -1,4 +1,8 @@
-﻿using System;
+﻿using InspectionWeb.Models;
+using InspectionWeb.Models.ViewModel;
+using InspectionWeb.Services.Interface;
+using InspectionWeb.Services.Misc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +12,13 @@ namespace InspectionWeb.Controllers
 {
     public class InformationController : Controller
     {
+        private IFieldMapService _fieldMapService;
+
+        public InformationController(IFieldMapService fieldMapService)
+        {
+            _fieldMapService = fieldMapService;
+        }
+
         // GET: Field
         public ActionResult Index()
         {
