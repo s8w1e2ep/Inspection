@@ -1,7 +1,7 @@
 ﻿$(function () {
     $(".select2").select2();
 
-    $('#ReportList').DataTable({
+    $('#ReportList_Item, #ReportList_Experience, #ReportList_Other').DataTable({
         "paging": false,
         "info": false,
         "searching": true,

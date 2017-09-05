@@ -85,16 +85,131 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="box box-info">
+                        <!--ExhibitionItem  List-->
                         <div class="box-header">
-                            <h3 class="box-title">通報列表</h3>
+                            <h3 class="box-title">通報列表-展項</h3>
                         </div>
                         <div class="box-body">
-                            <table id="ReportList" class="row-border" cellspacing="0" style="width: 100%;">
+                            <table id="ReportList_Item" class="row-border" cellspacing="0" style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>通報來源</th>
                                         <th>展示廳</th>
-                                        <th>展項/體驗設施</th>
+                                        <th>展項名稱</th>
+                                        <th>故障日期時間</th>
+                                        <th>故障排除日期時間</th>
+                                        <th>是否結案</th>
+                                        <th>詳細資料</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="t1">
+                                        <td>aa</td>
+                                        <td>b</td>
+                                        <td>Hello</td>
+                                        <td>World</td>
+                                        <td>2017-08-08 00:00:00</td>
+                                        <td>2017-08-08 00:00:00</td>
+                                        <td>
+                                            <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                            @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
+                                        </td>
+                                    </tr>
+                                    <tr id="t2">
+                                        <td>bb</td>
+                                        <td>a</td>
+                                        <td>chayi</td>
+                                        <td>Tinab</td>
+                                        <td>2017-9-08 00:00:00</td>
+                                        <td>2017-9-07 00:00:00</td>
+                                        <td>
+                                            <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                            @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
+                                        </td>
+                                    </tr>
+                                    <tr id="t3">
+                                        <td>cc</td>
+                                        <td>c</td>
+                                        <td>chayi</td>
+                                        <td>Tinab</td>
+                                        <td>2017-9-08 00:00:00</td>
+                                        <td>2017-9-07 00:00:00</td>
+                                        <td>
+                                            <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                            @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--Experience  List-->
+                        <div class="box-header">
+                            <h3 class="box-title">通報列表-體驗設施</h3>
+                        </div>
+                        <div class="box-body">
+                            <table id="ReportList_Experience" class="row-border" cellspacing="0" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>通報來源</th>
+                                        <th>展示廳</th>
+                                        <th>設施名稱</th>
+                                        <th>故障日期時間</th>
+                                        <th>故障排除日期時間</th>
+                                        <th>是否結案</th>
+                                        <th>詳細資料</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="t1">
+                                        <td>aa</td>
+                                        <td>b</td>
+                                        <td>Hello</td>
+                                        <td>World</td>
+                                        <td>2017-08-08 00:00:00</td>
+                                        <td>2017-08-08 00:00:00</td>
+                                        <td>
+                                            <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                            @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
+                                        </td>
+                                    </tr>
+                                    <tr id="t2">
+                                        <td>bb</td>
+                                        <td>a</td>
+                                        <td>chayi</td>
+                                        <td>Tinab</td>
+                                        <td>2017-9-08 00:00:00</td>
+                                        <td>2017-9-07 00:00:00</td>
+                                        <td>
+                                            <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                            @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
+                                        </td>
+                                    </tr>
+                                    <tr id="t3">
+                                        <td>cc</td>
+                                        <td>c</td>
+                                        <td>chayi</td>
+                                        <td>Tinab</td>
+                                        <td>2017-9-08 00:00:00</td>
+                                        <td>2017-9-07 00:00:00</td>
+                                        <td>
+                                            <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                            @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--Other  List-->
+                        <div class="box-header">
+                            <h3 class="box-title">通報列表-其他設施</h3>
+                        </div>
+                        <div class="box-body">
+                            <table id="ReportList_Other" class="row-border" cellspacing="0" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>通報來源</th>
+                                        <th>展示廳</th>
+                                        <th>設施名稱</th>
                                         <th>故障日期時間</th>
                                         <th>故障排除日期時間</th>
                                         <th>是否結案</th>
