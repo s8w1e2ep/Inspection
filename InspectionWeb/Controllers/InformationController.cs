@@ -95,6 +95,25 @@ namespace InspectionWeb.Controllers
             return RedirectToAction("ListField");
         }
 
+
+        public ActionResult ListField()
+        {
+            List<FieldListViewModel> vms = new List<FieldListViewModel>();
+            List <fieldMap> allFieldMaps = this._fieldMapService.GetAll().ToList();
+
+            foreach(var field in allFieldMaps)
+            {
+                FieldListViewModel vm = new FieldListViewModel();
+                vm.FieldId = field.fieldId;
+                vm.FieldName = field.fieldName;
+                vm.Version = field.version;
+                vm.CreateTime = field.createTime.Value;
+                vm.LastUpdateTime = field.lastUpdateTime.Value;
+                vms.Add(vm);
+                   
+            }
+            return View(vms);
+        }
         //GET:　/Information/AddExhibition
         public ActionResult AddExhibition()
         {
@@ -107,10 +126,6 @@ namespace InspectionWeb.Controllers
             return View();
         }
 
-        public ActionResult ListField()
-        {
-            return View();
-        }
 
         //GET: /Information/ListExhibition
         public ActionResult ListExhibition()
