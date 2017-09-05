@@ -1,11 +1,13 @@
-﻿@{
+﻿@model IEnumerable<InspectionWeb.Models.ViewModel.GroupDetailViewModel>
+
+@{
     ViewBag.Title = "群組列表";
 }
 
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
         <ol class="breadcrumb">
-            <li><a href="/"><i class="fa fa-dashboard"></i>home</a></li>
+            <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>home</a></li>
             <li class="active">群組列表</li>
         </ol>
     </section>
@@ -17,10 +19,9 @@
                         <h3 class="box-title">群組列表</h3>
                     </div>
                     <div class="box-body">
-                        <table id="userTable" class="row-border" cellspacing="0" style="width: 100%;">
+                        <table id="groupTable" class="row-border" cellspacing="0" style="width: 100%;">
                             <thead>
                                 <tr>
-                                    <th>群組編號</th>
                                     <th>群組名稱</th>
                                     <th>系統管理</th>
                                     <th>使用者管理</th>
@@ -32,20 +33,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>You see see you</td>
-                                    <td>Hello</td>
-                                    <td>World</td>
-                                    <td>!</td>
-                                    <td>Hello</td>
-                                    <td>World</td>
-                                    <td>2017-08-08 00:00:00</td>
-                                    <td>2017-08-08 00:00:00</td>
-                                    <td>
-                                        <a href="@Url.Action("EditGroup", "User")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                        <a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>
-                                    </td>
-                                </tr>
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="@item.groupId">
+                                        <td>@item.groupName</td>
+                                        <td>@item.system</td>
+                                        <td>@item.user</td>
+                                        <td>@item.dispatch</td>
+                                        <td>@item.normal</td>
+                                        <td>@Html.DisplayFor(modelItem => item.createTime)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.lastUpdateTime)</td>
+                                        <td>
+                                            <a href="@Url.Action("EditGroup", new { groupId = item.groupId })" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                            <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.groupId')" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -63,7 +66,7 @@
                         <h4 class="modal-title">刪除確認</h4>
                     </div>
                     <div class="modal-body">
-                        <p>是否刪除此群組？刪除此群組會將一併刪除所有的相關資料。</p>
+                        <p>是否刪除此群組？刪除此群組會一併刪除所有的相關資料。</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">否</button>

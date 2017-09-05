@@ -27,5 +27,6 @@ namespace InspectionWeb.Models
         public Nullable<byte> isDelete { get; set; }
         public Nullable<System.DateTime> createTime { get; set; }
         public Nullable<System.DateTime> lastUpdateTime { get; set; }
+        public Nullable<int> periodReportTime { get; set; }
     }
 }

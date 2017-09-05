@@ -1,12 +1,13 @@
 ﻿using InspectionWeb.Models.Interface;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
+using InspectionWeb.Models;
+using InspectionWeb.Models.Misc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using InspectionWeb.Models;
 
-namespace InspectionWeb.Service
+namespace InspectionWeb.Services
 {
     public class AbnormalDefinitionService : IAbnormalDefinitionService
     {
@@ -15,6 +16,46 @@ namespace InspectionWeb.Service
         public AbnormalDefinitionService(IRepository<abnormalDefinition> repository)
         {
             _repository = repository;
+        }
+
+        public IResult Create(string abnormaCode, string abnormalName)
+        {
+            if (string.IsNullOrEmpty(abnormaCode))
+            {
+                throw new ArgumentNullException();
+            }
+
+            IResult result = new Result(false);
+
+            abnormalDefinition abnormal = new abnormalDefinition();
+
+            try
+            {
+                DateTime now = DateTime.Now;
+                IdGenerator idGen = new IdGenerator();
+
+                abnormal.abnormalId = idGen.GetID("abnormalDefinition");
+                abnormal.abnormalCode = abnormaCode;
+                abnormal.abnormalName = abnormalName;
+                abnormal.description = "";
+                abnormal.createTime = now;
+                abnormal.lastUpdateTime = now;
+
+                this._repository.Create(abnormal);
+                result.Success = true;
+            }
+            catch (Exception ex)
+            {
+                result.Exception = ex;
+
+                if (((System.Data.SqlClient.SqlException)((ex.InnerException).InnerException)).Number == 2627)
+                {
+                    result.ErrorMsg = ex.ToString();
+                    //result.ErrorMsg = "";
+                }
+            }
+
+            return result;
         }
 
         public IResult Create(abnormalDefinition instance)
@@ -74,13 +115,9 @@ namespace InspectionWeb.Service
             try
             {
 
-                DateTime now = DateTime.Now;
-                string lastUpdateTime = now.ToString("yyyy/MM/dd HH:mm:ss");
-
-                DicUpdate.Add(propertyName, (string)value);
-                DicUpdate.Add("lastUpdateTime", lastUpdateTime);
-
-                _repository.Update(instance, DicUpdate);
+                DicUpdate.Add(propertyName, value);
+                DicUpdate.Add("lastUpdateTime", DateTime.Now);
+                this._repository.Update(instance, DicUpdate);
                 result.Success = true;
             }
             catch (Exception ex)
@@ -97,13 +134,13 @@ namespace InspectionWeb.Service
 
             if (!IsExists(abnormalId))
             {
-                result.Message = "找不到台車資料";
+                result.Message = "找不到異常定義資料";
             }
 
             try
             {
                 var instance = this.GetById(abnormalId);
-                this._repository.Update(instance, "isDelete", 1);
+                this._repository.Delete(instance);
                 result.Success = true;
             }
             catch (Exception ex)
@@ -111,6 +148,11 @@ namespace InspectionWeb.Service
                 result.Exception = ex;
             }
             return result;
+        }
+
+        public string GetId(string abnormalCode)
+        {
+            return this._repository.Get(x => x.abnormalCode == abnormalCode).abnormalId;
         }
 
         public bool IsExists(string abnormalId)
@@ -130,7 +172,7 @@ namespace InspectionWeb.Service
 
         public IEnumerable<abnormalDefinition> GetAll()
         {
-            return this._repository.GetAll().OrderBy(abnormalDefinition => abnormalDefinition.createTime);
+            return this._repository.GetAll();
         }
     }
 }

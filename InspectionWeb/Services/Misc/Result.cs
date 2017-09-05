@@ -43,6 +43,10 @@ namespace InspectionWeb.Services.Misc
             get;
             protected set;
         }
+        public string lastUpdateTime {
+            get;
+            set;
+        }
 
         public Result() :this(false)
         {

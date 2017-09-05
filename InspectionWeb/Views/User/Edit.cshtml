@@ -1,12 +1,106 @@
-﻿@{
+﻿@model InspectionWeb.Models.ViewModel.UserEditViewModel
+
+@{
     ViewBag.Title = "人員檢視/修改";
 }
+
+<script>
+    var userId = '@Model.user.userId';
+    var newPassword;
+    var repeatPassword;
+
+    $.fn.editable.defaults.mode = 'inline';
+
+    $(document).ready(function () {
+        // x-editable for user table
+        $('#userName, #email, #tel').editable({
+            success: function (response) {
+                $('#last').html(response.lastUpdateTime);
+            }
+        });
+
+        $('#active').editable({
+            value: ['@Model.user.active'],
+            source: {
+                1: '是',
+            },
+            emptytext: '否',
+            params: function (params) {
+                var data = {};
+                data['name'] = params.name;
+                data['pk'] = params.pk;
+                data['value'] = params.value.join(",");
+
+                return data;
+            },
+            success: function (response) {
+                $('#last').html(response.lastUpdateTime);
+            }
+        });
+
+        $('#agent').editable({
+            value: 'Select status',
+            source: [
+                @foreach(var item in Model.agents)
+                {
+                    <text>{value: '@item.userId', text: '@item.userCode' },</text>
+                }
+            ],
+            success: function (response) {
+                $('#last').html(response.lastUpdateTime);
+            }
+        });
+
+        $('#groupId').editable({
+            value: 'Select status',
+            source: [
+                @foreach(var item in Model.groups)
+                {
+                    <text>{value: '@item.groupId', text: '@item.groupName' },</text>
+                }
+            ],
+            success: function (response) {
+                $('#last').html(response.lastUpdateTime);
+            }
+        });
+
+        $('#modalYes2').click(function () {
+            newPassword = $.trim($('#newPassword').val());
+            repeatPassword = $.trim($('#repeatPassword').val());
+
+            if (newPassword === '' || repeatPassword === '') {
+                alert('密碼不能為空白!');
+                return;
+            }
+            if (newPassword === repeatPassword) {
+                changePassword();
+            } else {
+                alert('新密碼輸入錯誤!');
+            }
+        });
+
+        $('#exhibtionTable').DataTable({
+            "paging": false,
+            "info": false,
+            "searching": false,
+            "columnDefs": [
+                { "targets": 0, "width": "25%", "orderable": true },
+                { "targets": 1, "width": "25%", "orderable": true },
+                { "targets": 2, "width": "25%", "orderable": true },
+                { "targets": 3, "width": "25%", "orderable": false }
+            ],
+        });
+    });
+</script>
 
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
         <ol class="breadcrumb">
             <li>
-                <a href="/"><i class="fa fa-dashboard"></i>Home</a>
+                <a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>Home</a>
+            </li>
+            <li>
+                <a href="@Url.Action("List")">人員列表</a>
             </li>
             <li class="active">人員檢視/修改</li>
         </ol>
@@ -18,8 +112,15 @@
             <div class="col-md-12">
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">人員檢視/修改<input id="photoUpload" type='file' onchange="" style="display: none;"><button class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="onUploadFile('#photoUpload')"><i class="fa fa-camera"></i> 上傳照片</button></h3>
-                        <img class="profile-user-img img-responsive img-circle" src="../../theme/AdminLTE/dist/img/avatar.png" alt="User profile picture">
+                        <h3 class="box-title">
+                            人員檢視/修改
+                            <input id="uploadImage" type='file' onchange="uploadImage(this)" style="display: none;">
+                            <button class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="upload()"><i class="fa fa-camera"></i> 上傳照片</button>
+                        </h3>
+                        <div class="progress" style="margin-bottom: 10px; display: none;">
+                            <div id="imgProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                        </div>
+                        <img id="photo" class="profile-user-img img-responsive img-circle" src="@if (@Model.user.picture != null) { @Url.Content("~/media/user/" + @Model.user.picture) } else { @Url.Content("~/theme/AdminLTE/dist/img/avatar.png") }" alt="User profile picture">
                     </div>
                     <div class="box-body">
                         <table class="table table-striped table-hover table-bordered" cellspacing="0" style="width: 100%;">
@@ -32,57 +133,59 @@
                             <tbody>
                                 <tr>
                                     <td>使用者帳號</td>
-                                    <td>007</td>
+                                    <td>@Model.user.userCode</td>
                                 </tr>
                                 <tr>
                                     <td>密碼</td>
                                     <td>
-                                        <a href="@Url.Action("EditPassword", "User")" class="btn btn-sm btn-warning">
+                                        <a href="#" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#changePasswordModal">
                                             <i class="fa fa-lock"></i> 修改密碼
                                         </a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>姓名</td>
-                                    <td><a href="#" id="name" data-type="text" data-pk="" data-url="" data-title="輸入人員姓名">Hello</a></td>
+                                    <td>
+                                        <a href="#" id="userName" data-type="text" data-pk="@Model.user.userId" data-url="@Url.Action("UpdateUser")" data-title="輸入人員姓名">@Model.user.name</a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>代理人</td>
                                     <td>
-                                        <a href="#" id="agent" data-name="agentId" data-type="select" data-pk="" data-url="" data-title="選擇代理人">Agent - 1</a>
+                                        <a href="#" id="agent" data-type="select" data-pk="@Model.user.userId" data-url="@Url.Action("UpdateUser")" data-title="選擇代理人">@Model.user.agent</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>權限群組</td>
                                     <td>
-                                        <a href="#" id="group" data-name="groupId" data-type="select" data-pk="" data-url="" data-title="選擇權限群組">Group - 1</a>
+                                        <a href="#" id="groupId" data-type="select" data-pk="@Model.user.userId" data-url="@Url.Action("UpdateUser")" data-title="選擇權限群組">@Model.user.group</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>E-mail</td>
                                     <td>
-                                        <a href="#" id="email" data-type="text" data-pk="" data-url="" data-title="輸入E-mail">admin@localhost</a>
+                                        <a href="#" id="email" data-type="text" data-pk="@Model.user.userId" data-url="@Url.Action("UpdateUser")" data-title="輸入E-mail">@Model.user.email</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>電話</td>
                                     <td>
-                                        <a href="#" id="phone" data-type="text" data-pk="" data-url="" data-title="輸入電話">110</a>
+                                        <a href="#" id="tel" data-type="text" data-pk="@Model.user.userId" data-url="@Url.Action("UpdateUser")" data-title="輸入電話">@Model.user.tel</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>啟用</td>
                                     <td>
-                                        <a href="#" id="active" data-name="active" data-type="checklist" data-pk="" data-url="" data-title="啟用">1</a>
+                                        <a href="#" id="active" data-type="checklist" data-pk="@Model.user.userId" data-url="@Url.Action("UpdateUser")" data-title="啟用">@Model.user.active</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>建立日期</td>
-                                    <td>2017-08-08 00:00:00</td>
+                                    <td>@Html.DisplayFor(modelItem => @Model.user.createTime)</td>
                                 </tr>
                                 <tr>
                                     <td>最後更新日期</td>
-                                    <td>2017-08-08 00:00:00</td>
+                                    <td id="last">@Html.DisplayFor(modelItem => @Model.user.lastUpdateTime)</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -92,20 +195,25 @@
             <div class="col-md-12">
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">負責展示廳<button class="btn btn-sm btn-success" style="margin-left: 10px;" onclick=""><span class="glyphicon glyphicon-plus-sign"></span></button></h3>
+                        <h3 class="box-title">
+                            負責展示廳
+                            <button class="btn btn-sm btn-success" style="margin-left: 10px;" onclick="addExhibition()"><span class="glyphicon glyphicon-plus-sign"></span></button>
+                        </h3>
                     </div>
                     <div class="box-body">
-                        <table class="table table-striped table-hover table-bordered" cellspacing="0" style="width: 100%;">
+                        <table id="exhibtionTable" class="table table-striped table-hover table-bordered" cellspacing="0" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th class="col-md-3">展示廳名稱</th>
                                     <th class="col-md-3">建立日期</th>
+                                    <th class="col-md-3">最後更新日期</th>
                                     <th class="col-md-3">操作選項</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="exhibitionList">
                                 <tr>
                                     <td>地球</td>
+                                    <td>2017-08-08 00:00:00</td>
                                     <td>2017-08-08 00:00:00</td>
                                     <td>
                                         <a href="#" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
@@ -133,11 +241,133 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">否</button>
-                        <button id="modalYes" type="button" class="btn btn-outline" data-dismiss="modal">是</button>
+                        <button id="modalYes1" type="button" class="btn btn-outline" data-dismiss="modal">是</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- change password -->
+        <div class="modal modal-warning" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">變更密碼</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="box-body">
+                            <div id="passwordDiv" class="form-group">
+                                <label for="originalPassword" class="col-md-2 control-label">原密碼</label>
+                                <div class="col-md-10">
+                                    <input id="originalPassword" type="password" class="form-control" name="originalPassword" placeholder="原密碼">
+                                </div>
+                            </div>
+                            <div id="passwordDiv" class="form-group">
+                                <label for="newPassword" class="col-md-2 control-label">新密碼</label>
+                                <div class="col-md-10">
+                                    <input id="newPassword" type="password" class="form-control" name="newPassword" placeholder="新密碼">
+                                </div>
+                            </div>
+                            <div id="repeatPasswordDiv" class="form-group">
+                                <label for="repeatPssword" class="col-md-2 control-label">重複輸入密碼</label>
+                                <div class="col-md-10">
+                                    <input id="repeatPassword" type="password" class="form-control" name="repeatPassword" placeholder="重複輸入密碼">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">取消</button>
+                        <button id="modalYes2" type="button" class="btn btn-outline" data-dismiss="modal">確定</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 </div>
-<script src="~/Scripts/editUser.js"></script>
+<script>
+    function changePassword() {
+        var originalPassword = $('#originalPassword').val();
+        $.post(
+            '/User/EditPassword',
+            {
+                userId: userId,
+                originalPassword: originalPassword,
+                newPassword: newPassword,
+                repeatPassword: repeatPassword
+            },
+            function (data) {
+                if (data.Success) {
+                    alert('變更密碼成功');
+                    $('#last').html(data.lastUpdateTime);
+                } else {
+                    alert('變更密碼失敗');
+                }
+            },
+            'json'
+        ).fail(function () {
+            alert('變更密碼失敗');
+        });
+    }
+
+    function upload() {
+        // 觸發點擊事件
+        $('#uploadImage').trigger('click');
+    }
+
+    function uploadImage(obj) {
+        var err_filetype = '只能上傳 png, jpeg 檔';
+        var imageType = ['image/png', 'image/jpeg'];
+        if ($.inArray(obj.files[0].type, imageType) < 0) {
+            alert(err_filetype);
+            return;
+        }
+        $('#imgProgress').css('width', '0%').html('0%');
+        $('.progress').css('display', 'block');
+
+        var type = obj.files[0].type.substring(obj.files[0].type.indexOf('/') + 1);
+        var data = new FormData();
+        data.append('upload', obj.files[0]);
+        ajaxUploadFile("@Url.Content("~/User/UpdateImg?userId=")@Model.user.userId" + "&type=" + type, data);
+    }
+
+    function ajaxUploadFile(url, data) {
+        $.ajax({
+            url: url,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            cache: false,
+            data: data,
+            // return JSON datatype
+            dataType: 'json',
+            // Custom XMLHttpRequest
+            xhr: function () {  
+                var myXhr = $.ajaxSettings.xhr();
+                if (myXhr.upload) {
+                    myXhr.upload.addEventListener('progress', function (e) {
+                        var progress = parseInt(e.loaded / e.total * 100, 10);
+                        $('#imgProgress').css('width', progress + '%').html(progress + '%');
+                    }, false);
+                }
+                return myXhr;
+            }
+        }).done(function (data) {
+            if (data.Success) {
+                $('#photo').attr('src', '@Url.Content("~/media/user/")' + data.Message + '?timestamp=' + new Date().getTime());
+                $('.progress').css('display', 'none');
+                $('#last').html(data.lastUpdateTime);
+            } else {
+                alert('圖片更新失敗');
+            }
+        }).fail(function () {
+            alert("抱歉! 伺服器無法接受您的照片!");
+        });
+    }
+
+    function addExhibition() {
+
+    }
+</script>

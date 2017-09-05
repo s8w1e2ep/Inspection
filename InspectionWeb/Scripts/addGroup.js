@@ -11,7 +11,7 @@
     }
 
     function formValidation() {
-        if (fieldValidation('#group')) {
+        if (fieldValidation('#groupName')) {
             return true;
         }
         return false;
