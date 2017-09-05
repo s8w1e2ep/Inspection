@@ -31,10 +31,24 @@ namespace InspectionWeb.Controllers
             return View();
         }
 
-        // GET: /Information/EditField
-        public ActionResult EditField()
+        [HttpPost]
+        public ActionResult AddField(FormCollection fc)
         {
-            return View();
+            string fieldName = fc["fieldName"];
+            IResult result = this._fieldMapService.Create(fieldName);
+            FieldAddViewModel vm = new FieldAddViewModel();
+            vm.fieldId = result.Message;
+            vm.FieldName = fieldName;
+            vm.ErrorMsg = result.ErrorMsg;
+
+            if (result.Success == false)
+            {
+                return View("AddField",vm);
+            }
+
+             return RedirectToAction("EditField", new { id = vm.fieldId});
+
+        }
         }
 
         //GET:　/Information/AddExhibition
