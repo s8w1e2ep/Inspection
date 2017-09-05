@@ -49,6 +49,50 @@ namespace InspectionWeb.Controllers
              return RedirectToAction("EditField", new { id = vm.fieldId});
 
         }
+
+        // GET: /Information/EditField/fieldId
+        public ActionResult EditField(string id)
+        {
+            string fieldId = id;
+            fieldMap field = this._fieldMapService.GetById(fieldId);
+            FieldAddViewModel vm = new FieldAddViewModel();
+
+            if(field == null)
+            {
+                return RedirectToAction("ListField");
+            }
+
+            vm.fieldId = fieldId;
+            vm.FieldName = field.fieldName;
+            vm.Description = field.description;
+            vm.MapFileName = field.mapFileName;
+            vm.Photo = field.photo;
+            vm.Version = field.version;
+            vm.CreateTime = field.createTime.Value;
+            vm.LastUpdateTime = field.lastUpdateTime.Value;
+
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditField(FieldAddViewModel vm)
+        {
+            fieldMap field = this._fieldMapService.GetById(vm.fieldId);
+            field.fieldName = vm.FieldName;
+            field.description = vm.Description;
+            field.mapFileName = vm.MapFileName;
+            field.photo = vm.Photo;
+            field.version = vm.Version;
+
+            IResult result = this._fieldMapService.Update(field);
+            if(result.Success == false)
+            {
+                return RedirectToAction("EditField", vm.fieldId);
+            }
+
+            return RedirectToAction("ListField");
         }
 
         //GET:　/Information/AddExhibition
