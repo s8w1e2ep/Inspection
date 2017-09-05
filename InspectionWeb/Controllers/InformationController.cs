@@ -114,6 +114,17 @@ namespace InspectionWeb.Controllers
             }
             return View(vms);
         }
+
+        public ActionResult DeleteField(string fieldId)
+        {
+            fieldMap field = this._fieldMapService.GetById(fieldId);
+            field.isDelete = 1;
+            this._fieldMapService.Update(field);
+
+            return RedirectToAction("ListField");
+        }
+
+
         //GET:　/Information/AddExhibition
         public ActionResult AddExhibition()
         {
