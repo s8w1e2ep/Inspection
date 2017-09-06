@@ -28,10 +28,6 @@ public partial class roomActiveRecord
 
     public Nullable<System.DateTime> createTime { get; set; }
 
-    public Nullable<byte> isDelete { get; set; }
-
-    public Nullable<System.DateTime> lastUpdateTime { get; set; }
-
 }
 
 }

@@ -39,8 +39,6 @@ public partial class inspectionEntities : DbContext
 
     public virtual DbSet<company> company { get; set; }
 
-    public virtual DbSet<exhibitionItem> exhibitionItem { get; set; }
-
     public virtual DbSet<exhibitionRoom> exhibitionRoom { get; set; }
 
     public virtual DbSet<fieldMap> fieldMap { get; set; }
@@ -49,15 +47,9 @@ public partial class inspectionEntities : DbContext
 
     public virtual DbSet<itemInspectionDispatch> itemInspectionDispatch { get; set; }
 
-    public virtual DbSet<noCheckDate> noCheckDate { get; set; }
-
     public virtual DbSet<reportDevice> reportDevice { get; set; }
 
     public virtual DbSet<reportSource> reportSource { get; set; }
-
-    public virtual DbSet<roomActiveRecord> roomActiveRecord { get; set; }
-
-    public virtual DbSet<roomCheckRecord> roomCheckRecord { get; set; }
 
     public virtual DbSet<user> user { get; set; }
 
@@ -69,11 +61,21 @@ public partial class inspectionEntities : DbContext
 
     public virtual DbSet<softwareVersion> softwareVersion { get; set; }
 
-    public virtual DbSet<manRepairRecord> manRepairRecord { get; set; }
+    public virtual DbSet<otherAbnormalRecord> otherAbnormalRecords { get; set; }
 
-    public virtual DbSet<roomInspectionDispatch> roomInspectionDispatch { get; set; }
+    public virtual DbSet<exhibitionItem> exhibitionItems { get; set; }
 
-    public virtual DbSet<temp> temp { get; set; }
+    public virtual DbSet<manRepairRecord> manRepairRecords { get; set; }
+
+    public virtual DbSet<noCheckDate> noCheckDates { get; set; }
+
+    public virtual DbSet<roomActiveRecord> roomActiveRecords { get; set; }
+
+    public virtual DbSet<roomCheckRecord> roomCheckRecords { get; set; }
+
+    public virtual DbSet<roomInspectionDispatch> roomInspectionDispatches { get; set; }
+
+    public virtual DbSet<systemSetting> systemSettings { get; set; }
 
 
     public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)

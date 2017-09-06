@@ -42,6 +42,8 @@ public partial class abnormalRecord
 
     public Nullable<System.DateTime> lastUpdateTime { get; set; }
 
+    public Nullable<System.DateTime> fixDate { get; set; }
+
 }
 
 }

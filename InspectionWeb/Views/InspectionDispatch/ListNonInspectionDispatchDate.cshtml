@@ -142,7 +142,7 @@
                                     {
                                         <tr id="@item.id">
                                             <td>@item.noCheckDate</td>
-                                            @if (item.checkTimeType == Convert.ToInt16(1))
+                                            @if (item.am == Convert.ToInt16(1))
                                             {
                                                 <td>V</td>
                                             }
@@ -150,7 +150,7 @@
                                             {
                                                 <td>X</td>
                                             }
-                                            @if (item.checkTimeType == Convert.ToInt16(2))
+                                            @if (item.pm == Convert.ToInt16(2))
                                             {
                                                 <td>V</td>
                                             }

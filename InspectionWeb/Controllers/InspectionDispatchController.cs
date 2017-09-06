@@ -437,28 +437,16 @@ namespace InspectionWeb.Controllers
         public ActionResult AddNonInspectionDispatchDate(string nonCheckDate, bool morning, bool afternoon, string description)
         {
             System.DateTime noCheckDate = Convert.ToDateTime(nonCheckDate);
-            if (morning)
+            IResult result = this._noCheckDateService.Create(noCheckDate, description, morning, afternoon);
+            System.Diagnostics.Debug.WriteLine("msg: " + result.ErrorMsg);
+            if (result.Success == false)
             {
-                IResult result = this._noCheckDateService.Create(noCheckDate, description, Convert.ToInt16(1));
-                System.Diagnostics.Debug.WriteLine("msg: " + result.ErrorMsg);
-                if (result.Success == false)
-                {
-                    NoCheckDateViewModel vm = new NoCheckDateViewModel();
-                    vm.ErrorMsg = result.ErrorMsg;
-                    return View(vm);
-                }
+                NoCheckDateViewModel vm = new NoCheckDateViewModel();
+                vm.ErrorMsg = result.ErrorMsg;
+                return View(vm);
             }
-            if (afternoon)
-            {
-                IResult result = this._noCheckDateService.Create(noCheckDate, description, Convert.ToInt16(2));
-                System.Diagnostics.Debug.WriteLine("msg: " + result.ErrorMsg);
-                if (result.Success == false)
-                {
-                    NoCheckDateViewModel vm = new NoCheckDateViewModel();
-                    vm.ErrorMsg = result.ErrorMsg;
-                    return View(vm);
-                }
-            }
+
+
             var TotalViewModel = new List<NoCheckDateViewModel>();
             var noCheckDates = this._noCheckDateService.GetAll().ToList();
             foreach (var item in noCheckDates)
@@ -475,7 +463,8 @@ namespace InspectionWeb.Controllers
             viewModel.id = noCheckDate.id;
             viewModel.noCheckDate = noCheckDate.noCheckDate1.Value.ToString("d");
             viewModel.description = noCheckDate.description;
-            viewModel.checkTimeType = noCheckDate.checkTimeType;
+            viewModel.am = noCheckDate.am;
+            viewModel.pm = noCheckDate.pm;
             viewModel.setupUserId = noCheckDate.setupUserId;
             viewModel.isDelete = noCheckDate.isDelete;
             viewModel.createTime = noCheckDate.createTime;
