@@ -38,6 +38,21 @@ namespace InspectionWeb.Services
             return result;
         }
 
+        public IResult Create(System.DateTime date)
+        {
+            IResult result = new Result(false);
+            bool hasRecord = IsExists(date);
+            //先找是否已經建立
+            if (hasRecord)
+            {
+                return result;
+            }
+            else
+            {
+                return result;
+            }
+        }
+
         public IResult Update(itemCheckRecord instance)
         {
             if (instance == null)
@@ -97,13 +112,16 @@ namespace InspectionWeb.Services
 
             if (!IsExists(checkId))
             {
-                result.Message = "找不到台車資料";
+                result.Message = "找不到紀錄資料";
             }
 
             try
             {
                 var instance = this.GetById(checkId);
-                this._repository.Update(instance, "isDelete", 1);
+                Dictionary<string, object> DicUpdate = new Dictionary<string, object>();
+                DicUpdate.Add("isDelete", Convert.ToByte(1));
+                DicUpdate.Add("lastUpdateTime", DateTime.Now);
+                this._repository.Update(instance, DicUpdate);
                 result.Success = true;
             }
             catch (Exception ex)
@@ -115,7 +133,12 @@ namespace InspectionWeb.Services
 
         public bool IsExists(string checkId)
         {
-            return this._repository.GetAll().Any(x => x.checkId == checkId);
+            return this._repository.GetAll().Any(x => x.checkId == checkId && x.isDelete == 0);
+        }
+
+        public bool IsExists(System.DateTime date)
+        {
+            return this._repository.GetAll().Any(x => x.checkDate == date);
         }
 
         public itemCheckRecord GetById(string checkId)
@@ -125,7 +148,7 @@ namespace InspectionWeb.Services
 
         public IEnumerable<itemCheckRecord> GetAll()
         {
-            return this._repository.GetAll().OrderBy(roomCheckRecord => roomCheckRecord.createTime);
+            return this._repository.GetAll().Where(x => x.isDelete == 0).OrderBy(roomCheckRecord => roomCheckRecord.createTime);
         }
     }
 }

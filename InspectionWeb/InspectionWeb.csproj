@@ -281,6 +281,7 @@
     <Compile Include="Models\Misc\DateTimeHelper.cs" />
     <Compile Include="Models\Misc\Encrypt.cs" />
     <Compile Include="Models\Misc\IdGenerator.cs" />
+    <Compile Include="Models\itemInspectionDispatchDetail.cs" />
     <Compile Include="Models\noCheckDate.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
@@ -305,7 +306,6 @@
     <Compile Include="Models\roomInspectionDispatch.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\itemInspectionDispatchDetail.cs" />
     <Compile Include="Models\roomInspectionDispatchDetail.cs" />
     <Compile Include="Models\softwareVersion.cs">
       <DependentUpon>inspection.tt</DependentUpon>

@@ -483,6 +483,18 @@
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
           <Property Name="periodReportTime" Type="Int32" />
         </EntityType>
+        <EntityType Name="reportSource">
+          <Key>
+            <PropertyRef Name="sourceId" />
+          </Key>
+          <Property Name="sourceId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="sourceCode" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="sourceName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="isDelete" Type="Byte" />
+          <Property Name="createTime" Type="DateTime" Precision="3" />
+          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="roomCheckRecord">
           <Key>
             <PropertyRef Name="checkId" />
@@ -512,24 +524,6 @@
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="user">
-          <Key>
-            <PropertyRef Name="userId" />
-          </Key>
-          <Property Name="userId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="userCode" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="groupId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="password" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="userName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="picture" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="agent" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="tel" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="email" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="active" Type="Byte" />
-          <Property Name="isDelete" Type="Byte" />
-          <Property Name="createTime" Type="DateTime" Precision="3" />
-          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="userGroup">
           <Key>
             <PropertyRef Name="groupId" />
@@ -554,9 +548,9 @@
           <EntitySet Name="itemCheckRecord" EntityType="Self.itemCheckRecord" />
           <EntitySet Name="itemInspectionDispatch" EntityType="Self.itemInspectionDispatch" />
           <EntitySet Name="reportDevice" EntityType="Self.reportDevice" />
+          <EntitySet Name="reportSource" EntityType="Self.reportSource" />
           <EntitySet Name="roomCheckRecord" EntityType="Self.roomCheckRecord" />
           <EntitySet Name="softwareVersion" EntityType="Self.softwareVersion" />
-          <EntitySet Name="user" EntityType="Self.user" />
           <EntitySet Name="userGroup" EntityType="Self.userGroup" />
           <EntitySet Name="quickSolution" EntityType="inspectionModel.quickSolution" />
           <EntitySet Name="otherAbnormalRecord" EntityType="inspectionModel.otherAbnormalRecord" />
@@ -564,9 +558,9 @@
           <EntitySet Name="exhibitionItem" EntityType="inspectionModel.exhibitionItem" />
           <EntitySet Name="manRepairRecord" EntityType="inspectionModel.manRepairRecord" />
           <EntitySet Name="noCheckDate" EntityType="inspectionModel.noCheckDate" />
-          <EntitySet Name="reportSource" EntityType="inspectionModel.reportSource" />
           <EntitySet Name="roomActiveRecord" EntityType="inspectionModel.roomActiveRecord" />
           <EntitySet Name="roomInspectionDispatch" EntityType="inspectionModel.roomInspectionDispatch" />
+          <EntitySet Name="user" EntityType="inspectionModel.user" />
         </EntityContainer>
         <EntityType Name="quickSolution">
           <Key>
@@ -665,18 +659,6 @@
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="reportSource">
-          <Key>
-            <PropertyRef Name="sourceId" />
-          </Key>
-          <Property Name="sourceId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="sourceCode" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="true" />
-          <Property Name="sourceName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="isDelete" Type="Byte" />
-          <Property Name="createTime" Type="DateTime" Precision="3" />
-          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="roomActiveRecord">
           <Key>
             <PropertyRef Name="activityId" />
@@ -697,6 +679,24 @@
           <Property Name="inspectorId1" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
           <Property Name="inspectorId2" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
           <Property Name="setupUserId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="isDelete" Type="Byte" />
+          <Property Name="createTime" Type="DateTime" Precision="3" />
+          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="userCode" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="groupId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="userName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="picture" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="agent" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="tel" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="active" Type="Byte" />
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
@@ -843,6 +843,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="reportSource">
+            <EntityTypeMapping TypeName="inspectionModel.reportSource">
+              <MappingFragment StoreEntitySet="reportSource">
+                <ScalarProperty Name="sourceCode" ColumnName="sourceCode" />
+                <ScalarProperty Name="sourceId" ColumnName="sourceId" />
+                <ScalarProperty Name="sourceName" ColumnName="sourceName" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+                <ScalarProperty Name="createTime" ColumnName="createTime" />
+                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="roomCheckRecord">
             <EntityTypeMapping TypeName="inspectionModel.roomCheckRecord">
               <MappingFragment StoreEntitySet="roomCheckRecord">
@@ -868,25 +881,6 @@
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="fileName" ColumnName="fileName" />
                 <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
-                <ScalarProperty Name="createTime" ColumnName="createTime" />
-                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="user">
-            <EntityTypeMapping TypeName="inspectionModel.user">
-              <MappingFragment StoreEntitySet="user">
-                <ScalarProperty Name="userId" ColumnName="userId" />
-                <ScalarProperty Name="userCode" ColumnName="userCode" />
-                <ScalarProperty Name="groupId" ColumnName="groupId" />
-                <ScalarProperty Name="password" ColumnName="password" />
-                <ScalarProperty Name="userName" ColumnName="userName" />
-                <ScalarProperty Name="picture" ColumnName="picture" />
-                <ScalarProperty Name="agent" ColumnName="agent" />
-                <ScalarProperty Name="tel" ColumnName="tel" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="active" ColumnName="active" />
                 <ScalarProperty Name="isDelete" ColumnName="isDelete" />
                 <ScalarProperty Name="createTime" ColumnName="createTime" />
                 <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
@@ -1012,19 +1006,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="reportSource">
-            <EntityTypeMapping TypeName="inspectionModel.reportSource">
-              <MappingFragment StoreEntitySet="reportSource">
-                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
-                <ScalarProperty Name="createTime" ColumnName="createTime" />
-                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="sourceName" ColumnName="sourceName" />
-                <ScalarProperty Name="sourceCode" ColumnName="sourceCode" />
-                <ScalarProperty Name="sourceId" ColumnName="sourceId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="roomActiveRecord">
             <EntityTypeMapping TypeName="inspectionModel.roomActiveRecord">
               <MappingFragment StoreEntitySet="roomActiveRecord">
@@ -1048,6 +1029,25 @@
                 <ScalarProperty Name="roomId" ColumnName="roomId" />
                 <ScalarProperty Name="checkDate" ColumnName="checkDate" />
                 <ScalarProperty Name="dispatchId" ColumnName="dispatchId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user">
+            <EntityTypeMapping TypeName="inspectionModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+                <ScalarProperty Name="createTime" ColumnName="createTime" />
+                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="tel" ColumnName="tel" />
+                <ScalarProperty Name="agent" ColumnName="agent" />
+                <ScalarProperty Name="picture" ColumnName="picture" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="groupId" ColumnName="groupId" />
+                <ScalarProperty Name="userCode" ColumnName="userCode" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
