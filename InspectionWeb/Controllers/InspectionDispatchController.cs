@@ -77,6 +77,26 @@ namespace InspectionWeb.Controllers
         {
             System.DateTime date = Convert.ToDateTime(timeJson.dispatchDate);
             bool isExist = this._RoomInspectionDispatchService.IsExists(date);
+            //確認是不是非巡檢日
+            IResult nonCkeck = new Result(false);
+            int isNonCheckDate = this._noCheckDateService.IsExists(date);
+            if (isNonCheckDate == 1)
+            {
+                nonCkeck.ErrorMsg = "此日非巡檢日";
+            }
+            else if (isNonCheckDate == 2)
+            {
+                nonCkeck.ErrorMsg = "上午非巡檢日";
+            }
+            else if (isNonCheckDate == 3)
+            {
+                nonCkeck.ErrorMsg = "下午非巡檢日";
+            }
+            else
+            {
+                nonCkeck.ErrorMsg = "";
+            }
+
             bool roomNumCheck = this._RoomInspectionDispatchService.checkRoomInsert(date);
             IEnumerable<exhibitionRoom> rooms = this._ExhibitionRoomService.GetAll();
             //檢查有無分派的紀錄
@@ -233,6 +253,26 @@ namespace InspectionWeb.Controllers
         {
             System.DateTime date = Convert.ToDateTime(timeJson.dispatchDate);
             bool isExist = this._ItemInspectionDispatchService.IsExists(date);
+            //確認是不是非巡檢日
+            IResult nonCkeck = new Result(false);
+            int isNonCheckDate = this._noCheckDateService.IsExists(date);
+            if (isNonCheckDate == 1)
+            {
+                nonCkeck.ErrorMsg = "此日非巡檢日";
+            }
+            else if (isNonCheckDate == 2)
+            {
+                nonCkeck.ErrorMsg = "上午非巡檢日";
+            }
+            else if (isNonCheckDate == 3)
+            {
+                nonCkeck.ErrorMsg = "下午非巡檢日";
+            }
+            else
+            {
+                nonCkeck.ErrorMsg = "";
+            }
+
             bool itemNumCheck = this._ItemInspectionDispatchService.checkItemInsert(date);
             IEnumerable<exhibitionItem> items = this._ExhibitionItemService.GetAll();
             //檢查有無分派的紀錄
@@ -251,7 +291,7 @@ namespace InspectionWeb.Controllers
                     }
 
                     List<userListForInspectionViweModel> userList = GetUserListForInspection();
-                    return View(Data2ItemViewModel(itemDispatchDetail, userList, null, date));
+                    return View(Data2ItemViewModel(itemDispatchDetail, userList, nonCkeck, date));
                 }
                 else
                 {
@@ -264,7 +304,7 @@ namespace InspectionWeb.Controllers
                         System.Diagnostics.Debug.WriteLine("insert error");
                         //result.ErrorMsg = "Dispatch List construct error";
                         System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
-                        return View(Data2ItemViewModel(null, null, result,date));
+                        return View(Data2ItemViewModel(null, null, result, date));
                     }
                     else
                     {
@@ -276,7 +316,7 @@ namespace InspectionWeb.Controllers
                             itemDispatchDetail.Add(itemDispatch);
                         }
                         List<userListForInspectionViweModel> userList = GetUserListForInspection();
-                        return View(Data2ItemViewModel(itemDispatchDetail, userList, result, date));
+                        return View(Data2ItemViewModel(itemDispatchDetail, userList, nonCkeck, date));
                     }
                 }
 
@@ -302,7 +342,7 @@ namespace InspectionWeb.Controllers
                        itemDispatchDetail.Add(itemDispatch);
                     }
                     List<userListForInspectionViweModel> userList = GetUserListForInspection();
-                    return View(Data2ItemViewModel(itemDispatchDetail, userList, result, date));
+                    return View(Data2ItemViewModel(itemDispatchDetail, userList, nonCkeck, date));
                 }
             }
         }

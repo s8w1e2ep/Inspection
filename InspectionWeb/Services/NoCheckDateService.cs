@@ -152,6 +152,23 @@ namespace InspectionWeb.Services
             return this._repository.GetAll().Any(x => x.id == Id);
         }
 
+        public int IsExists(System.DateTime date)
+        {
+            if( this._repository.GetAll().Any(x => x.noCheckDate1 == date && x.isDelete == 0 && x.am == Convert.ToByte(1) && x.pm == Convert.ToByte(1)))
+            {
+                return 1;
+            }else if (this._repository.GetAll().Any(x => x.noCheckDate1 == date && x.isDelete == 0 && x.am == Convert.ToByte(1) && x.pm == Convert.ToByte(0)))
+            {
+                return 2;
+            }
+            else if (this._repository.GetAll().Any(x => x.noCheckDate1 == date && x.isDelete == 0 && x.am == Convert.ToByte(0) && x.pm == Convert.ToByte(1)))
+            {
+                return 3;
+            }
+            return 0;
+
+        }
+
         public noCheckDate GetById(string Id)
         {
             return this._repository.Get(x => x.id == Id);

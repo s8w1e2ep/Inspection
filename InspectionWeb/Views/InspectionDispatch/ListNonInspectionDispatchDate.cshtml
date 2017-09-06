@@ -71,8 +71,9 @@
         url: '@Url.Action("DeleteNonCheckDateDispatch")',
         data: $.param({ 'id': toDispatchId }),
         type: 'DELETE',
-        }).done(function (msg) {
-            if (msg.resule == 1) {
+    }).done(function (msg) {
+        //console.log(msg);
+            if (msg.result == 1) {
                 $('#' + toDispatchId).remove();
             }  
         });
@@ -150,7 +151,7 @@
                                             {
                                                 <td>X</td>
                                             }
-                                            @if (item.pm == Convert.ToInt16(false))
+                                            @if (item.pm == Convert.ToInt16(true))
                                             {
                                                 <td>V</td>
                                             }
