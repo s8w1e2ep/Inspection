@@ -489,8 +489,6 @@
     <Content Include="Views\ReportJob\AddExperience.cshtml" />
     <Content Include="Views\ReportJob\AddOther.cshtml" />
     <Content Include="Views\ReportJob\EditExhibitionItem.cshtml" />
-    <Content Include="Views\ReportJob\EditExperience.cshtml" />
-    <Content Include="Views\ReportJob\EditOther.cshtml" />
     <Content Include="Views\ReportJob\Query.cshtml" />
     <Content Include="Views\ReportJob\ItemDetailedData.cshtml" />
     <Content Include="Views\QuickSolution\Add.cshtml" />
