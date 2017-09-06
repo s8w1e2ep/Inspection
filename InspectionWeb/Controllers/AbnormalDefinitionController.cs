@@ -50,7 +50,7 @@ namespace InspectionWeb.Controllers
             {
 
                 IResult result = _AbnormalDefinitionService.Create(abnormalCode, abnormalName);
-
+                System.Diagnostics.Debug.WriteLine("msg: " + result.ErrorMsg);
                 if (result.Success == false)
                 {
                     AddAbnormalDefinitionViewModel ad = new AddAbnormalDefinitionViewModel();
@@ -61,14 +61,13 @@ namespace InspectionWeb.Controllers
                     return View("AddAbnormalDefinition", ad);
                 }
 
-                return RedirectToAction("EditAbnormalDefinition", new { abnormalId = _AbnormalDefinitionService.GetId(abnormalCode) });
+                return RedirectToAction("EditAbnormalDefinition", new { abnormalId = result.ErrorMsg });
             }
             else
             {
                 AddAbnormalDefinitionViewModel adEmpty = new AddAbnormalDefinitionViewModel();
                 adEmpty.abnormalDefinitionName = abnormalName;
-                adEmpty.ErrorMsg = "";
-
+                adEmpty.ErrorMsg = "異常編號或名稱是空白";
                 return View("AddAbnormalDefinition", adEmpty);
             }
 
@@ -93,12 +92,12 @@ namespace InspectionWeb.Controllers
                 abnormalDefinition = this._AbnormalDefinitionService.GetById(abnormalId);
                 if (result.Success)
                 {
-                    string lastUpdateTime = abnormalDefinition.lastUpdateTime.ToString();
-                    return Json(new { result = 1, abnormalId = abnormalId, lastUpdateTime = lastUpdateTime });
+                   string lastUpdateTime = abnormalDefinition.lastUpdateTime.ToString();
+                   return Json(new { result = 1, abnormalId = abnormalId, lastUpdateTime = lastUpdateTime });
                 }
                 else
                 {
-                    return Json(new { result = 0, abnormalId = abnormalId });
+                   return Json(new { result = 0, abnormalId = abnormalId });
                 }
             }
             else
@@ -113,14 +112,12 @@ namespace InspectionWeb.Controllers
             if (string.IsNullOrEmpty(abnormalId))
             {
                 return RedirectToAction("ListAbnormalDefintion");
-
             }
             else
             {
                 var abnormal = _AbnormalDefinitionService.GetById(abnormalId);
                 ListAbnormalDefinitionViewModel viewModel = new ListAbnormalDefinitionViewModel();
                 viewModel = AbnormalDefinition2ViewModel(abnormal);
-
                 return View(viewModel);
             }
 

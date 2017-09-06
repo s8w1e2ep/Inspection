@@ -18,30 +18,36 @@ namespace InspectionWeb.Services
             _repository = repository;
         }
 
-        public IResult Create(string abnormaCode, string abnormalName)
+        public IResult Create(string abnormalCode, string abnormalName)
         {
-            if (string.IsNullOrEmpty(abnormaCode))
+            if (string.IsNullOrEmpty(abnormalCode))
             {
                 throw new ArgumentNullException();
             }
 
             IResult result = new Result(false);
-
             abnormalDefinition abnormal = new abnormalDefinition();
 
             try
             {
+                if (IsRepeat(abnormalCode))
+                {
+                    result.ErrorMsg = "異常編號重複";
+                    return result;
+                }
                 DateTime now = DateTime.Now;
                 IdGenerator idGen = new IdGenerator();
 
                 abnormal.abnormalId = idGen.GetID("abnormalDefinition");
-                abnormal.abnormalCode = abnormaCode;
+                abnormal.abnormalCode = abnormalCode;
                 abnormal.abnormalName = abnormalName;
                 abnormal.description = "";
+                abnormal.isDelete = Convert.ToByte(0);
                 abnormal.createTime = now;
                 abnormal.lastUpdateTime = now;
 
                 this._repository.Create(abnormal);
+                result.ErrorMsg = abnormal.abnormalId;
                 result.Success = true;
             }
             catch (Exception ex)
@@ -51,7 +57,7 @@ namespace InspectionWeb.Services
                 if (((System.Data.SqlClient.SqlException)((ex.InnerException).InnerException)).Number == 2627)
                 {
                     result.ErrorMsg = ex.ToString();
-                    //result.ErrorMsg = "";
+                    //result.ErrorMsg = "其他未知錯誤";
                 }
             }
 
@@ -114,7 +120,6 @@ namespace InspectionWeb.Services
 
             try
             {
-
                 DicUpdate.Add(propertyName, value);
                 DicUpdate.Add("lastUpdateTime", DateTime.Now);
                 this._repository.Update(instance, DicUpdate);
@@ -139,8 +144,11 @@ namespace InspectionWeb.Services
 
             try
             {
-                var instance = this.GetById(abnormalId);
-                this._repository.Delete(instance);
+                abnormalDefinition instance = this.GetById(abnormalId);
+                Dictionary<string, object> DicUpdate = new Dictionary<string, object>();
+                DicUpdate.Add("isDelete", Convert.ToByte(1));
+                DicUpdate.Add("lastUpdateTime", DateTime.Now);
+                this._repository.Update(instance, DicUpdate);
                 result.Success = true;
             }
             catch (Exception ex)
@@ -150,14 +158,14 @@ namespace InspectionWeb.Services
             return result;
         }
 
-        public string GetId(string abnormalCode)
-        {
-            return this._repository.Get(x => x.abnormalCode == abnormalCode).abnormalId;
-        }
-
         public bool IsExists(string abnormalId)
         {
             return this._repository.GetAll().Any(x => x.abnormalId == abnormalId);
+        }
+
+        public bool IsRepeat(string abnormalCode)
+        {
+            return this._repository.GetAll().Any(x => x.isDelete == 0 && x.abnormalCode == abnormalCode);
         }
 
         public abnormalDefinition GetById(string abnormalId)
@@ -167,12 +175,12 @@ namespace InspectionWeb.Services
 
         public abnormalDefinition GetByAbnormalCode(string abnormalCode)
         {
-            return this._repository.Get(x => x.abnormalCode == abnormalCode);
+            return this._repository.Get(x => x.abnormalCode == abnormalCode && x.isDelete == 0);
         }
 
         public IEnumerable<abnormalDefinition> GetAll()
         {
-            return this._repository.GetAll();
+            return this._repository.GetAll().Where(x => x.isDelete == 0).OrderBy(x => x.createTime);
         }
     }
 }

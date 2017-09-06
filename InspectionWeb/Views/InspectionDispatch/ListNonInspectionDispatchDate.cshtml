@@ -14,29 +14,67 @@
 <script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
 <script>
+    var toDispatchId, theDate;
 
-    function formValidation() {
-        return false;
-    }
     $(function () {
         setNonInspectionTable();
-        $('#dispatchDate').datepicker({
+        $('#nonCheckDateStart').datepicker({
             format: "yyyy/mm/dd",
             language: 'zh-TW',
             todayHighlight: true
-        })
-
+        });
+        $('#nonCheckDateEnd').datepicker({
+            format: "yyyy/mm/dd",
+            language: 'zh-TW',
+            todayHighlight: true
+        });
+        $('#modalYes').on('click', function (e) {
+           deleteNonCheckDate();
+        });
     });
-    function setNonInspectionTable() {
-        $('#nonInspectiable').DataTable({
-            'paging': true,
-            'info': false,
-            'columnDefs': [
-                { 'targets': 0, 'width': "33%", 'orderable': false },
-                { 'targets': 1, 'width': "33%", 'orderable': false },
-                { 'targets': 2, 'width': "33%", 'orderable': false },
 
-            ],
+    function fieldValidation(field) {
+        if ($.trim($(field).val()) == '') {
+            $(field + 'Div').addClass('has-error');
+            $(field + 'Div').val('');
+            return false;
+        } else {
+            $(field + 'Div').removeClass('has-error');
+        }
+        return true;
+    }
+
+    function formValidation() {
+        if (fieldValidation('#nonCheckDateEnd') && fieldValidation('#nonCheckDateStart')) {
+            return true;
+        }
+        return false;
+    }
+    function setNonInspectionTable() {
+        $('#nonCheckDateTable').DataTable({
+            'columnDefs': [
+                { 'targets': 0, 'width': "15%", 'orderable': false },
+                { 'targets': 1, 'width': "15%", 'orderable': false },
+                { 'targets': 2, 'width': "15%", 'orderable': false },
+                { 'targets': 3, 'width': "45%", 'orderable': false },
+                { 'targets': 4, 'width': "10%", 'orderable': false }
+            ]
+        });
+    }
+
+    function storeId(id) {
+        toDispatchId = id;
+    }
+
+    function deleteNonCheckDate(){
+    $.ajax({
+        url: '@Url.Action("DeleteNonCheckDateDispatch")',
+        data: $.param({ 'id': toDispatchId }),
+        type: 'DELETE',
+        }).done(function (msg) {
+            if (msg.resule == 1) {
+                $('#' + toDispatchId).remove();
+            }  
         });
     }
 
@@ -49,10 +87,10 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>展示廳派工</h1>
+            <h1>非巡檢日期</h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
-                <li class="active">Dashboard</li>
+                <li class="active">非巡檢日期列表</li>
             </ol>
         </section>
 
@@ -60,39 +98,99 @@
         <section class="content">
             <div class="row">
                 <!-- left column -->
-                <div class="col-md-8">
+                <div class="col-md-10">
                     <!-- general form elements -->
                     <div class="box box-success">
+                    <form class="form-horizontal" method="post" action="@Url.Action("ListNonInspectionDispatchDate")" onsubmit="return formValidation();">
                         <div class="box-header with-border">
-                            <div id="dispatchDateDiv" class="form-group">
-                                <label for="dispatchDate" class="col-sm-2 control-label">巡檢日期</label>
-                                <div class="col-sm-6">
-                                    <input class="form-control" id="dispatchDate" name="dispatchDate">
+                            <div id="nonCheckDateStartDiv" class="form-group">
+                                <div class="col-sm-2">
+                                    <label for="dispatchDate" class="control-label">非巡檢開始日期</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" id="nonCheckDateStart" name="nonCheckDateStart">
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-success" style="text-align: right;">確定新增</button>
+                            <div id="nonCheckDateEndDiv" class="form-group">
+                                <div class="col-sm-2">
+                                    <label for="dispatchDate" class="control-label">非巡檢結束日期</label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" id="nonCheckDateEnd" name="nonCheckDateEnd">
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="submit" class="btn btn-success">搜尋</button>
+                                </div>
+                            </div>                           
                         </div><!-- /.box-header -->
+                        </form>
                         <div class="box-body">
-                            <table id="nonInspectionTable" class="row-border" cellspacing="0" width="100%">
+                            <table id="nonCheckDateTable" class="row-border" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>展示廳</th>
-                                        <th>上午巡檢人員</th>
-                                        <th>下午巡檢人員</th>
+                                        <th>非巡檢日期</th>
+                                        <th>上午</th>
+                                        <th>下午</th>
+                                        <th>原因</th>
+                                        <th>操作選項</th>
                                     </tr>
                                 </thead>
+                               @if (@Model != null)
+                               {
                                 <tbody>
-                                        <tr>
-                                            <td>items.abnormalCode</td>
-                                            <td>items.abnormalName</td>
-                                            <td>items.abnormalName</td>
+                                    @foreach (var item in @Model)
+                                    {
+                                        <tr id="@item.id">
+                                            <td>@item.noCheckDate</td>
+                                            @if (item.checkTimeType == Convert.ToInt16(1))
+                                            {
+                                                <td>V</td>
+                                            }
+                                            else
+                                            {
+                                                <td>X</td>
+                                            }
+                                            @if (item.checkTimeType == Convert.ToInt16(2))
+                                            {
+                                                <td>V</td>
+                                            }
+                                            else
+                                            {
+                                                <td>X</td>
+                                            }
+                                            <td>@item.description</td>
+                                            <td>
+                                                <a href="#" data-toggle=modal data-target=#myModal><button class="btn btn-sm btn-danger" onclick="storeId('@item.id')"><i class="glyphicon glyphicon-remove"></i></button></a>
+                                            </td>
                                         </tr>
+                                    }
                                 </tbody>
+                               }
                             </table>
                         </div>
                     </div><!-- /.box -->
                 </div>
             </div>
+
+            <div class="modal modal-success" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">刪除確認</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>是否刪除此非巡檢日資料？刪除此非巡檢日資料會將一併刪除所有的相關資料。</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">否</button>
+                            <button id="modalYes" type="button" class="btn btn-outline" data-dismiss="modal">是</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
         </section><!-- /.content -->
     </div><!-- /.content-wrapper -->
 </div><!-- ./wrapper -->

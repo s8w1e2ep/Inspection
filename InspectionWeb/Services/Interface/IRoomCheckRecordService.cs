@@ -15,7 +15,7 @@ namespace InspectionWeb.Services.Interface
 
         roomCheckRecord GetById(string dispatchId);
 
-        IEnumerable<roomCheckRecord> GetAll(System.DateTime date);
+        IEnumerable<roomCheckRecord> GetAll(System.DateTime date); 
 
         IEnumerable<roomCheckRecord> GetAll();
 

@@ -50,26 +50,22 @@ namespace InspectionWeb.Controllers
             {
 
                 IResult result = _ReportSourceService.Create(sourceCode, sourceName);
-
                 if (result.Success == false)
                 {
                     ReportSourceViewModel rs = new ReportSourceViewModel();
                     rs.sourceCode = sourceCode;
                     rs.sourceName = sourceName;
                     rs.ErrorMsg = result.ErrorMsg;
-
                     return View("AddReportSource", rs);
                 }
-
-                return RedirectToAction("EditReportSource", new { sourceId = _ReportSourceService.GetId(sourceCode) });
+                return RedirectToAction( "EditReportSource", new { sourceId = result.ErrorMsg } );
             }
             else
             {
                 ReportSourceViewModel rsEmpty = new ReportSourceViewModel();
                 rsEmpty.sourceCode = sourceCode;
                 rsEmpty.sourceName = sourceName;
-                rsEmpty.ErrorMsg = "";
-
+                rsEmpty.ErrorMsg = "來源編號或名稱是空白";
                 return View("AddReportSource", rsEmpty);
             }
 
@@ -120,7 +116,6 @@ namespace InspectionWeb.Controllers
             else
             {
                 return Json(new { result = 0, sourceId = sourceId });
-                //return RedirectToAction("ListReportSource");
             }
         }
 

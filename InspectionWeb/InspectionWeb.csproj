@@ -243,9 +243,11 @@
     <Compile Include="Models\exhibitionItem.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\exhibitionItemList.cs" />
     <Compile Include="Models\exhibitionRoom.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\exhibitionRoomList.cs" />
     <Compile Include="Models\fieldMap.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
@@ -281,9 +283,6 @@
     <Compile Include="Models\noCheckDate.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\otherAbnormalRecord.cs">
-      <DependentUpon>inspection.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\quickSolution.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
@@ -302,6 +301,8 @@
     <Compile Include="Models\roomInspectionDispatch.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\itemInspectionDispatchDetail.cs" />
+    <Compile Include="Models\roomInspectionDispatchDetail.cs" />
     <Compile Include="Models\softwareVersion.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
@@ -317,7 +318,7 @@
     <Compile Include="Models\sp_helpdiagrams_Result.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\systemSettings.cs">
+    <Compile Include="Models\temp.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\user.cs">
@@ -329,6 +330,12 @@
     <Compile Include="Models\ViewModel\GroupAddViewModel.cs" />
     <Compile Include="Models\ViewModel\GroupDetailViewModel.cs" />
     <Compile Include="Models\ViewModel\UserEditViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListItemInspectionDispatchViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListRoomInspectionDispatchViewModel.cs" />
+    <Compile Include="Models\ViewModel\userListForInspectionViewModel.cs" />
+    <Compile Include="Services\Interface\INoCheckDateService.cs" />
+    <Compile Include="Services\NoCheckDateService.cs" />
+    <Compile Include="Services\ExhibitionRoomService.cs" />
     <Compile Include="Services\Interface\IUserGroupService.cs" />
     <Compile Include="Services\Interface\IReportSourceService.cs" />
     <Compile Include="Models\ViewModel\AddAbnormalDefinitionViewModel.cs" />
@@ -348,11 +355,13 @@
     <Compile Include="Services\ExhibitionItemService.cs" />
     <Compile Include="Services\Interface\IAbnormalDefinitionService.cs" />
     <Compile Include="Services\Interface\IAbnormalRecordService.cs" />
+    <Compile Include="Services\Interface\IExhibitionRoomService.cs" />
     <Compile Include="Services\Interface\IExhibitionItemService.cs" />
     <Compile Include="Services\Interface\IItemCheckRecordService.cs" />
     <Compile Include="Services\Interface\IItemInspectionDispatchService.cs" />
     <Compile Include="Services\Interface\IReportDeviceService.cs" />
     <Compile Include="Services\Interface\IRoomCheckRecordService.cs" />
+    <Compile Include="Services\Interface\IInspectionDispatchService.cs" />
     <Compile Include="Services\Interface\IRoomInspectionDispatchService.cs" />
     <Compile Include="Services\Interface\ISoftwareVersionService.cs" />
     <Compile Include="Services\Interface\IUserService.cs" />
@@ -433,7 +442,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Unity.Mvc4.README.txt" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
