@@ -56,7 +56,7 @@ namespace InspectionWeb.Services
                     itemDispatch.itemId = items.ElementAt(i).itemId;
                     itemDispatch.inspectorId1 = "";//items.ElementAt(i).inspectionUserId;
                     itemDispatch.inspectorId2 = "";//items.ElementAt(i).inspectionUserId;
-                    itemDispatch.setupId = "";
+                    //itemDispatch.setupId = "";
                     itemDispatch.isDelete = Convert.ToByte(0);
                     itemDispatch.createTime = now;
                     itemDispatch.lastUpdateTime = now;

@@ -284,6 +284,9 @@
     <Compile Include="Models\noCheckDate.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\otherAbnormalRecord.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\quickSolution.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
@@ -307,19 +310,7 @@
     <Compile Include="Models\softwareVersion.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\sp_helpdiagramdefinition1_Result.cs">
-      <DependentUpon>inspection.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>inspection.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagrams1_Result.cs">
-      <DependentUpon>inspection.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagrams_Result.cs">
-      <DependentUpon>inspection.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\temp.cs">
+    <Compile Include="Models\systemSettings.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\user.cs">

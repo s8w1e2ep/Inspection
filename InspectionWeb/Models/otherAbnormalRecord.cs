@@ -12,22 +12,17 @@ namespace InspectionWeb.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class manRepairRecord
+    public partial class otherAbnormalRecord
     {
         public string recordId { get; set; }
-        public string fillUserId { get; set; }
-        public string repairUserId { get; set; }
-        public string fixNote { get; set; }
-        public string cost { get; set; }
-        public Nullable<System.DateTime> expectDate { get; set; }
-        public string imgFile1 { get; set; }
-        public string imgDesc1 { get; set; }
-        public string imgFile2 { get; set; }
-        public string imgDesc2 { get; set; }
-        public string imgFile3 { get; set; }
-        public string imgDesc3 { get; set; }
-        public string imgFixFile1 { get; set; }
-        public string imgFixDesc1 { get; set; }
+        public string name { get; set; }
+        public string sourceId { get; set; }
+        public string abnormalId { get; set; }
+        public Nullable<System.DateTime> happenedTime { get; set; }
+        public string description { get; set; }
+        public Nullable<System.DateTime> fixDate { get; set; }
+        public Nullable<short> fixMethod { get; set; }
+        public Nullable<byte> isClose { get; set; }
         public Nullable<byte> isDelete { get; set; }
         public Nullable<System.DateTime> createTime { get; set; }
         public Nullable<System.DateTime> lastUpdateTime { get; set; }

@@ -475,7 +475,7 @@ namespace InspectionWeb.Controllers
             viewModel.id = noCheckDate.id;
             viewModel.noCheckDate = noCheckDate.noCheckDate1.Value.ToString("d");
             viewModel.description = noCheckDate.description;
-            viewModel.checkTimeType = noCheckDate.checkTimeType;
+            // viewModel.checkTimeType = noCheckDate.checkTimeType;
             viewModel.setupUserId = noCheckDate.setupUserId;
             viewModel.isDelete = noCheckDate.isDelete;
             viewModel.createTime = noCheckDate.createTime;

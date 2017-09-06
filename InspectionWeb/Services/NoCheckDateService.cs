@@ -29,7 +29,7 @@ namespace InspectionWeb.Services
                 IdGenerator idGen = new IdGenerator();
                 noCheckDate.id = idGen.GetID("noCheckDate");
                 noCheckDate.noCheckDate1 = date;
-                noCheckDate.checkTimeType = type;
+                //noCheckDate.checkTimeType = type;
                 noCheckDate.description = description;
                 noCheckDate.setupUserId = "";
                 noCheckDate.isDelete = Convert.ToByte(0);
