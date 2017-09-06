@@ -215,6 +215,7 @@
     <Compile Include="Controllers\AuthenticationController.cs" />
     <Compile Include="Controllers\InformationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\QuickSolutionController.cs" />
     <Compile Include="Controllers\MaintenanceWorkController.cs" />
     <Compile Include="Controllers\ReportJobController.cs" />
     <Compile Include="Controllers\AbnormalDefinitionController.cs" />
@@ -439,8 +440,10 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\listGroup.js" />
+    <Content Include="Scripts\ListSolution.js" />
     <Content Include="Scripts\listUser.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\Query.js" />
     <Content Include="Scripts\rankItem.js" />
     <Content Include="Scripts\rankReport.js" />
     <Content Include="Scripts\respond.js" />
@@ -479,6 +482,7 @@
     <Content Include="Views\User\EditGroup.cshtml" />
     <Content Include="Views\User\EditPassword.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
+    <Content Include="Views\ReportJob\AddExhibitionItem.cshtml" />
     <Content Include="Views\Information\AddField.cshtml" />
     <Content Include="Views\Information\EditField.cshtml" />
     <Content Include="Views\Information\AddExhibition.cshtml" />
@@ -495,14 +499,16 @@
     <Content Include="Views\System\AddSoftware.cshtml" />
     <Content Include="Views\System\EditSoftware.cshtml" />
     <Content Include="Views\System\ListSoftware.cshtml" />
-    <Content Include="Views\ReportJob\AddExhibition.cshtml" />
     <Content Include="Views\ReportJob\AddExperience.cshtml" />
     <Content Include="Views\ReportJob\AddOther.cshtml" />
-    <Content Include="Views\ReportJob\EditExhibition.cshtml" />
+    <Content Include="Views\ReportJob\EditExhibitionItem.cshtml" />
     <Content Include="Views\ReportJob\EditExperience.cshtml" />
     <Content Include="Views\ReportJob\EditOther.cshtml" />
     <Content Include="Views\ReportJob\Query.cshtml" />
     <Content Include="Views\ReportJob\DetailedData.cshtml" />
+    <Content Include="Views\QuickSolution\Add.cshtml" />
+    <Content Include="Views\QuickSolution\Edit.cshtml" />
+    <Content Include="Views\QuickSolution\List.cshtml" />
     <Content Include="Views\MaintenanceWork\DetailedData.cshtml" />
     <Content Include="Views\MaintenanceWork\ExtendedWork.cshtml" />
     <Content Include="Views\MaintenanceWork\PendingList.cshtml" />

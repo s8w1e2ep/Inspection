@@ -1,9 +1,13 @@
 ﻿@{
     ViewBag.Title = "整體通報查詢";
 }
+<!-- daterange picker -->
+<link rel="stylesheet" href="~/theme/AdminLTE/plugins/daterangepicker/daterangepicker-bs3.css">
+<link rel="stylesheet" href="~/theme/AdminLTE/plugins/select2/select2.min.css">
 
 <div class="wrapper">
     <div class="content-wrapper">
+        <!--right corner path-->
         <section class="content-header" style="margin-bottom: 15px;">
             <ol class="breadcrumb">
                 <li>
@@ -13,6 +17,8 @@
             </ol>
         </section>
         <section class="content">
+            <h3>整體通報查詢</h3>
+            <!--overall query-->
             <div class="row">
                 <div class="col-md-12">
                     <div class="box box-info" style="padding: 5px;">
@@ -27,7 +33,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-clock-o"></i>
                                     </div>
-                                    <input type="text" class="form-control pull-right" id="startDatePicker">
+                                    <input type="text" class="form-control pull-right" id="dateAndTime1">
                                 </div>
                             </div>
                             <div class="col-md-6 form-group">
@@ -36,11 +42,11 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-clock-o"></i>
                                     </div>
-                                    <input type="text" class="form-control pull-right" id="endDatePicker">
+                                    <input type="text" class="form-control pull-right" id="dateAndTime2">
                                 </div>
                             </div>
                             <div class="col-md-6 form-group">
-                                <label class="control-label col-md-2" >通報來源</label>
+                                <label class="control-label col-md-2">通報來源</label>
                                 <select class="form-control select2" style="width: 50%;">
                                     <option selected="selected">巡檢填單</option>
                                     <option>6000填單</option>
@@ -54,16 +60,16 @@
                             <div class="col-md-6 form-group">
                                 <label class="control-label col-md-2">異常種類</label>
                                 <select class="form-control select2" style="width: 50%;">
-                                    <option selected="selected">異常種類-1</option>
-                                    <option>異常種類-2-</option>
-                                    <option>異常種類-3-</option>
+                                    <option selected="selected">異常種類1</option>
+                                    <option>異常種類2</option>
+                                    <option>異常種類3</option>
                                 </select>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="control-label col-md-2">是否結案</label>
                                 <select class="form-control select2" style="width: 50%;">
                                     <option selected="selected">是</option>
-                                    <option>否-</option>
+                                    <option>否</option>
                                 </select>
                             </div>
                             <div class="box-body">
@@ -75,6 +81,7 @@
                     </div>
                 </div>
             </div>
+            <!--consequence list -->
             <div class="row">
                 <div class="col-md-12">
                     <div class="box box-info">
@@ -82,7 +89,7 @@
                             <h3 class="box-title">通報列表</h3>
                         </div>
                         <div class="box-body">
-                            <table id="userTable" class="row-border" cellspacing="0" style="width: 100%;">
+                            <table id="ReportList" class="row-border" cellspacing="0" style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>通報來源</th>
@@ -95,13 +102,37 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>You see see you</td>
-                                        <td>Hello</td>
+                                    <tr id="t1">
+                                        <td>aa</td>
+                                        <td>b</td>
                                         <td>Hello</td>
                                         <td>World</td>
                                         <td>2017-08-08 00:00:00</td>
                                         <td>2017-08-08 00:00:00</td>
+                                        <td>
+                                            <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                            @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
+                                        </td>
+                                    </tr>
+                                    <tr id="t2">
+                                        <td>bb</td>
+                                        <td>a</td>
+                                        <td>chayi</td>
+                                        <td>Tinab</td>
+                                        <td>2017-9-08 00:00:00</td>
+                                        <td>2017-9-07 00:00:00</td>
+                                        <td>
+                                            <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                            @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
+                                        </td>
+                                    </tr>
+                                    <tr id="t3">
+                                        <td>cc</td>
+                                        <td>c</td>
+                                        <td>chayi</td>
+                                        <td>Tinab</td>
+                                        <td>2017-9-08 00:00:00</td>
+                                        <td>2017-9-07 00:00:00</td>
                                         <td>
                                             <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
                                             @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
@@ -116,6 +147,6 @@
         </section>
     </div>
 </div>
-<script src="~/Scripts/exhibition.js"></script>
-@*<script src="~/Scripts/listGroup.js"></script>*@
+<script src="~/Scripts/Query.js"></script>
+<script src="~/theme/AdminLTE/plugins/select2/select2.full.min.js"></script>
 

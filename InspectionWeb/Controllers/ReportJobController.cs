@@ -8,8 +8,8 @@ namespace InspectionWeb.Controllers
 {
     public class ReportJobController : Controller
     {
-        // GET: /ReportJob/AddExhibition
-        public ActionResult AddExhibition()
+        // GET: /ReportJob/AddExhibitionItem
+        public ActionResult AddExhibitionItem()
         {
             return View();
         }
@@ -26,8 +26,8 @@ namespace InspectionWeb.Controllers
             return View();
         }
 
-        // GET: /ReportJob/EditExhibition
-        public ActionResult EditExhibition()
+        // GET: /ReportJob/EditExhibitionItem
+        public ActionResult EditExhibitionItem()
         {
             return View();
         }

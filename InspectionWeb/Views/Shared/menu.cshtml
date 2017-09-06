@@ -187,12 +187,8 @@
                             <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li>
-                                <a href="@Url.Action("AddExhibition", "ReportJob")"><i class="fa fa-circle-o"></i>新增通報</a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("EditExhibition", "ReportJob")"><i class="fa fa-circle-o"></i>檢視/修改 通報</a>
-                            </li>
+                            <li><a href="@Url.Action("AddExhibitionItem", "ReportJob")"><i class="fa fa-circle-o"></i>新增通報</a></li>
+                            <li><a href="@Url.Action("EditExhibitionItem", "ReportJob")"><i class="fa fa-circle-o"></i>檢視/修改 通報</a></li>
                         </ul>
                     </li>
                     <li class="">
@@ -290,6 +286,18 @@
                     <li>
                         <a href="@Url.Action("RankReport", "Statistic")"><i class="fa fa-circle-o"></i>異常排行-通報來源</a>
                     </li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-dashboard"></i>
+                    <span>常用解決方法</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="@Url.Action("Add", "QuickSolution")"><i class="fa fa-circle-o"></i>新增</a></li>
+                    <li><a href="@Url.Action("Edit", "QuickSolution")"><i class="fa fa-circle-o"></i>檢視/修改</a></li>
+                    <li><a href="@Url.Action("List", "QuickSolution")"><i class="fa fa-circle-o"></i>列表</a></li>
                 </ul>
             </li>
         </ul>
