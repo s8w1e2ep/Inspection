@@ -18,9 +18,11 @@ using System;
 public partial class manRepairRecord
 {
 
+    public string recordId { get; set; }
+
     public string fillUserId { get; set; }
 
-    public string repairUserrId { get; set; }
+    public string repairUserId { get; set; }
 
     public string fixNote { get; set; }
 
@@ -49,8 +51,6 @@ public partial class manRepairRecord
     public Nullable<System.DateTime> createTime { get; set; }
 
     public Nullable<System.DateTime> lastUpdateTime { get; set; }
-
-    public string dispatchId { get; set; }
 
 }
 

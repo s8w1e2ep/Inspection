@@ -26,6 +26,8 @@ public partial class exhibitionItem
 
     public string itemName { get; set; }
 
+    public Nullable<short> itemType { get; set; }
+
     public string description { get; set; }
 
     public string picture { get; set; }

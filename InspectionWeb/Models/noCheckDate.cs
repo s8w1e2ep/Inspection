@@ -22,7 +22,9 @@ public partial class noCheckDate
 
     public Nullable<System.DateTime> noCheckDate1 { get; set; }
 
-    public Nullable<short> checkTimeType { get; set; }
+    public Nullable<byte> am { get; set; }
+
+    public Nullable<byte> pm { get; set; }
 
     public string description { get; set; }
 

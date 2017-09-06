@@ -44,6 +44,8 @@ public partial class reportDevice
 
     public Nullable<System.DateTime> lastUpdateTime { get; set; }
 
+    public Nullable<int> periodReportTime { get; set; }
+
 }
 
 }

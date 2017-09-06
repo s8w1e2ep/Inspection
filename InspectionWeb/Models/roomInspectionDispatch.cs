@@ -28,15 +28,13 @@ public partial class roomInspectionDispatch
 
     public string inspectorId2 { get; set; }
 
-    public string setupId { get; set; }
+    public string setupUserId { get; set; }
 
     public Nullable<byte> isDelete { get; set; }
 
     public Nullable<System.DateTime> createTime { get; set; }
 
     public Nullable<System.DateTime> lastUpdateTime { get; set; }
-
-    
 
 }
 

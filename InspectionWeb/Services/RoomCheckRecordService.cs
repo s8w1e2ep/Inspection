@@ -130,7 +130,7 @@ namespace InspectionWeb.Services
 
         public IEnumerable<roomCheckRecord> GetAll()
         {
-            return this._repository.GetAll().OrderBy(roomCheckRecord => roomCheckRecord.createTime);
+            return this._repository.GetAll().Where(x => x.isDelete == 0).OrderBy(roomCheckRecord => roomCheckRecord.createTime);
         }
     }
 }

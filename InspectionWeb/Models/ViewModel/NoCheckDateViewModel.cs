@@ -12,7 +12,9 @@ namespace InspectionWeb.Models.ViewModel
 
         public string noCheckDate { get; set; }
 
-        public Nullable<short> checkTimeType { get; set; }
+        public Nullable<byte> am { get; set; }
+
+        public Nullable<byte> pm { get; set; }
 
         public string description { get; set; }
 

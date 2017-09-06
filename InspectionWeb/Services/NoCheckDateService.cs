@@ -18,7 +18,7 @@ namespace InspectionWeb.Services
             _repository = repository;
         }
 
-        public IResult Create(System.DateTime date, string description, short type)
+        public IResult Create(System.DateTime date, string description, bool am, bool pm)
         {
             IResult result = new Result(false);
             noCheckDate noCheckDate = new noCheckDate();
@@ -29,7 +29,8 @@ namespace InspectionWeb.Services
                 IdGenerator idGen = new IdGenerator();
                 noCheckDate.id = idGen.GetID("noCheckDate");
                 noCheckDate.noCheckDate1 = date;
-                noCheckDate.checkTimeType = type;
+                noCheckDate.am = Convert.ToByte(am);
+                noCheckDate.pm = Convert.ToByte(pm);
                 noCheckDate.description = description;
                 noCheckDate.setupUserId = "";
                 noCheckDate.isDelete = Convert.ToByte(0);
