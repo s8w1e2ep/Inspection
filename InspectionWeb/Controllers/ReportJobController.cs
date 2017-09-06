@@ -8,9 +8,11 @@ namespace InspectionWeb.Controllers
 {
     public class ReportJobController : Controller
     {
-        // GET: /ReportJob/AddExhibitionItem
         public ActionResult AddExhibitionItem()
         {
+            ViewBag.Message = "Hello ";
+            ViewBag.NumTimes = 5;
+
             return View();
         }
 
