@@ -1,4 +1,4 @@
-﻿
+﻿@model InspectionWeb.Models.ViewModel.FieldAddViewModel
 @{
     ViewBag.Title = "新增場域";
 }
@@ -19,12 +19,12 @@
                         <h3 class="box-title">新增場域</h3>
                     </div>
                     <!-- form start -->
-                    <form class="form-horizontal" method="post" action="@Url.Action("addField")" onsubmit="return formValidation();">
+                    <form class="form-horizontal" method="post" action="@Url.Action("AddField")" onsubmit="return formValidation();">
                         <div class="box-body">
                             <div id="nameDiv" class="form-group">
                                 <label for="group" class="col-md-2 control-label">場域名稱</label>
                                 <div class="col-md-10">
-                                    <input id="group" type="text" class="form-control" name="group" placeholder="輸入場域名稱">
+                                    <input id="fieldName" type="text" class="form-control" name="fieldName" placeholder="輸入場域名稱">
                                 </div>
                             </div>
                         </div>

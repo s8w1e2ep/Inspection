@@ -327,6 +327,8 @@
     <Compile Include="Models\userGroup.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModel\FieldAddViewModel.cs" />
+    <Compile Include="Models\ViewModel\FieldListViewModel.cs" />
     <Compile Include="Models\ViewModel\GroupAddViewModel.cs" />
     <Compile Include="Models\ViewModel\GroupDetailViewModel.cs" />
     <Compile Include="Models\ViewModel\UserEditViewModel.cs" />
@@ -336,6 +338,8 @@
     <Compile Include="Services\Interface\INoCheckDateService.cs" />
     <Compile Include="Services\NoCheckDateService.cs" />
     <Compile Include="Services\ExhibitionRoomService.cs" />
+    <Compile Include="Services\FieldMapService.cs" />
+    <Compile Include="Services\Interface\IFieldMapService.cs" />
     <Compile Include="Services\Interface\IUserGroupService.cs" />
     <Compile Include="Services\Interface\IReportSourceService.cs" />
     <Compile Include="Models\ViewModel\AddAbnormalDefinitionViewModel.cs" />
