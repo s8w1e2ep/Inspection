@@ -28,7 +28,7 @@ public partial class itemInspectionDispatch
 
     public string inspectorId2 { get; set; }
 
-    public string setupId { get; set; }
+    public string setupUserId { get; set; }
 
     public Nullable<byte> isDelete { get; set; }
 

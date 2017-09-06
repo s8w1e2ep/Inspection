@@ -147,7 +147,7 @@ namespace InspectionWeb.Services
                                 "SELECT itemInspectionDispatch.itemId " +
                                 "FROM itemInspectionDispatch " +
                                 "WHERE itemInspectionDispatch.itemId = exhibitionItem.itemId " +
-                                "AND itemInspectionDispatch.checkDate = '" + date.Date + "')";
+                                "AND itemInspectionDispatch.checkDate = '" + date.ToString("d") + "')";
 
             using (inspectionEntities db = new inspectionEntities())
             {

@@ -35,6 +35,7 @@ namespace InspectionWeb.Services
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
                 result.Exception = ex;
             }
             return result;
@@ -56,7 +57,7 @@ namespace InspectionWeb.Services
                     itemDispatch.itemId = items.ElementAt(i).itemId;
                     itemDispatch.inspectorId1 = "";//items.ElementAt(i).inspectionUserId;
                     itemDispatch.inspectorId2 = "";//items.ElementAt(i).inspectionUserId;
-                    itemDispatch.setupId = "";
+                    itemDispatch.setupUserId = "";
                     itemDispatch.isDelete = Convert.ToByte(0);
                     itemDispatch.createTime = now;
                     itemDispatch.lastUpdateTime = now;
@@ -174,9 +175,10 @@ namespace InspectionWeb.Services
 
             using (inspectionEntities db = new inspectionEntities())
             {
-                var existNum = (int)db.Database.SqlQuery<int>(sqlString).First();
-                var roomNum = db.Database.SqlQuery<int>(sqlString2).First();
-                return (existNum - existNum == 0) ? false : true;
+                var existNum = db.Database.SqlQuery<int>(sqlString).First();
+                var itemNum = db.Database.SqlQuery<int>(sqlString2).First();
+
+                return ((existNum - itemNum) == 0) ? false : true;
             }
         }
 
@@ -197,8 +199,8 @@ namespace InspectionWeb.Services
                                 + "AND IID.checkDate = '" + date.ToString("d") + "' "
                                 + "AND IID.isDelete = 0 "
                                 + "SELECT temp.*, U2.userCode AS inspectorCode2, U2.userName AS inspectorName2 "
-                                + "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId ";
-                               // + "ORDER BY temp.dispatchId;";
+                                + "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId "
+                                + "ORDER BY temp.dispatchId;";
 
             using (inspectionEntities db = new inspectionEntities())
             {

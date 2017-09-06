@@ -143,7 +143,7 @@ namespace InspectionWeb.Services
                                 "SELECT roomInspectionDispatch.roomId " +
                                 "FROM roomInspectionDispatch " +
                                 "WHERE roomInspectionDispatch.roomId = exhibitionRoom.roomId " +
-                                "AND roomInspectionDispatch.checkDate = '"+ date.Date +"')";
+                                "AND roomInspectionDispatch.checkDate = '"+ date.ToString("d") + "')";
 
             using (inspectionEntities db = new inspectionEntities())
             {

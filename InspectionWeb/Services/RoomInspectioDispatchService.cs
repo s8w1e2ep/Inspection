@@ -187,7 +187,7 @@ namespace InspectionWeb.Services
             {
                 var existNum = (int)db.Database.SqlQuery<int>(sqlString).First();
                 var roomNum = db.Database.SqlQuery<int>(sqlString2).First();
-                return (existNum - existNum == 0) ? false : true;
+                return (existNum - roomNum == 0) ? false : true;
             }
         }
 
@@ -208,8 +208,8 @@ namespace InspectionWeb.Services
                     + "AND RID.checkDate = '" + date.ToString("d") + "' "
                     + "AND RID.isDelete = 0 "
                     + "SELECT temp.*, U2.userCode AS inspectorCode2, U2.userName AS inspectorName2 "
-                    + "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId ";
-                    //+ "ORDER BY roomId;";
+                    + "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId "
+                    + "ORDER BY roomId;";
 
             using (inspectionEntities db = new inspectionEntities())
             {
