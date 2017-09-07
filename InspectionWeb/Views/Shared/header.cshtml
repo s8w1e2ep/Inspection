@@ -35,7 +35,7 @@
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="../../image/index_logo.jpg" class="user-image" alt="User Image">
+                                <img src="@if (@Session["picture"] != null) { @Url.Content("~/media/user/" + @Session["picture"]) } else { @Url.Content("~/theme/AdminLTE/dist/img/avatar.png") }" class="user-image" alt="User Image">
                                 <span class="hidden-xs">@Session["account"]</span>
                             </a>
                             <ul class="dropdown-menu">

@@ -319,6 +319,7 @@
     <Compile Include="Models\userGroup.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModel\ExhibitionRoomListViewModel.cs" />
     <Compile Include="Models\ViewModel\FieldAddViewModel.cs" />
     <Compile Include="Models\ViewModel\FieldListViewModel.cs" />
     <Compile Include="Models\ViewModel\GroupAddViewModel.cs" />
