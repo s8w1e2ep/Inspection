@@ -51,6 +51,7 @@ namespace InspectionWeb.Controllers
                 Session["authenticated"] = true;
                 Session["account"] = user.userCode;
                 Session["userId"] = user.userId;
+                Session["picture"] = user.picture;
                 
                 // 使用 MVC 內建登入並利用自訂權限 [AuthorizeUser] 功能
                 LoginProcess(user, false);
@@ -99,24 +100,29 @@ namespace InspectionWeb.Controllers
         {
             var now = DateTime.Now;
             string roles = "Normal";
+            Session["normal"] = true;
 
             // 依照 group 設定權限
             userGroup group = this._userGroupService.GetByID(loginUser.groupId);
 
             if (group.superUserOnly == 1)
             {
+                Session["super"] = true;
                 roles += ",Super";
             }
             if (group.systemManagement == 1)
             {
+                Session["system"] = true;
                 roles += ",Manager";
             }
             if (group.userManagement == 1)
             {
+                Session["userManager"] = true;
                 roles += ",User";
             }
             if (group.dispatchManagement == 1)
             {
+                Session["dispatch"] = true;
                 roles += ",Dispatch";
             }
 

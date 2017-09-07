@@ -28,8 +28,8 @@ $(document).ready(function () {
             { "targets": 4, "width": "10%", "orderable": true },
             { "targets": 5, "width": "10%", "orderable": true },
             { "targets": 6, "width": "15%", "orderable": true },
-            { "targets": 7, "width": "15%", "orderable": false },
-            { "targets": 8, "width": "10%", "orderable": false },
+            { "targets": 7, "width": "15%", "orderable": true },
+            { "targets": 8, "width": "10%", "orderable": false }
         ]
     });
 
