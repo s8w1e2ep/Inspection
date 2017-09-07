@@ -13,6 +13,7 @@ using System.IO;
 
 namespace InspectionWeb.Controllers
 {
+    [AuthorizeUser(Super = true, Manager = true, User = true)]
     public class AbnormalDefinitionController : Controller
     {
         private IAbnormalDefinitionService _AbnormalDefinitionService;

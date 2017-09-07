@@ -522,10 +522,11 @@
     <Content Include="Views\InspectionDispatch\ListItemInspectionDispatch.cshtml" />
     <Content Include="Views\InspectionDispatch\ListNonInspectionDispatchDate.cshtml" />
     <Content Include="Views\InspectionDispatch\ListRoomInspectionDispatch.cshtml" />
+    <Content Include="Views\Authentication\AuthenticationFail.cshtml" />
+    <Content Include="Views\Authentication\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Authentication\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -13,6 +13,7 @@ using System.IO;
 
 namespace InspectionWeb.Controllers
 {
+    [AuthorizeUser(Super = true, Manager = true, Dispatch = true)]
     public class InspectionDispatchController : Controller
     {
         private IRoomInspectionDispatchService _RoomInspectionDispatchService;

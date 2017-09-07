@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace InspectionWeb.Controllers
 {
+    [AuthorizeUser(Super = true, Manager = true, User = true)]
     public class SystemController : Controller
     {
         // GET: System

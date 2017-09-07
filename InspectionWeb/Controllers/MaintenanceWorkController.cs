@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using InspectionWeb.Models;
 
 namespace InspectionWeb.Controllers
 {
+    [AuthorizeUser(Super = true, Manager = true, Dispatch = true)]
     public class MaintenanceWorkController : Controller
     {
         // GET: MaintenanceWork

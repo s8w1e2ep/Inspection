@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace InspectionWeb.Controllers
 {
+    [AuthorizeUser(Super = true, Manager = true, User = true)]
     public class InformationController : Controller
     {
         private IFieldMapService _fieldMapService;
