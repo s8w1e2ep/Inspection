@@ -23,9 +23,22 @@ namespace InspectionWeb.Controllers
         private INoCheckDateService _NoCheckDateService;
 
 
-        public class getInspectionDataJson
+        public class newItemRecordDataJson
         {
-            public string date { get; set; }
+            public string itemId { get; set; }
+            public string checkDate { get; set; }
+            public string inspectorId { get; set; }
+            public int status { get; set; }
+            public int checkTimeType { get; set; }
+        }
+
+        public class newRoomRecordDataJson
+        {
+            public string roomId { get; set; }
+            public string checkDate { get; set; }
+            public string inspectorId { get; set; }
+            public int status { get; set; }
+            public int checkTimeType { get; set; }
         }
 
         public CheckRecordController(IRoomCheckRecordService roomCheckRecordService, 
@@ -98,6 +111,27 @@ namespace InspectionWeb.Controllers
             return viewModel;
         }
 
+        public ActionResult AddNewRoomRecord(newRoomRecordDataJson json)
+        {
+            string roomId = json.roomId;
+            string inspectorId = json.inspectorId;
+            string checkDate = json.checkDate;
+            int status = json.status;
+            int checkTimeType = json.checkTimeType;
+
+            IResult result = this._RoomCheckRecordService.Create(roomId, inspectorId, checkDate, status, checkTimeType);
+            if (result.Success == false)
+            {
+                System.Diagnostics.Debug.WriteLine("insert error");
+                //result.ErrorMsg = "Dispatch List construct error";
+                System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
+                return Json(new { result = 0, ErrorMsg = result.ErrorMsg });
+            }
+            else
+            {
+                return Json(new { result = 1 });
+            }
+        }
 
         [HttpGet]
         public ActionResult AddItemCheckRecord()
@@ -153,6 +187,28 @@ namespace InspectionWeb.Controllers
                 viewModel.ErrorMsg = null;
             }
             return viewModel;
+        }
+
+        public ActionResult AddNewItemRecord(newItemRecordDataJson json)
+        {
+            string itemId = json.itemId;
+            string inspectorId = json.inspectorId;
+            string checkDate = json.checkDate;
+            int status = json.status;
+            int checkTimeType = json.checkTimeType;
+
+            IResult result = this._ItemCheckRecordServices.Create(itemId, inspectorId, checkDate, status, checkTimeType);
+            if (result.Success == false)
+            {
+                System.Diagnostics.Debug.WriteLine("insert error");
+                //result.ErrorMsg = "Dispatch List construct error";
+                System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
+                return Json(new { result = 0, ErrorMsg = result.ErrorMsg });
+            }
+            else
+            {
+                return Json(new { result = 1 });
+            }
         }
     }
 }

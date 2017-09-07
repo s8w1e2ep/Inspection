@@ -58,6 +58,22 @@
         });
     }
 
+    function AddCheckRecord(itemId, inspectorId, date, status, type) {
+        $.ajax({
+            url: '@Url.Action("AddNewItemRecord")',
+            data: $.param({ 'itemId': itemId, 'inspectorId': inspectorId, 'checkDate': date, 'status': status, 'checkTimeType': type }),
+            type: 'UPDATE',
+        }).done(function (msg) {
+            console.log(msg);
+            if (msg.result == 1) {
+                alert("資訊更新成功");
+            } else {
+                alert(msg.ErrorMsg);
+            }
+        });
+
+    }
+
 </script>
 
 
@@ -110,6 +126,11 @@
                     </div>
                     <div class="box box-success">
                             <div class="box-body">
+                                @if (@Model != null && @Model.checkDate != null)
+                                {
+                                    <h4>巡檢日期: @Model.checkDate</h4>
+                                    <br>
+                                }
                                 <table id="itemCheckRecord" class="row-border" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
@@ -129,12 +150,12 @@
                                                     <td>@item.itemName</td>
                                                     <td>@item.inspectorCode1 @item.inspectorName1</td>
                                                     <td>
-                                                        <a href="#"><button class="btn btn-lg btn-success">正常</button></a>
+                                                        <a href="#"><button class="btn btn-lg btn-success" onclick="AddCheckRecord('@item.itemId', '@item.inspectorId1', '@Model.checkDate', 1, 1)">正常</button></a>
                                                         <a href="#"><button class="btn btn-lg btn-danger">異常通報</button></a>
                                                     </td>
                                                     <td>@item.inspectorCode2 @item.inspectorName2</td>
                                                     <td>
-                                                        <a href="#"><button class="btn btn-lg btn-success">正常</button></a>
+                                                        <a href="#"><button class="btn btn-lg btn-success" onclick="AddCheckRecord('@item.itemId', '@item.inspectorId2', '@Model.checkDate', 1, 2)">正常</button></a>
                                                         <a href="#"><button class="btn btn-lg btn-danger">異常通報</button></a>
                                                     </td>
                                                 </tr>
@@ -143,7 +164,6 @@
                                          }                                   
                                 </table>
                             </div>
-                        </div>
                      </div><!-- /.box -->
                 </div>
             </div>
