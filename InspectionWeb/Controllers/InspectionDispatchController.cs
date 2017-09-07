@@ -83,6 +83,7 @@ namespace InspectionWeb.Controllers
             if (isNonCheckDate == 1)
             {
                 nonCkeck.ErrorMsg = "此日非巡檢日";
+                return View(Data2RoomViewModel(null, null, nonCkeck, date));
             }
             else if (isNonCheckDate == 2)
             {

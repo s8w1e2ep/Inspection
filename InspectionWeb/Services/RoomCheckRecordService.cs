@@ -132,5 +132,36 @@ namespace InspectionWeb.Services
         {
             return this._repository.GetAll().Where(x => x.isDelete == 0).OrderBy(roomCheckRecord => roomCheckRecord.createTime);
         }
+
+        public IEnumerable<roomInspectionDispatchDetail> GetAllByDate(System.DateTime date)
+        {
+            System.Diagnostics.Debug.WriteLine(date.Date.ToString());
+            string sqlString = "IF OBJECT_ID('temp','U') IS NOT NULL DROP TABLE temp;"
+                    + "SELECT RID.dispatchId, R.roomId, R.roomName, RID.checkDate, RID.inspectorId1, "
+                    + "U1.userCode AS inspectorCode1, U1.userName AS inspectorName1, RID.inspectorId2 "
+                    + "INTO temp "
+                    + "FROM exhibitionRoom R, "
+                    + "roomInspectionDispatch RID LEFT OUTER JOIN[user] U1 on RID.inspectorId1 = U1.userId "
+                    + "WHERE RID.roomId = R.roomId "
+                    + "AND RID.checkDate = '" + date.ToString("d") + "' "
+                    + "AND RID.isDelete = 0 "
+                    + "SELECT temp.*, U2.userCode AS inspectorCode2, U2.userName AS inspectorName2 "
+                    + "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId "
+                    + "ORDER BY temp.dispatchId;";
+
+            using (inspectionEntities db = new inspectionEntities())
+            {
+                List<roomInspectionDispatchDetail> allData = db.Database.SqlQuery<roomInspectionDispatchDetail>(sqlString).ToList();
+                List<roomInspectionDispatchDetail> filterData = new List<roomInspectionDispatchDetail>();
+                foreach (var data in allData)
+                {
+                    if (!string.IsNullOrEmpty(data.inspectorId1) || !string.IsNullOrEmpty(data.inspectorId2))
+                    {
+                        filterData.Add(data);
+                    }
+                }
+                return filterData;
+            }
+        }
     }
 }

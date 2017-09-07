@@ -16,5 +16,7 @@ namespace InspectionWeb.Services.Interface
         itemCheckRecord GetById(string dispatchId);
 
         IEnumerable<itemCheckRecord> GetAll();
+
+        IEnumerable<itemInspectionDispatchDetail> GetAllByDate(System.DateTime date);
     }
 }

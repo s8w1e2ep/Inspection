@@ -191,7 +191,7 @@ namespace InspectionWeb.Services
         {
             System.Diagnostics.Debug.WriteLine(date.Date.ToString());
             string sqlString = "IF OBJECT_ID('temp','U') IS NOT NULL DROP TABLE temp;"
-                                + "SELECT IID.dispatchId, I.itemId, I.itemName, IID.inspectorId1, "
+                                + "SELECT IID.dispatchId, I.itemId, I.itemName, IID.checkDate, IID.inspectorId1, "
                                 + "U1.userCode AS inspectorCode1, U1.userName AS inspectorName1, IID.inspectorId2 "
                                 + "INTO temp "
                                 + "FROM exhibitionItem I, itemInspectionDispatch IID LEFT OUTER JOIN[user] U1 on IID.inspectorId1 = U1.userId "

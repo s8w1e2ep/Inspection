@@ -19,5 +19,7 @@ namespace InspectionWeb.Services.Interface
 
         IEnumerable<roomCheckRecord> GetAll();
 
+        IEnumerable<roomInspectionDispatchDetail> GetAllByDate(System.DateTime date);
+
     }
 }

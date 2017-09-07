@@ -1,4 +1,5 @@
-﻿
+﻿@model InspectionWeb.Models.ViewModel.ListRoomCheckRecordViewModel
+
 @{
     ViewBag.Title = "AddRoomCheckRecord";
 }
@@ -9,18 +10,44 @@
 <script src="../../Scripts/locales/bootstrap-datepicker.zh-TW.js"></script>
 <script>
 
-    function formValidation() {
-        return false;
-    }
-
     $(function () {
+        setItemCheckRecordTable();
         $('#dispatchDate').datepicker({
             format: "yyyy/mm/dd",
             language: 'zh-TW',
             todayHighlight: true
         })
-
     });
+
+    function fieldValidation(field) {
+        if ($.trim($(field).val()) == '') {
+            $(field + 'Div').addClass('has-error');
+            $(field + 'Div').val('');
+            return false;
+        } else {
+            $(field + 'Div').removeClass('has-error');
+        }
+        return true;
+    }
+
+    function formValidation() {
+        if (fieldValidation('#dispatchDate')) {
+            return true;
+        }
+        return false;
+    }
+
+    function setItemCheckRecordTable() {
+        $('#roomCheckRecord').DataTable({
+            'columnDefs': [
+                { 'targets': 0, 'width': "20%", 'orderable': false },
+                { 'targets': 1, 'width': "20%", 'orderable': false },
+                { 'targets': 2, 'width': "20%", 'orderable': false },
+                { 'targets': 3, 'width': "20%", 'orderable': false },
+                { 'targets': 4, 'width': "20%", 'orderable': false }
+            ]
+        });
+    }
 </script>
 
 
@@ -45,42 +72,60 @@
                 <div class="col-md-8">
                     <!-- general form elements -->
                     <div class="box box-success">
-                        <div class="box-header with-border">
-                            <div id="dispatchDateDiv" class="form-group">
-                                <div class="col-sm-2">
-                                    <label for="dispatchDate" class="control-label">巡檢日期</label>
+                        <form class="form-horizontal" method="post" action="@Url.Action("AddRoomCheckRecord")" onsubmit="return formValidation();">
+                            @if (@Model != null && @Model.ErrorMsg != null && !string.IsNullOrEmpty(@Model.ErrorMsg))
+                            {
+                                <div class="form-group has-error">
+                                    <label class="col-sm-2"></label>
+                                    <label class="col-sm-10">@Model.ErrorMsg</label>
                                 </div>
-                                <div class="col-sm-3">
-                                    <input type="text" class="form-control pull-right" id="dispatchDate" name="dispatchDate">
+                            }
+                            <div class="box-header with-border">
+                                <div id="dispatchDateDiv" class="form-group">
+                                    <div class="col-sm-1">
+                                        <label for="dispatchDate" class="control-label">巡檢日期</label>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control pull-right" id="dispatchDate" name="dispatchDate">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button type="submit" class="btn btn-success">確定</button>
+                                    </div>
                                 </div>
-                                <div class="col-sm-2">
-                                    <button type="submit" class="btn btn-success" style="text-align: right;">確定</button>
-                                </div>
-                            </div>
-                            <br />
-                            <br />
-                        </div><!-- /.box-header -->
+                            </div><!-- /.box-header -->
+                        </form>
                         <div class="box-body">
-                            <table id="" class="row-border" cellspacing="0" width="100%">
+                            <table id="roomCheckRecord" class="row-border" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
-                                        <th class="col-md-3">展示廳</th>
-                                        <th class="col-md-3">上午巡檢人員</th>
-                                        <th class="col-md-3">下午巡檢人員</th>
-                                        <th class="col-md-3">結果</th>
+                                        <th>展覽廳</th>
+                                        <th>上午巡檢人員</th>
+                                        <th>結果</th>
+                                        <th>下午巡檢人員</th>
+                                        <th>結果</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>items.abnormalCode</td>
-                                        <td>items.abnormalName</td>
-                                        <td>items.abnormalName</td>
-                                        <td>
-                                            <a href="#"><button class="btn btn-sm btn-success">正常</button></a>
-                                            <a href="#"><button class="btn btn-sm btn-danger">異常通報</button></a>
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                @if (@Model != null && @Model.roomInspectionDispatch != null)
+                                {
+                                    <tbody>
+                                        @foreach (var item in @Model.roomInspectionDispatch)
+                                        {
+                                            <tr id="@item.dispatchId">
+                                                <td>@item.roomName</td>
+                                                <td>@item.inspectorCode1 @item.inspectorName1</td>
+                                                <td>
+                                                    <a href="#"><button class="btn btn-sm btn-success">正常</button></a>
+                                                    <a href="#"><button class="btn btn-sm btn-danger">異常通報</button></a>
+                                                </td>
+                                                <td>@item.inspectorCode2 @item.inspectorName2</td>
+                                                <td>
+                                                    <a href="#"><button class="btn btn-sm btn-success">正常</button></a>
+                                                    <a href="#"><button class="btn btn-sm btn-danger">異常通報</button></a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                }
                             </table>
                         </div>
                     </div><!-- /.box -->

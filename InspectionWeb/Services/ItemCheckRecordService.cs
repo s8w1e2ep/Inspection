@@ -149,6 +149,38 @@ namespace InspectionWeb.Services
         public IEnumerable<itemCheckRecord> GetAll()
         {
             return this._repository.GetAll().Where(x => x.isDelete == 0).OrderBy(roomCheckRecord => roomCheckRecord.createTime);
+            
         }
+
+        public IEnumerable<itemInspectionDispatchDetail> GetAllByDate(System.DateTime date)
+        {
+            System.Diagnostics.Debug.WriteLine(date.Date.ToString());
+            string sqlString = "IF OBJECT_ID('temp','U') IS NOT NULL DROP TABLE temp;"
+                                + "SELECT IID.dispatchId, I.itemId, I.itemName, IID.inspectorId1, "
+                                + "U1.userCode AS inspectorCode1, U1.userName AS inspectorName1, IID.inspectorId2 "
+                                + "INTO temp "
+                                + "FROM exhibitionItem I, itemInspectionDispatch IID LEFT OUTER JOIN[user] U1 on IID.inspectorId1 = U1.userId "
+                                + "WHERE IID.itemId = I.itemId "
+                                + "AND IID.checkDate = '" + date.ToString("d") + "' "
+                                + "AND IID.isDelete = 0 "
+                                + "SELECT temp.*, U2.userCode AS inspectorCode2, U2.userName AS inspectorName2 "
+                                + "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId "
+                                + "ORDER BY temp.dispatchId;";
+
+            using (inspectionEntities db = new inspectionEntities())
+            {
+                List<itemInspectionDispatchDetail> allData = db.Database.SqlQuery<itemInspectionDispatchDetail>(sqlString).ToList();
+                List<itemInspectionDispatchDetail> filterData = new List<itemInspectionDispatchDetail>();
+                foreach (var data in allData )
+                {
+                    if(!string.IsNullOrEmpty(data.inspectorId1) || !string.IsNullOrEmpty(data.inspectorId2))
+                    {
+                        filterData.Add(data);
+                    }
+                }
+                return filterData;
+            }
+        }
+
     }
 }
