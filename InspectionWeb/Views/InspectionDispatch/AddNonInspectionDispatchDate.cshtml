@@ -88,8 +88,11 @@
                             <form class="form-horizontal" method="post" action="@Url.Action("AddNonInspectionDispatchDate")" onsubmit="return formValidation();">
                                 <div id="nonCheckDateDiv" class="form-group">
                                     <label for="nonCheckDate" class="col-sm-2 control-label">非巡檢日期</label>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control" id="nonCheckDate" name="nonCheckDate">
+                                    <div class="input-group col-sm-6">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" id="nonCheckDate" name="nonCheckDate">
                                     </div>
                                 </div>
                                 <div id="typeDiv" class="form-group">

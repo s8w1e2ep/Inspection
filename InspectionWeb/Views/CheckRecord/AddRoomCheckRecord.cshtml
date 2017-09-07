@@ -40,11 +40,11 @@
     function setItemCheckRecordTable() {
         $('#roomCheckRecord').DataTable({
             'columnDefs': [
-                { 'targets': 0, 'width': "20%", 'orderable': false },
+                { 'targets': 0, 'width': "10%", 'orderable': false },
                 { 'targets': 1, 'width': "20%", 'orderable': false },
-                { 'targets': 2, 'width': "20%", 'orderable': false },
+                { 'targets': 2, 'width': "25%", 'orderable': false },
                 { 'targets': 3, 'width': "20%", 'orderable': false },
-                { 'targets': 4, 'width': "20%", 'orderable': false }
+                { 'targets': 4, 'width': "25%", 'orderable': false }
             ]
         });
     }
@@ -69,7 +69,7 @@
         <section class="content">
             <div class="row">
                 <!-- left column -->
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <!-- general form elements -->
                     <div class="box box-success">
                         <form class="form-horizontal" method="post" action="@Url.Action("AddRoomCheckRecord")" onsubmit="return formValidation();">
@@ -85,11 +85,14 @@
                                     <div class="col-sm-1">
                                         <label for="dispatchDate" class="control-label">巡檢日期</label>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="input-group col-sm-2">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
                                         <input type="text" class="form-control pull-right" id="dispatchDate" name="dispatchDate">
                                     </div>
-                                    <div class="col-sm-2">
-                                        <button type="submit" class="btn btn-success">確定</button>
+                                    <div class="col-sm-4">
+                                        <button type="submit" class="btn btn-success pull-right">確定</button>
                                     </div>
                                 </div>
                             </div><!-- /.box-header -->
@@ -114,13 +117,13 @@
                                                 <td>@item.roomName</td>
                                                 <td>@item.inspectorCode1 @item.inspectorName1</td>
                                                 <td>
-                                                    <a href="#"><button class="btn btn-sm btn-success">正常</button></a>
-                                                    <a href="#"><button class="btn btn-sm btn-danger">異常通報</button></a>
+                                                    <a href="#"><button class="btn btn-lg btn-success">正常</button></a>
+                                                    <a href="#"><button class="btn btn-lg btn-danger">異常通報</button></a>
                                                 </td>
                                                 <td>@item.inspectorCode2 @item.inspectorName2</td>
                                                 <td>
-                                                    <a href="#"><button class="btn btn-sm btn-success">正常</button></a>
-                                                    <a href="#"><button class="btn btn-sm btn-danger">異常通報</button></a>
+                                                    <a href="#"><button class="btn btn-lg btn-success">正常</button></a>
+                                                    <a href="#"><button class="btn btn-lg btn-danger">異常通報</button></a>
                                                 </td>
                                             </tr>
                                         }

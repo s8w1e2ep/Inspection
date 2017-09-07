@@ -111,7 +111,7 @@
                 <!-- left column -->
                 <div class="col-md-8">
                     <!-- general form elements -->
-                    <div class="box box-success">.
+                    <div class="box box-success">
                         <form class="form-horizontal" method="post" action="@Url.Action("ListItemInspectionDispatch")" onsubmit="return formValidation();">
                             @if (@Model != null && @Model.ErrorMsg != null && !string.IsNullOrEmpty(@Model.ErrorMsg))
                             {
@@ -125,11 +125,14 @@
                                     <div class="col-sm-1">
                                         <label for="dispatchDate" class="control-label">巡檢日期</label>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="input-group col-sm-4">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
                                         <input type="text" class="form-control pull-right" id="dispatchDate" name="dispatchDate">
                                     </div>
-                                    <div class="col-sm-2">
-                                        <button type="submit" class="btn btn-success">產生派工</button>
+                                    <div class="col-sm-7">
+                                        <button type="submit" class="btn btn-success pull-right">產生派工</button>
                                     </div>
                                 </div>
                             </div><!-- /.box-header -->
