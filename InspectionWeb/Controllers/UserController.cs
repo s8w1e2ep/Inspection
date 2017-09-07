@@ -17,11 +17,13 @@ namespace InspectionWeb.Controllers
     {
         private IUserService _userService;
         private IUserGroupService _userGroupService;
+        private IExhibitionRoomService _exhibitionRoomService;
 
-        public UserController(IUserService service, IUserGroupService service2)
+        public UserController(IUserService service, IUserGroupService service2, IExhibitionRoomService service3)
         {
             this._userService = service;
             this._userGroupService = service2;
+            this._exhibitionRoomService = service3;
         }
 
         // GET: /User/Login
@@ -43,6 +45,7 @@ namespace InspectionWeb.Controllers
                 Session["authenticated"] = true;
                 Session["account"] = user.userCode;
                 Session["userId"] = user.userId;
+                Session["picture"] = user.picture;
                 //TODO: 依照 groupId 設定權限
 
                 //使用 MVC 內建登入並利用自訂權限 [AuthorizeUser] 功能
@@ -183,9 +186,9 @@ namespace InspectionWeb.Controllers
                 if (result.Success == false)
                 {
                     UserAddViewModel vm = new UserAddViewModel();
-                    vm.Account = account;
-                    vm.Password = password;
-                    vm.ErrorMsg = result.ErrorMsg;
+                    vm.account = account;
+                    vm.password = password;
+                    vm.errorMsg = result.ErrorMsg;
 
                     return View("Add", vm);
                 }
@@ -195,9 +198,9 @@ namespace InspectionWeb.Controllers
             else
             {
                 UserAddViewModel vm = new UserAddViewModel();
-                vm.Account = account;
-                vm.Password = password;
-                vm.ErrorMsg = "帳號或密碼空白";
+                vm.account = account;
+                vm.password = password;
+                vm.errorMsg = "帳號或密碼空白";
 
                 return View("Add", vm);
             }
@@ -461,6 +464,7 @@ namespace InspectionWeb.Controllers
             UserEditViewModel vm = new UserEditViewModel();
             var groups = this._userGroupService.GetAll().Where(x => x.isDelete == 0 && x.groupId != instance.userId).ToList();
             var agents = this._userService.GetAll().Where(x => x.isDelete == 0 && x.userId != instance.userId).ToList();
+            var rooms = this._exhibitionRoomService.GetAll().Where(x => x.inspectionUserId == instance.userId);
 
             vm.user = User2ViewModel(instance);
 
@@ -472,6 +476,22 @@ namespace InspectionWeb.Controllers
             {
                 vm.agents.Add(User2ViewModel(agent));
             }
+            foreach (var room in rooms)
+            {
+                vm.rooms.Add(Room2ViewModel(room));
+            }
+
+            return vm;
+        }
+
+        private ExhibitionRoomListViewModel Room2ViewModel(exhibitionRoom instance)
+        {
+            ExhibitionRoomListViewModel vm = new ExhibitionRoomListViewModel();
+
+            vm.roomId = instance.roomId;
+            vm.roomName = instance.roomName;
+            vm.createTime = instance.createTime;
+            vm.lastUpdateTime = instance.lastUpdateTime;
 
             return vm;
         }

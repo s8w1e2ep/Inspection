@@ -2,8 +2,8 @@
 {
     public class UserAddViewModel
     {
-        public string Account { get; set; }
-        public string Password { get; set; }
-        public string ErrorMsg { get; set; }
+        public string account { get; set; }
+        public string password { get; set; }
+        public string errorMsg { get; set; }
     }
 }
