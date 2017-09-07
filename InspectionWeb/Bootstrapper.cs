@@ -64,7 +64,6 @@ namespace InspectionWeb
             container.RegisterType<IRepository<reportSource>, GenericRepository<reportSource>>();
             container.RegisterType<IRepository<user>, GenericRepository<user>>();
             container.RegisterType<IRepository<userGroup>, GenericRepository<userGroup>>();
-
             container.RegisterType<IRepository<fieldMap>, GenericRepository<fieldMap>>();
 
 
@@ -83,7 +82,6 @@ namespace InspectionWeb
             container.RegisterType<INoCheckDateService, NoCheckDateService>();
             container.RegisterType<IUserService, UserService>();
             container.RegisterType<IUserGroupService, UserGroupService>();
-
             container.RegisterType<IFieldMapService, FieldMapService>();
 
         }

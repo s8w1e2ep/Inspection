@@ -12,11 +12,24 @@ namespace InspectionWeb.Controllers
         private IUserService _userService;
         private IUserGroupService _userGroupService;
 
+        public AuthenticationController(IUserService service, IUserGroupService service2)
+        {
+            this._userService = service;
+            this._userGroupService = service2;
+        }
+
         // GET: Authentication/
         [AllowAnonymous]
         public ActionResult Index()
         {
             return RedirectToAction("Login");
+        }
+
+        // GET: Authentication/AuthenticationFail
+        [AllowAnonymous]
+        public ActionResult AuthenticationFail()
+        {
+            return View();
         }
 
         // GET: Authentication/Login
@@ -97,6 +110,10 @@ namespace InspectionWeb.Controllers
             if (group.systemManagement == 1)
             {
                 roles += ",Manager";
+            }
+            if (group.userManagement == 1)
+            {
+                roles += ",User";
             }
             if (group.dispatchManagement == 1)
             {
