@@ -38,7 +38,7 @@ namespace InspectionWeb.Controllers
             string fieldName = fc["fieldName"];
             IResult result = this._fieldMapService.Create(fieldName);
             FieldAddViewModel vm = new FieldAddViewModel();
-            vm.fieldId = result.Message;
+            vm.FieldId = result.Message;
             vm.FieldName = fieldName;
             vm.ErrorMsg = result.ErrorMsg;
 
@@ -47,7 +47,7 @@ namespace InspectionWeb.Controllers
                 return View("AddField",vm);
             }
 
-             return RedirectToAction("EditField", new { id = vm.fieldId});
+             return RedirectToAction("EditField", new { id = vm.FieldId});
 
         }
 
@@ -63,7 +63,7 @@ namespace InspectionWeb.Controllers
                 return RedirectToAction("ListField");
             }
 
-            vm.fieldId = fieldId;
+            vm.FieldId = fieldId;
             vm.FieldName = field.fieldName;
             vm.Description = field.description;
             vm.MapFileName = field.mapFileName;
@@ -80,7 +80,7 @@ namespace InspectionWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditField(FieldAddViewModel vm)
         {
-            fieldMap field = this._fieldMapService.GetById(vm.fieldId);
+            fieldMap field = this._fieldMapService.GetById(vm.FieldId);
             field.fieldName = vm.FieldName;
             field.description = vm.Description;
             field.mapFileName = vm.MapFileName;
@@ -90,7 +90,7 @@ namespace InspectionWeb.Controllers
             IResult result = this._fieldMapService.Update(field);
             if(result.Success == false)
             {
-                return RedirectToAction("EditField", vm.fieldId);
+                return RedirectToAction("EditField", vm.FieldId);
             }
 
             return RedirectToAction("ListField");
