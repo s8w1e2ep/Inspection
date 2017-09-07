@@ -54,6 +54,7 @@ namespace InspectionWeb
             container.RegisterType<IRepository<reportSource>, GenericRepository<reportSource>>();
             container.RegisterType<IRepository<user>, GenericRepository<user>>();
             container.RegisterType<IRepository<userGroup>, GenericRepository<userGroup>>();
+            container.RegisterType<IRepository<quickSolution>, GenericRepository<quickSolution>>();
 
 
 
@@ -65,6 +66,7 @@ namespace InspectionWeb
             container.RegisterType<IReportSourceService, ReportSourceService>();
             container.RegisterType<IUserService, UserService>();
             container.RegisterType<IUserGroupService, UserGroupService>();
+            container.RegisterType<ISolutionService, SolutionService>();
 
 
         }

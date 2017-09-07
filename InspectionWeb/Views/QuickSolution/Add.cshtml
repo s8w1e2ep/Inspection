@@ -18,12 +18,19 @@
                         <h3 class="box-title">新增常用解決方法</h3>
                     </div>
                     <!-- form start -->
-                    <form class="form-horizontal" method="post" action="@Url.Action("addsolution")" onsubmit="return formValidation();">
+                    <form class="form-horizontal" method="post" action="@Url.Action("AddSolution")" onsubmit="return formValidation();">
                         <div class="box-body">
-                            <div id="nameDiv" class="form-group">
+                            @if (!string.IsNullOrEmpty(ViewBag.ErrorMsg))
+                            {
+                                <div class="form-group has-error">
+                                    <label class="col-sm-2"></label>
+                                    <label class="col-sm-10">@ViewBag.ErrorMsg</label>
+                                </div>
+                            }
+                            <div id="" class="form-group">
                                 <label for="account" class="col-md-2 control-label">方法說明</label>
                                 <div class="col-md-10">
-                                    <input id="account" type="text" class="form-control" name="account" >
+                                    <input type="text" class="form-control" name="description" >
                                 </div>
                             </div>
                         </div>
@@ -36,4 +43,4 @@
         </div>
     </section>
 </div>
-<script src="~/Scripts/addUser.js"></script>
+@*<script src="~/Scripts/addUser.js"></script>*@
