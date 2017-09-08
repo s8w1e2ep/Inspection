@@ -4,6 +4,7 @@ using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -100,6 +101,25 @@ namespace InspectionWeb.Controllers
             }
         }
 
+        public ActionResult UpdatePhoto(HttpPostedFileBase upload, string fieldId)
+        {
+            if(upload.ContentLength > 0)
+            {
+                string fileName = fieldId;
+                fileName = fileName + Path.GetExtension(upload.FileName);
+                string savePath = System.IO.Path.Combine(Server.MapPath("~/media/field"), fileName);
+                upload.SaveAs(savePath);
+
+                fieldMap field = _fieldMapService.GetById(fieldId);
+                field.photo = fileName;
+                IResult result = _fieldMapService.Update(field);
+                if (result.Success)
+                {
+                    return Json(new { lastUpdateTime = field.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                                      photoName = fileName});
+                }
+            }
+            return Json(null);
         }
 
 
