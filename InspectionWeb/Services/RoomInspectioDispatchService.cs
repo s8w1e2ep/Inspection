@@ -210,15 +210,79 @@ namespace InspectionWeb.Services
                     + "AND RID.isDelete = 0 "
                     + "SELECT temp.*, U2.userCode AS inspectorCode2, U2.userName AS inspectorName2 "
                     + "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId "
-                    + "ORDER BY roomId;";
+                    + "ORDER BY temp.dispatchId;";
 
             using (inspectionEntities db = new inspectionEntities())
             {
-                var detialDate = db.Database.SqlQuery<roomInspectionDispatchDetail>(sqlString).ToList();
+                var detailDate = db.Database.SqlQuery<roomInspectionDispatchDetail>(sqlString).ToList();
 
-                return detialDate;
+                return detailDate;
             }
         }
 
+        public IEnumerable<roomInspectionDispatchDetail> GetAllByRoomCondition(string startDate, string endDate, List<string>roomId )
+        {
+            string sqlString = "IF OBJECT_ID('temp','U') IS NOT NULL DROP TABLE temp;"
+                    + "SELECT RID.dispatchId, R.roomId, R.roomName, RID.checkDate, RID.inspectorId1, "
+                    + "U1.userCode AS inspectorCode1, U1.userName AS inspectorName1, RID.inspectorId2 "
+                    + "INTO temp "
+                    + "FROM exhibitionRoom R, "
+                    + "roomInspectionDispatch RID LEFT OUTER JOIN[user] U1 on RID.inspectorId1 = U1.userId "
+                    + "WHERE RID.roomId = R.roomId "
+                    + "AND RID.isDelete = 0 "
+                    + "AND RID.checkDate >= '" + startDate  + "' "
+                    + "AND RID.checkDate <= '" + endDate + "' "
+                    + "AND ( ";
+            foreach (var i in roomId)
+            {
+                sqlString += "R.roomId = '";
+                sqlString += i;
+                sqlString += "' OR ";
+            }
+            sqlString = sqlString.Substring(0, sqlString.Length - 4);
+
+            sqlString += ") ";
+            sqlString += "SELECT temp.*, U2.userCode AS inspectorCode2, U2.userName AS inspectorName2 ";
+            sqlString += "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId ";
+            sqlString += "ORDER BY temp.dispatchId; ";
+            using (inspectionEntities db = new inspectionEntities())
+            {
+                var detailDate = db.Database.SqlQuery<roomInspectionDispatchDetail>(sqlString).ToList();
+
+                return detailDate;
+            }
+
+        }
+
+        public IEnumerable<roomInspectionDispatchDetail> GetAllByUserCondition(string startDate, string endDate, List<string>userId)
+        {
+            string sqlString = "SELECT RID.dispatchId, R.roomId, R.roomName, RID.checkDate, "
+                            + "RID.inspectorId1, UU1.userCode AS inspectorCode1, UU1.userName AS inspectorName1, "
+                            + "RID.inspectorId2, UU2.userCode AS inspectorCode2, UU2.userName AS inspectorName2 "
+                            + "FROM roomInspectionDispatch AS RID, [user] AS UU1, [user] AS UU2, exhibitionRoom AS R "
+                            + "WHERE RID.roomId = R.roomId "
+                            + "AND RID.checkDate >= '" + startDate + "' "
+                            + "AND RID.checkDate <= '" + endDate + "' "
+                            + "AND UU1.userId = RID.inspectorId1 "
+                            + "AND UU2.userId = RID.inspectorId2 "
+                            + "AND RID.isDelete = 0 "
+                            + "AND (";
+            foreach(var i in userId)
+            {
+                sqlString += "RID.inspectorId1 = '";
+                sqlString += i;
+                sqlString += "' OR RID.inspectorId2 = '";
+                sqlString += i;
+                sqlString += "' OR ";
+            }
+            sqlString = sqlString.Substring(0, sqlString.Length - 4);
+            sqlString += ") ORDER BY RID.dispatchId";
+
+            using (inspectionEntities db = new inspectionEntities())
+            {
+                var detailDate = db.Database.SqlQuery<roomInspectionDispatchDetail>(sqlString).ToList();
+                return detailDate;
+            }
+        }
     }
 }

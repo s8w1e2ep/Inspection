@@ -119,6 +119,11 @@ namespace InspectionWeb.Services
             return this._repository.Get(x => x.itemCode == itemCode);
         }
 
+        public IEnumerable<exhibitionItem> GetAllWithoutIsDelete()
+        {
+            return this._repository.GetAll().OrderBy(x => x.createTime);
+        }
+
         public IEnumerable<exhibitionItem> GetAll()
         {
             return this._repository.GetAll().Where(x => x.isDelete == 0).OrderBy(x => x.createTime);

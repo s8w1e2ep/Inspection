@@ -1,4 +1,5 @@
-﻿
+﻿@model InspectionWeb.Models.ViewModel.ListQueryInspectionByUserIdViewModel
+
 @{
     ViewBag.Title = "QueryInspectionDispatchByUserId";
 }
@@ -54,16 +55,18 @@
     function setTables() {
         $('#roomInspectionTable').DataTable({
             'columnDefs': [
-                { 'targets': 0, 'width': "30%", 'orderable': false },
-                { 'targets': 1, 'width': "35%", 'orderable': false },
-                { 'targets': 2, 'width': "35%", 'orderable': false }
+                { 'targets': 0, 'width': "20%", 'orderable': false },
+                { 'targets': 1, 'width': "20%", 'orderable': false },
+                { 'targets': 2, 'width': "30%", 'orderable': false },
+                { 'targets': 3, 'witdh': "30%", 'orderable': false}
             ]
         });
         $('#itemInspectionTable').DataTable({
             'columnDefs': [
-                { 'targets': 0, 'width': "30%", 'orderable': false },
-                { 'targets': 1, 'width': "35%", 'orderable': false },
-                { 'targets': 2, 'width': "35%", 'orderable': false }
+                { 'targets': 0, 'width': "20%", 'orderable': false },
+                { 'targets': 1, 'width': "20%", 'orderable': false },
+                { 'targets': 2, 'width': "30%", 'orderable': false },
+                { 'targets': 3, 'width': "30%", 'orderable': false }
             ]
         });
     }
@@ -96,16 +99,9 @@
             </div>
             <br>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <div class="box box-success">
-                        <form class="form-horizontal" method="post" action="@Url.Action("ListItemInspectionDispatch")" onsubmit="return formValidation();">
-                            @if (@Model != null && @Model.ErrorMsg != null && !string.IsNullOrEmpty(@Model.ErrorMsg))
-                            {
-                                <div class="form-group has-error">
-                                    <label class="col-sm-2"></label>
-                                    <label class="col-sm-10">@Model.ErrorMsg</label>
-                                </div>
-                            }
+                        <form class="form-horizontal" method="post" action="@Url.Action("QueryInspectionByUserId")" onsubmit="return formValidation();">
                             <div class="box-body with-border">
                                 <div id="queryDateStartDiv" class="form-group">
                                     <div class="col-sm-2">
@@ -135,14 +131,17 @@
                                     </div>
                                     <div class="input-group col-sm-3">
                                         <select class="selectpicker" multiple title="複選巡檢人員" name="userId" id="userId">
-                                            <option>Mustard</option>
-                                            <option>Ketchup</option>
-                                            <option>Relish</option>
+                                            @if (@Model != null && @Model.users != null)
+                                            {
+                                                foreach (var item in @Model.users)
+                                                {
+                                                    <option value="@item.userId">@item.userCode @item.userName</option>
+                                                }
+                                            }
                                         </select>
-
                                      </div>  
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-8">
                                     <button type="submit" class="btn btn-success pull-right">搜尋</button>
                                 </div>
                             </div>
@@ -151,20 +150,19 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <div class="box box-success">
                         <div class="box-body">
-                            <h4>巡檢日期: 2017/08/29</h4>
-                            <br>
-                            @if (@Model != null && @Model.checkDate != null)
+                            @if (@Model != null && @Model.startDate != null && @Model.endDate != null)
                             {
-                                <h4>巡檢日期: @Model.checkDate</h4>
+                                <h4>巡檢日期: @Model.startDate ~ @Model.endDate</h4>
                                 <br>
                             }
                             <table id="roomInspectionTable" class="row-border" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
                                         <th>展示廳</th>
+                                        <th>巡檢日期</th>
                                         <th>上午巡檢人員</th>
                                         <th>下午巡檢人員</th>
                                     </tr>
@@ -172,12 +170,13 @@
                                 @if (@Model != null && @Model.itemInspectionDispatch != null)
                                 {
                                     <tbody>
-                                        @foreach (var item in @Model.itemInspectionDispatch)
+                                        @foreach (var item in @Model.roomInspectionDispatch)
                                         {
                                             <tr id="@item.dispatchId">
-                                                <td>@item.itemName</td>
-                                                <td></td>
-                                                <td></td>
+                                                <td>@item.roomName</td>
+                                                <td>@item.checkDate</td>
+                                                <td>@item.inspectorCode1 @item.inspectorName1</td>
+                                                <td>@item.inspectorCode2 @item.inspectorName2</td>
                                             </tr>
                                         }
                                     </tbody>
@@ -187,17 +186,16 @@
                     </div>
                     <div class="box box-success">
                         <div class="box-body">
-                            <h4>巡檢日期: 2017/08/29</h4>
-                            <br>
-                            @if (@Model != null && @Model.checkDate != null)
+                            @if (@Model != null && @Model.startDate != null && @Model.endDate != null)
                             {
-                                <h4>巡檢日期: @Model.checkDate</h4>
+                                <h4>巡檢日期: @Model.startDate ~ @Model.endDate</h4>
                                 <br>
                             }
                             <table id="itemInspectionTable" class="row-border" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
                                         <th>體驗項目</th>
+                                        <th>巡檢日期</th>
                                         <th>上午巡檢人員</th>
                                         <th>下午巡檢人員</th>
                                     </tr>
@@ -209,8 +207,9 @@
                                         {
                                             <tr id="@item.dispatchId">
                                                 <td>@item.itemName</td>
-                                                <td></td>
-                                                <td></td>
+                                                <td>@item.checkDate</td>
+                                                <td>@item.inspectorCode1 @item.inspectorName1</td>
+                                                <td>@item.inspectorCode2 @item.inspectorName2</td>
                                             </tr>
                                         }
                                     </tbody>

@@ -17,6 +17,8 @@ namespace InspectionWeb.Services.Interface
 
         exhibitionRoom GetById(string roomId);
 
+        IEnumerable<exhibitionRoom> GetAllWithoutIsDelete();
+
         IEnumerable<exhibitionRoom> GetAll();
 
         IEnumerable<exhibitionRoomList> GetAllIdAndName();
