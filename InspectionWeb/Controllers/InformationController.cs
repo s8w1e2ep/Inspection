@@ -77,23 +77,29 @@ namespace InspectionWeb.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult EditField(FieldAddViewModel vm)
+        public ActionResult EditField(FormCollection fc)
         {
-            fieldMap field = this._fieldMapService.GetById(vm.FieldId);
-            field.fieldName = vm.FieldName;
-            field.description = vm.Description;
-            field.mapFileName = vm.MapFileName;
-            field.photo = vm.Photo;
-            field.version = vm.Version;
-
-            IResult result = this._fieldMapService.Update(field);
-            if(result.Success == false)
+            string fieldId = fc["pk"];
+            fieldMap field = this._fieldMapService.GetById(fieldId);
+            if(field != null && ModelState.IsValid)
             {
-                return RedirectToAction("EditField", vm.FieldId);
+                field.GetType().GetProperty(fc["name"]).SetValue(field, fc["value"], null);
+                IResult result = this._fieldMapService.Update(field);
+                if (result.Success)
+                {
+                    return Json(new { lastUpdateTime=field.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+                }
+                else
+                {
+                    return RedirectToAction("EditField");
+                }
+                
             }
+            else{
+                    return RedirectToAction("ListField");
+            }
+        }
 
-            return RedirectToAction("ListField");
         }
 
 
