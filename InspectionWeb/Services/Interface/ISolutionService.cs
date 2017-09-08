@@ -9,14 +9,14 @@ namespace InspectionWeb.Services.Interface
         IResult Create(quickSolution instance);
         IResult Create(string description);
         //IResult Update(quickSolution instance);
-        //IResult Update(quickSolution instance, string key, object value);
+        IResult Update(quickSolution instance, string key, object value);
         //IResult Delete(string userId);
-        
 
-       
+
+
         //bool IsExists(string userId);
 
-        //quickSolution GetByID(string userId);
+        quickSolution GetByID(string solutionID);
        
 
         bool IsRepeat(string description);

@@ -103,47 +103,47 @@ namespace InspectionWeb.Services
         //    return result;
         //}
 
-        //public IResult Update(quickSolution instance, string key, object value)
-        //{
-        //    Dictionary<string, object> DicUpdateUser = new Dictionary<string, object>();
+        public IResult Update(quickSolution instance, string key, object value)
+        {
+            Dictionary<string, object> DicUpdateUser = new Dictionary<string, object>();
 
-        //    if (instance == null)
-        //    {
-        //        throw new ArgumentNullException();
-        //    }
+            if (instance == null)
+            {
+                throw new ArgumentNullException();
+            }
 
-        //    IResult result = new Result(false);
+            IResult result = new Result(false);
 
-        //    try
-        //    {
-        //        if (key == "active" || key == "isDelete")
-        //        {
-        //            int iValue;
-        //            bool ret = JsonValue2Int(value, out iValue);
+            try
+            {
+                //if (key == "active" || key == "isDelete")
+                //{
+                //    int iValue;
+                //    bool ret = JsonValue2Int(value, out iValue);
 
-        //            if (ret == true)
-        //            {
-        //                value = Convert.ToByte(iValue);
-        //            }
-        //            else //轉換異常寫入預設值
-        //            {
-        //                value = Convert.ToByte(1); ;
-        //            }
-        //        }
-        //        DicUpdateUser.Add(key, value);
-        //        DateTime now = DateTime.Now;
-        //        DicUpdateUser.Add("lastUpdateTime", now);
-        //        this._repository.Update(instance, DicUpdateUser);
-        //        result.Success = true;
-        //        result.lastUpdateTime = now.ToString("yyyy-MM-dd HH:mm:ss");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        result.Exception = ex;
-        //    }
+                //    if (ret == true)
+                //    {
+                //        value = Convert.ToByte(iValue);
+                //    }
+                //    else //轉換異常寫入預設值
+                //    {
+                //        value = Convert.ToByte(1); ;
+                //    }
+                //}
+                DicUpdateUser.Add(key, value);
+                DateTime now = DateTime.Now;
+                DicUpdateUser.Add("lastUpdateTime", now);
+                this._repository.Update(instance, DicUpdateUser);
+                result.Success = true;
+                result.lastUpdateTime = now.ToString("yyyy-MM-dd HH:mm:ss");
+            }
+            catch (Exception ex)
+            {
+                result.Exception = ex;
+            }
 
-        //    return result;
-        //}
+            return result;
+        }
 
         //private bool JsonValue2Int(object value, out int transValue)
         //{
@@ -206,17 +206,17 @@ namespace InspectionWeb.Services
         //    return result;
         //}
 
-     
+
 
         //public bool IsExists(string userId)
         //{
         //    return this._repository.GetAll().Any(x => x.isDelete == 0 && x.solutionId == userId);
         //}
 
-        //public quickSolution GetByID(string userId)
-        //{
-        //    return _repository.Get(x => x.solutionId == userId);
-        //}
+        public quickSolution GetByID(string solutionID)
+        {
+            return _repository.Get(x => x.solutionId == solutionID);
+        }
 
        
 

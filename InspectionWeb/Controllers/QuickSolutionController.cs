@@ -1,12 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Web.Security;
-using System.Web;
-using System.Web.Mvc;
-using InspectionWeb.Models;
+﻿using InspectionWeb.Models;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
+using System.Web.Mvc;
+
 
 
 namespace InspectionWeb.Controllers
@@ -23,10 +19,9 @@ namespace InspectionWeb.Controllers
         {
             return View();
         }
-        public ActionResult Edit()
-        {
-            return View();
-        }
+
+       
+
         public ActionResult List()
         {
             return View();
@@ -48,8 +43,7 @@ namespace InspectionWeb.Controllers
                     return View("Add");
                 }
 
-                return RedirectToAction("Edit");
-                //return RedirectToAction("Edit", new { id = result.Message });
+                return RedirectToAction("Edit", new { id = result.Message });
             }
             else
             {
@@ -58,5 +52,53 @@ namespace InspectionWeb.Controllers
             }
             
         }
+
+
+        public ActionResult Edit(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return RedirectToAction("List");
+            }
+            var data = this._solutionService.GetByID(id);
+            ViewBag.description = data.description;
+
+            ViewBag.createTime = data.createTime;
+            ViewBag.solutionId = data.solutionId;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult UpdateSolution(SoluJson solutionJ)
+        {
+            var id = solutionJ.Pk;
+            var SoluData = this._solutionService.GetByID(id);
+            if (SoluData != null && ModelState.IsValid)
+            {
+                IResult result = this._solutionService.Update(SoluData, solutionJ.Name, solutionJ.Value);
+
+                if (result.Success)
+                {
+                    return Json(result);
+                }
+                else
+                {
+                    return RedirectToAction("Edit");
+                }
+            }
+            else
+            {
+                return RedirectToAction("List");
+            }
+        }
+
+        public class SoluJson
+        {
+            public string Name { get; set; }
+            public string Pk { get; set; }
+            public string Value { get; set; }
+
+        }
+
     }
 }
