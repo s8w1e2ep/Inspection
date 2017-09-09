@@ -9,8 +9,10 @@ using InspectionWeb.Models;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
 
+
 namespace InspectionWeb.Controllers
 {
+    [AuthorizeUser(Normal = true)]
     public class UserController : Controller
     {
         private IUserService _userService;
@@ -26,7 +28,6 @@ namespace InspectionWeb.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
-            //Session["authenticated"] = false;
             return View();
         }
 
@@ -66,6 +67,7 @@ namespace InspectionWeb.Controllers
             var now = DateTime.Now;
             string roles = "Normal";
             // TODO: 依照 groupId 設定角色名稱，Ex: roles = roles + ",Manager";
+            
 
             FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
                 1,                          // version
@@ -150,7 +152,7 @@ namespace InspectionWeb.Controllers
                 {
                     return RedirectToAction("List");
                 }
-                UserDetailViewModel vm = this.User2ViewModel(user);
+                UserEditViewModel vm = this.User2EditViewModel(user);
 
                 return View(vm);
             }
@@ -188,9 +190,7 @@ namespace InspectionWeb.Controllers
                     return View("Add", vm);
                 }
 
-                UserDetailViewModel vm2 = this.User2ViewModel(this._userService.GetByID(result.Message));
-
-                return RedirectToAction("Edit", vm2);
+                return RedirectToAction("Edit", new { id = result.Message });
             }
             else
             {
@@ -276,7 +276,7 @@ namespace InspectionWeb.Controllers
             return View(vms);
         }
 
-        // GET: /User/EditGroup
+        // GET: /User/EditGroup/id
         public ActionResult EditGroup(string groupId)
         {
             if (string.IsNullOrEmpty(groupId))
@@ -312,10 +312,8 @@ namespace InspectionWeb.Controllers
 
                     return View("AddGroup", vm);
                 }
-                System.Diagnostics.Debug.WriteLine("P1 :\n\n" + result.Message);
-                GroupDetailViewModel vm2 = this.Group2ViewModel(this._userGroupService.GetByID(result.Message));
 
-                return RedirectToAction("EditGroup", vm2);
+                return RedirectToAction("EditGroup", new { groupid = result.Message });
             }
             else
             {
@@ -352,6 +350,50 @@ namespace InspectionWeb.Controllers
             }
         }
 
+        // POST: /User/UploadImg
+        [HttpPost]
+        public ActionResult UpdateImg(HttpPostedFileBase upload, string userId, string type)
+        {
+            if (upload.ContentLength > 0)
+            {
+                try
+                {
+                    var fileName = userId;
+
+                    if (type == "jpeg")
+                    {
+                        fileName += ".jpg";
+                    }
+                    else
+                    {
+                        fileName += ".png";
+                    }
+                    
+                    var path = System.IO.Path.Combine(Server.MapPath("~/media/user"), fileName);
+                    upload.SaveAs(path);
+
+                    user instance = _userService.GetByID(userId);
+
+                    var result = _userService.Update(instance, "picture", fileName);
+
+                    if (result.Success)
+                    {
+                        result.Message = fileName;
+                        return Json(result);
+                    }  
+                }
+                catch(Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine("UploadImg ex:\n" + e.ToString());
+                }
+                return Json(null);
+            }
+            else
+            {
+                return Json(null);
+            }
+        }
+
         // DELETE: /User/DeleteGroup
         public ActionResult DeleteGroup(string groupId)
         {
@@ -384,17 +426,52 @@ namespace InspectionWeb.Controllers
 
             vm.userId = instance.userId;
             vm.userCode = instance.userCode;
-            vm.groupId = instance.groupId;
+            
+            if (this._userGroupService.IsExists(instance.groupId))
+            {
+                vm.group = (this._userGroupService.GetByID(instance.groupId)).groupName;
+            }
+            else
+            {
+                vm.group = null;
+            }
             vm.email = instance.email;
             vm.tel = instance.tel;
             vm.password = instance.password;
             vm.name = instance.userName;
-            vm.agent = instance.agent;
-            vm.picture = instance.agent;
+            if (this._userService.IsExists(instance.agent))
+            {
+                vm.agent = (this._userService.GetByID(instance.agent)).userCode;
+            }
+            else
+            {
+                vm.agent = null;
+            }
+            vm.picture = instance.picture;
             vm.active = instance.active;
             vm.isDelete = (short)instance.isDelete;
             vm.createTime = instance.createTime;
             vm.lastUpdateTime = instance.lastUpdateTime;
+
+            return vm;
+        }
+
+        private UserEditViewModel User2EditViewModel(user instance)
+        {
+            UserEditViewModel vm = new UserEditViewModel();
+            var groups = this._userGroupService.GetAll().Where(x => x.isDelete == 0 && x.groupId != instance.userId).ToList();
+            var agents = this._userService.GetAll().Where(x => x.isDelete == 0 && x.userId != instance.userId).ToList();
+
+            vm.user = User2ViewModel(instance);
+
+            foreach (var group in groups)
+            {
+                vm.groups.Add(Group2ViewModel(group));
+            }
+            foreach (var agent in agents)
+            {
+                vm.agents.Add(User2ViewModel(agent));
+            }
 
             return vm;
         }

@@ -19,8 +19,7 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">篩選條件</h3>
                         </div>
-                        <br />
-                        <div class="row">
+                        <div class="box-body row">
                             <div class="col-md-6 form-group">
                                 <label class="control-label col-md-2" for="startDatePicker">開始日期</label>
                                 <div class="input-group col-md-8">
@@ -48,6 +47,9 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="box-footer">
+                            <button class="btn btn-primary" onclick="query()">確定</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -57,7 +59,7 @@
                     <h4>人工巡檢</h4>
                     <div class="box" style="border-top-color: #0094ff;">
                         <div class="box-body">
-                            <table id="fieldTable" class="row-border" cellspacing="0" width="100%">
+                            <table id="artificialTable" class="row-border" cellspacing="0" style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>日期</th>
@@ -91,7 +93,7 @@
                     <h4>自動通報</h4>
                     <div class="box" style="border-top-color: #0094ff;">
                         <div class="box-body">
-                            <table id="fieldTable2" class="row-border" cellspacing="0" width="100%">
+                            <table id="autoTable" class="row-border" cellspacing="0" style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>日期</th>
@@ -101,18 +103,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr id="a1">
-                                        <td>a</td>
-                                        <td>b</td>
-                                        <td>c</td>
-                                        <td>d</td>
-                                    </tr>
-                                    <tr id="a2">
-                                        <td>c</td>
-                                        <td>d</td>
-                                        <td>a</td>
-                                        <td>b</td>
-                                    </tr>
+                                    
                                 </tbody>
                             </table>
                         </div>

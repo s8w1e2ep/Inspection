@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<InspectionWeb.Models.ViewModel.FieldListViewModel>
 @{
     ViewBag.Title = "場域列表";
 }
@@ -20,38 +20,42 @@
                         <h3 class="box-title">場域列表</h3>
                     </div>
                     <div class="box-body">
-                        <table id="infoFieldTable" class="row-border" cellspacing="0" style="width: 100%;">
+                        <table id="listFieldTable" class="row-border" cellspacing="0" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th>場域名稱</th>
                                     <th>版本</th>
                                     <th>建立時間</th>
+                                    <th>最後更新時間</th>
                                     <th>刪除</th>
                                     <th>檢視/修改</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>AAA</td>
-                                    <td>1.0.0</td>
-                                    <td>2017-08-08 00:00:00</td>
+                                
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="@item.FieldId">
+                                        <td>@item.FieldName</td>
+                                        <td>@item.Version</td>
+                                        <td>@Html.DisplayFor(modelItem => item.CreateTime)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.LastUpdateTime)</td>
 
-                                    
+                                        @*刪除按鈕*@
+                                        <td> 
+                                            <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.FieldId')" data-toggle=modal data-target=#myModal>
+                                                <i class="glyphicon glyphicon-remove"></i>
+                                            </a>
+                                        </td>
 
-                                    @*檢視按鈕*@
-                                    <td>
-                                        <a href="@Url.Action("", "")" class="btn btn-sm btn-primary">
-                                        <i class="glyphicon glyphicon-menu-hamburger"></i>
-                                        </a>
-                                    </td>
-
-                                    @*刪除按鈕*@
-                                    <td> 
-                                        <a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal>
-                                            <i class="glyphicon glyphicon-remove"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                                        @*檢視按鈕*@
+                                        <td>
+                                            <a href="@Url.Action("EditField", new { id = item.FieldId })" class="btn btn-sm btn-primary">
+                                            <i class="glyphicon glyphicon-menu-hamburger"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -82,28 +86,43 @@
 </div><!-- /.modal -->
 
 <script>
+    var toDeleteFieldId;
+
+    function deleteField() {
+        $.ajax({
+            type: "DELETE",
+            url: 'DeleteField',
+            data: $.param({ "fieldId": toDeleteFieldId })
+        }).done(function (msg) {
+            $("#" + toDeleteFieldId).remove();
+        });
+    }
+
+    // 設定刪除的 userId
+    function setId(fieldId) {
+        toDeleteFieldId = fieldId;
+    }
+
     $(document).ready(function () {
-        $('#infoFieldTable').DataTable({
+        // 使用者表格設定
+        $('#listFieldTable').DataTable({
             "paging": false,
             "info": false,
-            "searching": false,
+            "searching": true,
             "columnDefs": [
-                { "targets": 0, "width": "20%", "orderable": true },
-                { "targets": 1, "width": "20%", "orderable": true },
-                { "targets": 2, "width": "20%", "orderable": true },
-                { "targets": 3, "width": "20%", "orderable": true },
-                { "targets": 4, "width": "20%", "orderable": true },
-            ],
+                { "targets": 0, "width": "18%", "orderable": true },
+                { "targets": 1, "width": "18%", "orderable": true },
+                { "targets": 2, "width": "15%", "orderable": true },
+                { "targets": 3, "width": "18%", "orderable": true },
+                { "targets": 4, "width": "18%", "orderable": true },
+                { "targets": 5, "width": "18%", "orderable": true }
+            ]
         });
 
-        $('#modalYes').on('click', function (e) {
+        // delete dialog 確定事件
+        $('#modalYes').click(function () {
             deleteField();
         });
-
-        function deleteField() {
-            @{/* TODO: use jquery AJAX method to send Message to Information controller.
-               */
-            }
-        }
     });
+
 </script>

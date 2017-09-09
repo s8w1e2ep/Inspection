@@ -1,4 +1,4 @@
-﻿
+﻿@model InspectionWeb.Models.ViewModel.FieldAddViewModel
 @{
     ViewBag.Title = "EditField";
 }
@@ -21,71 +21,68 @@
                     </div>
                         <!-- form start -->
                     
-                    <form class="form-horizontal">
+                    @using (Html.BeginForm("EditField", "Information", FormMethod.Post, new { @class = "form-horizontal" }))
+                    {
+                        @Html.AntiForgeryToken()
                         <div class="box-body">
 
-                            @*場域編號*@
-                            <div class="form-group">
-                                <label for="fieldNo" class="col-sm-2 control-label">場域編號</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="fieldNo" placeholder="場域編號">
-                                </div>
-                            </div>
-
+                            @Html.HiddenFor(model => model.fieldId)
                             @*場域名稱*@
                             <div class="form-group">
-                                <label for="filedName" class="col-sm-2 control-label">場域名稱</label>
+                                @Html.LabelFor(model => model.FieldName, htmlAttributes: new { @class =  "col-sm-2 control-label"})
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="fieldName" placeholder="場域名稱">
+                                    @Html.EditorFor(model => model.FieldName, new { htmlAttributes= new { @class = "form-control"} })
                                 </div>
                             </div>
 
                             @*說明*@
                             <div class="form-group">
-                                <label for="fieldExplanation" class="col-sm-2 control-label">說明</label>
+                                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "col-sm-2 control-label" })
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="fieldExplanation" placeholder="說明">
+                                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
                                 </div>
                             </div>
 
                             @*版本*@
                             <div class="form-group">
-                                <label for="fieldVersion" class="col-sm-2 control-label">版本</label>
+                                @Html.LabelFor(model => model.Version, htmlAttributes: new { @class = "col-sm-2 control-label" })
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="fieldVersion" placeholder="版本">
+                                    @Html.EditorFor(model => model.Version, new { htmlAttributes = new { @class = "form-control" } })
                                 </div>
                             </div>
 
                             @*場域示意圖*@
                             <div class="form-group">
                                 <label for="fieldFigure" class="col-sm-2 control-label">場域示意圖</label>
-                                <input class="form-control-static" type="file" id="exampleInputFile">
+                                <input class="form-control-static" type="file" id="uploadFigure">
                             </div>
                         
                             @*場域地圖*@
                             <div class="form-group">
                                 <label for="fieldMap" class="col-sm-2 control-label">場域地圖</label>
-                                <input class="form-control-static" type="file" id="exampleInputFile">
+                                <input class="form-control-static" type="file" id="uploadFile">
                             </div>
                             
                             @*建立時間*@
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">建立時間</label>
-                                <div class="col-sm-10">
-                                    <p class="form-control-static">1994/02/09</p>
-                                </div>
+                                @Html.LabelFor(model => model.CreateTime, htmlAttributes: new { @class = "col-sm-2 control-label" })
+                                <p class="col-sm-10 form-control-static">@Model.CreateTime</p>
                             </div>
 
                             @*最後更新時間*@
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">最後更新時間</label>
-                                <div class="col-sm-10">
-                                    <p class="form-control-static">2017/02/09</p>
-                                </div>
+                                @Html.LabelFor(model => model.LastUpdateTime, htmlAttributes: new { @class = "col-sm-2 control-label" })
+                                <p class="col-sm-10 form-control-static">@Model.LastUpdateTime</p>
                             </div> 
                                                        
                         </div><!-- /.box-body -->
-                    </form>
+
+
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-success pull-right">確認新增</button>
+                        </div>
+
+                    }
                 </div>
             </div>
         </div>

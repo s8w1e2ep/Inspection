@@ -65,6 +65,7 @@ namespace InspectionWeb
             container.RegisterType<IRepository<user>, GenericRepository<user>>();
             container.RegisterType<IRepository<userGroup>, GenericRepository<userGroup>>();
 
+            container.RegisterType<IRepository<fieldMap>, GenericRepository<fieldMap>>();
 
 
             //Service
@@ -83,6 +84,7 @@ namespace InspectionWeb
             container.RegisterType<IUserService, UserService>();
             container.RegisterType<IUserGroupService, UserGroupService>();
 
+            container.RegisterType<IFieldMapService, FieldMapService>();
 
         }
     }
