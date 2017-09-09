@@ -316,7 +316,10 @@
     </Compile>
     <Compile Include="Models\ViewModel\GroupAddViewModel.cs" />
     <Compile Include="Models\ViewModel\GroupDetailViewModel.cs" />
+    <Compile Include="Models\ViewModel\SolutionViewModel.cs" />
     <Compile Include="Models\ViewModel\UserEditViewModel.cs" />
+    <Compile Include="Services\ExhibitionRoomService.cs" />
+    <Compile Include="Services\Interface\IExhibitionRoomService.cs" />
     <Compile Include="Services\Interface\ISolutionService.cs" />
     <Compile Include="Services\Interface\IUserGroupService.cs" />
     <Compile Include="Services\Interface\IReportSourceService.cs" />

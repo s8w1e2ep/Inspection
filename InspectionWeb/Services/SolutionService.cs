@@ -116,20 +116,20 @@ namespace InspectionWeb.Services
 
             try
             {
-                //if (key == "active" || key == "isDelete")
-                //{
-                //    int iValue;
-                //    bool ret = JsonValue2Int(value, out iValue);
+                if (key == "isDelete")
+                {
+                    int iValue;
+                    bool ret = JsonValue2Int(value, out iValue);
 
-                //    if (ret == true)
-                //    {
-                //        value = Convert.ToByte(iValue);
-                //    }
-                //    else //轉換異常寫入預設值
-                //    {
-                //        value = Convert.ToByte(1); ;
-                //    }
-                //}
+                    if (ret == true)
+                    {
+                        value = Convert.ToByte(iValue);
+                    }
+                    else //轉換異常寫入預設值
+                    {
+                        value = Convert.ToByte(1); ;
+                    }
+                }
                 DicUpdateUser.Add(key, value);
                 DateTime now = DateTime.Now;
                 DicUpdateUser.Add("lastUpdateTime", now);
@@ -145,24 +145,24 @@ namespace InspectionWeb.Services
             return result;
         }
 
-        //private bool JsonValue2Int(object value, out int transValue)
-        //{
+        private bool JsonValue2Int(object value, out int transValue)
+        {
 
-        //    if (value == null)   //介面未選擇Yes 會傳回null,所以寫入0(No)
-        //    {
-        //        transValue = 0;
-        //        return true;
+            if (value == null)   //介面未選擇Yes 會傳回null,所以寫入0(No)
+            {
+                transValue = 0;
+                return true;
 
-        //    }
-        //    else if (Int32.TryParse((string)value, out transValue))
-        //    {
-        //        return true;
-        //    }
-        //    else //轉換異常
-        //    {
-        //        return false;
-        //    }
-        //}
+            }
+            else if (Int32.TryParse((string)value, out transValue))
+            {
+                return true;
+            }
+            else //轉換異常
+            {
+                return false;
+            }
+        }
 
         //private bool JsonValue2Short(object value, out short transValue)
         //{
@@ -219,7 +219,7 @@ namespace InspectionWeb.Services
         }
 
        
-
+        //取出未被刪除的資料
         public IEnumerable<quickSolution> GetAll()
         {
             return _repository.GetAll().Where(x => x.isDelete == 0);

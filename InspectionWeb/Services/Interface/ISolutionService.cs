@@ -17,8 +17,8 @@ namespace InspectionWeb.Services.Interface
         //bool IsExists(string userId);
 
         quickSolution GetByID(string solutionID);
-       
 
+        IEnumerable<quickSolution> GetAll();
         bool IsRepeat(string description);
        
     }

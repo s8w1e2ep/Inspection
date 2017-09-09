@@ -1,7 +1,14 @@
-﻿using InspectionWeb.Models;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Web.Security;
+using System.Web;
+using System.Web.Mvc;
+using InspectionWeb.Models.ViewModel;
+using InspectionWeb.Models;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
-using System.Web.Mvc;
+
 
 
 
@@ -24,7 +31,13 @@ namespace InspectionWeb.Controllers
 
         public ActionResult List()
         {
-            return View();
+            var vms = new List<SolutionViewModel>();
+            var solutions = this._solutionService.GetAll().ToList();
+            foreach (var data in solutions)
+            {
+                vms.Add(this.solution2ViewModel(data));
+            }
+            return View(vms);
         }
 
 
@@ -64,6 +77,7 @@ namespace InspectionWeb.Controllers
             ViewBag.description = data.description;
 
             ViewBag.createTime = data.createTime;
+            //ViewBag.createTime = data.createTime.ToString("yyyy-MM-dd HH:mm:ss");
             ViewBag.solutionId = data.solutionId;
             return View();
         }
@@ -90,6 +104,43 @@ namespace InspectionWeb.Controllers
             {
                 return RedirectToAction("List");
             }
+        }
+
+        public ActionResult DeleteSolution(string solutionId)
+        {
+            if (string.IsNullOrEmpty(solutionId))
+            {
+                return RedirectToAction("List");
+            }
+
+            var solution = _solutionService.GetByID(solutionId);
+
+            if (solution == null)
+            {
+                return RedirectToAction("List");
+            }
+
+            try
+            {
+                this._solutionService.Update(solution, "isDelete", "1");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("List");
+            }
+
+            return RedirectToAction("List");
+        }
+
+        private SolutionViewModel solution2ViewModel(quickSolution instance)
+        {
+            SolutionViewModel vm = new SolutionViewModel();
+
+            vm.solutionId = instance.solutionId;
+            vm.description = instance.description;
+            vm.lastUpdateTime = instance.lastUpdateTime;
+
+            return vm;
         }
 
         public class SoluJson
