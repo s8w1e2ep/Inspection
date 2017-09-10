@@ -101,7 +101,8 @@ namespace InspectionWeb.Controllers
             }
         }
 
-        public ActionResult UpdatePhoto(HttpPostedFileBase upload, string fieldId)
+        [HttpPost]
+        public ActionResult UpdateFieldPhoto(HttpPostedFileBase upload, string fieldId)
         {
             if(upload.ContentLength > 0)
             {

@@ -30,7 +30,7 @@
         var formData = new FormData();
         formData.append('upload', file);
         $.ajax({
-            url: "@Url.Content("~/Information/UpdatePhoto?fieldId=")@Model.FieldId",
+            url: "@Url.Content("~/Information/UpdateFieldPhoto?fieldId=")@Model.FieldId",
             type: 'POST',
             contentType: false,
             processData: false,
@@ -51,7 +51,6 @@
                     console.log(data);
                     $('#photo').attr('src', '@Url.Content("~/media/field/")' + data.photoName + '?timestamp=' + new Date().getTime());
                     $('#photoProgress').css('display', 'none');
-                    console.log(data);
                     $('#lastUpdateTime').html(data.lastUpdateTime);
                 }
             })
@@ -159,11 +158,6 @@
                                 </tbody>
                             </table>
                         </div><!-- /.box-body -->
-
-
-                        <div class="box-footer">
-                            <button type="submit" class="btn btn-success pull-right">確認新增</button>
-                        </div>
 
                     
                 </div>
