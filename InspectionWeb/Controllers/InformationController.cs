@@ -144,9 +144,27 @@ namespace InspectionWeb.Controllers
 
         public ActionResult DeleteField(string fieldId)
         {
+            if (string.IsNullOrEmpty(fieldId))
+            {
+                return RedirectToAction("ListField");
+            }
+
+
             fieldMap field = this._fieldMapService.GetById(fieldId);
+            if(field == null)
+            {
+                return RedirectToAction("ListField");
+            }
+
             field.isDelete = 1;
-            this._fieldMapService.Update(field);
+            try
+            {
+                this._fieldMapService.Update(field);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("ListField");
+            }
 
             return RedirectToAction("ListField");
         }
