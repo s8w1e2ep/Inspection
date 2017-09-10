@@ -185,9 +185,92 @@ namespace InspectionWeb.Controllers
             return View();
         }
 
-        //GET: /Information/EditExhibition
-        public ActionResult EditExhibition()
+        [HttpPost]
+        public ActionResult AddExhibition(FormCollection fc)
         {
+            string roomName = fc["roomName"];
+            IResult result = this._exhibitionRoomService.Create(roomName);
+            ExhibitionRoomAddViewModel vm = new ExhibitionRoomAddViewModel();
+            vm.RoomId = result.Message;
+            vm.RoomName = roomName;
+            vm.ErrorMsg = result.ErrorMsg;
+
+            if (result.Success == false) {
+                return View("AddExhibition", vm);
+            }
+            return RedirectToAction("EditExhibition", new { id = vm.RoomId });
+        }
+
+        //GET: /Information/EditExhibition
+        public ActionResult EditExhibition(string id)
+        {
+            string roomId = id;
+            exhibitionRoom room = this._exhibitionRoomService.GetById(roomId);
+            ExhibitionRoomAddViewModel vm = new ExhibitionRoomAddViewModel();
+
+            if (room == null)
+            {
+                return RedirectToAction("ListExhibition");
+            }
+
+            // setting viewModel {{{
+            string[] activeState = new string[] {"不啟用", "啟用", "維護中"};
+            vm.RoomId = roomId;
+            vm.RoomName = room.roomName;
+            vm.Description = room.description;
+            vm.Floor = room.floor;
+            vm.Picture = room.picture;
+            vm.active = activeState[(int) room.active];
+            vm.Inspector = this._userService.GetByID(room.inspectionUserId);
+            //TODO company field 
+            vm.Active = (int) room.active.Value;
+
+            vm.X = room.x.Value;
+            vm.Y = room.y.Value;
+            vm.Width = room.width.Value;
+            vm.Height = room.height.Value;
+            vm.CreateTime = room.createTime.Value;
+            vm.LastUpdateTime = room.lastUpdateTime.Value;
+
+            vm.Fields = this._fieldMapService.GetAll().ToList();
+            vm.Inspectors = this._userService.GetAll().ToList();
+            // }}}
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult EditExhibition(FormCollection fc) {
+            string roomId = fc["pk"];
+            exhibitionRoom room = this._exhibitionRoomService.GetById(roomId);
+            if (room != null && ModelState.IsValid)
+            {
+                System.Diagnostics.Debug.WriteLine("name" + fc["name"] + ",value" + fc["value"]);
+                // 處理active的int16型態,其餘皆為字串
+                if (fc["name"] == "active")
+                {
+                    room.GetType().GetProperty(fc["name"]).SetValue(room, Convert.ToInt16(fc["value"]), null);
+                }
+                else
+                {
+                    room.GetType().GetProperty(fc["name"]).SetValue(room, fc["value"], null);
+                }
+
+                IResult result = this._exhibitionRoomService.Update(room);
+                if (result.Success)
+                {
+                    return Json(new { lastUpdateTime = room.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+                }
+                else
+                {
+                    return RedirectToAction("EditExhibition");
+                }
+
+            }
+            else
+            {
+                return RedirectToAction("ListExhibition");
+            }
             return View();
         }
 
