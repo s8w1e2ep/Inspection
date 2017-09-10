@@ -9,6 +9,8 @@ namespace InspectionWeb.Services.Interface
 
         IResult Create(exhibitionRoom instance);
 
+        IResult Create(string exhibitRoomName);
+
         IResult Update(exhibitionRoom instance);
 
         IResult Update(exhibitionRoom instance, string propertyName, object value);
