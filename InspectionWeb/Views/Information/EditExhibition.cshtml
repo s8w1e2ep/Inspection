@@ -66,6 +66,43 @@
         $(id).trigger('click');
     }
 
+    function uploadPhoto(obj) {
+        var file = obj.files[0];
+        $('#photoProgress').css('width', '0%').html('0%');
+
+        var formData = new FormData();
+        formData.append('upload', file);
+        $.ajax({
+            url: "@Url.Content("~/Information/UpdateExhibitionPhoto?roomId=")@Model.RoomId",
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            cache: false,
+            data: formData,
+            dataType: 'json',
+            xhr: function () {
+                var myXhr = $.ajaxSettings.xhr();
+                myXhr.upload.addEventListener('progress', function (e) {
+                    var progress = parseInt(e.loaded / e.toatal * 100, 10);
+                    $('photoProgress').css('width', progress + '%').html(progress + '%');
+                }, false);
+                return myXhr;
+            }
+        }).done(function (data) {
+            console.log(data);
+                if (data) {
+                    console.log(data);
+                    $('#photo').attr('src', '@Url.Content("~/media/exhibition/")' + data.photoName + '?timestamp=' + new Date().getTime());
+                    $('#photoProgress').css('display', 'none');
+                    $('#lastUpdateTime').html(data.lastUpdateTime);
+                }
+            })
+
+          .fail(function () {
+              alert("Sorry, Server unavailable. ");
+          });
+
+    }
 
 
 

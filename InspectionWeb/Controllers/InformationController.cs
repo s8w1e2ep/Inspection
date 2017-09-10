@@ -274,6 +274,31 @@ namespace InspectionWeb.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult UpdateExhibitionPhoto(HttpPostedFileBase upload, string roomId)
+        {
+            if (upload.ContentLength > 0)
+            {
+                string fileName = roomId;
+                fileName = fileName + Path.GetExtension(upload.FileName);
+                string savePath = System.IO.Path.Combine(Server.MapPath("~/media/exhibition"), fileName);
+                upload.SaveAs(savePath);
+
+                exhibitionRoom room = _exhibitionRoomService.GetById(roomId);
+                room.picture = fileName;
+                IResult result = _exhibitionRoomService.Update(room);
+                if (result.Success)
+                {
+                    return Json(new
+                    {
+                        lastUpdateTime = room.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                        photoName = fileName
+                    });
+                }
+            }
+            return Json(null);
+        }
+
 
         //GET: /Information/ListExhibition
         public ActionResult ListExhibition()
