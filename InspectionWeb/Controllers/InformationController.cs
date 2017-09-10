@@ -278,7 +278,25 @@ namespace InspectionWeb.Controllers
         //GET: /Information/ListExhibition
         public ActionResult ListExhibition()
         {
-            return View();
+            List<ExhibitionRoomListViewModel> vms = new List<ExhibitionRoomListViewModel>();
+            List<exhibitionRoom> allExhibitionRoom = this._exhibitionRoomService.GetAll().ToList();
+
+            foreach (var room in allExhibitionRoom)
+            {
+                ExhibitionRoomListViewModel vm = new ExhibitionRoomListViewModel();
+                vm.roomId = room.roomId;
+                vm.roomName = room.roomName;
+                vm.floor = room.floor;
+                user inspector = this._userService.GetByID(room.inspectionUserId);
+                if(inspector == null)
+                {
+                    vm.InspectorName = string.Empty;
+                }
+
+                vms.Add(vm);
+
+            }
+            return View(vms);
         }
 
         //GET: /Information/EditExhibitItem
