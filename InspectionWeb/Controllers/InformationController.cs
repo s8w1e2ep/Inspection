@@ -305,6 +305,32 @@ namespace InspectionWeb.Controllers
             return View();
         }
 
+        public ActionResult DeleteExhibitionRoom(string roomId)
+        {
+            if (string.IsNullOrEmpty(roomId))
+            {
+                return RedirectToAction("ListExhibition");
+            }
+
+            exhibitionRoom room = this._exhibitionRoomService.GetById(roomId);
+            if(room == null)
+            {
+                return RedirectToAction("ListExhibition");
+            }
+
+            room.isDelete = 1;
+
+            try
+            {
+                this._exhibitionRoomService.Update(room);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("ListExhibition");
+            }
+
+            return RedirectToAction("ListExhibition");
+        }
 
         //GET: /Information/AddDevice
         public ActionResult AddDevice()
