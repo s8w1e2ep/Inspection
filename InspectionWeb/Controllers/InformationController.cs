@@ -15,10 +15,18 @@ namespace InspectionWeb.Controllers
     public class InformationController : Controller
     {
         private IFieldMapService _fieldMapService;
+        private IExhibitionRoomService _exhibitionRoomService;
+        private IUserService _userService;
 
-        public InformationController(IFieldMapService fieldMapService)
+        public InformationController(IFieldMapService fieldMapService,
+                                     IExhibitionRoomService exhibitionRoomService,
+                                     IUserService userService)
         {
-            _fieldMapService = fieldMapService;
+            this._fieldMapService = fieldMapService;
+            this._exhibitionRoomService = exhibitionRoomService;
+            this._userService = userService;
+
+            //TODO: add company service
         }
 
         // GET: Field
