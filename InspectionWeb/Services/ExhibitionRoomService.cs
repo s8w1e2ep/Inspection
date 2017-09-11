@@ -98,6 +98,7 @@ namespace InspectionWeb.Services
 
             try
             {
+                instance.lastUpdateTime = DateTime.Now;
                 this._repository.Update(instance);
                 result.Success = true;
             }
@@ -105,7 +106,6 @@ namespace InspectionWeb.Services
             {
                 result.Exception = ex;
             }
-            instance.lastUpdateTime = DateTime.Now;
 
             return result;
         }
