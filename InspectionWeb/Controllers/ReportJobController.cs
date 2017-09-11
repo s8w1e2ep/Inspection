@@ -18,15 +18,18 @@ namespace InspectionWeb.Controllers
         private IReportSourceService _reportSourceService;
         private IAbnormalDefinitionService _abnormalDefinitionService;
         private IAbnormalRecordService _abnormalRecordService;
+        private IOtherAbnormalRecordService _otherAbnormalRecordService;
+      
 
-        public ReportJobController(IExhibitionRoomService service, IExhibitionItemService service2, 
-            IReportSourceService service3, IAbnormalDefinitionService service4, IAbnormalRecordService service5)
+        public ReportJobController(IExhibitionRoomService service, IExhibitionItemService service2, IReportSourceService service3,
+            IAbnormalDefinitionService service4, IAbnormalRecordService service5, IOtherAbnormalRecordService service6)
         {
             this._exhibitionRoomService = service;
             this._exhibitionItemService = service2;
             this._reportSourceService = service3;
             this._abnormalDefinitionService = service4;
             this._abnormalRecordService = service5;
+            this._otherAbnormalRecordService = service6;
         }
 
         
@@ -130,6 +133,35 @@ namespace InspectionWeb.Controllers
             else
             {
                 return View("AddExperience");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Addother(string name, string sourceId, string abnormalId)
+        {
+            if ( !string.IsNullOrEmpty(name) && ModelState.IsValid )
+            {
+                IResult result = this._otherAbnormalRecordService.Create(name, sourceId, abnormalId);
+
+                if (result.Success == false)
+                {
+                    //取出展示廳資料
+                    ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+                    ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
+                    ViewBag.ErrorMsg = result.ErrorMsg;
+
+                    return View("AddOther");
+                }
+
+                return RedirectToAction("ItemDetailedData", new { id = result.Message });           ////////////////////actionName待修改
+            }
+            else
+            {
+                //取出展示廳資料
+                ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+                ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
+                ViewBag.ErrorMsg = "設施名稱空白";
+                return View("AddOther");
             }
         }
 

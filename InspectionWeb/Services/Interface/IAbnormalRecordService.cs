@@ -51,6 +51,13 @@ namespace InspectionWeb.Services.Interface
         bool IsExists(string recordId);
 
         /// <summary>
+        /// check repeat of abnormal record
+        /// </summary>
+        /// <param name="recordId"></param>
+        /// <returns></returns>
+        bool IsRepeat(string itemId);
+
+        /// <summary>
         /// get abnormal record
         /// </summary>
         /// <param name="recordId"></param>
