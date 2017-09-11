@@ -13,7 +13,7 @@ namespace InspectionWeb.Models.ViewModel
         public string Description;
         public string Floor;
         public string Picture;
-        public string active;
+        public string FieldId;
         public user Inspector;
         public company Company;
 
@@ -22,24 +22,24 @@ namespace InspectionWeb.Models.ViewModel
         public int Active;
 
         // for svg {{{
-        public int X;
-        public int Y;
-        public int Width;
-        public int Height;
+        public int? X;
+        public int? Y;
+        public int? Width;
+        public int? Height;
         //}}}
 
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
-        public DateTime CreateTime;
+        public DateTime? CreateTime;
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
-        public DateTime LastUpdateTime;
+        public DateTime? LastUpdateTime;
 
         public List<fieldMap> Fields;
         public List<user> Inspectors;
         public List<company> Companys;
 
+        public List<exhibitionItem> ExhibitionItems;
+
         public string ErrorMsg;
-
-
 
     }
 }
