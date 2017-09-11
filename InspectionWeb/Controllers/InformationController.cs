@@ -314,11 +314,16 @@ namespace InspectionWeb.Controllers
                 ExhibitionRoomListViewModel vm = new ExhibitionRoomListViewModel();
                 vm.roomId = room.roomId;
                 vm.roomName = room.roomName;
-                vm.floor = room.floor;
-                user inspector = this._userService.GetByID(room.inspectionUserId);
-                if(inspector == null)
+                fieldMap field = _fieldMapService.GetById(room.fieldId);
+                user inspector = _userService.GetByID(room.inspectionUserId);
+                if(field != null)
                 {
-                    vm.InspectorName = string.Empty;
+                    vm.fieldName = field.fieldName;
+                }
+
+                if(inspector != null)
+                {
+                    vm.InspectorName = inspector.userName;
                 }
 
                 vms.Add(vm);
