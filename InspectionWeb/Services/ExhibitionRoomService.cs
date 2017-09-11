@@ -41,6 +41,52 @@ namespace InspectionWeb.Services
             return result;
         }
 
+        public IResult Create(string exhibitRoomName)
+        {
+            IResult result = new Result(false);
+            exhibitionRoom newExhibitionRoom = new exhibitionRoom();
+            if (IsRepeat(exhibitRoomName))
+            {
+                result.ErrorMsg = "展示廳名稱已重複,請重新命名";
+            }
+            else
+            {
+                try
+                {
+                    IdGenerator idg = new IdGenerator();
+                    string roomId = idg.GetID("exhibitionRoom");
+
+                    DateTime nowTime = DateTime.Now;
+
+                    newExhibitionRoom.roomId = roomId;
+                    newExhibitionRoom.roomName = exhibitRoomName;
+                    newExhibitionRoom.createTime = nowTime;
+
+                    newExhibitionRoom.x = 0;
+                    newExhibitionRoom.y = 0;
+                    newExhibitionRoom.width = 0;
+                    newExhibitionRoom.height = 0;
+
+                    newExhibitionRoom.active = 0;
+                    newExhibitionRoom.isDelete = 0;
+                    newExhibitionRoom.lastUpdateTime = nowTime;
+
+                    this._repository.Create(newExhibitionRoom);
+
+                    // send id to message
+                    result.Message = roomId;
+                    result.Success = true;
+                }
+                catch (Exception ex)
+                {
+                    result.Success = false;
+                    result.ErrorMsg = "新增展示廳失敗";
+                    result.Exception = ex;
+                }
+            }
+            return result;
+        }
+
         public IResult Update(exhibitionRoom instance)
         {
             if (instance == null)
@@ -59,6 +105,7 @@ namespace InspectionWeb.Services
             {
                 result.Exception = ex;
             }
+            instance.lastUpdateTime = DateTime.Now;
 
             return result;
         }
@@ -111,7 +158,7 @@ namespace InspectionWeb.Services
 
         public exhibitionRoom GetById(string roomId)
         {
-            return this._repository.Get(x => x.roomId == roomId);
+            return this._repository.Get(x => x.isDelete == 0 && x.roomId == roomId);
         }
 
 
@@ -155,6 +202,11 @@ namespace InspectionWeb.Services
                 var roomList = db.Database.SqlQuery<exhibitionRoom>(sqlString).ToList();
                 return roomList;
             }
+        }
+
+        public bool IsRepeat(string exhibitRoomName)
+        {
+            return this._repository.GetAll().Any(x => x.isDelete == 0 && x.roomName == exhibitRoomName);
         }
     }
 }

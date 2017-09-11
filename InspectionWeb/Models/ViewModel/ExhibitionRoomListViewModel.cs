@@ -7,6 +7,8 @@ namespace InspectionWeb.Models.ViewModel
     {
         public string roomId { get; set; }
         public string roomName { get; set; }
+        public string InspectorName { get; set; }
+        public string floor { get; set; }
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
         public Nullable<DateTime> createTime { get; set; }
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]

@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<InspectionWeb.Models.ViewModel.ExhibitionRoomListViewModel>
 @{
     ViewBag.Title = "展示廳列表";
 }
@@ -26,32 +26,39 @@
                         <h3 class="box-title">展示廳列表</h3>
                     </div>
                     <div class="box-body">
-                        <table id="infoListExhitbitionTable" class="row-border" cellspacing="0" style="width: 100%;">
+                        <table id="listExhibitionRoomTable" class="row-border" cellspacing="0" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th>名稱</th>
                                     <th>場域</th>
                                     <th>樓層</th>
-                                    <th>啟用狀態</th>
+                                    <th>預設巡檢人員</th>
                                     <th>操作選項</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>AAA</td>
-                                    <td>BBB</td>
-                                    <td>ccc</td>
-                                    <td>YES</td>
-                                    <td>
-                                        <a href="@Url.Action("EditField")" class="btn btn-sm btn-primary">
-                                            <i class="glyphicon glyphicon-menu-hamburger"></i>
-                                        </a>
-                                   
-                                        <a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal>
-                                            <i class="glyphicon glyphicon-remove"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="@item.roomId">
+                                        <td>@item.roomName</td>
+                                        <td>@item.floor</td>
+                                        <td>@Html.DisplayFor(modelItem => item.createTime)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.lastUpdateTime)</td>
+
+                                        <td>
+                                            @*刪除按鈕*@
+                                            <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.roomId')" data-toggle=modal data-target=#myModal>
+                                                <i class="glyphicon glyphicon-remove"></i>
+                                            </a>
+                                            @*檢視按鈕*@
+                                            <a href="@Url.Action("EditExhibition", new { id = item.roomId })" class="btn btn-sm btn-primary">
+                                                <i class="glyphicon glyphicon-menu-hamburger"></i>
+                                            </a>
+                                        </td>
+
+                                        
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -82,8 +89,25 @@
 </div><!-- /.modal -->
 
 <script>
+
+    var toDeleteRoomId;
+
+    function setId(roomId) {
+            toDeleteRoomId = roomId;
+    }
+
+    function deleteExhibition() {
+        $.ajax({
+            type: "DELETE",
+            url: 'DeleteExhibitionRoom',
+            data: $.param({ "roomId": toDeleteRoomId })
+        }).done(function (msg) {
+            $("#" + toDeleteRoomId).remove();
+        });
+    }
+
     $(document).ready(function () {
-        $('#infoListExhitbitionTable').DataTable({
+        $('#listExhibitionRoomTable').DataTable({
             "paging": false,
             "info": false,
             "searching": false,
@@ -100,11 +124,7 @@
             deleteExhibition();
         });
 
-        function deleteExhibition() {
-            @{/* TODO: use jquery AJAX method to send Message to Information controller.
-               */
-            }
-        }
+       
     });
 </script>
 

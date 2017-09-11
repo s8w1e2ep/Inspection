@@ -4,6 +4,7 @@ using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -14,10 +15,18 @@ namespace InspectionWeb.Controllers
     public class InformationController : Controller
     {
         private IFieldMapService _fieldMapService;
+        private IExhibitionRoomService _exhibitionRoomService;
+        private IUserService _userService;
 
-        public InformationController(IFieldMapService fieldMapService)
+        public InformationController(IFieldMapService fieldMapService,
+                                     IExhibitionRoomService exhibitionRoomService,
+                                     IUserService userService)
         {
-            _fieldMapService = fieldMapService;
+            this._fieldMapService = fieldMapService;
+            this._exhibitionRoomService = exhibitionRoomService;
+            this._userService = userService;
+
+            //TODO: add company service
         }
 
         // GET: Field
@@ -38,7 +47,7 @@ namespace InspectionWeb.Controllers
             string fieldName = fc["fieldName"];
             IResult result = this._fieldMapService.Create(fieldName);
             FieldAddViewModel vm = new FieldAddViewModel();
-            vm.fieldId = result.Message;
+            vm.FieldId = result.Message;
             vm.FieldName = fieldName;
             vm.ErrorMsg = result.ErrorMsg;
 
@@ -47,7 +56,7 @@ namespace InspectionWeb.Controllers
                 return View("AddField",vm);
             }
 
-             return RedirectToAction("EditField", new { id = vm.fieldId});
+             return RedirectToAction("EditField", new { id = vm.FieldId});
 
         }
 
@@ -63,7 +72,7 @@ namespace InspectionWeb.Controllers
                 return RedirectToAction("ListField");
             }
 
-            vm.fieldId = fieldId;
+            vm.FieldId = fieldId;
             vm.FieldName = field.fieldName;
             vm.Description = field.description;
             vm.MapFileName = field.mapFileName;
@@ -77,23 +86,49 @@ namespace InspectionWeb.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult EditField(FieldAddViewModel vm)
+        public ActionResult EditField(FormCollection fc)
         {
-            fieldMap field = this._fieldMapService.GetById(vm.fieldId);
-            field.fieldName = vm.FieldName;
-            field.description = vm.Description;
-            field.mapFileName = vm.MapFileName;
-            field.photo = vm.Photo;
-            field.version = vm.Version;
-
-            IResult result = this._fieldMapService.Update(field);
-            if(result.Success == false)
+            string fieldId = fc["pk"];
+            fieldMap field = this._fieldMapService.GetById(fieldId);
+            if(field != null && ModelState.IsValid)
             {
-                return RedirectToAction("EditField", vm.fieldId);
+                field.GetType().GetProperty(fc["name"]).SetValue(field, fc["value"], null);
+                IResult result = this._fieldMapService.Update(field);
+                if (result.Success)
+                {
+                    return Json(new { lastUpdateTime=field.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+                }
+                else
+                {
+                    return RedirectToAction("EditField");
+                }
+                
             }
+            else{
+                    return RedirectToAction("ListField");
+            }
+        }
 
-            return RedirectToAction("ListField");
+        [HttpPost]
+        public ActionResult UpdateFieldPhoto(HttpPostedFileBase upload, string fieldId)
+        {
+            if(upload.ContentLength > 0)
+            {
+                string fileName = fieldId;
+                fileName = fileName + Path.GetExtension(upload.FileName);
+                string savePath = System.IO.Path.Combine(Server.MapPath("~/media/field"), fileName);
+                upload.SaveAs(savePath);
+
+                fieldMap field = _fieldMapService.GetById(fieldId);
+                field.photo = fileName;
+                IResult result = _fieldMapService.Update(field);
+                if (result.Success)
+                {
+                    return Json(new { lastUpdateTime = field.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                                      photoName = fileName});
+                }
+            }
+            return Json(null);
         }
 
 
@@ -118,9 +153,27 @@ namespace InspectionWeb.Controllers
 
         public ActionResult DeleteField(string fieldId)
         {
+            if (string.IsNullOrEmpty(fieldId))
+            {
+                return RedirectToAction("ListField");
+            }
+
+
             fieldMap field = this._fieldMapService.GetById(fieldId);
+            if(field == null)
+            {
+                return RedirectToAction("ListField");
+            }
+
             field.isDelete = 1;
-            this._fieldMapService.Update(field);
+            try
+            {
+                this._fieldMapService.Update(field);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("ListField");
+            }
 
             return RedirectToAction("ListField");
         }
@@ -132,17 +185,143 @@ namespace InspectionWeb.Controllers
             return View();
         }
 
-        //GET: /Information/EditExhibition
-        public ActionResult EditExhibition()
+        [HttpPost]
+        public ActionResult AddExhibition(FormCollection fc)
         {
+            string roomName = fc["roomName"];
+            IResult result = this._exhibitionRoomService.Create(roomName);
+            ExhibitionRoomAddViewModel vm = new ExhibitionRoomAddViewModel();
+            vm.RoomId = result.Message;
+            vm.RoomName = roomName;
+            vm.ErrorMsg = result.ErrorMsg;
+
+            if (result.Success == false) {
+                return View("AddExhibition", vm);
+            }
+            return RedirectToAction("EditExhibition", new { id = vm.RoomId });
+        }
+
+        //GET: /Information/EditExhibition
+        public ActionResult EditExhibition(string id)
+        {
+            string roomId = id;
+            exhibitionRoom room = this._exhibitionRoomService.GetById(roomId);
+            ExhibitionRoomAddViewModel vm = new ExhibitionRoomAddViewModel();
+
+            if (room == null)
+            {
+                return RedirectToAction("ListExhibition");
+            }
+
+            // setting viewModel {{{
+            string[] activeState = new string[] {"不啟用", "啟用", "維護中"};
+            vm.RoomId = roomId;
+            vm.RoomName = room.roomName;
+            vm.Description = room.description;
+            vm.Floor = room.floor;
+            vm.Picture = room.picture;
+            vm.active = activeState[(int) room.active];
+            vm.Inspector = this._userService.GetByID(room.inspectionUserId);
+            //TODO company field 
+            vm.Active = (int) room.active.Value;
+
+            vm.X = room.x.Value;
+            vm.Y = room.y.Value;
+            vm.Width = room.width.Value;
+            vm.Height = room.height.Value;
+            vm.CreateTime = room.createTime.Value;
+            vm.LastUpdateTime = room.lastUpdateTime.Value;
+
+            vm.Fields = this._fieldMapService.GetAll().ToList();
+            vm.Inspectors = this._userService.GetAll().ToList();
+            // }}}
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult EditExhibition(FormCollection fc) {
+            string roomId = fc["pk"];
+            exhibitionRoom room = this._exhibitionRoomService.GetById(roomId);
+            if (room != null && ModelState.IsValid)
+            {
+                System.Diagnostics.Debug.WriteLine("name" + fc["name"] + ",value" + fc["value"]);
+                // 處理active的int16型態,其餘皆為字串
+                if (fc["name"] == "active")
+                {
+                    room.GetType().GetProperty(fc["name"]).SetValue(room, Convert.ToInt16(fc["value"]), null);
+                }
+                else
+                {
+                    room.GetType().GetProperty(fc["name"]).SetValue(room, fc["value"], null);
+                }
+
+                IResult result = this._exhibitionRoomService.Update(room);
+                if (result.Success)
+                {
+                    return Json(new { lastUpdateTime = room.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+                }
+                else
+                {
+                    return RedirectToAction("EditExhibition");
+                }
+
+            }
+            else
+            {
+                return RedirectToAction("ListExhibition");
+            }
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult UpdateExhibitionPhoto(HttpPostedFileBase upload, string roomId)
+        {
+            if (upload.ContentLength > 0)
+            {
+                string fileName = roomId;
+                fileName = fileName + Path.GetExtension(upload.FileName);
+                string savePath = System.IO.Path.Combine(Server.MapPath("~/media/exhibition"), fileName);
+                upload.SaveAs(savePath);
+
+                exhibitionRoom room = _exhibitionRoomService.GetById(roomId);
+                room.picture = fileName;
+                IResult result = _exhibitionRoomService.Update(room);
+                if (result.Success)
+                {
+                    return Json(new
+                    {
+                        lastUpdateTime = room.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                        photoName = fileName
+                    });
+                }
+            }
+            return Json(null);
         }
 
 
         //GET: /Information/ListExhibition
         public ActionResult ListExhibition()
         {
-            return View();
+            List<ExhibitionRoomListViewModel> vms = new List<ExhibitionRoomListViewModel>();
+            List<exhibitionRoom> allExhibitionRoom = this._exhibitionRoomService.GetAll().ToList();
+
+            foreach (var room in allExhibitionRoom)
+            {
+                ExhibitionRoomListViewModel vm = new ExhibitionRoomListViewModel();
+                vm.roomId = room.roomId;
+                vm.roomName = room.roomName;
+                vm.floor = room.floor;
+                user inspector = this._userService.GetByID(room.inspectionUserId);
+                if(inspector == null)
+                {
+                    vm.InspectorName = string.Empty;
+                }
+
+                vms.Add(vm);
+
+            }
+            return View(vms);
         }
 
         //GET: /Information/EditExhibitItem
@@ -151,6 +330,32 @@ namespace InspectionWeb.Controllers
             return View();
         }
 
+        public ActionResult DeleteExhibitionRoom(string roomId)
+        {
+            if (string.IsNullOrEmpty(roomId))
+            {
+                return RedirectToAction("ListExhibition");
+            }
+
+            exhibitionRoom room = this._exhibitionRoomService.GetById(roomId);
+            if(room == null)
+            {
+                return RedirectToAction("ListExhibition");
+            }
+
+            room.isDelete = 1;
+
+            try
+            {
+                this._exhibitionRoomService.Update(room);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("ListExhibition");
+            }
+
+            return RedirectToAction("ListExhibition");
+        }
 
         //GET: /Information/AddDevice
         public ActionResult AddDevice()
