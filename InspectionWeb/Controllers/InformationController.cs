@@ -217,24 +217,24 @@ namespace InspectionWeb.Controllers
             }
 
             // setting viewModel {{{
-            string[] activeState = new string[] {"不啟用", "啟用", "維護中"};
             vm.RoomId = roomId;
             vm.RoomName = room.roomName;
             vm.Description = room.description;
             vm.Floor = room.floor;
             vm.Picture = room.picture;
-            vm.active = activeState[(int) room.active];
+            vm.Active = (int) room.active;
+            vm.FieldId = room.fieldId;
             vm.Inspector = this._userService.GetByID(room.inspectionUserId);
             //TODO company field 
-            vm.Active = (int) room.active.Value;
 
-            vm.X = room.x.Value;
-            vm.Y = room.y.Value;
-            vm.Width = room.width.Value;
-            vm.Height = room.height.Value;
-            vm.CreateTime = room.createTime.Value;
-            vm.LastUpdateTime = room.lastUpdateTime.Value;
+            vm.X = room.x;
+            vm.Y = room.y;
+            vm.Width = room.width;
+            vm.Height = room.height;
+            vm.CreateTime = room.createTime;
+            vm.LastUpdateTime = room.lastUpdateTime;
 
+            vm.ExhibitionItems = this._exhibitionItemService.GetAll().Where(x => x.roomId == roomId).ToList();
             vm.Fields = this._fieldMapService.GetAll().ToList();
             vm.Inspectors = this._userService.GetAll().ToList();
             // }}}
