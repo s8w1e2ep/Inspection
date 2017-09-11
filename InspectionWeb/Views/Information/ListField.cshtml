@@ -27,7 +27,6 @@
                                     <th>版本</th>
                                     <th>建立時間</th>
                                     <th>最後更新時間</th>
-                                    <th>刪除</th>
                                     <th>檢視/修改</th>
                                 </tr>
                             </thead>
@@ -41,17 +40,16 @@
                                         <td>@Html.DisplayFor(modelItem => item.CreateTime)</td>
                                         <td>@Html.DisplayFor(modelItem => item.LastUpdateTime)</td>
 
-                                        @*刪除按鈕*@
                                         <td> 
-                                            <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.FieldId')" data-toggle=modal data-target=#myModal>
-                                                <i class="glyphicon glyphicon-remove"></i>
-                                            </a>
-                                        </td>
-
-                                        @*檢視按鈕*@
-                                        <td>
+                                           
+                                            @*檢視按鈕*@
                                             <a href="@Url.Action("EditField", new { id = item.FieldId })" class="btn btn-sm btn-primary">
                                             <i class="glyphicon glyphicon-menu-hamburger"></i>
+                                            </a>
+
+                                            @*刪除按鈕*@
+                                            <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.FieldId')" data-toggle=modal data-target=#myModal>
+                                                <i class="glyphicon glyphicon-remove"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -110,12 +108,11 @@
             "info": false,
             "searching": true,
             "columnDefs": [
-                { "targets": 0, "width": "18%", "orderable": true },
-                { "targets": 1, "width": "18%", "orderable": true },
-                { "targets": 2, "width": "15%", "orderable": true },
-                { "targets": 3, "width": "18%", "orderable": true },
-                { "targets": 4, "width": "18%", "orderable": true },
-                { "targets": 5, "width": "18%", "orderable": true }
+                { "targets": 0, "width": "20%", "orderable": true },
+                { "targets": 1, "width": "20%", "orderable": true },
+                { "targets": 2, "width": "20%", "orderable": true },
+                { "targets": 3, "width": "20%", "orderable": true },
+                { "targets": 4, "width": "20%", "orderable": true },
             ]
         });
 
