@@ -53,7 +53,7 @@ namespace InspectionWeb.Services
 
             if (IsRepeat(itemId))
             {
-                result.ErrorMsg = "該展項已申請過, 請至檢修頁面查看";
+                result.ErrorMsg = "該展項已申請過, 可至檢修頁面查看";
             }
             else
             {
@@ -69,6 +69,7 @@ namespace InspectionWeb.Services
                     newRecord.deviceId = reporter;      // 6000通報時deviceid = 通報者
                     newRecord.abnormalId = abnormalId;
 
+                    newRecord.isClose = 1;          //暫時 isrepeat也要記得家回去isclose()
                     newRecord.isDelete = 0;
                     newRecord.createTime = nowTime;
                     newRecord.lastUpdateTime = nowTime;
@@ -184,7 +185,7 @@ namespace InspectionWeb.Services
 
         public bool IsRepeat(string itemId)
         {
-            return this._repository.GetAll().Any(x => x.isDelete == 0 && x.isClose == 0 && x.itemId == itemId);
+            return this._repository.GetAll().Any(x => x.isDelete == 0 && x.itemId == itemId);
         }
 
     }

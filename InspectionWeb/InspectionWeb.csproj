@@ -314,7 +314,7 @@
     <Compile Include="Models\userGroup.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ViewModel\ExhibitionItemViewModel.cs" />
+    <Compile Include="Models\ViewModel\ReportAddViewModel.cs" />
     <Compile Include="Models\ViewModel\GroupAddViewModel.cs" />
     <Compile Include="Models\ViewModel\GroupDetailViewModel.cs" />
     <Compile Include="Models\ViewModel\SolutionViewModel.cs" />
