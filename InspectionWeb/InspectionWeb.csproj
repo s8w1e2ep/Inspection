@@ -311,6 +311,18 @@
     <Compile Include="Models\softwareVersion.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition1_Result.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams1_Result.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\systemSettings.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
@@ -325,6 +337,12 @@
     <Compile Include="Models\ViewModel\FieldListViewModel.cs" />
     <Compile Include="Models\ViewModel\GroupAddViewModel.cs" />
     <Compile Include="Models\ViewModel\GroupDetailViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListQueryInspectionByItemViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListQueryInspectionByDateViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListQueryInspectionByUserIdViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListQueryInspectionByRoomViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListRoomCheckRecordViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListItemCheckRecordViewModel.cs" />
     <Compile Include="Models\ViewModel\UserEditViewModel.cs" />
     <Compile Include="Models\ViewModel\ListItemInspectionDispatchViewModel.cs" />
     <Compile Include="Models\ViewModel\ListRoomInspectionDispatchViewModel.cs" />
@@ -524,6 +542,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Mail\" />
+    <Folder Include="Views\Authentication\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

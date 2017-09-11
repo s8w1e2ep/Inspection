@@ -50,6 +50,7 @@
         }
         return false;
     }
+
     function setNonInspectionTable() {
         $('#nonCheckDateTable').DataTable({
             'columnDefs': [
@@ -71,8 +72,9 @@
         url: '@Url.Action("DeleteNonCheckDateDispatch")',
         data: $.param({ 'id': toDispatchId }),
         type: 'DELETE',
-        }).done(function (msg) {
-            if (msg.resule == 1) {
+    }).done(function (msg) {
+        //console.log(msg);
+            if (msg.result == 1) {
                 $('#' + toDispatchId).remove();
             }  
         });
@@ -107,19 +109,25 @@
                                 <div class="col-sm-2">
                                     <label for="dispatchDate" class="control-label">非巡檢開始日期</label>
                                 </div>
-                                <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="nonCheckDateStart" name="nonCheckDateStart">
+                                <div class="input-group col-sm-3">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="nonCheckDateStart" name="nonCheckDateStart">
                                 </div>
                             </div>
                             <div id="nonCheckDateEndDiv" class="form-group">
                                 <div class="col-sm-2">
                                     <label for="dispatchDate" class="control-label">非巡檢結束日期</label>
                                 </div>
-                                <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="nonCheckDateEnd" name="nonCheckDateEnd">
+                                <div class="input-group col-sm-3">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="nonCheckDateEnd" name="nonCheckDateEnd">
                                 </div>
-                                <div class="col-sm-2">
-                                    <button type="submit" class="btn btn-success">搜尋</button>
+                                <div class="col-sm-6">
+                                    <button type="submit" class="btn btn-success pull-right">搜尋</button>
                                 </div>
                             </div>                           
                         </div><!-- /.box-header -->
@@ -142,7 +150,7 @@
                                     {
                                         <tr id="@item.id">
                                             <td>@item.noCheckDate</td>
-                                            @if (item.am == Convert.ToInt16(1))
+                                            @if (item.am == Convert.ToInt16(true))
                                             {
                                                 <td>V</td>
                                             }
@@ -150,7 +158,7 @@
                                             {
                                                 <td>X</td>
                                             }
-                                            @if (item.pm == Convert.ToInt16(2))
+                                            @if (item.pm == Convert.ToInt16(true))
                                             {
                                                 <td>V</td>
                                             }

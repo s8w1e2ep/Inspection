@@ -39,6 +39,7 @@ namespace InspectionWeb.Models
                 }
             }
 
+<<<<<<< HEAD
             if (Dispatch == true)
             {
                 if (currentRoles.Contains("Dispatch"))
@@ -50,6 +51,11 @@ namespace InspectionWeb.Models
             if (User == true)
             {
                 if (currentRoles.Contains("User"))
+=======
+            if (Deployer == true)
+            {
+                if (currentRoles.Contains("Deployer"))
+>>>>>>> abnormal
                 {
                     return true;
                 }
@@ -63,6 +69,7 @@ namespace InspectionWeb.Models
                 }
             }
 
+<<<<<<< HEAD
             if (Super == true)
             {
                 if (currentRoles.Contains("Super"))
@@ -71,6 +78,8 @@ namespace InspectionWeb.Models
                 }
             }
 
+=======
+>>>>>>> abnormal
             return false;
         }
     }

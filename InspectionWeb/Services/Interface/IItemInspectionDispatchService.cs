@@ -27,5 +27,10 @@ namespace InspectionWeb.Services.Interface
         IEnumerable<itemInspectionDispatch> GetAll();
 
         IEnumerable<itemInspectionDispatchDetail> GetAllByDate(System.DateTime date);
+
+        IEnumerable<itemInspectionDispatchDetail> GetAllByItemCondition(string startDate, string endDate, List<string> itemId);
+
+        IEnumerable<itemInspectionDispatchDetail> GetAllByUserCondition(string startDate, string endDate, List<string> userId);
+
     }
 }

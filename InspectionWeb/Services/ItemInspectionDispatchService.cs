@@ -35,6 +35,7 @@ namespace InspectionWeb.Services
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
                 result.Exception = ex;
             }
             return result;
@@ -56,7 +57,7 @@ namespace InspectionWeb.Services
                     itemDispatch.itemId = items.ElementAt(i).itemId;
                     itemDispatch.inspectorId1 = "";//items.ElementAt(i).inspectionUserId;
                     itemDispatch.inspectorId2 = "";//items.ElementAt(i).inspectionUserId;
-                    //itemDispatch.setupId = "";
+                    itemDispatch.setupUserId = "";
                     itemDispatch.isDelete = Convert.ToByte(0);
                     itemDispatch.createTime = now;
                     itemDispatch.lastUpdateTime = now;
@@ -174,9 +175,10 @@ namespace InspectionWeb.Services
 
             using (inspectionEntities db = new inspectionEntities())
             {
-                var existNum = (int)db.Database.SqlQuery<int>(sqlString).First();
-                var roomNum = db.Database.SqlQuery<int>(sqlString2).First();
-                return (existNum - existNum == 0) ? false : true;
+                var existNum = db.Database.SqlQuery<int>(sqlString).First();
+                var itemNum = db.Database.SqlQuery<int>(sqlString2).First();
+
+                return ((existNum - itemNum) == 0) ? false : true;
             }
         }
 
@@ -189,7 +191,7 @@ namespace InspectionWeb.Services
         {
             System.Diagnostics.Debug.WriteLine(date.Date.ToString());
             string sqlString = "IF OBJECT_ID('temp','U') IS NOT NULL DROP TABLE temp;"
-                                + "SELECT IID.dispatchId, I.itemId, I.itemName, IID.inspectorId1, "
+                                + "SELECT IID.dispatchId, I.itemId, I.itemName, IID.checkDate, IID.inspectorId1, "
                                 + "U1.userCode AS inspectorCode1, U1.userName AS inspectorName1, IID.inspectorId2 "
                                 + "INTO temp "
                                 + "FROM exhibitionItem I, itemInspectionDispatch IID LEFT OUTER JOIN[user] U1 on IID.inspectorId1 = U1.userId "
@@ -197,8 +199,8 @@ namespace InspectionWeb.Services
                                 + "AND IID.checkDate = '" + date.ToString("d") + "' "
                                 + "AND IID.isDelete = 0 "
                                 + "SELECT temp.*, U2.userCode AS inspectorCode2, U2.userName AS inspectorName2 "
-                                + "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId ";
-                               // + "ORDER BY temp.dispatchId;";
+                                + "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId "
+                                + "ORDER BY temp.dispatchId;";
 
             using (inspectionEntities db = new inspectionEntities())
             {
@@ -207,5 +209,68 @@ namespace InspectionWeb.Services
                 return detialDate;
             }
         }
+
+        public IEnumerable<itemInspectionDispatchDetail> GetAllByItemCondition(string startDate, string endDate, List<string> itemId)
+        {
+            string sqlString = "IF OBJECT_ID('temp', 'U') IS NOT NULL DROP TABLE temp; "
+                   + "SELECT IID.dispatchId, I.itemId, I.itemName, IID.checkDate, IID.inspectorId1, "
+                   + "U1.userCode AS inspectorCode1, U1.userName AS inspectorName1, IID.inspectorId2 "
+                   + "INTO temp "
+                   + "FROM exhibitionItem I, itemInspectionDispatch IID LEFT OUTER JOIN[user] U1 on IID.inspectorId1 = U1.userId "
+                   + "WHERE IID.itemId = I.itemId "
+                   + "AND IID.checkDate >= '" + startDate + "' "
+                   + "AND IID.checkDate <= '" + endDate + "' "
+                   + "AND ( ";
+            foreach (var i in itemId)
+            {
+                sqlString += "I.itemId = '";
+                sqlString += i;
+                sqlString += "' OR ";
+            }
+            sqlString = sqlString.Substring(0, sqlString.Length - 4);
+
+            sqlString += ") ";
+            sqlString += "SELECT temp.*, U2.userCode AS inspectorCode2, U2.userName AS inspectorName2 ";
+            sqlString += "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId ";
+            sqlString += "ORDER BY temp.dispatchId;";
+            using (inspectionEntities db = new inspectionEntities())
+            {
+                var detailDate = db.Database.SqlQuery<itemInspectionDispatchDetail>(sqlString).ToList();
+
+                return detailDate;
+            }
+        }
+
+        public IEnumerable<itemInspectionDispatchDetail> GetAllByUserCondition(string startDate, string endDate, List<string> userId)
+        {
+            string sqlString = "SELECT IID.dispatchId, I.itemId, I.itemName, IID.checkDate, "
+                            + "IID.inspectorId1, UU1.userCode AS inspectorCode1, UU1.userName AS inspectorName1, "
+                            + "IID.inspectorId2, UU2.userCode AS inspectorCode2, UU2.userName AS inspectorName2 "
+                            + "FROM itemInspectionDispatch AS IID, [user] AS UU1, [user] AS UU2, exhibitionitem AS I "
+                            + "WHERE IID.itemId = I.itemId "
+                            + "AND IID.checkDate >= '" + startDate + "' "
+                            + "AND IID.checkDate <= '" + endDate + "' "
+                            + "AND UU1.userId = IID.inspectorId1 "
+                            + "AND UU2.userId = IID.inspectorId2 "
+                            + "AND IID.isDelete = 0 "
+                            + "AND (";
+            foreach (var i in userId)
+            {
+                sqlString += "IID.inspectorId1 = '";
+                sqlString += i;
+                sqlString += "' OR IID.inspectorId2 = '";
+                sqlString += i;
+                sqlString += "' OR ";
+            }
+            sqlString = sqlString.Substring(0, sqlString.Length - 4);
+            sqlString += ") ORDER BY IID.dispatchId";
+
+            using (inspectionEntities db = new inspectionEntities())
+            {
+                var detailDate = db.Database.SqlQuery<itemInspectionDispatchDetail>(sqlString).ToList();
+                return detailDate;
+            }
+        }
+
     }
 }

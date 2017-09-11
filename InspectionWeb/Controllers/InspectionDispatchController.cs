@@ -78,6 +78,27 @@ namespace InspectionWeb.Controllers
         {
             System.DateTime date = Convert.ToDateTime(timeJson.dispatchDate);
             bool isExist = this._RoomInspectionDispatchService.IsExists(date);
+            //確認是不是非巡檢日
+            IResult nonCkeck = new Result(false);
+            int isNonCheckDate = this._noCheckDateService.IsExists(date);
+            if (isNonCheckDate == 1)
+            {
+                nonCkeck.ErrorMsg = "此日非巡檢日";
+                return View(Data2RoomViewModel(null, null, nonCkeck, date));
+            }
+            else if (isNonCheckDate == 2)
+            {
+                nonCkeck.ErrorMsg = "上午非巡檢日";
+            }
+            else if (isNonCheckDate == 3)
+            {
+                nonCkeck.ErrorMsg = "下午非巡檢日";
+            }
+            else
+            {
+                nonCkeck.ErrorMsg = "";
+            }
+
             bool roomNumCheck = this._RoomInspectionDispatchService.checkRoomInsert(date);
             IEnumerable<exhibitionRoom> rooms = this._ExhibitionRoomService.GetAll();
             //檢查有無分派的紀錄
@@ -234,6 +255,26 @@ namespace InspectionWeb.Controllers
         {
             System.DateTime date = Convert.ToDateTime(timeJson.dispatchDate);
             bool isExist = this._ItemInspectionDispatchService.IsExists(date);
+            //確認是不是非巡檢日
+            IResult nonCkeck = new Result(false);
+            int isNonCheckDate = this._noCheckDateService.IsExists(date);
+            if (isNonCheckDate == 1)
+            {
+                nonCkeck.ErrorMsg = "此日非巡檢日";
+            }
+            else if (isNonCheckDate == 2)
+            {
+                nonCkeck.ErrorMsg = "上午非巡檢日";
+            }
+            else if (isNonCheckDate == 3)
+            {
+                nonCkeck.ErrorMsg = "下午非巡檢日";
+            }
+            else
+            {
+                nonCkeck.ErrorMsg = "";
+            }
+
             bool itemNumCheck = this._ItemInspectionDispatchService.checkItemInsert(date);
             IEnumerable<exhibitionItem> items = this._ExhibitionItemService.GetAll();
             //檢查有無分派的紀錄
@@ -252,7 +293,7 @@ namespace InspectionWeb.Controllers
                     }
 
                     List<userListForInspectionViweModel> userList = GetUserListForInspection();
-                    return View(Data2ItemViewModel(itemDispatchDetail, userList, null, date));
+                    return View(Data2ItemViewModel(itemDispatchDetail, userList, nonCkeck, date));
                 }
                 else
                 {
@@ -265,7 +306,7 @@ namespace InspectionWeb.Controllers
                         System.Diagnostics.Debug.WriteLine("insert error");
                         //result.ErrorMsg = "Dispatch List construct error";
                         System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
-                        return View(Data2ItemViewModel(null, null, result,date));
+                        return View(Data2ItemViewModel(null, null, result, date));
                     }
                     else
                     {
@@ -277,7 +318,7 @@ namespace InspectionWeb.Controllers
                             itemDispatchDetail.Add(itemDispatch);
                         }
                         List<userListForInspectionViweModel> userList = GetUserListForInspection();
-                        return View(Data2ItemViewModel(itemDispatchDetail, userList, result, date));
+                        return View(Data2ItemViewModel(itemDispatchDetail, userList, nonCkeck, date));
                     }
                 }
 
@@ -303,7 +344,7 @@ namespace InspectionWeb.Controllers
                        itemDispatchDetail.Add(itemDispatch);
                     }
                     List<userListForInspectionViweModel> userList = GetUserListForInspection();
-                    return View(Data2ItemViewModel(itemDispatchDetail, userList, result, date));
+                    return View(Data2ItemViewModel(itemDispatchDetail, userList, nonCkeck, date));
                 }
             }
         }
@@ -500,25 +541,124 @@ namespace InspectionWeb.Controllers
             return Json(new { result = 1 });
         }
 
+        [HttpGet]
         public ActionResult QueryInspectionByRoom()
         {
-            return View();
+            IEnumerable<exhibitionRoom> rooms = this._ExhibitionRoomService.GetAllWithoutIsDelete();
+            return View(Data2QueryByRoomViewModel(null,rooms,null,null));
         }
 
+        [HttpPost]
+        public ActionResult QueryInspectionByRoom(string queryDateStart, string queryDateEnd, List<string> roomId)
+        {
+            IEnumerable<roomInspectionDispatchDetail> dispatchList = this._RoomInspectionDispatchService.GetAllByRoomCondition(queryDateStart, queryDateEnd, roomId);
+            IEnumerable<exhibitionRoom> rooms = this._ExhibitionRoomService.GetAllWithoutIsDelete();
+            return View(Data2QueryByRoomViewModel(dispatchList,rooms,queryDateStart,queryDateEnd));
+        }
+
+        private ListQueryInspectionByRoomViewModel Data2QueryByRoomViewModel(IEnumerable<roomInspectionDispatchDetail> dispatchList, IEnumerable<exhibitionRoom> rooms, string startDate, string endDate)
+        {
+            ListQueryInspectionByRoomViewModel viewModel = new ListQueryInspectionByRoomViewModel();
+            viewModel.roomInspectionDispatch = dispatchList;
+            List<exhibitionRoomList> room = new List<exhibitionRoomList>();
+            foreach (var item in rooms)
+            {
+                exhibitionRoomList x = new exhibitionRoomList();
+                x.roomId = item.roomId;
+                x.roomName = item.roomName;
+                x.inspectionUserId = item.inspectionUserId;
+                room.Add(x);
+            }
+            viewModel.room = room;
+            viewModel.startDate = startDate;
+            viewModel.endDate = endDate;
+            return viewModel;
+        }
+
+        [HttpGet]
         public ActionResult QueryInspectionByItem()
         {
-            return View();
+            IEnumerable<exhibitionItem> items = this._ExhibitionItemService.GetAllWithoutIsDelete();
+            return View(Data2QueryByItemViewModel(null, items, null, null));
         }
 
+        [HttpPost]
+        public ActionResult QueryInspectionByItem(string queryDateStart, string queryDateEnd, List<string> itemId)
+        {
+            IEnumerable<itemInspectionDispatchDetail> dispatchList = this._ItemInspectionDispatchService.GetAllByItemCondition(queryDateStart,queryDateEnd,itemId);
+            IEnumerable<exhibitionItem> items = this._ExhibitionItemService.GetAllWithoutIsDelete();
+            return View(Data2QueryByItemViewModel(dispatchList,items,queryDateStart,queryDateEnd));
+        }
+
+        private ListQueryInspectionByItemViewModel Data2QueryByItemViewModel(IEnumerable<itemInspectionDispatchDetail> dispatchList, IEnumerable<exhibitionItem> items, string startDate, string endDate)
+        {
+            ListQueryInspectionByItemViewModel viewModel = new ListQueryInspectionByItemViewModel();
+            viewModel.itemInspectionDispatch = dispatchList;
+            List<exhibitionItemList> item = new List<exhibitionItemList>();
+            foreach (var i in items)
+            {
+                exhibitionItemList x = new exhibitionItemList();
+                x.itemId = i.itemId;
+                x.itemName = i.itemName;
+                x.inspectionUserId = "";
+                item.Add(x);
+            }
+            viewModel.item = item;
+            viewModel.startDate = startDate;
+            viewModel.endDate = endDate;
+            return viewModel;
+        }
+
+
+        [HttpGet]
         public ActionResult QueryInspectionByUserId()
         {
-            return View();
+            IEnumerable<user> users = this._UserService.GetAll();
+            return View(Data2QueryByUserIdViewModel(null,null,users,null,null));
         }
 
+        [HttpPost]
+        public ActionResult QueryInspectionByUserId(string queryDateStart, string queryDateEnd, List<string> userId)
+        {
+            IEnumerable<roomInspectionDispatchDetail> roomDispatchList = this._RoomInspectionDispatchService.GetAllByUserCondition(queryDateStart, queryDateEnd, userId);
+            IEnumerable<itemInspectionDispatchDetail> itemDispatchList = this._ItemInspectionDispatchService.GetAllByUserCondition(queryDateStart, queryDateEnd, userId);
+            IEnumerable<user> users = this._UserService.GetAll();
+            return View(Data2QueryByUserIdViewModel(itemDispatchList,roomDispatchList,users,queryDateStart,queryDateEnd));
+        }
+
+        private ListQueryInspectionByUserIdViewModel Data2QueryByUserIdViewModel(IEnumerable<itemInspectionDispatchDetail> itemDispatchList, IEnumerable<roomInspectionDispatchDetail> roomDispatchList, IEnumerable<user>users , string startDate, string endDate)
+        {
+            ListQueryInspectionByUserIdViewModel viewModel = new ListQueryInspectionByUserIdViewModel();
+            viewModel.itemInspectionDispatch = itemDispatchList;
+            viewModel.roomInspectionDispatch = roomDispatchList;
+            viewModel.users = users;
+            viewModel.startDate = startDate;
+            viewModel.endDate = endDate;
+            return viewModel;
+        }
+
+        [HttpGet]
         public ActionResult QueryInspectionByDate()
         {
             return View();
         }
 
+        [HttpPost]
+        public ActionResult QueryInspectionByDate(string dispatchDate)
+        {
+            System.DateTime date = Convert.ToDateTime(dispatchDate);
+            IEnumerable<itemInspectionDispatchDetail> itemDispatchList = this._ItemInspectionDispatchService.GetAllByDate(date);
+            IEnumerable<roomInspectionDispatchDetail> roomDispatchList = this._RoomInspectionDispatchService.GetAllByDate(date);
+            return View(Data2QueryByDateViewModel(itemDispatchList, roomDispatchList , dispatchDate));
+        }
+
+        private ListQueryInspectionByDateViewModel Data2QueryByDateViewModel(IEnumerable<itemInspectionDispatchDetail> itemDispatchList, IEnumerable<roomInspectionDispatchDetail> roomDispatchList, string date)
+        {
+            ListQueryInspectionByDateViewModel viewModel = new ListQueryInspectionByDateViewModel();
+            viewModel.itemInspectionDispatch = itemDispatchList;
+            viewModel.roomInspectionDispatch = roomDispatchList;
+            viewModel.checkDate = date;
+            return viewModel;
+        }
     }
 }

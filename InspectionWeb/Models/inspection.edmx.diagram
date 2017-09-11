@@ -10,7 +10,7 @@
         <EntityTypeShape EntityType="inspectionModel.exhibitionRoom" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="inspectionModel.fieldMap" Width="1.5" PointX="4.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="inspectionModel.itemCheckRecord" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="inspectionModel.itemInspectionDispatch" Width="1.5" PointX="6.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="inspectionModel.itemInspectionDispatch" PointX="15.375" PointY="4.75" Width="1.5" IsExpanded="true" />
         <EntityTypeShape EntityType="inspectionModel.reportDevice" Width="1.5" PointX="8.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="inspectionModel.reportSource" Width="1.5" PointX="0.75" PointY="9.75" IsExpanded="true" />
         <EntityTypeShape EntityType="inspectionModel.userGroup" Width="1.5" PointX="0.75" PointY="12.75" IsExpanded="true" />

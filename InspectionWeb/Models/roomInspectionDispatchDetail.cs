@@ -7,6 +7,8 @@ namespace InspectionWeb.Models
 {
     public class roomInspectionDispatchDetail
     {
+        public Nullable<System.DateTime> checkDate { get; set; }
+
         public string dispatchId { get; set; }
 
         public string roomId { get; set; }

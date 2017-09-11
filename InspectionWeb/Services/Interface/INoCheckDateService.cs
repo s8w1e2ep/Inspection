@@ -19,6 +19,8 @@ namespace InspectionWeb.Services.Interface
 
         bool IsExists(string id);
 
+        int IsExists(System.DateTime date);
+
         noCheckDate GetById(string id);
 
         IEnumerable<noCheckDate> GetAllWithTimeInterval (System.DateTime start,System.DateTime end);

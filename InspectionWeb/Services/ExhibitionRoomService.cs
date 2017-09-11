@@ -115,6 +115,11 @@ namespace InspectionWeb.Services
         }
 
 
+        public IEnumerable<exhibitionRoom> GetAllWithoutIsDelete()
+        {
+            return this._repository.GetAll().OrderBy(x => x.createTime);
+        }
+
         public IEnumerable<exhibitionRoom> GetAll()
         {
             return this._repository.GetAll().Where(x => x.isDelete == 0).OrderBy(x => x.createTime);
@@ -143,7 +148,7 @@ namespace InspectionWeb.Services
                                 "SELECT roomInspectionDispatch.roomId " +
                                 "FROM roomInspectionDispatch " +
                                 "WHERE roomInspectionDispatch.roomId = exhibitionRoom.roomId " +
-                                "AND roomInspectionDispatch.checkDate = '"+ date.Date +"')";
+                                "AND roomInspectionDispatch.checkDate = '"+ date.ToString("d") + "')";
 
             using (inspectionEntities db = new inspectionEntities())
             {

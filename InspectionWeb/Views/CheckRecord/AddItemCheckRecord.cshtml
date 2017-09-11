@@ -1,4 +1,5 @@
-﻿
+﻿@model InspectionWeb.Models.ViewModel.ListItemCheckRecordViewModel
+
 @{
     ViewBag.Title = "AddItemCheckRecord";
 }
@@ -19,6 +20,7 @@
 <script>
 
     $(function () {
+        setItemCheckRecordTable();
         $('#dispatchDate').datepicker({
             format: "yyyy/mm/dd",
             language: 'zh-TW',
@@ -44,15 +46,32 @@
         return false;
     }
 
-    function setItemInspectionTable() {
+    function setItemCheckRecordTable() {
         $('#itemCheckRecord').DataTable({
             'columnDefs': [
-                { 'targets': 0, 'width': "25%", 'orderable': false },
-                { 'targets': 1, 'width': "25%", 'orderable': false },
+                { 'targets': 0, 'width': "10%", 'orderable': false },
+                { 'targets': 1, 'width': "20%", 'orderable': false },
                 { 'targets': 2, 'width': "25%", 'orderable': false },
-                { 'targets': 3, 'width': "25%", 'orderable': false }
+                { 'targets': 3, 'width': "20%", 'orderable': false },
+                { 'targets': 4, 'width': "25%", 'orderable': false }
             ]
         });
+    }
+
+    function AddCheckRecord(itemId, inspectorId, date, status, type) {
+        $.ajax({
+            url: '@Url.Action("AddNewItemRecord")',
+            data: $.param({ 'itemId': itemId, 'inspectorId': inspectorId, 'checkDate': date, 'status': status, 'checkTimeType': type }),
+            type: 'UPDATE',
+        }).done(function (msg) {
+            console.log(msg);
+            if (msg.result == 1) {
+                alert("資訊更新成功");
+            } else {
+                alert(msg.ErrorMsg);
+            }
+        });
+
     }
 
 </script>
@@ -76,10 +95,10 @@
         <section class="content">
             <div class="row">
                 <!-- left column -->
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <!-- general form elements -->
                     <div class="box box-success">
-                        <form class="form-horizontal" method="post" action="@Url.Action("AddRoomCheckRecord")" onsubmit="return formValidation();">
+                        <form class="form-horizontal" method="post" action="@Url.Action("AddItemCheckRecord")" onsubmit="return formValidation();">
                             @if (@Model != null && @Model.ErrorMsg != null && !string.IsNullOrEmpty(@Model.ErrorMsg))
                             {
                                 <div class="form-group has-error">
@@ -92,39 +111,60 @@
                                     <div class="col-sm-1">
                                         <label for="dispatchDate" class="control-label">巡檢日期</label>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="input-group col-md-2">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
                                         <input type="text" class="form-control pull-right" id="dispatchDate" name="dispatchDate">
                                     </div>
-                                    <div class="col-sm-2">
-                                        <button type="submit" class="btn btn-success">確定</button>
+                                    <div class="col-sm-4">
+                                        <button type="submit" class="btn btn-success pull-right">確定</button>
                                     </div>
                                 </div>
                             </div><!-- /.box-header -->
                         </form>
+                    </div>
+                    <div class="box box-success">
                             <div class="box-body">
+                                @if (@Model != null && @Model.checkDate != null)
+                                {
+                                    <h4>巡檢日期: @Model.checkDate</h4>
+                                    <br>
+                                }
                                 <table id="itemCheckRecord" class="row-border" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
-                                            <th>展示廳</th>
+                                            <th>體驗設施</th>
                                             <th>上午巡檢人員</th>
+                                            <th>結果</th>
                                             <th>下午巡檢人員</th>
                                             <th>結果</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>items.abnormalCode</td>
-                                            <td>items.abnormalName</td>
-                                            <td>items.abnormalName</td>
-                                            <td>
-                                                <a href="#"><button class="btn btn-sm btn-success">正常</button></a>
-                                                <a href="#"><button class="btn btn-sm btn-danger">異常通報</button></a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
+                                        @if (@Model != null && @Model.itemInspectionDispatch != null)
+                                        {
+                                            <tbody>
+                                                @foreach (var item in @Model.itemInspectionDispatch)
+                                                {
+                                                <tr id="@item.dispatchId">
+                                                    <td>@item.itemName</td>
+                                                    <td>@item.inspectorCode1 @item.inspectorName1</td>
+                                                    <td>
+                                                        <a href="#"><button class="btn btn-lg btn-success" onclick="AddCheckRecord('@item.itemId', '@item.inspectorId1', '@Model.checkDate', 1, 1)">正常</button></a>
+                                                        <a href="#"><button class="btn btn-lg btn-danger">異常通報</button></a>
+                                                    </td>
+                                                    <td>@item.inspectorCode2 @item.inspectorName2</td>
+                                                    <td>
+                                                        <a href="#"><button class="btn btn-lg btn-success" onclick="AddCheckRecord('@item.itemId', '@item.inspectorId2', '@Model.checkDate', 1, 2)">正常</button></a>
+                                                        <a href="#"><button class="btn btn-lg btn-danger">異常通報</button></a>
+                                                    </td>
+                                                </tr>
+                                                }
+                                            </tbody>
+                                         }                                   
                                 </table>
                             </div>
-</div><!-- /.box -->
+                     </div><!-- /.box -->
                 </div>
             </div>
         </section><!-- /.content -->

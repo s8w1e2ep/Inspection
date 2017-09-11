@@ -19,18 +19,41 @@ namespace InspectionWeb.Controllers
 
         private IRoomCheckRecordService _RoomCheckRecordService;
         private IItemCheckRecordService _ItemCheckRecordServices;
-        
-        public class getInspectionDataJson
+        private IRoomInspectionDispatchService _RoomInspectionDispatchService;
+        private IItemInspectionDispatchService _ItemInspectionDispatchService;
+        private INoCheckDateService _NoCheckDateService;
+
+
+        public class newItemRecordDataJson
         {
-            public string name { get; set; }
-            public string pk { get; set; }
-            public string value { get; set; }
+            public string itemId { get; set; }
+            public string checkDate { get; set; }
+            public string inspectorId { get; set; }
+            public int status { get; set; }
+            public int checkTimeType { get; set; }
         }
 
-        public CheckRecordController(IRoomCheckRecordService roomCheckRecordService, IItemCheckRecordService itemCheckRecordServices)
+        public class newRoomRecordDataJson
+        {
+            public string roomId { get; set; }
+            public string checkDate { get; set; }
+            public string inspectorId { get; set; }
+            public int status { get; set; }
+            public int checkTimeType { get; set; }
+        }
+
+        public CheckRecordController(IRoomCheckRecordService roomCheckRecordService, 
+                                     IItemCheckRecordService itemCheckRecordServices,
+                                     IRoomInspectionDispatchService roomInspectionDispatchService,
+                                     IItemInspectionDispatchService itemInspectionDispatchService,
+                                     INoCheckDateService noCheckDateService)
         {
             this._RoomCheckRecordService = roomCheckRecordService;
             this._ItemCheckRecordServices = itemCheckRecordServices;
+            this._RoomInspectionDispatchService = roomInspectionDispatchService;
+            this._ItemInspectionDispatchService = itemInspectionDispatchService;
+            this._NoCheckDateService = noCheckDateService;
+
         }
 
         [HttpGet]
@@ -40,11 +63,75 @@ namespace InspectionWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddRoomCheckRecord(getInspectionDataJson time)
+        public ActionResult AddRoomCheckRecord(string dispatchDate)
         {
-            var checkTime = time.value;
-            var inspectionData = this._RoomCheckRecordService.GetAll();
-            return View();
+            System.DateTime checkDate = Convert.ToDateTime(dispatchDate);
+            //檢查非巡檢日
+            IResult nonCkeck = new Result(false);
+            int isNonCheckDate = this._NoCheckDateService.IsExists(checkDate);
+            if (isNonCheckDate == 1)
+            {
+                nonCkeck.ErrorMsg = "此日非巡檢日";
+                return View(Data2ItemViewModel(null, nonCkeck, checkDate));
+            }
+            else if (isNonCheckDate == 2)
+            {
+                nonCkeck.ErrorMsg = "上午非巡檢日";
+            }
+            else if (isNonCheckDate == 3)
+            {
+                nonCkeck.ErrorMsg = "下午非巡檢日";
+            }
+            else
+            {
+                nonCkeck.ErrorMsg = "";
+            }
+            List<roomInspectionDispatchDetail> allDetailData = new List<roomInspectionDispatchDetail>();
+            var allData = this._RoomCheckRecordService.GetAllByDate(checkDate);
+            foreach (var item in allData)
+            {
+                allDetailData.Add(item);
+            }
+            return View(Data2RoomViewModel(allDetailData, nonCkeck, checkDate));
+        }
+
+        private ListRoomCheckRecordViewModel Data2RoomViewModel(List<roomInspectionDispatchDetail> dispatchList, IResult result, System.DateTime checkDate)
+        {
+            ListRoomCheckRecordViewModel viewModel = new ListRoomCheckRecordViewModel();
+            viewModel.roomInspectionDispatch = dispatchList;
+            viewModel.checkDate = checkDate.ToString("d");
+            if (result != null)
+            {
+                viewModel.ErrorMsg = result.ErrorMsg;
+                System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
+            }
+            else
+            {
+                viewModel.ErrorMsg = null;
+            }
+            return viewModel;
+        }
+
+        public ActionResult AddNewRoomRecord(newRoomRecordDataJson json)
+        {
+            string roomId = json.roomId;
+            string inspectorId = json.inspectorId;
+            string checkDate = json.checkDate;
+            int status = json.status;
+            int checkTimeType = json.checkTimeType;
+
+            IResult result = this._RoomCheckRecordService.Create(roomId, inspectorId, checkDate, status, checkTimeType);
+            if (result.Success == false)
+            {
+                System.Diagnostics.Debug.WriteLine("insert error");
+                //result.ErrorMsg = "Dispatch List construct error";
+                System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
+                return Json(new { result = 0, ErrorMsg = result.ErrorMsg });
+            }
+            else
+            {
+                return Json(new { result = 1 });
+            }
         }
 
         [HttpGet]
@@ -54,9 +141,75 @@ namespace InspectionWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddItemCheckRecord(getInspectionDataJson time)
+        public ActionResult AddItemCheckRecord(string dispatchDate)
         {
-            return View();
+            System.DateTime checkDate = Convert.ToDateTime(dispatchDate);
+            //檢查非巡檢日
+            IResult nonCkeck = new Result(false);
+            int isNonCheckDate = this._NoCheckDateService.IsExists(checkDate);
+            if (isNonCheckDate == 1)
+            {
+                nonCkeck.ErrorMsg = "此日非巡檢日";
+                return View(Data2ItemViewModel(null, nonCkeck, checkDate));
+            }
+            else if (isNonCheckDate == 2)
+            {
+                nonCkeck.ErrorMsg = "上午非巡檢日";
+            }
+            else if (isNonCheckDate == 3)
+            {
+                nonCkeck.ErrorMsg = "下午非巡檢日";
+            }
+            else
+            {
+                nonCkeck.ErrorMsg = "";
+            }
+            List<itemInspectionDispatchDetail> allDetailData = new List<itemInspectionDispatchDetail>();
+            var allData = this._ItemCheckRecordServices.GetAllByDate(checkDate);
+            foreach (var item in allData)
+            {
+                allDetailData.Add(item);
+            }
+            return View(Data2ItemViewModel(allDetailData,nonCkeck,checkDate));
+        }
+
+        private ListItemCheckRecordViewModel Data2ItemViewModel(List<itemInspectionDispatchDetail> dispatchList, IResult result, System.DateTime checkDate)
+        {
+            ListItemCheckRecordViewModel viewModel = new ListItemCheckRecordViewModel();
+            viewModel.itemInspectionDispatch = dispatchList;
+            viewModel.checkDate = checkDate.ToString("d");
+            if (result != null)
+            {
+                viewModel.ErrorMsg = result.ErrorMsg;
+                System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
+            }
+            else
+            {
+                viewModel.ErrorMsg = null;
+            }
+            return viewModel;
+        }
+
+        public ActionResult AddNewItemRecord(newItemRecordDataJson json)
+        {
+            string itemId = json.itemId;
+            string inspectorId = json.inspectorId;
+            string checkDate = json.checkDate;
+            int status = json.status;
+            int checkTimeType = json.checkTimeType;
+
+            IResult result = this._ItemCheckRecordServices.Create(itemId, inspectorId, checkDate, status, checkTimeType);
+            if (result.Success == false)
+            {
+                System.Diagnostics.Debug.WriteLine("insert error");
+                //result.ErrorMsg = "Dispatch List construct error";
+                System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
+                return Json(new { result = 0, ErrorMsg = result.ErrorMsg });
+            }
+            else
+            {
+                return Json(new { result = 1 });
+            }
         }
     }
 }

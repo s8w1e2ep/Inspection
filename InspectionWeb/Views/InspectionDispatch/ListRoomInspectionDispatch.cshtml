@@ -66,7 +66,7 @@
              type: 'UPDATE',
          }).done(function (msg) {
              //console.log(msg);
-             $('#' + inspectorType + '_' + dispatchId).value = inspectionId;
+             //$('#' + inspectorType + '_' + dispatchId).value = inspectionId;
          });
 
     }
@@ -129,11 +129,14 @@
                                     <div class="col-sm-1">
                                         <label for="dispatchDate" class="control-label">巡檢日期</label>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="input-group col-sm-4">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
                                         <input type="text" class="form-control pull-right" id="dispatchDate" name="dispatchDate">
                                     </div>
-                                    <div class="col-sm-2">
-                                        <button type="submit" class="btn btn-success">產生派工</button>
+                                    <div class="col-sm-7">
+                                        <button type="submit" class="btn btn-success  pull-right">產生派工</button>
                                     </div>
                                 </div>
                             </div><!-- /.box-header -->
