@@ -17,14 +17,17 @@ namespace InspectionWeb.Controllers
         private IFieldMapService _fieldMapService;
         private IExhibitionRoomService _exhibitionRoomService;
         private IUserService _userService;
+        private IExhibitionItemService _exhibitionItemService;
 
         public InformationController(IFieldMapService fieldMapService,
                                      IExhibitionRoomService exhibitionRoomService,
-                                     IUserService userService)
+                                     IUserService userService,
+                                     IExhibitionItemService exhibitionItemService)
         {
             this._fieldMapService = fieldMapService;
             this._exhibitionRoomService = exhibitionRoomService;
             this._userService = userService;
+            this._exhibitionItemService = exhibitionItemService;
 
             //TODO: add company service
         }
@@ -357,6 +360,27 @@ namespace InspectionWeb.Controllers
             return RedirectToAction("ListExhibition");
         }
 
+
+        public ActionResult AddExhibitItem(string id)
+        {
+
+            string roomId = id;
+            exhibitionItem item = new exhibitionItem();
+            item.roomId = roomId;
+            item.itemType = 0; // 0為一般展項, 1為體驗設施
+            item.fieldId = _exhibitionRoomService.GetById(roomId).fieldId;
+            IResult result = this._exhibitionItemService.Create(item);
+            string itemId = result.Message;
+
+            if (result.Success == false)
+            {
+                return RedirectToAction("EditExhibition", new { id = roomId });
+            }
+
+
+            return RedirectToAction("EditExhibitItem", new { id = itemId });
+
+        }
         //GET: /Information/AddDevice
         public ActionResult AddDevice()
         {
