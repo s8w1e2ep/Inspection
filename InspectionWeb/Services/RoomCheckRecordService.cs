@@ -132,5 +132,21 @@ namespace InspectionWeb.Services
         {
             return this._repository.GetAll().Where(x => x.isDelete == 0).OrderBy(roomCheckRecord => roomCheckRecord.createTime);
         }
+
+        public IEnumerable<roomCheckRecord> GetAllByDateRange(string startDate, string endDate, string roomId)
+        {
+
+            string sqlString = "SELECT * FROM roomCheckRecord WHERE roomId = '" + roomId 
+                             + "' AND CAST(checkDate AS date) >= '" + startDate
+                             + "' AND CAST(checkDate AS date) <= '" + endDate
+                             + "' ORDER BY checkDate ASC";
+
+            System.Diagnostics.Debug.WriteLine("GGG0: \n\n" + sqlString);
+            using (inspectionEntities db = new inspectionEntities())
+            {
+                var roomCheckRecordList = db.Database.SqlQuery<roomCheckRecord>(sqlString).ToList();
+                return roomCheckRecordList;
+            }
+        }
     }
 }

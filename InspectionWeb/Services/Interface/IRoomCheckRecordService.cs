@@ -19,5 +19,7 @@ namespace InspectionWeb.Services.Interface
 
         IEnumerable<roomCheckRecord> GetAll();
 
+        IEnumerable<roomCheckRecord> GetAllByDateRange(string startDate, string endDate, string roomId);
+
     }
 }
