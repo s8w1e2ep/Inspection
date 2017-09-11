@@ -439,6 +439,9 @@ namespace InspectionWeb.Controllers
                     case "isLock":
                         item.isLock = Convert.ToByte(fc["value"]);
                         break;
+                    case "periodReportTime":
+                        item.periodReportTime = Convert.ToInt32(fc["value"]);
+                        break;
                     defualt:
                         break;
                 }
