@@ -427,9 +427,6 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\editGroup.js" />
     <Content Include="Scripts\editPendingListDetailedData.js" />
-    <Content Include="Scripts\exhibition.js" />
-    <Content Include="Scripts\exhibitionItem.js" />
-    <Content Include="Scripts\facility.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\listGroup.js" />
@@ -437,8 +434,6 @@
     <Content Include="Scripts\listUser.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Query.js" />
-    <Content Include="Scripts\rankItem.js" />
-    <Content Include="Scripts\rankReport.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Unity.Mvc4.README.txt" />
