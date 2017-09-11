@@ -36,12 +36,21 @@ namespace InspectionWeb.Controllers
         // GET: /Statistic/ExhibitionItem
         public ActionResult ExhibitionItem()
         {
+            ViewBag.rooms = this._roomService.GetAll();
             return View();
+        }
+
+        // GET: /Statistic/Items
+        public ActionResult Items(string roomId)
+        {
+            var items = this._itemService.GetAll().Where(x => x.roomId == roomId && x.itemType == 0);
+            return Json(items.ToList(), JsonRequestBehavior.AllowGet);
         }
 
         // GET: /Statistic/Facility
         public ActionResult Facility()
         {
+            ViewBag.facilities = this._itemService.GetAll().Where(x => x.itemType == 1);
             return View();
         }
 
@@ -63,12 +72,9 @@ namespace InspectionWeb.Controllers
             System.Diagnostics.Debug.WriteLine("TE0: \n\n" + roomId + ", " + type + ", " + startDate + ", " + endDate);
 
             if (type == "man" || type == "auto")
-            {
-                System.Diagnostics.Debug.WriteLine("TE1: \n\n");
-                
+            {             
                 // 選出符合日期的展示廳巡檢紀錄
                 var roomRecords = this._roomCheckService.GetAllByDateRange(startDate, endDate, roomId);
-                System.Diagnostics.Debug.WriteLine("TE2: \n\n" + roomRecords.GetType());
                 List<RecordJson> records = new List<RecordJson>();
 
                 // 選出展示廳所有展項
@@ -103,7 +109,7 @@ namespace InspectionWeb.Controllers
                     }
                     records.Add(re);
                 }
-                System.Diagnostics.Debug.WriteLine("TE3: \n\n");
+
                 if (records.Count == 0)
                 {
                     System.Diagnostics.Debug.WriteLine("TE4: \n\n");
@@ -111,7 +117,7 @@ namespace InspectionWeb.Controllers
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine("TE: " + records.Count);
+                    System.Diagnostics.Debug.WriteLine("TE5 " + records.Count);
                     return Json(records, JsonRequestBehavior.AllowGet);
                 }
             }
