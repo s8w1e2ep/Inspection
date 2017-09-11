@@ -332,12 +332,6 @@ namespace InspectionWeb.Controllers
             return View(vms);
         }
 
-        //GET: /Information/EditExhibitItem
-        public ActionResult EditExhibitItem()
-        {
-            return View();
-        }
-
         public ActionResult DeleteExhibitionRoom(string roomId)
         {
             if (string.IsNullOrEmpty(roomId))
@@ -385,6 +379,86 @@ namespace InspectionWeb.Controllers
 
             return RedirectToAction("EditExhibitItem", new { id = itemId });
 
+        }
+
+        //GET: /Information/EditExhibitItem/itemId
+        public ActionResult EditExhibitItem(string id)
+        {
+            string itemId = id;
+            exhibitionItem item = _exhibitionItemService.GetById(itemId);
+            ExhibitionItemEditViewModel vm = new ExhibitionItemEditViewModel();
+
+            if(item != null && ModelState.IsValid)
+            {
+                vm.ItemId = item.itemId; 
+                vm.RoomId = item.roomId;
+                vm.FieldId = item.fieldId;
+
+                vm.ItemCode = item.itemCode;
+                vm.ItemName = item.itemName;
+                vm.ItemType = item.itemType;
+                vm.Description = item.description;
+                vm.Picture = item.picture;
+                // TODO:comapny list
+                vm.X = item.x;
+                vm.Y = item.y;
+                vm.Active = item.active;
+                vm.IsLock = item.isLock;
+                vm.PeriodReportTime = item.periodReportTime;
+                vm.CreateTime = item.createTime;
+                vm.LastUpdateTime = item.lastUpdateTime;
+            }
+            return View(vm);
+            
+        }
+
+        [HttpPost]
+        public ActionResult EditExhibitItem(FormCollection fc)
+        {
+            string itemId = fc["pk"];
+            exhibitionItem item = _exhibitionItemService.GetById(itemId);
+            if (item != null && ModelState.IsValid)
+            {
+                switch (fc["name"])
+                {
+                    case "itemCode":
+                        item.itemCode = fc["value"];
+                        break;
+                    case "itemName":
+                        item.itemName = fc["value"];
+                        break;
+                    case "description":
+                        item.description = fc["value"];
+                        break;
+                    case "company":
+                        item.companyId = fc["value"];
+                        break;
+                    case "active":
+                        item.active = Convert.ToInt16(fc["value"]);
+                        break;
+                    case "isLock":
+                        item.isLock = Convert.ToByte(fc["value"]);
+                        break;
+                    defualt:
+                        break;
+                }
+
+                IResult result = this._exhibitionItemService.Update(item);
+                if (result.Success)
+                {
+                    return Json(new { lastUpdateTime = item.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+                }
+                else
+                {
+                    return RedirectToAction("EditExhibitionItem");
+                }
+
+            }
+            else
+            {
+                return RedirectToAction("EditExhibition");
+            }
+            return View();
         }
         //GET: /Information/AddDevice
         public ActionResult AddDevice()
