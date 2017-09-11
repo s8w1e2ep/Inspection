@@ -56,7 +56,6 @@ namespace InspectionWeb
             container.RegisterType<IRepository<userGroup>, GenericRepository<userGroup>>();
 
 
-
             //Service
             container.RegisterType<IAbnormalDefinitionService, AbnormalDefinitionService>();
             container.RegisterType<IAbnormalRecordService, AbnormalRecordService>();
@@ -65,6 +64,7 @@ namespace InspectionWeb
             container.RegisterType<IReportSourceService, ReportSourceService>();
             container.RegisterType<IUserService, UserService>();
             container.RegisterType<IUserGroupService, UserGroupService>();
+            container.RegisterType<IMaintenanceWorkService, MaintenanceWorkService>();
 
 
         }

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<InspectionWeb.Models.ViewModel.MaintenanceWorkDetailViewModel>
+
+@{
     ViewBag.Title = "待修清單";
 }
 <div class="wrapper">
@@ -30,19 +32,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>自動通報</td>
-                                        <td>4F 交通夢想館</td>
-                                        <td>飛行車</td>
-                                        <td>不會動</td>
-                                        <td>A8097</td>
-                                        <td>2017-08-28 13:47:23</td>
-                                        <td>2017-08-30 10:00:00</td>
-                                        <td>
-                                            <a href="@Url.Action("DetailedData", "MaintenanceWork")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                            @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
-                                        </td>
-                                    </tr>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr >
+                                            <td>@item.sourceName</td>
+                                            <td>留白</td>
+                                            <td>@item.itemName</td>
+                                            <td>@item.description</td>
+                                            <td>@item.deviceId</td>
+                                            <td>@Html.DisplayFor(modelItem => item.happendedTime)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.fixDate)</td>
+                                            <td>
+                                                <a href="@Url.Action("DetailedData", "MaintenanceWork")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                      
+                                            </td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>
