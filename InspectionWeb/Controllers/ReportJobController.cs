@@ -61,6 +61,8 @@ namespace InspectionWeb.Controllers
         // GET: /ReportJob/Query
         public ActionResult Query()
         {
+            ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+            ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
             return View();
         }
 

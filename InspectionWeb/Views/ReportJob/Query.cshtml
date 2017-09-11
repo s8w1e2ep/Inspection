@@ -47,22 +47,22 @@
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="control-label col-md-2">通報來源</label>
-                                <select class="form-control select2" style="width: 50%;">
-                                    <option selected="selected">巡檢填單</option>
-                                    <option>6000填單</option>
-                                    <option>NM</option>
-                                    <option>通報按鈕</option>
-                                    <option>監控軟體</option>
-                                    <option>app</option>
-                                    <option>其它</option>
+                                <select class="form-control" id="exhibitionSelect" name="sourceId" style="width: 50%;">
+                                    <option>----請選擇通報來源----</option>
+                                    @foreach (var item in ViewBag.reportSources)
+                                    {
+                                        <option value="@item.sourceId">@item.sourceName</option>
+                                    }
                                 </select>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="control-label col-md-2">異常種類</label>
-                                <select class="form-control select2" style="width: 50%;">
-                                    <option selected="selected">異常種類1</option>
-                                    <option>異常種類2</option>
-                                    <option>異常種類3</option>
+                                <select class="form-control" id="exhibitionSelect" name="abnormalId" style="width: 50%;">
+                                    <option>----請選擇一個異常種類----</option>
+                                    @foreach (var item in ViewBag.abnormals)
+                                    {
+                                        <option value="@item.abnormalId">@item.abnormalName</option>
+                                    }
                                 </select>
                             </div>
                             <div class="col-md-6 form-group">
