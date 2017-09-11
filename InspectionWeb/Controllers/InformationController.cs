@@ -460,6 +460,61 @@ namespace InspectionWeb.Controllers
             }
             return View();
         }
+        public ActionResult DeleteExhibitionItem(string itemId)
+        {
+            if (string.IsNullOrEmpty(itemId))
+            {
+                return RedirectToAction("EditExhibition");
+            }
+
+
+            exhibitionItem item = this._exhibitionItemService.GetById(itemId);
+            if (item == null)
+            {
+                return RedirectToAction("EditExhibition");
+            }
+
+            item.isDelete = 1;
+            try
+            {
+                this._exhibitionItemService.Update(item);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("EditExhibition");
+            }
+
+            return RedirectToAction("EditExhibition");
+        }
+
+        [HttpPost]
+        public ActionResult UpdateExhibitionItemPhoto(HttpPostedFileBase upload, string itemId)
+        {
+            if (upload.ContentLength > 0)
+            {
+                string fileName = itemId;
+                fileName = fileName + Path.GetExtension(upload.FileName);
+                string savePath = System.IO.Path.Combine(Server.MapPath("~/media/exhibitionItem"), fileName);
+                upload.SaveAs(savePath);
+
+                exhibitionItem item = _exhibitionItemService.GetById(itemId);
+                item.picture = fileName;
+                IResult result = _exhibitionItemService.Update(item);
+                if (result.Success)
+                {
+                    return Json(new
+                    {
+                        lastUpdateTime = item.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                        photoName = fileName
+                    });
+                }
+            }
+            return Json(null);
+        }
+
+
+        
+
         //GET: /Information/AddDevice
         public ActionResult AddDevice()
         {
