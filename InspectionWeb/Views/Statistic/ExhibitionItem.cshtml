@@ -181,14 +181,14 @@
         } else if ($('#itemSelect').val() === '#') {
             alert('請選擇展項');
         } else {
-            setDispatchTable('man');
-            setDispatchTable('auto');
+            setInspectTable('man');
+            setInspectTable('auto');
         }
     }
 
-    function setDispatchTable(type) {
+    function setInspectTable(type) {
         $.get(
-            'QueryDispatch',
+            'QueryInspect',
             {
                 roomId: $('#roomSelect').val(),
                 roomItem: $('#itemSelect').val(),

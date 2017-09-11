@@ -66,8 +66,8 @@ namespace InspectionWeb.Controllers
             return View();
         }
 
-        // GET: /Statistic/QueryDispatch
-        public ActionResult QueryDispatch(string roomId, string startDate, string endDate, string type)
+        // GET: /Statistic/QueryInspect
+        public ActionResult QueryInspect(string roomId, string startDate, string endDate, string type)
         {
             System.Diagnostics.Debug.WriteLine("TE0: \n\n" + roomId + ", " + type + ", " + startDate + ", " + endDate);
 

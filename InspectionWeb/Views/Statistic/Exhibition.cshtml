@@ -155,14 +155,14 @@
         } else if ($('#roomSelect').val() === '#') {
             alert('請選擇展示廳');
         } else {
-            setDispatchTable('man');
-            setDispatchTable('auto');
+            setInspectTable('man');
+            setInspectTable('auto');
         }
     }
 
-    function setDispatchTable(type) {
+    function setInspectTable(type) {
         $.get(
-            'QueryDispatch',
+            'QueryInspect',
             {
                 roomId: $('#roomSelect').val(),
                 startDate: startDate,
