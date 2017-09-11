@@ -42,8 +42,9 @@
                                 </div>
                             </div>
                             <div class="col-md-12 form-group">
-                                <label class="control-label col-md-1" for="exhibitionSelect">展示廳</label>
-                                <select id="exhibitionSelect" class="form-control" style="width: 40%;">
+                                <label class="control-label col-md-1" for="roomSelect">展示廳</label>
+                                <select id="roomSelect" class="form-control" style="width: 40%;">
+                                    <option value="#">--請選擇展示廳--</option>
                                     @foreach (var item in ViewBag.rooms)
                                     {
                                         <option value="@item.roomId">@item.roomName</option>
@@ -140,8 +141,7 @@
         }).on('changeDate', function (ev) {
             startDate = $('#startDatePicker').val();
             endDate = $('#endDatePicker').val();
-            console.log(startDate);
-            console.log(endDate);
+            $('.datepicker').hide();
         });
     });
 
@@ -151,7 +151,9 @@
         } else if (endDate === null || endDate === "") {
             alert('請選擇結束日期!');
         } else if (endDate < startDate) { 
-            alert('開始日期不能比結束日期晚');
+            alert('結束日期不能比開始日期早');
+        } else if ($('#roomSelect').val() === '#') {
+            alert('請選擇展示廳');
         } else {
             setDispatchTable('man');
             setDispatchTable('auto');
@@ -162,7 +164,7 @@
         $.get(
             'QueryDispatch',
             {
-                roomId: $('#exhibitionSelect').val(),
+                roomId: $('#roomSelect').val(),
                 startDate: startDate,
                 endDate: endDate,
                 type: type
