@@ -72,6 +72,7 @@
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
+          <Property Name="inspectionUserId" Type="nchar" MaxLength="32" />
         </EntityType>
         <EntityType Name="exhibitionRoom">
           <Key>
@@ -622,6 +623,7 @@
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="inspectionUserId" Type="String" MaxLength="32" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="manRepairRecord">
           <Key>
@@ -948,6 +950,7 @@
           <EntitySetMapping Name="exhibitionItem">
             <EntityTypeMapping TypeName="inspectionModel.exhibitionItem">
               <MappingFragment StoreEntitySet="exhibitionItem">
+                <ScalarProperty Name="inspectionUserId" ColumnName="inspectionUserId" />
                 <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
                 <ScalarProperty Name="createTime" ColumnName="createTime" />
                 <ScalarProperty Name="isDelete" ColumnName="isDelete" />

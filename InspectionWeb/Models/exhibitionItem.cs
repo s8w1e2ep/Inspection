@@ -31,5 +31,6 @@ namespace InspectionWeb.Models
         public Nullable<byte> isDelete { get; set; }
         public Nullable<System.DateTime> createTime { get; set; }
         public Nullable<System.DateTime> lastUpdateTime { get; set; }
+        public string inspectionUserId { get; set; }
     }
 }
