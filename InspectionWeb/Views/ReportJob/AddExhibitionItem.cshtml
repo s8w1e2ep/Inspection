@@ -30,51 +30,58 @@
                             <h3 class="box-title">新增展項通報</h3>
                         </div>
                         <br />
-                        <form class="form-horizontal" method="post" action="@Url.Action()">
+                        <form class="form-horizontal" method="post" action="@Url.Action("AddItem")">
+                            @if (!string.IsNullOrEmpty(ViewBag.ErrMsg))
+                            {
+                                <div class="form-group has-error">
+                                    <label class="col-sm-2"></label>
+                                    <label class="col-sm-10">@ViewBag.ErrMsg</label>
+                                </div>
+                            }
                             <div class="form-group">
                                 <label class="control-label col-md-2" for="exhibitionSelect">展示廳</label>
-                                <select class="form-control" id="exhibitionSelect" name="exhibition" style="width: 50%;">
-                                    @foreach (var data in ViewBag.exhibitionRooms)
+                                <select class="form-control" id="exhibitionSelect" name="Room" style="width: 50%;">
+                                    <option >----請選擇一個展示廳----</option>
+                                    @foreach (var item in ViewBag.exhibitionRooms)
                                     {
-                                        <option value="@data.roomId">@data.roomname</option>
+                                        <option value="@item.roomId">@item.roomName</option>
                                     }
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-2" for="exhibitionSelect">展項</label>
-                                <select id="itemSelect" class="form-control"  style="width: 50%;">
-                                    <option value="exhibition1">展項-1</option>
-                                    <option value="exhibition2">展項-2</option>
-                                    <option value="exhibition3">展項-3</option>
+                                <select id="itemSelect" class="form-control" name="itemId" style="width: 50%;">
+                                    <option>----請選擇一個展項----</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-2" for="exhibitionSelect">故障來源</label>
-                                <select class="form-control" id="exhibitionSelect" style="width: 50%;">
-                                    <option value="exhibition2">巡檢填單</option>
-                                    <option value="exhibition2">6000填單</option>
-                                    <option value="exhibition2">NM</option>
-                                    <option value="exhibition1">通報按鈕</option>
-                                    <option value="exhibition2">監控軟體</option>
-                                    <option value="exhibition2">app</option>
-                                    <option value="exhibition3">其它</option>
+                                <select class="form-control" id="exhibitionSelect" name="sourceId" style="width: 50%;">
+                                    <option>----請選擇一個故障來源----</option>
+                                    @foreach (var item in ViewBag.reportSources)
+                                    {
+                                        <option value="@item.sourceId">@item.sourceName</option>
+                                    }
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-2" for="exhibitionSelect">異常狀況</label>
-                                <select class="form-control" id="exhibitionSelect" style="width: 50%;">
-                                    <option value="exhibition1">異常狀況-1</option>
-                                    <option value="exhibition2">異常狀況-2</option>
-                                    <option value="exhibition3">異常狀況-3</option>
+                                <select class="form-control" id="exhibitionSelect" name="abnormalId" style="width: 50%;">
+                                    <option>----請選擇一個異常狀況----</option>
+                                    @foreach (var item in ViewBag.abnormals)
+                                    {
+                                        <option value="@item.abnormalId">@item.abnormalName</option>
+                                    }
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-2" for="exhibitionSelect">通報者</label>
-                                <select class="form-control" id="exhibitionSelect" style="width: 50%;">
-                                    <option value="exhibition1">保全</option>
-                                    <option value="exhibition2">志工</option>
-                                    <option value="exhibition3">館員</option>
-                                    <option value="exhibition3">其他</option>
+                                <select class="form-control" id="exhibitionSelect" name="reporter" style="width: 50%;">
+                                    <option>----請選擇一個通報者----</option>
+                                    <option value="guard">保全</option>
+                                    <option value="volunteer">志工</option>
+                                    <option value="clerk">館員</option>
+                                    <option value="other">其他</option>
                                 </select>
                             </div>
                             <div class="box-footer">
@@ -93,22 +100,23 @@
 
         //當第一個選擇結束傳到controller的動作
         $.post(
-            '/ReportJobController/GetItems',
+            '/ReportJob/GetItems',
             {
                 id: val
             },
-            function (data) {//data 是 getItem傳回來的
-                var str = '';
+            function (data) {//data 是 GetItem傳回來的
+                var str = '<select id="itemSelect" class="form-control" name="itemId" style="width: 50%;"><option>----請選擇一個展項----</option>';
                 for (var i = 0; i < data.length; i++) {
-                    str += '<option value="' + data[i].itemId + '>' + data[i].itemName + '</option>'
+                    str += '<option value="' + data[i].itemId + '">' + data[i].itemName + '</option>'
                 }
-                $('#itemSelect').append(str);
-                // $('#itemSelect').fresh();
+                str += '</select >';
+
+                $('#itemSelect').replaceWith(str);
                 //location.reload();
             },
             'json'
         ).fail(function () {        //id資料傳送失敗
-            alert('變更密碼失敗');
+            alert('選擇傳送至controller失敗');
         });
     });
 </script>

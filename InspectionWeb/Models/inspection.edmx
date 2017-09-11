@@ -53,10 +53,10 @@
         </EntityType>
         <EntityType Name="exhibitionItem">
           <Key>
-            <PropertyRef Name="roomId" />
+            <PropertyRef Name="itemId" />
           </Key>
-          <Property Name="roomId" Type="nvarchar" MaxLength="32" Nullable="false" />
-          <Property Name="itemId" Type="nvarchar" MaxLength="32" />
+          <Property Name="roomId" Type="nvarchar" MaxLength="32" />
+          <Property Name="itemId" Type="nvarchar" MaxLength="32" Nullable="false" />
           <Property Name="itemCode" Type="nvarchar" MaxLength="32" />
           <Property Name="itemName" Type="nvarchar" MaxLength="64" />
           <Property Name="itemType" Type="smallint" />
@@ -383,28 +383,6 @@
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="exhibitionItem">
-          <Key>
-            <PropertyRef Name="roomId" />
-          </Key>
-          <Property Name="roomId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="itemId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="itemCode" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="itemName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="picture" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="companyId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="fieldId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="x" Type="Int32" />
-          <Property Name="y" Type="Int32" />
-          <Property Name="isLock" Type="Byte" />
-          <Property Name="active" Type="Int16" />
-          <Property Name="periodReportTime" Type="Int32" />
-          <Property Name="isDelete" Type="Byte" />
-          <Property Name="createTime" Type="DateTime" Precision="3" />
-          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
-          <Property Name="itemType" Type="Int16" />
-        </EntityType>
         <EntityType Name="exhibitionRoom">
           <Key>
             <PropertyRef Name="roomId" />
@@ -506,7 +484,6 @@
         <EntityContainer Name="inspectionEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="abnormalDefinition" EntityType="Self.abnormalDefinition" />
           <EntitySet Name="company" EntityType="Self.company" />
-          <EntitySet Name="exhibitionItem" EntityType="Self.exhibitionItem" />
           <EntitySet Name="exhibitionRoom" EntityType="Self.exhibitionRoom" />
           <EntitySet Name="itemInspectionDispatch" EntityType="Self.itemInspectionDispatch" />
           <EntitySet Name="reportDevice" EntityType="Self.reportDevice" />
@@ -525,6 +502,7 @@
           <EntitySet Name="roomInspectionDispatch" EntityType="inspectionModel.roomInspectionDispatch" />
           <EntitySet Name="systemSettings" EntityType="inspectionModel.systemSettings" />
           <EntitySet Name="user" EntityType="inspectionModel.user" />
+          <EntitySet Name="exhibitionItem" EntityType="inspectionModel.exhibitionItem" />
         </EntityContainer>
         <EntityType Name="quickSolution">
           <Key>
@@ -701,6 +679,28 @@
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="exhibitionItem">
+          <Key>
+            <PropertyRef Name="itemId" />
+          </Key>
+          <Property Name="roomId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="itemId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="itemCode" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="itemName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="itemType" Type="Int16" />
+          <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="picture" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="companyId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="fieldId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="x" Type="Int32" />
+          <Property Name="y" Type="Int32" />
+          <Property Name="isLock" Type="Byte" />
+          <Property Name="active" Type="Int16" />
+          <Property Name="periodReportTime" Type="Int32" />
+          <Property Name="isDelete" Type="Byte" />
+          <Property Name="createTime" Type="DateTime" Precision="3" />
+          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -731,29 +731,6 @@
                 <ScalarProperty Name="website" ColumnName="website" />
                 <ScalarProperty Name="invoiceId" ColumnName="invoiceId" />
                 <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
-                <ScalarProperty Name="createTime" ColumnName="createTime" />
-                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="exhibitionItem">
-            <EntityTypeMapping TypeName="inspectionModel.exhibitionItem">
-              <MappingFragment StoreEntitySet="exhibitionItem">
-                <ScalarProperty Name="itemType" ColumnName="itemType" />
-                <ScalarProperty Name="itemCode" ColumnName="itemCode" />
-                <ScalarProperty Name="roomId" ColumnName="roomId" />
-                <ScalarProperty Name="itemId" ColumnName="itemId" />
-                <ScalarProperty Name="itemName" ColumnName="itemName" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="picture" ColumnName="picture" />
-                <ScalarProperty Name="companyId" ColumnName="companyId" />
-                <ScalarProperty Name="fieldId" ColumnName="fieldId" />
-                <ScalarProperty Name="x" ColumnName="x" />
-                <ScalarProperty Name="y" ColumnName="y" />
-                <ScalarProperty Name="isLock" ColumnName="isLock" />
-                <ScalarProperty Name="active" ColumnName="active" />
-                <ScalarProperty Name="periodReportTime" ColumnName="periodReportTime" />
                 <ScalarProperty Name="isDelete" ColumnName="isDelete" />
                 <ScalarProperty Name="createTime" ColumnName="createTime" />
                 <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
@@ -1048,6 +1025,29 @@
                 <ScalarProperty Name="groupId" ColumnName="groupId" />
                 <ScalarProperty Name="userCode" ColumnName="userCode" />
                 <ScalarProperty Name="userId" ColumnName="userId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="exhibitionItem">
+            <EntityTypeMapping TypeName="inspectionModel.exhibitionItem">
+              <MappingFragment StoreEntitySet="exhibitionItem">
+                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+                <ScalarProperty Name="createTime" ColumnName="createTime" />
+                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+                <ScalarProperty Name="periodReportTime" ColumnName="periodReportTime" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="isLock" ColumnName="isLock" />
+                <ScalarProperty Name="y" ColumnName="y" />
+                <ScalarProperty Name="x" ColumnName="x" />
+                <ScalarProperty Name="fieldId" ColumnName="fieldId" />
+                <ScalarProperty Name="companyId" ColumnName="companyId" />
+                <ScalarProperty Name="picture" ColumnName="picture" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="itemType" ColumnName="itemType" />
+                <ScalarProperty Name="itemName" ColumnName="itemName" />
+                <ScalarProperty Name="itemCode" ColumnName="itemCode" />
+                <ScalarProperty Name="itemId" ColumnName="itemId" />
+                <ScalarProperty Name="roomId" ColumnName="roomId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

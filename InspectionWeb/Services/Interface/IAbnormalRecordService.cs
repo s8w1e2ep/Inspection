@@ -14,6 +14,13 @@ namespace InspectionWeb.Services.Interface
         IResult Create(abnormalRecord instance);
 
         /// <summary>
+        /// add new abnormal record
+        /// </summary>
+        /// <param name="itemId", "sourceId", "abnormalId", "reporter"></param>
+        /// <returns></returns>
+        IResult Create(string itemId, string sourceId, string abnormalId, string reporter);
+
+        /// <summary>
         /// update 
         /// </summary>
         /// <param name="instance"></param>

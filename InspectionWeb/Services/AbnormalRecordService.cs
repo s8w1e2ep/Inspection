@@ -1,4 +1,5 @@
 ﻿using InspectionWeb.Models.Interface;
+using InspectionWeb.Models.Misc;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
 using System;
@@ -35,6 +36,53 @@ namespace InspectionWeb.Services
             catch (Exception ex)
             {
                 result.Exception = ex;
+            }
+            return result;
+        }
+
+        public IResult Create(string itemId, string sourceId, string abnormalId, string reporter)
+        {
+            if (string.IsNullOrEmpty(itemId) || string.IsNullOrEmpty(sourceId) 
+                || string.IsNullOrEmpty(abnormalId) || string.IsNullOrEmpty(reporter) )
+            {
+                throw new ArgumentNullException();
+            }
+
+            IResult result = new Result(false);
+            abnormalRecord newRecord = new abnormalRecord();
+
+            if (IsRepeat(itemId))
+            {
+                result.ErrorMsg = "該展項已申請過, 請至檢修頁面查看";
+            }
+            else
+            {
+                try
+                {
+                    IdGenerator idg = new IdGenerator();
+                    string recordId = idg.GetID("abnormalRecord");
+                    DateTime nowTime = DateTime.Now;
+
+                    newRecord.recordId = recordId;
+                    newRecord.itemId = itemId;
+                    newRecord.sourceId = sourceId;
+                    newRecord.deviceId = reporter;      // 6000通報時deviceid = 通報者
+                    newRecord.abnormalId = abnormalId;
+
+                    newRecord.isDelete = 0;
+                    newRecord.createTime = nowTime;
+                    newRecord.lastUpdateTime = nowTime;
+
+                    this._repository.Create(newRecord);
+
+                    result.Message = recordId;
+                    result.Success = true;
+                }
+                catch (Exception ex)
+                {
+                    result.Exception = ex;
+                    result.ErrorMsg = ex.ToString();
+                }
             }
             return result;
         }
@@ -133,5 +181,11 @@ namespace InspectionWeb.Services
         {
             return this._repository.GetAll().Where(abnormalRecord => abnormalRecord.isClose == 0);
         }
+
+        public bool IsRepeat(string itemId)
+        {
+            return this._repository.GetAll().Any(x => x.isDelete == 0 && x.isClose == 0 && x.itemId == itemId);
+        }
+
     }
 }

@@ -35,7 +35,7 @@ namespace InspectionWeb.Services
 
         public IEnumerable<exhibitionRoom> GetAll()
         {
-            return _repository.GetAll().Where(x => x.isDelete == 0 && x.active == 1);
+            return _repository.GetAll().Where(x => x.isDelete == 0);
         }
 
         public user GetByAccount(string account)
