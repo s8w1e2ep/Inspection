@@ -26,6 +26,9 @@
         <EntityTypeShape EntityType="inspectionModel.roomActiveRecord" Width="1.5" PointX="11.375" PointY="5.75" />
         <EntityTypeShape EntityType="inspectionModel.roomInspectionDispatch" Width="1.5" PointX="13.375" PointY="0.75" />
         <EntityTypeShape EntityType="inspectionModel.user" Width="1.5" PointX="13.375" PointY="4.75" />
+        <EntityTypeShape EntityType="inspectionModel.temp" Width="1.5" PointX="11.375" PointY="13.75" />
+        <EntityTypeShape EntityType="inspectionModel.temp1" Width="1.5" PointX="13.375" PointY="13.75" />
+        <EntityTypeShape EntityType="inspectionModel.temp2" Width="1.5" PointX="15.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

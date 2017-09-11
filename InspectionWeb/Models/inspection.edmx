@@ -4,15 +4,15 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Alias="Self" Namespace="inspectionModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012">
+    <Schema Namespace="inspectionModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="abnormalDefinition">
           <Key>
             <PropertyRef Name="abnormalId" />
           </Key>
-          <Property Name="abnormalId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="abnormalCode" MaxLength="32" Type="nvarchar" />
-          <Property Name="abnormalName" MaxLength="64" Type="nvarchar" />
-          <Property Name="description" MaxLength="128" Type="nvarchar" />
+          <Property Name="abnormalId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="abnormalCode" Type="nvarchar" MaxLength="32" />
+          <Property Name="abnormalName" Type="nvarchar" MaxLength="64" />
+          <Property Name="description" Type="nvarchar" MaxLength="128" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
@@ -21,13 +21,13 @@
           <Key>
             <PropertyRef Name="recordId" />
           </Key>
-          <Property Name="recordId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="itemId" MaxLength="32" Type="nvarchar" />
-          <Property Name="sourceId" MaxLength="32" Type="nvarchar" />
-          <Property Name="deviceId" MaxLength="32" Type="nvarchar" />
-          <Property Name="abnormalId" MaxLength="32" Type="nvarchar" />
+          <Property Name="recordId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="itemId" Type="nvarchar" MaxLength="32" />
+          <Property Name="sourceId" Type="nvarchar" MaxLength="32" />
+          <Property Name="deviceId" Type="nvarchar" MaxLength="32" />
+          <Property Name="abnormalId" Type="nvarchar" MaxLength="32" />
           <Property Name="happenedTime" Type="datetime" />
-          <Property Name="description" MaxLength="128" Type="nvarchar" />
+          <Property Name="description" Type="nvarchar" MaxLength="128" />
           <Property Name="fixDate" Type="datetime" />
           <Property Name="fixMethod" Type="smallint" />
           <Property Name="isClose" Type="tinyint" />
@@ -39,14 +39,14 @@
           <Key>
             <PropertyRef Name="companyId" />
           </Key>
-          <Property Name="companyId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="companyName" MaxLength="64" Type="nvarchar" />
-          <Property Name="logo" MaxLength="64" Type="nvarchar" />
-          <Property Name="tel" MaxLength="32" Type="nvarchar" />
-          <Property Name="fax" MaxLength="32" Type="nvarchar" />
-          <Property Name="website" MaxLength="64" Type="nvarchar" />
-          <Property Name="invoiceId" MaxLength="16" Type="nvarchar" />
-          <Property Name="email" MaxLength="64" Type="nvarchar" />
+          <Property Name="companyId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="companyName" Type="nvarchar" MaxLength="64" />
+          <Property Name="logo" Type="nvarchar" MaxLength="64" />
+          <Property Name="tel" Type="nvarchar" MaxLength="32" />
+          <Property Name="fax" Type="nvarchar" MaxLength="32" />
+          <Property Name="website" Type="nvarchar" MaxLength="64" />
+          <Property Name="invoiceId" Type="nvarchar" MaxLength="16" />
+          <Property Name="email" Type="nvarchar" MaxLength="64" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
@@ -55,15 +55,15 @@
           <Key>
             <PropertyRef Name="itemId" />
           </Key>
-          <Property Name="roomId" MaxLength="32" Type="nvarchar" />
-          <Property Name="itemId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="itemCode" MaxLength="32" Type="nvarchar" />
-          <Property Name="itemName" MaxLength="64" Type="nvarchar" />
+          <Property Name="roomId" Type="nvarchar" MaxLength="32" />
+          <Property Name="itemId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="itemCode" Type="nvarchar" MaxLength="32" />
+          <Property Name="itemName" Type="nvarchar" MaxLength="64" />
           <Property Name="itemType" Type="smallint" />
-          <Property Name="description" MaxLength="128" Type="nvarchar" />
-          <Property Name="picture" MaxLength="128" Type="nvarchar" />
-          <Property Name="companyId" MaxLength="32" Type="nvarchar" />
-          <Property Name="fieldId" MaxLength="32" Type="nvarchar" />
+          <Property Name="description" Type="nvarchar" MaxLength="128" />
+          <Property Name="picture" Type="nvarchar" MaxLength="128" />
+          <Property Name="companyId" Type="nvarchar" MaxLength="32" />
+          <Property Name="fieldId" Type="nvarchar" MaxLength="32" />
           <Property Name="x" Type="int" />
           <Property Name="y" Type="int" />
           <Property Name="isLock" Type="tinyint" />
@@ -72,20 +72,21 @@
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
+          <Property Name="inspectionUserId" Type="nchar" MaxLength="32" />
         </EntityType>
         <EntityType Name="exhibitionRoom">
           <Key>
             <PropertyRef Name="roomId" />
           </Key>
-          <Property Name="roomId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="roomName" MaxLength="64" Type="nvarchar" />
-          <Property Name="fieldId" MaxLength="32" Type="nvarchar" />
-          <Property Name="description" MaxLength="128" Type="nvarchar" />
-          <Property Name="picture" MaxLength="128" Type="nvarchar" />
-          <Property Name="inspectionUserId" MaxLength="32" Type="nvarchar" />
-          <Property Name="companyId" MaxLength="32" Type="nvarchar" />
+          <Property Name="roomId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="roomName" Type="nvarchar" MaxLength="64" />
+          <Property Name="fieldId" Type="nvarchar" MaxLength="32" />
+          <Property Name="description" Type="nvarchar" MaxLength="128" />
+          <Property Name="picture" Type="nvarchar" MaxLength="128" />
+          <Property Name="inspectionUserId" Type="nvarchar" MaxLength="32" />
+          <Property Name="companyId" Type="nvarchar" MaxLength="32" />
           <Property Name="active" Type="smallint" />
-          <Property Name="floor" MaxLength="10" Type="nvarchar" />
+          <Property Name="floor" Type="nvarchar" MaxLength="10" />
           <Property Name="x" Type="int" />
           <Property Name="y" Type="int" />
           <Property Name="width" Type="int" />
@@ -98,12 +99,12 @@
           <Key>
             <PropertyRef Name="fieldId" />
           </Key>
-          <Property Name="fieldId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="fieldName" MaxLength="64" Type="nvarchar" />
-          <Property Name="description" MaxLength="128" Type="nvarchar" />
-          <Property Name="mapFileName" MaxLength="128" Type="nvarchar" />
-          <Property Name="photo" MaxLength="128" Type="nvarchar" />
-          <Property Name="version" MaxLength="16" Type="nvarchar" />
+          <Property Name="fieldId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="fieldName" Type="nvarchar" MaxLength="64" />
+          <Property Name="description" Type="nvarchar" MaxLength="128" />
+          <Property Name="mapFileName" Type="nvarchar" MaxLength="128" />
+          <Property Name="photo" Type="nvarchar" MaxLength="128" />
+          <Property Name="version" Type="nvarchar" MaxLength="16" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
@@ -112,10 +113,10 @@
           <Key>
             <PropertyRef Name="checkId" />
           </Key>
-          <Property Name="checkId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="itemId" MaxLength="32" Type="nvarchar" />
+          <Property Name="checkId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="itemId" Type="nvarchar" MaxLength="32" />
           <Property Name="checkDate" Type="date" />
-          <Property Name="inspectorId" MaxLength="32" Type="nvarchar" />
+          <Property Name="inspectorId" Type="nvarchar" MaxLength="32" />
           <Property Name="status" Type="smallint" />
           <Property Name="checkTimeType" Type="smallint" />
           <Property Name="isDelete" Type="tinyint" />
@@ -126,12 +127,12 @@
           <Key>
             <PropertyRef Name="dispatchId" />
           </Key>
-          <Property Name="dispatchId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="itemId" MaxLength="32" Type="nvarchar" />
+          <Property Name="dispatchId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="itemId" Type="nvarchar" MaxLength="32" />
           <Property Name="checkDate" Type="date" />
-          <Property Name="inspectorId1" MaxLength="32" Type="nvarchar" />
-          <Property Name="inspectorId2" MaxLength="32" Type="nvarchar" />
-          <Property Name="setupUserId" MaxLength="32" Type="nvarchar" />
+          <Property Name="inspectorId1" Type="nvarchar" MaxLength="32" />
+          <Property Name="inspectorId2" Type="nvarchar" MaxLength="32" />
+          <Property Name="setupUserId" Type="nvarchar" MaxLength="32" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
@@ -140,20 +141,20 @@
           <Key>
             <PropertyRef Name="recordId" />
           </Key>
-          <Property Name="recordId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="fillUserId" MaxLength="32" Type="nvarchar" />
-          <Property Name="repairUserId" MaxLength="32" Type="nvarchar" />
+          <Property Name="recordId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="fillUserId" Type="nvarchar" MaxLength="32" />
+          <Property Name="repairUserId" Type="nvarchar" MaxLength="32" />
           <Property Name="fixNote" Type="text" />
-          <Property Name="cost" MaxLength="10" Type="nchar" />
+          <Property Name="cost" Type="nchar" MaxLength="10" />
           <Property Name="expectDate" Type="date" />
-          <Property Name="imgFile1" MaxLength="128" Type="nvarchar" />
-          <Property Name="imgDesc1" MaxLength="50" Type="nvarchar" />
-          <Property Name="imgFile2" MaxLength="128" Type="nvarchar" />
-          <Property Name="imgDesc2" MaxLength="50" Type="nvarchar" />
-          <Property Name="imgFile3" MaxLength="128" Type="nvarchar" />
-          <Property Name="imgDesc3" MaxLength="50" Type="nvarchar" />
-          <Property Name="imgFixFile1" MaxLength="128" Type="nvarchar" />
-          <Property Name="imgFixDesc1" MaxLength="50" Type="nvarchar" />
+          <Property Name="imgFile1" Type="nvarchar" MaxLength="128" />
+          <Property Name="imgDesc1" Type="nvarchar" MaxLength="50" />
+          <Property Name="imgFile2" Type="nvarchar" MaxLength="128" />
+          <Property Name="imgDesc2" Type="nvarchar" MaxLength="50" />
+          <Property Name="imgFile3" Type="nvarchar" MaxLength="128" />
+          <Property Name="imgDesc3" Type="nvarchar" MaxLength="50" />
+          <Property Name="imgFixFile1" Type="nvarchar" MaxLength="128" />
+          <Property Name="imgFixDesc1" Type="nvarchar" MaxLength="50" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
@@ -162,12 +163,12 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" MaxLength="32" Type="nvarchar" />
+          <Property Name="id" Type="nvarchar" MaxLength="32" Nullable="false" />
           <Property Name="noCheckDate" Type="date" />
           <Property Name="am" Type="tinyint" />
           <Property Name="pm" Type="tinyint" />
-          <Property Name="description" MaxLength="100" Type="nvarchar" />
-          <Property Name="setupUserId" MaxLength="32" Type="nvarchar" />
+          <Property Name="description" Type="nvarchar" MaxLength="100" />
+          <Property Name="setupUserId" Type="nvarchar" MaxLength="32" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
@@ -176,12 +177,12 @@
           <Key>
             <PropertyRef Name="recordId" />
           </Key>
-          <Property Name="recordId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="name" MaxLength="32" Type="nvarchar" />
-          <Property Name="sourceId" MaxLength="32" Type="nvarchar" />
-          <Property Name="abnormalId" MaxLength="32" Type="nvarchar" />
+          <Property Name="recordId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="32" />
+          <Property Name="sourceId" Type="nvarchar" MaxLength="32" />
+          <Property Name="abnormalId" Type="nvarchar" MaxLength="32" />
           <Property Name="happenedTime" Type="datetime" />
-          <Property Name="description" MaxLength="128" Type="nvarchar" />
+          <Property Name="description" Type="nvarchar" MaxLength="128" />
           <Property Name="fixDate" Type="datetime" />
           <Property Name="fixMethod" Type="smallint" />
           <Property Name="isClose" Type="tinyint" />
@@ -193,8 +194,8 @@
           <Key>
             <PropertyRef Name="solutionId" />
           </Key>
-          <Property Name="solutionId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="description" MaxLength="128" Type="nvarchar" />
+          <Property Name="solutionId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="description" Type="nvarchar" MaxLength="128" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
@@ -203,14 +204,14 @@
           <Key>
             <PropertyRef Name="deviceId" />
           </Key>
-          <Property Name="deviceId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="deviceCode" MaxLength="32" Type="nvarchar" />
-          <Property Name="sourceId" MaxLength="32" Type="nvarchar" />
-          <Property Name="name" MaxLength="64" Type="nvarchar" />
+          <Property Name="deviceId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="deviceCode" Type="nvarchar" MaxLength="32" />
+          <Property Name="sourceId" Type="nvarchar" MaxLength="32" />
+          <Property Name="name" Type="nvarchar" MaxLength="64" />
           <Property Name="description" Type="text" />
-          <Property Name="photo" MaxLength="128" Type="nvarchar" />
-          <Property Name="itemId" MaxLength="32" Type="nvarchar" />
-          <Property Name="fieldId" MaxLength="32" Type="nvarchar" />
+          <Property Name="photo" Type="nvarchar" MaxLength="128" />
+          <Property Name="itemId" Type="nvarchar" MaxLength="32" />
+          <Property Name="fieldId" Type="nvarchar" MaxLength="32" />
           <Property Name="x" Type="int" />
           <Property Name="y" Type="int" />
           <Property Name="periodReportTime" Type="int" />
@@ -222,9 +223,9 @@
           <Key>
             <PropertyRef Name="sourceId" />
           </Key>
-          <Property Name="sourceId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="sourceCode" Nullable="false" MaxLength="8" Type="nvarchar" />
-          <Property Name="sourceName" MaxLength="64" Type="nvarchar" />
+          <Property Name="sourceId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="sourceCode" Type="nvarchar" MaxLength="8" Nullable="false" />
+          <Property Name="sourceName" Type="nvarchar" MaxLength="64" />
           <Property Name="description" Type="text" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
@@ -234,8 +235,8 @@
           <Key>
             <PropertyRef Name="activityId" />
           </Key>
-          <Property Name="activityId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="roomId" MaxLength="32" Type="nvarchar" />
+          <Property Name="activityId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="roomId" Type="nvarchar" MaxLength="32" />
           <Property Name="active" Type="smallint" />
           <Property Name="description" Type="text" />
           <Property Name="createTime" Type="datetime" />
@@ -244,11 +245,11 @@
           <Key>
             <PropertyRef Name="checkId" />
           </Key>
-          <Property Name="checkId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="dispatchId" MaxLength="32" Type="nvarchar" />
-          <Property Name="roomId" MaxLength="32" Type="nvarchar" />
+          <Property Name="checkId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="dispatchId" Type="nvarchar" MaxLength="32" />
+          <Property Name="roomId" Type="nvarchar" MaxLength="32" />
           <Property Name="checkDate" Type="date" />
-          <Property Name="inspectorId" MaxLength="32" Type="nvarchar" />
+          <Property Name="inspectorId" Type="nvarchar" MaxLength="32" />
           <Property Name="status" Type="smallint" />
           <Property Name="checkTimeType" Type="smallint" />
           <Property Name="isDelete" Type="tinyint" />
@@ -259,12 +260,12 @@
           <Key>
             <PropertyRef Name="dispatchId" />
           </Key>
-          <Property Name="dispatchId" Nullable="false" MaxLength="32" Type="nvarchar" />
+          <Property Name="dispatchId" Type="nvarchar" MaxLength="32" Nullable="false" />
           <Property Name="checkDate" Type="date" />
-          <Property Name="roomId" MaxLength="64" Type="nvarchar" />
-          <Property Name="inspectorId1" MaxLength="32" Type="nvarchar" />
-          <Property Name="inspectorId2" MaxLength="32" Type="nvarchar" />
-          <Property Name="setupUserId" MaxLength="32" Type="nvarchar" />
+          <Property Name="roomId" Type="nvarchar" MaxLength="64" />
+          <Property Name="inspectorId1" Type="nvarchar" MaxLength="32" />
+          <Property Name="inspectorId2" Type="nvarchar" MaxLength="32" />
+          <Property Name="setupUserId" Type="nvarchar" MaxLength="32" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
@@ -273,12 +274,12 @@
           <Key>
             <PropertyRef Name="softwareId" />
           </Key>
-          <Property Name="softwareId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="softwareCode" MaxLength="32" Type="nvarchar" />
-          <Property Name="softwareName" MaxLength="64" Type="nvarchar" />
+          <Property Name="softwareId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="softwareCode" Type="nvarchar" MaxLength="32" />
+          <Property Name="softwareName" Type="nvarchar" MaxLength="64" />
           <Property Name="description" Type="text" />
-          <Property Name="fileName" MaxLength="128" Type="nvarchar" />
-          <Property Name="version" MaxLength="14" Type="nvarchar" />
+          <Property Name="fileName" Type="nvarchar" MaxLength="128" />
+          <Property Name="version" Type="nvarchar" MaxLength="14" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
@@ -287,27 +288,63 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="keyName" MaxLength="32" Type="nvarchar" />
-          <Property Name="description" MaxLength="64" Type="nvarchar" />
-          <Property Name="value" MaxLength="32" Type="nvarchar" />
+          <Property Name="id" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="keyName" Type="nvarchar" MaxLength="32" />
+          <Property Name="description" Type="nvarchar" MaxLength="64" />
+          <Property Name="value" Type="nvarchar" MaxLength="32" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'inspection.dbo.temp' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="temp">
+          <Key>
+            <PropertyRef Name="dispatchId" />
+            <PropertyRef Name="roomId" />
+          </Key>
+          <Property Name="dispatchId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="roomId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="roomName" Type="nvarchar" MaxLength="64" />
+          <Property Name="checkDate" Type="date" />
+          <Property Name="inspectorId1" Type="nvarchar" MaxLength="32" />
+          <Property Name="inspectorCode1" Type="nvarchar" MaxLength="64" />
+          <Property Name="inspectorName1" Type="nvarchar" MaxLength="64" />
+          <Property Name="inspectorId2" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'inspection.dbo.temp1' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="temp1">
+          <Key>
+            <PropertyRef Name="id1" />
+          </Key>
+          <Property Name="id1" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="u1" Type="nvarchar" MaxLength="32" />
+          <Property Name="n1" Type="nvarchar" MaxLength="64" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'inspection.dbo.temp2' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="temp2">
+          <Key>
+            <PropertyRef Name="id2" />
+          </Key>
+          <Property Name="id2" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="u2" Type="nvarchar" MaxLength="32" />
+          <Property Name="n2" Type="nvarchar" MaxLength="64" />
         </EntityType>
         <EntityType Name="user">
           <Key>
             <PropertyRef Name="userId" />
           </Key>
-          <Property Name="userId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="userCode" MaxLength="64" Type="nvarchar" />
-          <Property Name="groupId" MaxLength="32" Type="nvarchar" />
-          <Property Name="password" MaxLength="128" Type="nvarchar" />
-          <Property Name="userName" MaxLength="64" Type="nvarchar" />
-          <Property Name="picture" MaxLength="64" Type="nvarchar" />
-          <Property Name="agent" MaxLength="64" Type="nvarchar" />
-          <Property Name="tel" MaxLength="32" Type="nvarchar" />
-          <Property Name="email" MaxLength="64" Type="nvarchar" />
+          <Property Name="userId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="userCode" Type="nvarchar" MaxLength="64" />
+          <Property Name="groupId" Type="nvarchar" MaxLength="32" />
+          <Property Name="password" Type="nvarchar" MaxLength="128" />
+          <Property Name="userName" Type="nvarchar" MaxLength="64" />
+          <Property Name="picture" Type="nvarchar" MaxLength="64" />
+          <Property Name="agent" Type="nvarchar" MaxLength="64" />
+          <Property Name="tel" Type="nvarchar" MaxLength="32" />
+          <Property Name="email" Type="nvarchar" MaxLength="64" />
           <Property Name="active" Type="tinyint" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
@@ -317,8 +354,8 @@
           <Key>
             <PropertyRef Name="groupId" />
           </Key>
-          <Property Name="groupId" Nullable="false" MaxLength="32" Type="nvarchar" />
-          <Property Name="groupName" MaxLength="64" Type="nvarchar" />
+          <Property Name="groupId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="groupName" Type="nvarchar" MaxLength="64" />
           <Property Name="superUserOnly" Type="tinyint" />
           <Property Name="systemManagement" Type="tinyint" />
           <Property Name="userManagement" Type="tinyint" />
@@ -350,9 +387,34 @@
           <EntitySet Name="systemSettings" EntityType="Self.systemSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="userGroup" EntityType="Self.userGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="temp" EntityType="Self.temp" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [temp].[dispatchId] AS [dispatchId], 
+    [temp].[roomId] AS [roomId], 
+    [temp].[roomName] AS [roomName], 
+    [temp].[checkDate] AS [checkDate], 
+    [temp].[inspectorId1] AS [inspectorId1], 
+    [temp].[inspectorCode1] AS [inspectorCode1], 
+    [temp].[inspectorName1] AS [inspectorName1], 
+    [temp].[inspectorId2] AS [inspectorId2]
+    FROM [dbo].[temp] AS [temp]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="temp1" EntityType="Self.temp1" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [temp1].[id1] AS [id1], 
+    [temp1].[u1] AS [u1], 
+    [temp1].[n1] AS [n1]
+    FROM [dbo].[temp1] AS [temp1]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="temp2" EntityType="Self.temp2" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [temp2].[id2] AS [id2], 
+    [temp2].[u2] AS [u2], 
+    [temp2].[n2] AS [n2]
+    FROM [dbo].[temp2] AS [temp2]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="inspectionModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -562,6 +624,9 @@
           <EntitySet Name="roomActiveRecord" EntityType="inspectionModel.roomActiveRecord" />
           <EntitySet Name="roomInspectionDispatch" EntityType="inspectionModel.roomInspectionDispatch" />
           <EntitySet Name="user" EntityType="inspectionModel.user" />
+          <EntitySet Name="temp" EntityType="inspectionModel.temp" />
+          <EntitySet Name="temp1" EntityType="inspectionModel.temp1" />
+          <EntitySet Name="temp2" EntityType="inspectionModel.temp2" />
         </EntityContainer>
         <EntityType Name="quickSolution">
           <Key>
@@ -623,6 +688,7 @@
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="inspectionUserId" Type="String" MaxLength="32" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="manRepairRecord">
           <Key>
@@ -701,6 +767,36 @@
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="temp">
+          <Key>
+            <PropertyRef Name="dispatchId" />
+            <PropertyRef Name="roomId" />
+          </Key>
+          <Property Name="dispatchId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="roomId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="roomName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="checkDate" Type="DateTime" Precision="0" />
+          <Property Name="inspectorId1" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="inspectorCode1" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="inspectorName1" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="inspectorId2" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="temp1">
+          <Key>
+            <PropertyRef Name="id1" />
+          </Key>
+          <Property Name="id1" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="u1" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="n1" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="temp2">
+          <Key>
+            <PropertyRef Name="id2" />
+          </Key>
+          <Property Name="id2" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="u2" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="n2" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -949,6 +1045,7 @@
           <EntitySetMapping Name="exhibitionItem">
             <EntityTypeMapping TypeName="inspectionModel.exhibitionItem">
               <MappingFragment StoreEntitySet="exhibitionItem">
+                <ScalarProperty Name="inspectionUserId" ColumnName="inspectionUserId" />
                 <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
                 <ScalarProperty Name="createTime" ColumnName="createTime" />
                 <ScalarProperty Name="isDelete" ColumnName="isDelete" />
@@ -1049,6 +1146,38 @@
                 <ScalarProperty Name="groupId" ColumnName="groupId" />
                 <ScalarProperty Name="userCode" ColumnName="userCode" />
                 <ScalarProperty Name="userId" ColumnName="userId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="temp">
+            <EntityTypeMapping TypeName="inspectionModel.temp">
+              <MappingFragment StoreEntitySet="temp">
+                <ScalarProperty Name="inspectorId2" ColumnName="inspectorId2" />
+                <ScalarProperty Name="inspectorName1" ColumnName="inspectorName1" />
+                <ScalarProperty Name="inspectorCode1" ColumnName="inspectorCode1" />
+                <ScalarProperty Name="inspectorId1" ColumnName="inspectorId1" />
+                <ScalarProperty Name="checkDate" ColumnName="checkDate" />
+                <ScalarProperty Name="roomName" ColumnName="roomName" />
+                <ScalarProperty Name="roomId" ColumnName="roomId" />
+                <ScalarProperty Name="dispatchId" ColumnName="dispatchId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="temp1">
+            <EntityTypeMapping TypeName="inspectionModel.temp1">
+              <MappingFragment StoreEntitySet="temp1">
+                <ScalarProperty Name="n1" ColumnName="n1" />
+                <ScalarProperty Name="u1" ColumnName="u1" />
+                <ScalarProperty Name="id1" ColumnName="id1" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="temp2">
+            <EntityTypeMapping TypeName="inspectionModel.temp2">
+              <MappingFragment StoreEntitySet="temp2">
+                <ScalarProperty Name="n2" ColumnName="n2" />
+                <ScalarProperty Name="u2" ColumnName="u2" />
+                <ScalarProperty Name="id2" ColumnName="id2" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

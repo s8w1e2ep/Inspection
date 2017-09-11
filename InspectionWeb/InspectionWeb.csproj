@@ -311,19 +311,16 @@
     <Compile Include="Models\softwareVersion.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\sp_helpdiagramdefinition1_Result.cs">
-      <DependentUpon>inspection.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>inspection.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagrams1_Result.cs">
-      <DependentUpon>inspection.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagrams_Result.cs">
-      <DependentUpon>inspection.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\systemSettings.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\temp.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\temp1.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\temp2.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\user.cs">
@@ -542,7 +539,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Mail\" />
-    <Folder Include="Views\Authentication\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

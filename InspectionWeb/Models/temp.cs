@@ -12,16 +12,15 @@ namespace InspectionWeb.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class itemInspectionDispatch
+    public partial class temp
     {
         public string dispatchId { get; set; }
-        public string itemId { get; set; }
+        public string roomId { get; set; }
+        public string roomName { get; set; }
         public Nullable<System.DateTime> checkDate { get; set; }
         public string inspectorId1 { get; set; }
+        public string inspectorCode1 { get; set; }
+        public string inspectorName1 { get; set; }
         public string inspectorId2 { get; set; }
-        public string setupUserId { get; set; }
-        public Nullable<byte> isDelete { get; set; }
-        public Nullable<System.DateTime> createTime { get; set; }
-        public Nullable<System.DateTime> lastUpdateTime { get; set; }
     }
 }
