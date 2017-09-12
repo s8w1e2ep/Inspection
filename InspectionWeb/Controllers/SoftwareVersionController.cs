@@ -13,8 +13,10 @@ namespace InspectionWeb.Controllers
     public class SoftwareVersionController : Controller
     {
 
-        public SoftwareVersionController()
+        private ISoftwareVersionService _softwareVersionService;
+        public SoftwareVersionController(ISoftwareVersionService softwareVersionService)
         {
+            this._softwareVersionService = softwareVersionService;
         }
 
        
