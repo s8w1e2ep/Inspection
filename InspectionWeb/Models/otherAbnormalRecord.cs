@@ -17,6 +17,7 @@ namespace InspectionWeb.Models
         public string recordId { get; set; }
         public string name { get; set; }
         public string sourceId { get; set; }
+        public string deviceId { get; set; }
         public string abnormalId { get; set; }
         public Nullable<System.DateTime> happenedTime { get; set; }
         public string description { get; set; }

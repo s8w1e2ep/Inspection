@@ -17,7 +17,7 @@ function setId(groupId) {
 
 $(document).ready(function () {
     $('#groupTable').DataTable({
-        "paging": false,
+        "paging": true,
         "info": false,
         "searching": true,
         "columnDefs": [
