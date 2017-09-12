@@ -15,18 +15,18 @@ namespace InspectionWeb.Models
     public partial class reportDevice
     {
         public string deviceId { get; set; }
+        public string deviceCode { get; set; }
         public string sourceId { get; set; }
         public string name { get; set; }
-        public string deviceCode { get; set; }
         public string description { get; set; }
         public string photo { get; set; }
         public string itemId { get; set; }
         public string fieldId { get; set; }
         public Nullable<int> x { get; set; }
         public Nullable<int> y { get; set; }
+        public Nullable<int> periodReportTime { get; set; }
         public Nullable<byte> isDelete { get; set; }
         public Nullable<System.DateTime> createTime { get; set; }
         public Nullable<System.DateTime> lastUpdateTime { get; set; }
-        public Nullable<int> periodReportTime { get; set; }
     }
 }
