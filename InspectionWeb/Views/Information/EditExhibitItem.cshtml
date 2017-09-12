@@ -18,7 +18,14 @@
             ],
         });
 
-        $('#itemCode, #itemName, #description, #periodReportTime').editable({
+        $('#itemCode, #itemName, #description').editable({
+            emptytext: "未設定",
+            success: function (response) {
+                $('#lastUpdateTime').html(response.lastUpdateTime);
+            }
+        });
+
+        $('#periodReportTime').editable({
             emptytext: "未設定",
             success: function (response) {
                 $('#lastUpdateTime').html(response.lastUpdateTime);
