@@ -224,6 +224,7 @@
     <Compile Include="Controllers\InspectionDispatchController.cs" />
     <Compile Include="Controllers\ReportSourceController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Controllers\SoftwareVersionController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
     <Compile Include="Controllers\SystemController.cs" />
     <Compile Include="Controllers\UserController.cs" />
