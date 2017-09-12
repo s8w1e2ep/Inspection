@@ -516,9 +516,6 @@
     <Content Include="Views\Information\AddNotifyDevice.cshtml" />
     <Content Include="Views\Information\EditNotifyDevice.cshtml" />
     <Content Include="Views\Information\ListNotifyDevice.cshtml" />
-    <Content Include="Views\System\AddSoftware.cshtml" />
-    <Content Include="Views\System\EditSoftware.cshtml" />
-    <Content Include="Views\System\ListSoftware.cshtml" />
     <Content Include="Views\ReportJob\AddExperience.cshtml" />
     <Content Include="Views\ReportJob\AddOther.cshtml" />
     <Content Include="Views\ReportJob\EditExhibitionItem.cshtml" />
