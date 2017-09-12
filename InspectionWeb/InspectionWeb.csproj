@@ -344,6 +344,7 @@
     <Compile Include="Models\ViewModel\ListRoomCheckRecordViewModel.cs" />
     <Compile Include="Models\ViewModel\ListItemCheckRecordViewModel.cs" />
     <Compile Include="Models\ViewModel\SoftwareVersionAddViewModel.cs" />
+    <Compile Include="Models\ViewModel\SoftwareVersionListViewModel.cs" />
     <Compile Include="Models\ViewModel\UserEditViewModel.cs" />
     <Compile Include="Models\ViewModel\ListItemInspectionDispatchViewModel.cs" />
     <Compile Include="Models\ViewModel\ListRoomInspectionDispatchViewModel.cs" />
@@ -547,6 +548,8 @@
     <Content Include="Views\Authentication\AuthenticationFail.cshtml" />
     <Content Include="Views\Authentication\Login.cshtml" />
     <Content Include="Views\SoftwareVersion\AddSoftware.cshtml" />
+    <Content Include="Views\SoftwareVersion\EditSoftware.cshtml" />
+    <Content Include="Views\SoftwareVersion\ListSoftware.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
