@@ -46,5 +46,8 @@ namespace InspectionWeb.Models
         public virtual DbSet<systemSettings> systemSettings { get; set; }
         public virtual DbSet<user> user { get; set; }
         public virtual DbSet<exhibitionItem> exhibitionItem { get; set; }
+        public virtual DbSet<temp> temp { get; set; }
+        public virtual DbSet<temp1> temp1 { get; set; }
+        public virtual DbSet<temp2> temp2 { get; set; }
     }
 }

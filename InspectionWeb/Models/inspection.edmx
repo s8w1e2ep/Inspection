@@ -72,6 +72,7 @@
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
+          <Property Name="inspectionUserId" Type="nchar" MaxLength="32" />
         </EntityType>
         <EntityType Name="exhibitionRoom">
           <Key>
@@ -295,6 +296,42 @@
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
         </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'inspection.dbo.temp' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="temp">
+          <Key>
+            <PropertyRef Name="dispatchId" />
+            <PropertyRef Name="roomId" />
+          </Key>
+          <Property Name="dispatchId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="roomId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="roomName" Type="nvarchar" MaxLength="64" />
+          <Property Name="checkDate" Type="date" />
+          <Property Name="inspectorId1" Type="nvarchar" MaxLength="32" />
+          <Property Name="inspectorCode1" Type="nvarchar" MaxLength="64" />
+          <Property Name="inspectorName1" Type="nvarchar" MaxLength="64" />
+          <Property Name="inspectorId2" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'inspection.dbo.temp1' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="temp1">
+          <Key>
+            <PropertyRef Name="id1" />
+          </Key>
+          <Property Name="id1" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="u1" Type="nvarchar" MaxLength="32" />
+          <Property Name="n1" Type="nvarchar" MaxLength="64" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'inspection.dbo.temp2' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="temp2">
+          <Key>
+            <PropertyRef Name="id2" />
+          </Key>
+          <Property Name="id2" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="u2" Type="nvarchar" MaxLength="32" />
+          <Property Name="n2" Type="nvarchar" MaxLength="64" />
+        </EntityType>
         <EntityType Name="user">
           <Key>
             <PropertyRef Name="userId" />
@@ -350,6 +387,32 @@
           <EntitySet Name="systemSettings" EntityType="Self.systemSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="userGroup" EntityType="Self.userGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="temp" EntityType="Self.temp" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [temp].[dispatchId] AS [dispatchId], 
+    [temp].[roomId] AS [roomId], 
+    [temp].[roomName] AS [roomName], 
+    [temp].[checkDate] AS [checkDate], 
+    [temp].[inspectorId1] AS [inspectorId1], 
+    [temp].[inspectorCode1] AS [inspectorCode1], 
+    [temp].[inspectorName1] AS [inspectorName1], 
+    [temp].[inspectorId2] AS [inspectorId2]
+    FROM [dbo].[temp] AS [temp]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="temp1" EntityType="Self.temp1" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [temp1].[id1] AS [id1], 
+    [temp1].[u1] AS [u1], 
+    [temp1].[n1] AS [n1]
+    FROM [dbo].[temp1] AS [temp1]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="temp2" EntityType="Self.temp2" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [temp2].[id2] AS [id2], 
+    [temp2].[u2] AS [u2], 
+    [temp2].[n2] AS [n2]
+    FROM [dbo].[temp2] AS [temp2]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -503,6 +566,9 @@
           <EntitySet Name="systemSettings" EntityType="inspectionModel.systemSettings" />
           <EntitySet Name="user" EntityType="inspectionModel.user" />
           <EntitySet Name="exhibitionItem" EntityType="inspectionModel.exhibitionItem" />
+          <EntitySet Name="temp" EntityType="inspectionModel.temp" />
+          <EntitySet Name="temp1" EntityType="inspectionModel.temp1" />
+          <EntitySet Name="temp2" EntityType="inspectionModel.temp2" />
         </EntityContainer>
         <EntityType Name="quickSolution">
           <Key>
@@ -700,6 +766,37 @@
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="inspectionUserId" Type="String" MaxLength="32" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="temp">
+          <Key>
+            <PropertyRef Name="dispatchId" />
+            <PropertyRef Name="roomId" />
+          </Key>
+          <Property Name="dispatchId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="roomId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="roomName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="checkDate" Type="DateTime" Precision="0" />
+          <Property Name="inspectorId1" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="inspectorCode1" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="inspectorName1" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="inspectorId2" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="temp1">
+          <Key>
+            <PropertyRef Name="id1" />
+          </Key>
+          <Property Name="id1" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="u1" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="n1" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="temp2">
+          <Key>
+            <PropertyRef Name="id2" />
+          </Key>
+          <Property Name="id2" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="u2" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="n2" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1031,6 +1128,7 @@
           <EntitySetMapping Name="exhibitionItem">
             <EntityTypeMapping TypeName="inspectionModel.exhibitionItem">
               <MappingFragment StoreEntitySet="exhibitionItem">
+                <ScalarProperty Name="inspectionUserId" ColumnName="inspectionUserId" />
                 <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
                 <ScalarProperty Name="createTime" ColumnName="createTime" />
                 <ScalarProperty Name="isDelete" ColumnName="isDelete" />
@@ -1048,6 +1146,38 @@
                 <ScalarProperty Name="itemCode" ColumnName="itemCode" />
                 <ScalarProperty Name="itemId" ColumnName="itemId" />
                 <ScalarProperty Name="roomId" ColumnName="roomId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="temp">
+            <EntityTypeMapping TypeName="inspectionModel.temp">
+              <MappingFragment StoreEntitySet="temp">
+                <ScalarProperty Name="inspectorId2" ColumnName="inspectorId2" />
+                <ScalarProperty Name="inspectorName1" ColumnName="inspectorName1" />
+                <ScalarProperty Name="inspectorCode1" ColumnName="inspectorCode1" />
+                <ScalarProperty Name="inspectorId1" ColumnName="inspectorId1" />
+                <ScalarProperty Name="checkDate" ColumnName="checkDate" />
+                <ScalarProperty Name="roomName" ColumnName="roomName" />
+                <ScalarProperty Name="roomId" ColumnName="roomId" />
+                <ScalarProperty Name="dispatchId" ColumnName="dispatchId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="temp1">
+            <EntityTypeMapping TypeName="inspectionModel.temp1">
+              <MappingFragment StoreEntitySet="temp1">
+                <ScalarProperty Name="n1" ColumnName="n1" />
+                <ScalarProperty Name="u1" ColumnName="u1" />
+                <ScalarProperty Name="id1" ColumnName="id1" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="temp2">
+            <EntityTypeMapping TypeName="inspectionModel.temp2">
+              <MappingFragment StoreEntitySet="temp2">
+                <ScalarProperty Name="n2" ColumnName="n2" />
+                <ScalarProperty Name="u2" ColumnName="u2" />
+                <ScalarProperty Name="id2" ColumnName="id2" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
