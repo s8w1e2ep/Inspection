@@ -10,6 +10,7 @@
 
     $(document).ready(function () {
         $('#fieldName, #description, #version').editable({
+            emptytext: "未設定",
             success: function (response) {
                 //change the content of #lastUpdateTime
                 $('#lastUpdateTime').html(response.lastUpdateTime);

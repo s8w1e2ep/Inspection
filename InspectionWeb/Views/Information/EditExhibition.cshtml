@@ -7,26 +7,42 @@
     $.fn.editable.defaults.mode = 'inline';
 
     $(document).ready(function () {
+
+        $('#infoExhibitItem').DataTable({
+            "paging": false,
+            "info": false,
+            "searching": false,
+            "columnDefs": [
+                { "targets": 0, "width": "25%", "orderable": true },
+                { "targets": 1, "width": "25%", "orderable": true },
+                { "targets": 2, "width": "25%", "orderable": true },
+                { "targets": 3, "width": "25%", "orderable": true },
+            ],
+        });
+
+
         $('#roomName, #description').editable({
+            emptytext: "未設定",
             success: function (response) {
                 $('#lastUpdateTime').html(response.lastUpdateTime);
             }
         });
 
         $('#active').editable({
-            value: ['@Model.active'],
+            value: [@Model.Active],
             source: [
                 { value: 0, text: '不啟用' },
                 { value: 1, text: '啟用' },
                 { value: 2, text: '維護中' }
             ],
-            emptytext: '不啟用',
+            emptytext: '未設定',
             success: function (response) {
                 $('#lastUpdateTime').html(response.lastUpdateTime)
             }
         });
 
         $('#inspectionUserId').editable({
+            value: ["@if (@Model.Inspector != null) {<text>@Model.Inspector.userId</text>}"],
             emptytext: '未設定',
             source: [
                 // value :選擇後會回傳的值
@@ -37,11 +53,12 @@
                 }
             ],
             success: function (response) {
-                $('lastUpdateTime').html(response.lastUpdateTime);
-            }
+                $('#lastUpdateTime').html(response.lastUpdateTime);
+                }
         });
 
         $('#fieldId').editable({
+            value: ["@if (@Model.FieldId != null) {<text>@Model.FieldId</text>}"],
             emptytext: '未設定',
             source: [
                 // value :選擇後會回傳的值
@@ -52,14 +69,33 @@
                 }
             ],
             success: function (response) {
-                $('lastUpdateTime').html(response.lastUpdateTime);
+                $('#lastUpdateTime').html(response.lastUpdateTime);
             }
+        });
+
+        $('#modalYes').on('click', function (e) {
+            deleteExhibitionItem();
         });
 
 
 
 
     });
+    // delete exhibtionItem {{{
+    var toDeleteItemId;
+    function setId(itemId) {
+        toDeleteItemId = itemId;
+    }
+    function deleteExhibitionItem() {
+        $.ajax({
+            type: "DELETE",
+            url: '@Url.Action("DeleteExhibitionItem", "Information")',
+            data: $.param({ "itemId": toDeleteItemId })
+        }).done(function (msg) {
+            $("#" + toDeleteItemId).remove();
+        });
+    }
+    // }}}
 
     // virtually tirgger input file button
     function onUploadFile(id) {
@@ -84,7 +120,7 @@
                 var myXhr = $.ajaxSettings.xhr();
                 myXhr.upload.addEventListener('progress', function (e) {
                     var progress = parseInt(e.loaded / e.toatal * 100, 10);
-                    $('photoProgress').css('width', progress + '%').html(progress + '%');
+                    $('#photoProgress').css('width', progress + '%').html(progress + '%');
                 }, false);
                 return myXhr;
             }
@@ -93,7 +129,7 @@
                 if (data) {
                     console.log(data);
                     $('#photo').attr('src', '@Url.Content("~/media/exhibition/")' + data.photoName + '?timestamp=' + new Date().getTime());
-                    $('#photoProgress').css('display', 'none');
+                    $('.progress').css('display', 'none');
                     $('#lastUpdateTime').html(data.lastUpdateTime);
                 }
             })
@@ -169,11 +205,11 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="progress" style="margin-bottom: 10px;">
+                                        <div class="progress" style="margin-bottom: 10px; display: none;">
                                             <div id="photoProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
                                         </div>
                                         <div>
-                                            <img id="photo" class="img-responsive" src="@if(@Model.Picture != null){@Url.Content("~/media/exhibition/"+@Model.Picture)}">
+                                            <img id="photo" class="img-responsive" src="@if (@Model.Picture != null) {@Url.Content("~/media/exhibition/" + @Model.Picture)}">
                                         </div>
                                     </td>
                                 </tr>
@@ -198,7 +234,15 @@
                                 <tr>
                                     <td>啟用</td>
                                     <td>
-                                        <a href="#" id="active" data-type="select" data-pk="@Model.RoomId" data-url="@Url.Action("EditExhibition")" data-title="選擇樓層">@Model.active</a>
+                                        <a href="#" id="active" data-type="select" data-pk="@Model.RoomId" data-url="@Url.Action("EditExhibition")" data-title="選擇啟用狀態"></a>
+                                    </td>
+                                </tr>
+
+                                @*地圖*@
+                                <tr>
+                                    <td>地圖</td>
+                                    <td>
+                                        @*TODO: svg upload*@
                                     </td>
                                 </tr>
 
@@ -222,34 +266,51 @@
             </div>
         </div>
 
+        @*展項列表*@
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">展項新增</h3>
+                        <h3 class="box-title">
+                            展項新增
+                            <a href="@Url.Action("AddExhibitItem", new { id = Model.RoomId })" class="btn btn-sm btn-primary">
+                                <i class="glyphicon glyphicon-plus"></i>
+                            </a>
+                        
+                        </h3>
                     </div>
                     <div class="box-body">
                         <table id="infoExhibitItem" class="row-border" cellspacing="0" style="width: 100%;">
                             <thead>
                                 <tr>
+                                    <th>展項代碼</th>
                                     <th>展項名稱</th>
                                     <th>建立日期</th>
                                     <th>操作選項</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>AAA</td>
-                                    <td>2017-08-08 00:00:00</td>
-                                    <td>
+                                    @foreach(var item in Model.ExhibitionItems)
+                                    {
+                                        <tr id="@item.itemId">
+                                            <td>@item.itemCode</td>
+                                            <td>@item.itemName</td>
+                                            <td>@item.createTime</td>
 
-                                        @{/* TODO: redirec to correct place
-* Action(actionName, controller)
-*/}
-                                        <a href="@Url.Action("", "")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                        <a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>
-                                    </td>
-                                </tr>
+                                            <td>
+                                                @*檢視按鈕*@
+                                                <a href="@Url.Action("EditExhibitItem", new { id = item.itemId })" class="btn btn-sm btn-primary">
+                                                    <i class="glyphicon glyphicon-menu-hamburger"></i>
+                                                </a>
+
+                                                @*刪除按鈕*@
+                                                <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.itemId')" data-toggle=modal data-target=#myModal>
+                                                    <i class="glyphicon glyphicon-remove"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                   
                             </tbody>
                         </table>
                     </div>
@@ -280,28 +341,3 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-<script>
-    $(document).ready(function () {
-        $('#infoExhibitItem').DataTable({
-            "paging": false,
-            "info": false,
-            "searching": false,
-            "columnDefs": [
-                { "targets": 0, "width": "40%", "orderable": true },
-                { "targets": 1, "width": "40%", "orderable": true },
-                { "targets": 2, "width": "20%", "orderable": true },
-            ],
-        });
-
-        $('#modalYes').on('click', function (e) {
-            deleteExhibitionItem();
-        });
-
-        function deleteExhibitionItem() {
-            @{/* TODO: use jquery AJAX method to send Message to Exhibition controller.
-               */
-            }
-        }
-    });
-</script>

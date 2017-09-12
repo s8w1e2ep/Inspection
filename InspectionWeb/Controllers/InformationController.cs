@@ -17,14 +17,17 @@ namespace InspectionWeb.Controllers
         private IFieldMapService _fieldMapService;
         private IExhibitionRoomService _exhibitionRoomService;
         private IUserService _userService;
+        private IExhibitionItemService _exhibitionItemService;
 
         public InformationController(IFieldMapService fieldMapService,
                                      IExhibitionRoomService exhibitionRoomService,
-                                     IUserService userService)
+                                     IUserService userService,
+                                     IExhibitionItemService exhibitionItemService)
         {
             this._fieldMapService = fieldMapService;
             this._exhibitionRoomService = exhibitionRoomService;
             this._userService = userService;
+            this._exhibitionItemService = exhibitionItemService;
 
             //TODO: add company service
         }
@@ -214,24 +217,24 @@ namespace InspectionWeb.Controllers
             }
 
             // setting viewModel {{{
-            string[] activeState = new string[] {"不啟用", "啟用", "維護中"};
             vm.RoomId = roomId;
             vm.RoomName = room.roomName;
             vm.Description = room.description;
             vm.Floor = room.floor;
             vm.Picture = room.picture;
-            vm.active = activeState[(int) room.active];
+            vm.Active = (int) room.active;
+            vm.FieldId = room.fieldId;
             vm.Inspector = this._userService.GetByID(room.inspectionUserId);
             //TODO company field 
-            vm.Active = (int) room.active.Value;
 
-            vm.X = room.x.Value;
-            vm.Y = room.y.Value;
-            vm.Width = room.width.Value;
-            vm.Height = room.height.Value;
-            vm.CreateTime = room.createTime.Value;
-            vm.LastUpdateTime = room.lastUpdateTime.Value;
+            vm.X = room.x;
+            vm.Y = room.y;
+            vm.Width = room.width;
+            vm.Height = room.height;
+            vm.CreateTime = room.createTime;
+            vm.LastUpdateTime = room.lastUpdateTime;
 
+            vm.ExhibitionItems = this._exhibitionItemService.GetAll().Where(x => x.roomId == roomId).ToList();
             vm.Fields = this._fieldMapService.GetAll().ToList();
             vm.Inspectors = this._userService.GetAll().ToList();
             // }}}
@@ -311,23 +314,22 @@ namespace InspectionWeb.Controllers
                 ExhibitionRoomListViewModel vm = new ExhibitionRoomListViewModel();
                 vm.roomId = room.roomId;
                 vm.roomName = room.roomName;
-                vm.floor = room.floor;
-                user inspector = this._userService.GetByID(room.inspectionUserId);
-                if(inspector == null)
+                fieldMap field = _fieldMapService.GetById(room.fieldId);
+                user inspector = _userService.GetByID(room.inspectionUserId);
+                if(field != null)
                 {
-                    vm.InspectorName = string.Empty;
+                    vm.fieldName = field.fieldName;
+                }
+
+                if(inspector != null)
+                {
+                    vm.InspectorName = inspector.userName;
                 }
 
                 vms.Add(vm);
 
             }
             return View(vms);
-        }
-
-        //GET: /Information/EditExhibitItem
-        public ActionResult EditExhibitItem()
-        {
-            return View();
         }
 
         public ActionResult DeleteExhibitionRoom(string roomId)
@@ -356,6 +358,165 @@ namespace InspectionWeb.Controllers
 
             return RedirectToAction("ListExhibition");
         }
+
+
+        public ActionResult AddExhibitItem(string id)
+        {
+
+            string roomId = id;
+            exhibitionItem item = new exhibitionItem();
+            item.roomId = roomId;
+            item.itemType = 0; // 0為一般展項, 1為體驗設施
+            item.fieldId = _exhibitionRoomService.GetById(roomId).fieldId;
+            IResult result = this._exhibitionItemService.Create(item);
+            string itemId = result.Message;
+
+            if (result.Success == false)
+            {
+                return RedirectToAction("EditExhibition", new { id = roomId });
+            }
+
+
+            return RedirectToAction("EditExhibitItem", new { id = itemId });
+
+        }
+
+        //GET: /Information/EditExhibitItem/itemId
+        public ActionResult EditExhibitItem(string id)
+        {
+            string itemId = id;
+            exhibitionItem item = _exhibitionItemService.GetById(itemId);
+            ExhibitionItemEditViewModel vm = new ExhibitionItemEditViewModel();
+
+            if(item != null && ModelState.IsValid)
+            {
+                vm.ItemId = item.itemId; 
+                vm.RoomId = item.roomId;
+                vm.FieldId = item.fieldId;
+
+                vm.ItemCode = item.itemCode;
+                vm.ItemName = item.itemName;
+                vm.ItemType = item.itemType;
+                vm.Description = item.description;
+                vm.Picture = item.picture;
+                // TODO:comapny list
+                vm.X = item.x;
+                vm.Y = item.y;
+                vm.Active = item.active;
+                vm.IsLock = item.isLock;
+                vm.PeriodReportTime = item.periodReportTime;
+                vm.CreateTime = item.createTime;
+                vm.LastUpdateTime = item.lastUpdateTime;
+            }
+            return View(vm);
+            
+        }
+
+        [HttpPost]
+        public ActionResult EditExhibitItem(FormCollection fc)
+        {
+            string itemId = fc["pk"];
+            exhibitionItem item = _exhibitionItemService.GetById(itemId);
+            if (item != null && ModelState.IsValid)
+            {
+                switch (fc["name"])
+                {
+                    case "itemCode":
+                        item.itemCode = fc["value"];
+                        break;
+                    case "itemName":
+                        item.itemName = fc["value"];
+                        break;
+                    case "description":
+                        item.description = fc["value"];
+                        break;
+                    case "company":
+                        item.companyId = fc["value"];
+                        break;
+                    case "active":
+                        item.active = Convert.ToInt16(fc["value"]);
+                        break;
+                    case "isLock":
+                        item.isLock = Convert.ToByte(fc["value"]);
+                        break;
+                    case "periodReportTime":
+                        item.periodReportTime = Convert.ToInt32(fc["value"]);
+                        break;
+                    defualt:
+                        break;
+                }
+
+                IResult result = this._exhibitionItemService.Update(item);
+                if (result.Success)
+                {
+                    return Json(new { lastUpdateTime = item.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+                }
+                else
+                {
+                    return RedirectToAction("EditExhibitionItem");
+                }
+
+            }
+            else
+            {
+                return RedirectToAction("EditExhibition");
+            }
+            return View();
+        }
+        public ActionResult DeleteExhibitionItem(string itemId)
+        {
+            if (string.IsNullOrEmpty(itemId))
+            {
+                return RedirectToAction("EditExhibition");
+            }
+
+
+            exhibitionItem item = this._exhibitionItemService.GetById(itemId);
+            if (item == null)
+            {
+                return RedirectToAction("EditExhibition");
+            }
+
+            item.isDelete = 1;
+            try
+            {
+                this._exhibitionItemService.Update(item);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("EditExhibition");
+            }
+
+            return RedirectToAction("EditExhibition");
+        }
+
+        [HttpPost]
+        public ActionResult UpdateExhibitionItemPhoto(HttpPostedFileBase upload, string itemId)
+        {
+            if (upload.ContentLength > 0)
+            {
+                string fileName = itemId;
+                fileName = fileName + Path.GetExtension(upload.FileName);
+                string savePath = System.IO.Path.Combine(Server.MapPath("~/media/exhibitionItem"), fileName);
+                upload.SaveAs(savePath);
+
+                exhibitionItem item = _exhibitionItemService.GetById(itemId);
+                item.picture = fileName;
+                IResult result = _exhibitionItemService.Update(item);
+                if (result.Success)
+                {
+                    return Json(new
+                    {
+                        lastUpdateTime = item.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                        photoName = fileName
+                    });
+                }
+            }
+            return Json(null);
+        }
+
+
+        
 
         //GET: /Information/AddDevice
         public ActionResult AddDevice()

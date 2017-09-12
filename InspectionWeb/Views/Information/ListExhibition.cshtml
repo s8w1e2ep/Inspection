@@ -41,18 +41,19 @@
                                 {
                                     <tr id="@item.roomId">
                                         <td>@item.roomName</td>
+                                        <td>@item.fieldName</td>
                                         <td>@item.floor</td>
-                                        <td>@Html.DisplayFor(modelItem => item.createTime)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.lastUpdateTime)</td>
+                                        <td>@item.InspectorName</td>
 
                                         <td>
-                                            @*刪除按鈕*@
-                                            <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.roomId')" data-toggle=modal data-target=#myModal>
-                                                <i class="glyphicon glyphicon-remove"></i>
-                                            </a>
                                             @*檢視按鈕*@
                                             <a href="@Url.Action("EditExhibition", new { id = item.roomId })" class="btn btn-sm btn-primary">
                                                 <i class="glyphicon glyphicon-menu-hamburger"></i>
+                                            </a>
+
+                                            @*刪除按鈕*@
+                                            <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.roomId')" data-toggle=modal data-target=#myModal>
+                                                <i class="glyphicon glyphicon-remove"></i>
                                             </a>
                                         </td>
 
