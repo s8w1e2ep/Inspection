@@ -69,6 +69,7 @@ namespace InspectionWeb
             container.RegisterType<IRepository<exhibitionRoom>, GenericRepository<exhibitionRoom>>();
             container.RegisterType<IRepository<otherAbnormalRecord>, GenericRepository<otherAbnormalRecord>>();
             container.RegisterType<IRepository<softwareVersion>, GenericRepository<softwareVersion>>();
+            container.RegisterType<IRepository<systemSettings>, GenericRepository<systemSettings>>();
 
 
             //Service
@@ -92,6 +93,7 @@ namespace InspectionWeb
             container.RegisterType<IOtherAbnormalRecordService, OtherAbnormalRecordService>();
             container.RegisterType<IMaintenanceWorkService, MaintenanceWorkService>();
             container.RegisterType<ISoftwareVersionService, SoftwareVersionService>();
+            container.RegisterType<ISystemArgService, SystemArgService>();
 
         }
     }
