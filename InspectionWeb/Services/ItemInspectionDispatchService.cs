@@ -41,7 +41,7 @@ namespace InspectionWeb.Services
             return result;
         }
 
-        public IResult Create(System.DateTime date, IEnumerable<exhibitionItem> items)
+        public IResult Create(System.DateTime date, IEnumerable<exhibitionItem> items, string setupId)
         {
             IResult result = new Result(false);
             for (int i = 0; i < items.Count(); i++)
@@ -55,9 +55,9 @@ namespace InspectionWeb.Services
                     itemDispatch.dispatchId = idGen.GetID("itemDispatch");
                     itemDispatch.checkDate = date;
                     itemDispatch.itemId = items.ElementAt(i).itemId;
-                    itemDispatch.inspectorId1 = "";//items.ElementAt(i).inspectionUserId;
-                    itemDispatch.inspectorId2 = "";//items.ElementAt(i).inspectionUserId;
-                    itemDispatch.setupUserId = "";
+                    itemDispatch.inspectorId1 = items.ElementAt(i).inspectionUserId;
+                    itemDispatch.inspectorId2 = items.ElementAt(i).inspectionUserId;
+                    itemDispatch.setupUserId = setupId;
                     itemDispatch.isDelete = Convert.ToByte(0);
                     itemDispatch.createTime = now;
                     itemDispatch.lastUpdateTime = now;

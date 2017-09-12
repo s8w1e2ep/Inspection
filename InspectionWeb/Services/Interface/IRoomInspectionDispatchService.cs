@@ -8,7 +8,7 @@ namespace InspectionWeb.Services.Interface
     {
         IResult Create(roomInspectionDispatch instance);
 
-        IResult Create(System.DateTime date, IEnumerable<exhibitionRoom> rooms);
+        IResult Create(System.DateTime date, IEnumerable<exhibitionRoom> rooms, string setupId);
 
         IResult Update(roomInspectionDispatch instance);
 

@@ -117,13 +117,6 @@
                     <!-- general form elements -->
                     <div class="box box-success">
                         <form class="form-horizontal" method="post" action="@Url.Action("ListRoomInspectionDispatch")" onsubmit="return formValidation();">
-                            @if (@Model != null && @Model.ErrorMsg != null && !string.IsNullOrEmpty(@Model.ErrorMsg))
-                            {
-                                <div class="form-group has-error">
-                                    <label class="col-sm-2"></label>
-                                    <label class="col-sm-10">@Model.ErrorMsg</label>
-                                </div>
-                            }
                             <div class="box-header with-border">
                                 <div id="dispatchDateDiv" class="form-group">
                                     <div class="col-sm-1">
@@ -135,8 +128,10 @@
                                         </div>
                                         <input type="text" class="form-control pull-right" id="dispatchDate" name="dispatchDate">
                                     </div>
-                                    <div class="col-sm-7">
-                                        <button type="submit" class="btn btn-success  pull-right">產生派工</button>
+                                    <br/>
+                                    <input type="hidden" class="form-control pull-right" id="userId" name="userId" value="123456">
+                                    <div class="col-sm-1">
+                                        <button type="submit" class="btn btn-success">產生派工</button>
                                     </div>
                                 </div>
                             </div><!-- /.box-header -->
@@ -148,6 +143,13 @@
                                 <h4>巡檢日期: @Model.checkDate</h4>
                                 <br>
                             }
+                            @if (@Model != null && @Model.ErrorMsg != null && !string.IsNullOrEmpty(@Model.ErrorMsg))
+                            {
+                                <div class="form-group has-error">
+                                    <label class="col-sm-2"></label>
+                                    <label class="col-sm-10">@Model.ErrorMsg</label>
+                                </div>
+                            }
                             <table id="roomInspectionTable" class="row-border" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
@@ -157,13 +159,14 @@
                                         <th>操作選項</th>
                                     </tr>
                                 </thead>
-                                @if (@Model != null && @Model.roomInspectionDispatch != null ) {
+                                @if (@Model != null && @Model.roomInspectionDispatch != null && @Model.ErrorType != 1) {
                                 <tbody>
                                     @foreach (var item in @Model.roomInspectionDispatch)
                                     {
                                     <tr id="@item.dispatchId">
                                             <td>@item.roomName</td>
                                             <td>
+                                                @if( @Model.ErrorType != 2 ){
                                                 <select class="form-control" id="inspectorId1_@item.dispatchId" onChange="updateInspector('@item.dispatchId','inspectorId1',this.value)">
                                                     @if (!string.IsNullOrEmpty(@item.inspectorId1)) {
                                                         foreach (var user in @Model.userList){
@@ -182,8 +185,13 @@
                                                         }
                                                     }
                                                 </select>
+                                                }else{
+                                                    <label>上午非巡檢日</label>
+                                                }
                                             </td>
                                             <td>
+                                                @if (@Model.ErrorType != 3)
+                                                {
                                                 <select class="form-control" id="inspectorId2_@item.dispatchId" onChange="updateInspector('@item.dispatchId','inspectorId2',this.value)">
                                                      @if (!string.IsNullOrEmpty(@item.inspectorId2))
                                                      {
@@ -192,20 +200,25 @@
                                                              if (user.userId == item.inspectorId2)
                                                              {
                                                                 <option selected="selected" value="@item.inspectorId2">@user.userCode  @user.userName</option>
-                                                            }
-                                                            else
-                                                            {
+                                                             }
+                                                             else
+                                                             {
                                                                 <option value="@user.userId">@user.userCode  @user.userName</option>
-                                                            }
-                                                        }
-                                                     }else{
+                                                             }
+                                                         }
+                                                     }
+                                                     else
+                                                     {
                                                         <option selected="selected" value="null">請選擇巡檢人員</option>
-                                                        foreach (var user in @Model.userList)
-                                                        {
+                                                         foreach (var user in @Model.userList)
+                                                         {
                                                             <option value="@user.userId">@user.userCode  @user.userName</option>
-                                                        }
+                                                         }
                                                      }
                                                 </select>
+                                                }eles{
+                                                    <label>下午非巡檢日</label>
+                                                }
                                             </td>
                                             <td>
                                                 <a href="#" data-toggle=modal data-target=#myModal><button class="btn btn-sm btn-danger" onclick="storeId('@item.dispatchId','@Model.checkDate')" ><i class="glyphicon glyphicon-remove"></i></button></a>

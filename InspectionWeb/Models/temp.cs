@@ -15,26 +15,24 @@ namespace InspectionWeb.Models
 using System;
     using System.Collections.Generic;
     
-public partial class noCheckDate
+public partial class temp
 {
 
-    public string id { get; set; }
+    public string dispatchId { get; set; }
 
-    public Nullable<System.DateTime> noCheckDate1 { get; set; }
+    public string roomId { get; set; }
 
-    public Nullable<byte> am { get; set; }
+    public string roomName { get; set; }
 
-    public Nullable<byte> pm { get; set; }
+    public Nullable<System.DateTime> checkDate { get; set; }
 
-    public string description { get; set; }
+    public string inspectorId1 { get; set; }
 
-    public string setupUserId { get; set; }
+    public string inspectorCode1 { get; set; }
 
-    public Nullable<byte> isDelete { get; set; }
+    public string inspectorName1 { get; set; }
 
-    public Nullable<System.DateTime> createTime { get; set; }
-
-    public Nullable<System.DateTime> lastUpdateTime { get; set; }
+    public string inspectorId2 { get; set; }
 
 }
 

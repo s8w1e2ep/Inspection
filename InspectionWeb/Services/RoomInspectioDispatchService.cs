@@ -40,7 +40,7 @@ namespace InspectionWeb.Services
             return result;
         }
 
-        public IResult Create(System.DateTime date, IEnumerable<exhibitionRoom> rooms)
+        public IResult Create(System.DateTime date, IEnumerable<exhibitionRoom> rooms, string setupId)
         {
             IResult result = new Result(false);
             GetAll().Where(x => x.isDelete == 0);
@@ -57,7 +57,7 @@ namespace InspectionWeb.Services
                     roomDispatch.roomId = rooms.ElementAt(i).roomId;
                     roomDispatch.inspectorId1 = rooms.ElementAt(i).inspectionUserId;
                     roomDispatch.inspectorId2 = rooms.ElementAt(i).inspectionUserId;
-                    roomDispatch.setupUserId = "";
+                    roomDispatch.setupUserId = setupId;
                     roomDispatch.isDelete = Convert.ToByte(0);
                     roomDispatch.createTime = now;
                     roomDispatch.lastUpdateTime = now;
