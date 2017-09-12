@@ -1,5 +1,4 @@
 ﻿$(function () {
-    $(".select2").select2();
 
     $('#ReportList_Item, #ReportList_Experience, #ReportList_Other').DataTable({
         "paging": false,
