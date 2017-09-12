@@ -10,6 +10,7 @@ using InspectionWeb.Services.Misc;
 
 namespace InspectionWeb.Controllers
 {
+    [AuthorizeUser(Super = true, Manager = true, Dispatch = true)]
     public class MaintenanceWorkController : Controller
     {
         private IAbnormalRecordService _abnormalRecordService;

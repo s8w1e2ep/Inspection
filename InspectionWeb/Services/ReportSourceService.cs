@@ -26,22 +26,28 @@ namespace InspectionWeb.Services
             }
 
             IResult result = new Result(false);
-
             reportSource source = new reportSource();
 
             try
             {
+                if (IsRepeat(sourceCode))
+                {
+                    result.ErrorMsg = "故障來源編號重複";
+                    return result;
+                }
                 DateTime now = DateTime.Now;
                 IdGenerator idGen = new IdGenerator();
 
                 source.sourceId = idGen.GetID("reportSource");
                 source.sourceCode = sourceCode;
                 source.sourceName = sourceName;
+                source.isDelete = Convert.ToByte(0);
                 source.description = "";
                 source.createTime = now;
                 source.lastUpdateTime = now;
 
                 this._repository.Create(source);
+                result.ErrorMsg = source.sourceId;
                 result.Success = true;
             }
             catch (Exception ex)
@@ -51,7 +57,7 @@ namespace InspectionWeb.Services
                 if (((System.Data.SqlClient.SqlException)((ex.InnerException).InnerException)).Number == 2627)
                 {
                     result.ErrorMsg = ex.ToString();
-                    //result.ErrorMsg = "";
+                    result.ErrorMsg = "來源編號或是名稱為空白";
                 }
             }
 
@@ -134,11 +140,13 @@ namespace InspectionWeb.Services
             {
                 result.Message = "找不到故障來源資料";
             }
-
             try
             {
-                var instance = this.GetById(sourceId);
-                this._repository.Delete(instance);
+                reportSource instance = this.GetById(sourceId);
+                Dictionary<string, object> DicUpdate = new Dictionary<string, object>();
+                DicUpdate.Add("isDelete", Convert.ToByte(1));
+                DicUpdate.Add("lastUpdateTime", DateTime.Now);
+                this._repository.Update(instance, DicUpdate);
                 result.Success = true;
             }
             catch (Exception ex)
@@ -148,14 +156,14 @@ namespace InspectionWeb.Services
             return result;
         }
 
-        public bool IsExists(string sourceId)
+        public bool IsRepeat(string sourceCode)
         {
-            return this._repository.GetAll().Any(x => x.sourceId == sourceId);
+            return this._repository.GetAll().Any(x => x.isDelete == 0 && x.sourceCode == sourceCode);
         }
 
-        public string GetId(string sourceCode)
+        public bool IsExists(string sourceId)
         {
-            return this._repository.Get(x => x.sourceCode == sourceCode).sourceId;
+            return this._repository.GetAll().Any(x => x.sourceId == sourceId && x.isDelete == 0);
         }
 
         public reportSource GetById(string sourceId)
@@ -165,17 +173,12 @@ namespace InspectionWeb.Services
 
         public reportSource GetBySourceCode(string sourceCode)
         {
-            return this._repository.Get(x => x.sourceCode == sourceCode);
-        }
-
-        public reportSource GetBySourceName(string name)
-        {
-            return this._repository.Get(x => x.sourceName == name);
+            return this._repository.Get(x => x.sourceCode == sourceCode && x.isDelete == 0);
         }
 
         public IEnumerable<reportSource> GetAll()
         {
-            return this._repository.GetAll().OrderBy(abnormalDefinition => abnormalDefinition.createTime);
+            return this._repository.GetAll().Where(x => x.isDelete ==0 ).OrderBy(x => x.createTime);
         }
     }
 }

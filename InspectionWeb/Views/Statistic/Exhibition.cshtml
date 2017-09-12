@@ -20,6 +20,9 @@
                             <h3 class="box-title">篩選條件</h3>
                         </div>
                         <div class="box-body row">
+                            <div id="errDiv" class="form-group has-error" style="display: none;">
+                                <label id="errMsg" class="col-sm-12">查無資料</label>
+                            </div>
                             <div class="col-md-6 form-group">
                                 <label class="control-label col-md-2" for="startDatePicker">開始日期</label>
                                 <div class="input-group col-md-8">
@@ -39,11 +42,13 @@
                                 </div>
                             </div>
                             <div class="col-md-12 form-group">
-                                <label class="control-label col-md-1" for="exhibitionSelect">展示廳</label>
-                                <select class="form-control" id="exhibitionSelect" style="width: 40%;">
-                                    <option value="exhibition1">展示廳-1</option>
-                                    <option value="exhibition2">展示廳-2</option>
-                                    <option value="exhibition3">展示廳-3</option>
+                                <label class="control-label col-md-1" for="roomSelect">展示廳</label>
+                                <select id="roomSelect" class="form-control" style="width: 40%;">
+                                    <option value="#">--請選擇展示廳--</option>
+                                    @foreach (var item in ViewBag.rooms)
+                                    {
+                                        <option value="@item.roomId">@item.roomName</option>
+                                    }
                                 </select>
                             </div>
                         </div>
@@ -59,7 +64,7 @@
                     <h4>人工巡檢</h4>
                     <div class="box" style="border-top-color: #0094ff;">
                         <div class="box-body">
-                            <table id="artificialTable" class="row-border" cellspacing="0" style="width: 100%;">
+                            <table id="manTable" class="row-border" cellspacing="0" style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>日期</th>
@@ -69,18 +74,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr id="t1">
-                                        <td>a</td>
-                                        <td>b</td>
-                                        <td>c</td>
-                                        <td>d</td>
-                                    </tr>
-                                    <tr id="t2">
-                                        <td>g</td>
-                                        <td>h</td>
-                                        <td>r</td>
-                                        <td>a</td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -103,7 +96,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
                                 </tbody>
                             </table>
                         </div>
@@ -113,4 +105,89 @@
         </section>
     </div>
 </div>
-<script src="~/Scripts/exhibition.js"></script>
+<script>
+    var startDate = null;
+    var endDate = null;
+
+    $(document).ready(function () {
+        $('#manTable').DataTable({
+            "paging": true,
+            "info": false,
+            "searching": true,
+            "columnDefs": [
+                { "targets": 0, "width": "25%", "orderable": true },
+                { "targets": 1, "width": "25%", "orderable": true },
+                { "targets": 2, "width": "25%", "orderable": true },
+                { "targets": 3, "width": "25%", "orderable": true }
+            ]
+        });
+
+        $('#autoTable').DataTable({
+            "paging": true,
+            "info": false,
+            "searching": true,
+            "columnDefs": [
+                { "targets": 0, "width": "25%", "orderable": true },
+                { "targets": 1, "width": "25%", "orderable": true },
+                { "targets": 2, "width": "25%", "orderable": true },
+                { "targets": 3, "width": "25%", "orderable": true }
+            ]
+        });
+
+        // single Date picker
+        $('#startDatePicker, #endDatePicker').datepicker({
+            language: 'zh-TW',
+            format: 'yyyy/mm/dd'
+        }).on('changeDate', function (ev) {
+            startDate = $('#startDatePicker').val();
+            endDate = $('#endDatePicker').val();
+            $('.datepicker').hide();
+        });
+    });
+
+    function query() {
+        if (startDate === null || startDate === "") {
+            alert('請選擇開始日期!');
+        } else if (endDate === null || endDate === "") {
+            alert('請選擇結束日期!');
+        } else if (endDate < startDate) { 
+            alert('結束日期不能比開始日期早');
+        } else if ($('#roomSelect').val() === '#') {
+            alert('請選擇展示廳');
+        } else {
+            setInspectTable('man');
+            setInspectTable('auto');
+        }
+    }
+
+    function setInspectTable(type) {
+        $.get(
+            'QueryInspect',
+            {
+                roomId: $('#roomSelect').val(),
+                startDate: startDate,
+                endDate: endDate,
+                type: type
+            },
+            function (data) {
+                if (data !== "[]") {
+                    for (var record in data) {
+                        t.row.add([
+                            record.dispatchTime,
+                            record.total,
+                            record.normal,
+                            record.prob
+                        ]).draw(false);
+                    }
+                    $('#errDiv').css('display', 'none');
+                } else {
+                    $('#errDiv').css('display', 'block');
+                }
+            },
+            'json' 
+        ).fail(function () {
+            //console.log(e);
+            alert("抱歉! 伺服器無法接受您的查詢!");
+        });
+    }
+</script>

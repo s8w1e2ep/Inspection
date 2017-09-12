@@ -8,8 +8,10 @@ namespace InspectionWeb.Models
     public class AuthorizeUserAttribute : AuthorizeAttribute
     {
         public bool Normal { get; set; }
-        public bool Deployer { get; set; }
+        public bool Dispatch { get; set; }
+        public bool User { get; set; }
         public bool Manager { get; set; }
+        public bool Super { get; set; }
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
@@ -37,9 +39,17 @@ namespace InspectionWeb.Models
                 }
             }
 
-            if (Deployer == true)
+            if (Dispatch == true)
             {
-                if (currentRoles.Contains("Deployer"))
+                if (currentRoles.Contains("Dispatch"))
+                {
+                    return true;
+                }
+            }
+
+            if (User == true)
+            {
+                if (currentRoles.Contains("User"))
                 {
                     return true;
                 }
@@ -48,6 +58,14 @@ namespace InspectionWeb.Models
             if (Manager == true)
             {
                 if (currentRoles.Contains("Manager"))
+                {
+                    return true;
+                }
+            }
+
+            if (Super == true)
+            {
+                if (currentRoles.Contains("Super"))
                 {
                     return true;
                 }

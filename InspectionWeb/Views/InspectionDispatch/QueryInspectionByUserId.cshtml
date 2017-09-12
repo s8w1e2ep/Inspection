@@ -1,22 +1,82 @@
-﻿
+﻿@model InspectionWeb.Models.ViewModel.ListQueryInspectionByUserIdViewModel
+
 @{
     ViewBag.Title = "QueryInspectionDispatchByUserId";
 }
 
+<!--multi select-->
+<script src="../../plugins/bootstrap3-select/js/bootstrap-select.min.js"></script>
+<link rel="stylesheet" href="../../plugins/bootstrap3-select/css/bootstrap-select.min.css">
+<!-- datepicker -->
+<link href="../../Scripts/datepicker3.css" rel="stylesheet" type="text/css" />
+<script src="../../Scripts/jquery-ui.min.js"></script>
+<script src="../../Scripts/bootstrap-datepicker.js"></script>
+<script src="../../Scripts/locales/bootstrap-datepicker.zh-TW.js"></script>
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
 <script>
+    $(function () {
+        setTables();
+        $('#queryDateStart').datepicker({
+            format: "yyyy/mm/dd",
+            language: 'zh-TW',
+            todayHighlight: true
+        });
+        $('#queryDateEnd').datepicker({
+            format: "yyyy/mm/dd",
+            language: 'zh-TW',
+            todayHighlight: true
+        });
+
+    });
+
+    function fieldValidation(field) {
+        if ($.trim($(field).val()) == '') {
+            $(field + 'Div').addClass('has-error');
+            $(field + 'Div').val('');
+            return false;
+        } else {
+            $(field + 'Div').removeClass('has-error');
+        }
+        return true;
+    }
 
     function formValidation() {
+        if (fieldValidation('#queryDateStart') && fieldValidation('#queryDateEnd')) {
+            return true;
+        }
         return false;
+    }
+
+    function setTables() {
+        $('#roomInspectionTable').DataTable({
+            'columnDefs': [
+                { 'targets': 0, 'width': "20%", 'orderable': false },
+                { 'targets': 1, 'width': "20%", 'orderable': false },
+                { 'targets': 2, 'width': "30%", 'orderable': false },
+                { 'targets': 3, 'witdh': "30%", 'orderable': false}
+            ]
+        });
+        $('#itemInspectionTable').DataTable({
+            'columnDefs': [
+                { 'targets': 0, 'width': "20%", 'orderable': false },
+                { 'targets': 1, 'width': "20%", 'orderable': false },
+                { 'targets': 2, 'width': "30%", 'orderable': false },
+                { 'targets': 3, 'width': "30%", 'orderable': false }
+            ]
+        });
     }
 
 </script>
 
 
-
 <div class="wrapper">
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>巡檢查詢</h1>
             <ol class="breadcrumb">
@@ -28,14 +88,135 @@
         <!-- Main content -->
         <section class="content">
             <div class="row">
-                <!-- left column -->
                 <div class="col-md-12">
                     <ul class="nav nav-tabs">
-                        <li><a>依展示廳</a></li>
-                        <li><a>依體驗設施</a></li>
-                        <li class="active"><a>依個人</a></li>
-                        <li><a>依日期彙整結果</a></li>
+                        <li><a href="@Url.Action("QueryInspectionByRoom")">依展示廳</a></li>
+                        <li><a href="@Url.Action("QueryInspectionByItem")">依體驗設施</a></li>
+                        <li class="active"><a href="@Url.Action("QueryInspectionByUserId")">依個人</a></li>
+                        <li><a href="@Url.Action("QueryInspectionByDate")">依日期彙整結果</a></li>
                     </ul>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="box box-success">
+                        <form class="form-horizontal" method="post" action="@Url.Action("QueryInspectionByUserId")" onsubmit="return formValidation();">
+                            <div class="box-body with-border">
+                                <div id="queryDateStartDiv" class="form-group">
+                                    <div class="col-sm-2">
+                                        <label for="queryDateStart" class="control-label">開始日期</label>
+                                    </div>
+                                    <div class="input-group col-sm-3">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" id="queryDateStart" name="queryDateStart">
+                                    </div>
+                                </div>
+                                <div id="queryDateEndDiv" class="form-group">
+                                    <div class="col-sm-2">
+                                        <label for="queryDateEnd" class="control-label">結束日期</label>
+                                    </div>
+                                    <div class="input-group col-sm-3">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" id="queryDateEnd" name="queryDateEnd">
+                                    </div>
+                                </div>
+                                <div id="userIdDiv" class="form-group">
+                                    <div class="col-sm-2">
+                                        <label for="dispatchDate" class="control-label">巡檢人員</label>
+                                    </div>
+                                    <div class="input-group col-sm-3">
+                                        <select class="selectpicker" multiple title="複選巡檢人員" name="userId" id="userId">
+                                            @if (@Model != null && @Model.users != null)
+                                            {
+                                                foreach (var item in @Model.users)
+                                                {
+                                                    <option value="@item.userId">@item.userCode @item.userName</option>
+                                                }
+                                            }
+                                        </select>
+                                     </div>  
+                                </div>
+                                <div class="col-sm-8">
+                                    <button type="submit" class="btn btn-success pull-right">搜尋</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="box box-success">
+                        <div class="box-body">
+                            @if (@Model != null && @Model.startDate != null && @Model.endDate != null)
+                            {
+                                <h4>巡檢日期: @Model.startDate ~ @Model.endDate</h4>
+                                <br>
+                            }
+                            <table id="roomInspectionTable" class="row-border" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>展示廳</th>
+                                        <th>巡檢日期</th>
+                                        <th>上午巡檢人員</th>
+                                        <th>下午巡檢人員</th>
+                                    </tr>
+                                </thead>
+                                @if (@Model != null && @Model.itemInspectionDispatch != null)
+                                {
+                                    <tbody>
+                                        @foreach (var item in @Model.roomInspectionDispatch)
+                                        {
+                                            <tr id="@item.dispatchId">
+                                                <td>@item.roomName</td>
+                                                <td>@item.checkDate</td>
+                                                <td>@item.inspectorCode1 @item.inspectorName1</td>
+                                                <td>@item.inspectorCode2 @item.inspectorName2</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box box-success">
+                        <div class="box-body">
+                            @if (@Model != null && @Model.startDate != null && @Model.endDate != null)
+                            {
+                                <h4>巡檢日期: @Model.startDate ~ @Model.endDate</h4>
+                                <br>
+                            }
+                            <table id="itemInspectionTable" class="row-border" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>體驗項目</th>
+                                        <th>巡檢日期</th>
+                                        <th>上午巡檢人員</th>
+                                        <th>下午巡檢人員</th>
+                                    </tr>
+                                </thead>
+                                @if (@Model != null && @Model.itemInspectionDispatch != null)
+                                {
+                                    <tbody>
+                                        @foreach (var item in @Model.itemInspectionDispatch)
+                                        {
+                                            <tr id="@item.dispatchId">
+                                                <td>@item.itemName</td>
+                                                <td>@item.checkDate</td>
+                                                <td>@item.inspectorCode1 @item.inspectorName1</td>
+                                                <td>@item.inspectorCode2 @item.inspectorName2</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                }
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section><!-- /.content -->

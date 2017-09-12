@@ -39,7 +39,7 @@ namespace InspectionWeb
 
         public static void RegisterTypes(IUnityContainer container)
         {
-            //¸ê®Æ®w³s±µ¦r¦ê¥Ñ°õ¦æºÝÀô¹Ò¨Óµ¹¤©¡A¦Ó¤£¼g¦º¦b DbContextFactory ·í¤¤.
+            //ï¿½ï¿½Æ®wï¿½sï¿½ï¿½ï¿½rï¿½ï¿½Ñ°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¨Óµï¿½ï¿½ï¿½ï¿½Aï¿½Ó¤ï¿½ï¿½gï¿½ï¿½ï¿½b DbContextFactory ï¿½ï¿½.
             string connectionString = WebConfigurationManager.ConnectionStrings["inspectionEntities"].ConnectionString;
 
             container.RegisterType<IDbContextFactory, DbContextFactory>(
@@ -50,20 +50,45 @@ namespace InspectionWeb
             container.RegisterType<IRepository<abnormalDefinition>, GenericRepository<abnormalDefinition>>();
             container.RegisterType<IRepository<abnormalRecord>, GenericRepository<abnormalRecord>>();
             container.RegisterType<IRepository<exhibitionItem>, GenericRepository<exhibitionItem>>();
+            container.RegisterType<IRepository<itemInspectionDispatch>, GenericRepository<itemInspectionDispatch>>();
+            container.RegisterType<IRepository<roomInspectionDispatch>, GenericRepository<roomInspectionDispatch>>();
+            container.RegisterType<IRepository<itemInspectionDispatchDetail>, GenericRepository<itemInspectionDispatchDetail>>();
+            container.RegisterType<IRepository<roomInspectionDispatchDetail>, GenericRepository<roomInspectionDispatchDetail>>();
+            container.RegisterType<IRepository<noCheckDate>, GenericRepository<noCheckDate>>();
+            container.RegisterType<IRepository<exhibitionItem>, GenericRepository<exhibitionItem>>();
+            container.RegisterType<IRepository<exhibitionRoom>, GenericRepository<exhibitionRoom>>();
             container.RegisterType<IRepository<reportDevice>, GenericRepository<reportDevice>>();
+            container.RegisterType<IRepository<reportSource>, GenericRepository<reportSource>>();
+            container.RegisterType<IRepository<roomCheckRecord>, GenericRepository<roomCheckRecord>>();
+            container.RegisterType<IRepository<itemCheckRecord>, GenericRepository<itemCheckRecord>>();
             container.RegisterType<IRepository<reportSource>, GenericRepository<reportSource>>();
             container.RegisterType<IRepository<user>, GenericRepository<user>>();
             container.RegisterType<IRepository<userGroup>, GenericRepository<userGroup>>();
+            container.RegisterType<IRepository<fieldMap>, GenericRepository<fieldMap>>();
+            container.RegisterType<IRepository<quickSolution>, GenericRepository<quickSolution>>();
+            container.RegisterType<IRepository<exhibitionRoom>, GenericRepository<exhibitionRoom>>();
+            container.RegisterType<IRepository<otherAbnormalRecord>, GenericRepository<otherAbnormalRecord>>();
 
 
             //Service
             container.RegisterType<IAbnormalDefinitionService, AbnormalDefinitionService>();
             container.RegisterType<IAbnormalRecordService, AbnormalRecordService>();
             container.RegisterType<IExhibitionItemService, ExhibitionItemService>();
+            container.RegisterType<IExhibitionRoomService, ExhibitionRoomService>();
             container.RegisterType<IReportDeviceService, ReportDeviceService>();
             container.RegisterType<IReportSourceService, ReportSourceService>();
+            container.RegisterType<INoCheckDateService, NoCheckDateService>();
+            container.RegisterType<IItemInspectionDispatchService, ItemInspectionDispatchService>();
+            container.RegisterType<IRoomInspectionDispatchService, RoomInspectionDispatchService>();
+            container.RegisterType<IRoomCheckRecordService, RoomCheckRecordService>();
+            container.RegisterType<IItemCheckRecordService, ItemCheckRecordService>();
+            container.RegisterType<INoCheckDateService, NoCheckDateService>();
             container.RegisterType<IUserService, UserService>();
             container.RegisterType<IUserGroupService, UserGroupService>();
+            container.RegisterType<IFieldMapService, FieldMapService>();
+            container.RegisterType<ISolutionService, SolutionService>();
+            container.RegisterType<IExhibitionRoomService, ExhibitionRoomService>();
+            container.RegisterType<IOtherAbnormalRecordService, OtherAbnormalRecordService>();
             container.RegisterType<IMaintenanceWorkService, MaintenanceWorkService>();
 
 

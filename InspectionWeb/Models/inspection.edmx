@@ -53,10 +53,10 @@
         </EntityType>
         <EntityType Name="exhibitionItem">
           <Key>
-            <PropertyRef Name="roomId" />
+            <PropertyRef Name="itemId" />
           </Key>
-          <Property Name="roomId" Type="nvarchar" MaxLength="32" Nullable="false" />
-          <Property Name="itemId" Type="nvarchar" MaxLength="32" />
+          <Property Name="roomId" Type="nvarchar" MaxLength="32" />
+          <Property Name="itemId" Type="nvarchar" MaxLength="32" Nullable="false" />
           <Property Name="itemCode" Type="nvarchar" MaxLength="32" />
           <Property Name="itemName" Type="nvarchar" MaxLength="64" />
           <Property Name="itemType" Type="smallint" />
@@ -72,6 +72,7 @@
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
+          <Property Name="inspectionUserId" Type="nchar" MaxLength="32" />
         </EntityType>
         <EntityType Name="exhibitionRoom">
           <Key>
@@ -295,6 +296,42 @@
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
         </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'inspection.dbo.temp' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="temp">
+          <Key>
+            <PropertyRef Name="dispatchId" />
+            <PropertyRef Name="roomId" />
+          </Key>
+          <Property Name="dispatchId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="roomId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="roomName" Type="nvarchar" MaxLength="64" />
+          <Property Name="checkDate" Type="date" />
+          <Property Name="inspectorId1" Type="nvarchar" MaxLength="32" />
+          <Property Name="inspectorCode1" Type="nvarchar" MaxLength="64" />
+          <Property Name="inspectorName1" Type="nvarchar" MaxLength="64" />
+          <Property Name="inspectorId2" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'inspection.dbo.temp1' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="temp1">
+          <Key>
+            <PropertyRef Name="id1" />
+          </Key>
+          <Property Name="id1" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="u1" Type="nvarchar" MaxLength="32" />
+          <Property Name="n1" Type="nvarchar" MaxLength="64" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'inspection.dbo.temp2' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="temp2">
+          <Key>
+            <PropertyRef Name="id2" />
+          </Key>
+          <Property Name="id2" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="u2" Type="nvarchar" MaxLength="32" />
+          <Property Name="n2" Type="nvarchar" MaxLength="64" />
+        </EntityType>
         <EntityType Name="user">
           <Key>
             <PropertyRef Name="userId" />
@@ -350,11 +387,49 @@
           <EntitySet Name="systemSettings" EntityType="Self.systemSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="userGroup" EntityType="Self.userGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="temp" EntityType="Self.temp" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [temp].[dispatchId] AS [dispatchId], 
+    [temp].[roomId] AS [roomId], 
+    [temp].[roomName] AS [roomName], 
+    [temp].[checkDate] AS [checkDate], 
+    [temp].[inspectorId1] AS [inspectorId1], 
+    [temp].[inspectorCode1] AS [inspectorCode1], 
+    [temp].[inspectorName1] AS [inspectorName1], 
+    [temp].[inspectorId2] AS [inspectorId2]
+    FROM [dbo].[temp] AS [temp]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="temp1" EntityType="Self.temp1" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [temp1].[id1] AS [id1], 
+    [temp1].[u1] AS [u1], 
+    [temp1].[n1] AS [n1]
+    FROM [dbo].[temp1] AS [temp1]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="temp2" EntityType="Self.temp2" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [temp2].[id2] AS [id2], 
+    [temp2].[u2] AS [u2], 
+    [temp2].[n2] AS [n2]
+    FROM [dbo].[temp2] AS [temp2]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="inspectionModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="abnormalDefinition">
+          <Key>
+            <PropertyRef Name="abnormalId" />
+          </Key>
+          <Property Name="abnormalId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="abnormalCode" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="abnormalName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="isDelete" Type="Byte" />
+          <Property Name="createTime" Type="DateTime" Precision="3" />
+          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="abnormalRecord">
           <Key>
             <PropertyRef Name="recordId" />
@@ -388,28 +463,6 @@
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="exhibitionItem">
-          <Key>
-            <PropertyRef Name="roomId" />
-          </Key>
-          <Property Name="roomId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="itemId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="itemCode" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="itemName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="picture" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="companyId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="fieldId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="x" Type="Int32" />
-          <Property Name="y" Type="Int32" />
-          <Property Name="isLock" Type="Byte" />
-          <Property Name="active" Type="Int16" />
-          <Property Name="periodReportTime" Type="Int32" />
-          <Property Name="isDelete" Type="Byte" />
-          <Property Name="createTime" Type="DateTime" Precision="3" />
-          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
-          <Property Name="itemType" Type="Int16" />
         </EntityType>
         <EntityType Name="exhibitionRoom">
           <Key>
@@ -464,15 +517,15 @@
           <Key>
             <PropertyRef Name="dispatchId" />
           </Key>
-          <Property Name="dispatchId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="itemId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="checkDate" Type="DateTime" Precision="0" />
-          <Property Name="inspectorId1" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="inspectorId2" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="setupUserId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="dispatchId" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="itemId" MaxLength="32" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="checkDate" Precision="0" Type="DateTime" />
+          <Property Name="inspectorId1" MaxLength="32" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="inspectorId2" MaxLength="32" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="setupUserId" MaxLength="32" FixedLength="false" Unicode="true" Type="String" />
           <Property Name="isDelete" Type="Byte" />
-          <Property Name="createTime" Type="DateTime" Precision="3" />
-          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="createTime" Precision="3" Type="DateTime" />
+          <Property Name="lastUpdateTime" Precision="3" Type="DateTime" />
         </EntityType>
         <EntityType Name="reportDevice">
           <Key>
@@ -505,16 +558,6 @@
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="roomActiveRecord">
-          <Key>
-            <PropertyRef Name="activityId" />
-          </Key>
-          <Property Name="activityId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="roomId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="active" Type="Int16" />
-          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="createTime" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="roomCheckRecord">
           <Key>
             <PropertyRef Name="checkId" />
@@ -530,20 +573,16 @@
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="user">
+        <EntityType Name="softwareVersion">
           <Key>
-            <PropertyRef Name="userId" />
+            <PropertyRef Name="softwareId" />
           </Key>
-          <Property Name="userId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="userCode" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="groupId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="password" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="userName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="picture" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="agent" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="tel" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="email" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="active" Type="Byte" />
+          <Property Name="softwareId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="softwareCode" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="softwareName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="fileName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="version" Type="String" MaxLength="14" FixedLength="false" Unicode="true" />
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
@@ -564,142 +603,37 @@
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityContainer Name="inspectionEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="abnormalDefinition" EntityType="Self.abnormalDefinition" />
           <EntitySet Name="abnormalRecord" EntityType="Self.abnormalRecord" />
           <EntitySet Name="company" EntityType="Self.company" />
-          <EntitySet Name="exhibitionItem" EntityType="Self.exhibitionItem" />
           <EntitySet Name="exhibitionRoom" EntityType="Self.exhibitionRoom" />
           <EntitySet Name="fieldMap" EntityType="Self.fieldMap" />
           <EntitySet Name="itemCheckRecord" EntityType="Self.itemCheckRecord" />
           <EntitySet Name="itemInspectionDispatch" EntityType="Self.itemInspectionDispatch" />
           <EntitySet Name="reportDevice" EntityType="Self.reportDevice" />
           <EntitySet Name="reportSource" EntityType="Self.reportSource" />
-          <EntitySet Name="roomActiveRecord" EntityType="Self.roomActiveRecord" />
           <EntitySet Name="roomCheckRecord" EntityType="Self.roomCheckRecord" />
-          <EntitySet Name="user" EntityType="Self.user" />
+          <EntitySet Name="softwareVersion" EntityType="Self.softwareVersion" />
           <EntitySet Name="userGroup" EntityType="Self.userGroup" />
-          <FunctionImport Name="sp_alterdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_creatediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_dropdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(inspectionModel.sp_helpdiagramdefinition_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(inspectionModel.sp_helpdiagrams_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_renamediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="new_diagramname" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="sp_upgraddiagrams" />
           <EntitySet Name="quickSolution" EntityType="inspectionModel.quickSolution" />
-          <FunctionImport Name="sp_alterdiagram1">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_creatediagram1">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_dropdiagram1">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagramdefinition1" ReturnType="Collection(inspectionModel.sp_helpdiagramdefinition1_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagrams1" ReturnType="Collection(inspectionModel.sp_helpdiagrams1_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_renamediagram1">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="new_diagramname" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="sp_upgraddiagrams1" />
-          <EntitySet Name="abnormalDefinition" EntityType="inspectionModel.abnormalDefinition" />
-          <EntitySet Name="softwareVersion" EntityType="inspectionModel.softwareVersion" />
           <EntitySet Name="otherAbnormalRecord" EntityType="inspectionModel.otherAbnormalRecord" />
           <EntitySet Name="systemSettings" EntityType="inspectionModel.systemSettings" />
-          <EntitySet Name="roomInspectionDispatch" EntityType="inspectionModel.roomInspectionDispatch" />
+          <EntitySet Name="exhibitionItem" EntityType="inspectionModel.exhibitionItem" />
           <EntitySet Name="manRepairRecord" EntityType="inspectionModel.manRepairRecord" />
           <EntitySet Name="noCheckDate" EntityType="inspectionModel.noCheckDate" />
+          <EntitySet Name="roomActiveRecord" EntityType="inspectionModel.roomActiveRecord" />
+          <EntitySet Name="roomInspectionDispatch" EntityType="inspectionModel.roomInspectionDispatch" />
+          <EntitySet Name="user" EntityType="inspectionModel.user" />
+          <EntitySet Name="temp" EntityType="inspectionModel.temp" />
+          <EntitySet Name="temp1" EntityType="inspectionModel.temp1" />
+          <EntitySet Name="temp2" EntityType="inspectionModel.temp2" />
         </EntityContainer>
-        <ComplexType Name="sp_helpdiagramdefinition_Result">
-          <Property Type="Int32" Name="version" Nullable="true" />
-          <Property Type="Binary" Name="definition" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="sp_helpdiagrams_Result">
-          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
-          <Property Type="Int32" Name="OwnerID" Nullable="false" />
-        </ComplexType>
         <EntityType Name="quickSolution">
           <Key>
             <PropertyRef Name="solutionId" />
           </Key>
           <Property Name="solutionId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
           <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="isDelete" Type="Byte" />
-          <Property Name="createTime" Type="DateTime" Precision="3" />
-          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <ComplexType Name="sp_helpdiagramdefinition1_Result">
-          <Property Type="Int32" Name="version" Nullable="true" />
-          <Property Type="Binary" Name="definition" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="sp_helpdiagrams1_Result">
-          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
-          <Property Type="Int32" Name="OwnerID" Nullable="false" />
-        </ComplexType>
-        <EntityType Name="abnormalDefinition">
-          <Key>
-            <PropertyRef Name="abnormalId" />
-          </Key>
-          <Property Name="abnormalId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="abnormalCode" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="abnormalName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="isDelete" Type="Byte" />
-          <Property Name="createTime" Type="DateTime" Precision="3" />
-          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="softwareVersion">
-          <Key>
-            <PropertyRef Name="softwareId" />
-          </Key>
-          <Property Name="softwareId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="softwareCode" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="softwareName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="fileName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="version" Type="String" MaxLength="14" FixedLength="false" Unicode="true" />
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
@@ -733,19 +667,28 @@
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="roomInspectionDispatch">
+        <EntityType Name="exhibitionItem">
           <Key>
-            <PropertyRef Name="dispatchId" />
+            <PropertyRef Name="itemId" />
           </Key>
-          <Property Name="dispatchId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="checkDate" Type="DateTime" Precision="0" />
-          <Property Name="roomId" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="inspectorId1" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="inspectorId2" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="setupUserId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="roomId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="itemId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="itemCode" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="itemName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="itemType" Type="Int16" />
+          <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="picture" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="companyId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="fieldId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="x" Type="Int32" />
+          <Property Name="y" Type="Int32" />
+          <Property Name="isLock" Type="Byte" />
+          <Property Name="active" Type="Int16" />
+          <Property Name="periodReportTime" Type="Int32" />
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="inspectionUserId" Type="String" MaxLength="32" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="manRepairRecord">
           <Key>
@@ -783,12 +726,97 @@
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="roomActiveRecord">
+          <Key>
+            <PropertyRef Name="activityId" />
+          </Key>
+          <Property Name="activityId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="roomId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="active" Type="Int16" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="createTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="roomInspectionDispatch">
+          <Key>
+            <PropertyRef Name="dispatchId" />
+          </Key>
+          <Property Name="dispatchId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="checkDate" Type="DateTime" Precision="0" />
+          <Property Name="roomId" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="inspectorId1" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="inspectorId2" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="setupUserId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="isDelete" Type="Byte" />
+          <Property Name="createTime" Type="DateTime" Precision="3" />
+          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="userCode" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="groupId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="userName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="picture" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="agent" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="tel" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="active" Type="Byte" />
+          <Property Name="isDelete" Type="Byte" />
+          <Property Name="createTime" Type="DateTime" Precision="3" />
+          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="temp">
+          <Key>
+            <PropertyRef Name="dispatchId" />
+            <PropertyRef Name="roomId" />
+          </Key>
+          <Property Name="dispatchId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="roomId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="roomName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="checkDate" Type="DateTime" Precision="0" />
+          <Property Name="inspectorId1" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="inspectorCode1" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="inspectorName1" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="inspectorId2" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="temp1">
+          <Key>
+            <PropertyRef Name="id1" />
+          </Key>
+          <Property Name="id1" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="u1" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="n1" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="temp2">
+          <Key>
+            <PropertyRef Name="id2" />
+          </Key>
+          <Property Name="id2" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="u2" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="n2" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="inspectionModelStoreContainer" CdmEntityContainer="inspectionEntities">
+          <EntitySetMapping Name="abnormalDefinition">
+            <EntityTypeMapping TypeName="inspectionModel.abnormalDefinition">
+              <MappingFragment StoreEntitySet="abnormalDefinition">
+                <ScalarProperty Name="abnormalName" ColumnName="abnormalName" />
+                <ScalarProperty Name="abnormalId" ColumnName="abnormalId" />
+                <ScalarProperty Name="abnormalCode" ColumnName="abnormalCode" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+                <ScalarProperty Name="createTime" ColumnName="createTime" />
+                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="abnormalRecord">
             <EntityTypeMapping TypeName="inspectionModel.abnormalRecord">
               <MappingFragment StoreEntitySet="abnormalRecord">
@@ -819,29 +847,6 @@
                 <ScalarProperty Name="website" ColumnName="website" />
                 <ScalarProperty Name="invoiceId" ColumnName="invoiceId" />
                 <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
-                <ScalarProperty Name="createTime" ColumnName="createTime" />
-                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="exhibitionItem">
-            <EntityTypeMapping TypeName="inspectionModel.exhibitionItem">
-              <MappingFragment StoreEntitySet="exhibitionItem">
-                <ScalarProperty Name="itemType" ColumnName="itemType" />
-                <ScalarProperty Name="itemCode" ColumnName="itemCode" />
-                <ScalarProperty Name="roomId" ColumnName="roomId" />
-                <ScalarProperty Name="itemId" ColumnName="itemId" />
-                <ScalarProperty Name="itemName" ColumnName="itemName" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="picture" ColumnName="picture" />
-                <ScalarProperty Name="companyId" ColumnName="companyId" />
-                <ScalarProperty Name="fieldId" ColumnName="fieldId" />
-                <ScalarProperty Name="x" ColumnName="x" />
-                <ScalarProperty Name="y" ColumnName="y" />
-                <ScalarProperty Name="isLock" ColumnName="isLock" />
-                <ScalarProperty Name="active" ColumnName="active" />
-                <ScalarProperty Name="periodReportTime" ColumnName="periodReportTime" />
                 <ScalarProperty Name="isDelete" ColumnName="isDelete" />
                 <ScalarProperty Name="createTime" ColumnName="createTime" />
                 <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
@@ -948,17 +953,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="roomActiveRecord">
-            <EntityTypeMapping TypeName="inspectionModel.roomActiveRecord">
-              <MappingFragment StoreEntitySet="roomActiveRecord">
-                <ScalarProperty Name="activityId" ColumnName="activityId" />
-                <ScalarProperty Name="roomId" ColumnName="roomId" />
-                <ScalarProperty Name="active" ColumnName="active" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="createTime" ColumnName="createTime" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="roomCheckRecord">
             <EntityTypeMapping TypeName="inspectionModel.roomCheckRecord">
               <MappingFragment StoreEntitySet="roomCheckRecord">
@@ -975,19 +969,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="user">
-            <EntityTypeMapping TypeName="inspectionModel.user">
-              <MappingFragment StoreEntitySet="user">
-                <ScalarProperty Name="userId" ColumnName="userId" />
-                <ScalarProperty Name="userCode" ColumnName="userCode" />
-                <ScalarProperty Name="groupId" ColumnName="groupId" />
-                <ScalarProperty Name="password" ColumnName="password" />
-                <ScalarProperty Name="userName" ColumnName="userName" />
-                <ScalarProperty Name="picture" ColumnName="picture" />
-                <ScalarProperty Name="agent" ColumnName="agent" />
-                <ScalarProperty Name="tel" ColumnName="tel" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="active" ColumnName="active" />
+          <EntitySetMapping Name="softwareVersion">
+            <EntityTypeMapping TypeName="inspectionModel.softwareVersion">
+              <MappingFragment StoreEntitySet="softwareVersion">
+                <ScalarProperty Name="softwareCode" ColumnName="softwareCode" />
+                <ScalarProperty Name="softwareId" ColumnName="softwareId" />
+                <ScalarProperty Name="softwareName" ColumnName="softwareName" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="fileName" ColumnName="fileName" />
+                <ScalarProperty Name="version" ColumnName="version" />
                 <ScalarProperty Name="isDelete" ColumnName="isDelete" />
                 <ScalarProperty Name="createTime" ColumnName="createTime" />
                 <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
@@ -1018,34 +1008,6 @@
                 <ScalarProperty Name="isDelete" ColumnName="isDelete" />
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="solutionId" ColumnName="solutionId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="abnormalDefinition">
-            <EntityTypeMapping TypeName="inspectionModel.abnormalDefinition">
-              <MappingFragment StoreEntitySet="abnormalDefinition">
-                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
-                <ScalarProperty Name="createTime" ColumnName="createTime" />
-                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="abnormalName" ColumnName="abnormalName" />
-                <ScalarProperty Name="abnormalCode" ColumnName="abnormalCode" />
-                <ScalarProperty Name="abnormalId" ColumnName="abnormalId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="softwareVersion">
-            <EntityTypeMapping TypeName="inspectionModel.softwareVersion">
-              <MappingFragment StoreEntitySet="softwareVersion">
-                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
-                <ScalarProperty Name="createTime" ColumnName="createTime" />
-                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="fileName" ColumnName="fileName" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="softwareName" ColumnName="softwareName" />
-                <ScalarProperty Name="softwareCode" ColumnName="softwareCode" />
-                <ScalarProperty Name="softwareId" ColumnName="softwareId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1080,18 +1042,27 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="roomInspectionDispatch">
-            <EntityTypeMapping TypeName="inspectionModel.roomInspectionDispatch">
-              <MappingFragment StoreEntitySet="roomInspectionDispatch">
+          <EntitySetMapping Name="exhibitionItem">
+            <EntityTypeMapping TypeName="inspectionModel.exhibitionItem">
+              <MappingFragment StoreEntitySet="exhibitionItem">
+                <ScalarProperty Name="inspectionUserId" ColumnName="inspectionUserId" />
                 <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
                 <ScalarProperty Name="createTime" ColumnName="createTime" />
                 <ScalarProperty Name="isDelete" ColumnName="isDelete" />
-                <ScalarProperty Name="setupUserId" ColumnName="setupUserId" />
-                <ScalarProperty Name="inspectorId2" ColumnName="inspectorId2" />
-                <ScalarProperty Name="inspectorId1" ColumnName="inspectorId1" />
+                <ScalarProperty Name="periodReportTime" ColumnName="periodReportTime" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="isLock" ColumnName="isLock" />
+                <ScalarProperty Name="y" ColumnName="y" />
+                <ScalarProperty Name="x" ColumnName="x" />
+                <ScalarProperty Name="fieldId" ColumnName="fieldId" />
+                <ScalarProperty Name="companyId" ColumnName="companyId" />
+                <ScalarProperty Name="picture" ColumnName="picture" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="itemType" ColumnName="itemType" />
+                <ScalarProperty Name="itemName" ColumnName="itemName" />
+                <ScalarProperty Name="itemCode" ColumnName="itemCode" />
+                <ScalarProperty Name="itemId" ColumnName="itemId" />
                 <ScalarProperty Name="roomId" ColumnName="roomId" />
-                <ScalarProperty Name="checkDate" ColumnName="checkDate" />
-                <ScalarProperty Name="dispatchId" ColumnName="dispatchId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1133,7 +1104,84 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          </EntityContainerMapping>
+          <EntitySetMapping Name="roomActiveRecord">
+            <EntityTypeMapping TypeName="inspectionModel.roomActiveRecord">
+              <MappingFragment StoreEntitySet="roomActiveRecord">
+                <ScalarProperty Name="createTime" ColumnName="createTime" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="roomId" ColumnName="roomId" />
+                <ScalarProperty Name="activityId" ColumnName="activityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="roomInspectionDispatch">
+            <EntityTypeMapping TypeName="inspectionModel.roomInspectionDispatch">
+              <MappingFragment StoreEntitySet="roomInspectionDispatch">
+                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+                <ScalarProperty Name="createTime" ColumnName="createTime" />
+                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+                <ScalarProperty Name="setupUserId" ColumnName="setupUserId" />
+                <ScalarProperty Name="inspectorId2" ColumnName="inspectorId2" />
+                <ScalarProperty Name="inspectorId1" ColumnName="inspectorId1" />
+                <ScalarProperty Name="roomId" ColumnName="roomId" />
+                <ScalarProperty Name="checkDate" ColumnName="checkDate" />
+                <ScalarProperty Name="dispatchId" ColumnName="dispatchId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user">
+            <EntityTypeMapping TypeName="inspectionModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+                <ScalarProperty Name="createTime" ColumnName="createTime" />
+                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="tel" ColumnName="tel" />
+                <ScalarProperty Name="agent" ColumnName="agent" />
+                <ScalarProperty Name="picture" ColumnName="picture" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="groupId" ColumnName="groupId" />
+                <ScalarProperty Name="userCode" ColumnName="userCode" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="temp">
+            <EntityTypeMapping TypeName="inspectionModel.temp">
+              <MappingFragment StoreEntitySet="temp">
+                <ScalarProperty Name="inspectorId2" ColumnName="inspectorId2" />
+                <ScalarProperty Name="inspectorName1" ColumnName="inspectorName1" />
+                <ScalarProperty Name="inspectorCode1" ColumnName="inspectorCode1" />
+                <ScalarProperty Name="inspectorId1" ColumnName="inspectorId1" />
+                <ScalarProperty Name="checkDate" ColumnName="checkDate" />
+                <ScalarProperty Name="roomName" ColumnName="roomName" />
+                <ScalarProperty Name="roomId" ColumnName="roomId" />
+                <ScalarProperty Name="dispatchId" ColumnName="dispatchId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="temp1">
+            <EntityTypeMapping TypeName="inspectionModel.temp1">
+              <MappingFragment StoreEntitySet="temp1">
+                <ScalarProperty Name="n1" ColumnName="n1" />
+                <ScalarProperty Name="u1" ColumnName="u1" />
+                <ScalarProperty Name="id1" ColumnName="id1" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="temp2">
+            <EntityTypeMapping TypeName="inspectionModel.temp2">
+              <MappingFragment StoreEntitySet="temp2">
+                <ScalarProperty Name="n2" ColumnName="n2" />
+                <ScalarProperty Name="u2" ColumnName="u2" />
+                <ScalarProperty Name="id2" ColumnName="id2" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

@@ -14,6 +14,13 @@ namespace InspectionWeb.Services.Interface
         IResult Create(abnormalRecord instance);
 
         /// <summary>
+        /// add new abnormal record
+        /// </summary>
+        /// <param name="itemId", "sourceId", "abnormalId", "reporter"></param>
+        /// <returns></returns>
+        IResult Create(string itemId, string sourceId, string abnormalId, string reporter);
+
+        /// <summary>
         /// update 
         /// </summary>
         /// <param name="instance"></param>
@@ -42,6 +49,13 @@ namespace InspectionWeb.Services.Interface
         /// <param name="recordId"></param>
         /// <returns></returns>
         bool IsExists(string recordId);
+
+        /// <summary>
+        /// check repeat of abnormal record
+        /// </summary>
+        /// <param name="recordId"></param>
+        /// <returns></returns>
+        bool IsRepeat(string itemId);
 
         /// <summary>
         /// get abnormal record

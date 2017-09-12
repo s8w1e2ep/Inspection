@@ -26,6 +26,7 @@
                 data: $.param({ 'abnormalId': toDeleteAbnormalId }),
                 type: 'DELETE',
             }).done(function (msg) {
+                console.log(msg);
                 $('#' + toDeleteAbnormalId).remove();
             });
         }

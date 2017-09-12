@@ -18,6 +18,7 @@ namespace InspectionWeb.Models
         public string itemId { get; set; }
         public string itemCode { get; set; }
         public string itemName { get; set; }
+        public Nullable<short> itemType { get; set; }
         public string description { get; set; }
         public string picture { get; set; }
         public string companyId { get; set; }
@@ -30,6 +31,6 @@ namespace InspectionWeb.Models
         public Nullable<byte> isDelete { get; set; }
         public Nullable<System.DateTime> createTime { get; set; }
         public Nullable<System.DateTime> lastUpdateTime { get; set; }
-        public Nullable<short> itemType { get; set; }
+        public string inspectionUserId { get; set; }
     }
 }

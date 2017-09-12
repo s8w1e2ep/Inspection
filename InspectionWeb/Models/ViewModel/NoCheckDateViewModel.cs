@@ -10,21 +10,25 @@ namespace InspectionWeb.Models.ViewModel
     {
         public string id { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
-        public DateTime noCheckDate { get; set; }
+        public string noCheckDate { get; set; }
 
-        public int checkTimeType { get; set; }
+        public Nullable<byte> am { get; set; }
+
+        public Nullable<byte> pm { get; set; }
 
         public string description { get; set; }
 
         public string setupUserId { get; set; }
 
-        public int isDelete { get; set; }
+        public Nullable<short> isDelete { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
-        public DateTime createTime { get; set; }
+        public Nullable<System.DateTime> createTime { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
-        public DateTime lastUpdateTime { get; set; }
+        public Nullable<System.DateTime> lastUpdateTime { get; set; }
+
+        public string ErrorMsg { get; set; }
+
     }
 }
