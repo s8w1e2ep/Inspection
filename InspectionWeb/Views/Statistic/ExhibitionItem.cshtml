@@ -14,7 +14,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-                <div class="box box-info" style="padding: 5px;">
+                <div class="box box-success" style="padding: 5px;">
                     <div class="box-header with-border">
                         <h3 class="box-title">篩選條件</h3>
                     </div>
@@ -65,9 +65,9 @@
         <div class="row">
             <div class="col-xs-12">
                 <h4>人工巡檢</h4>
-                <div class="box" style="border-top-color: #0094ff;">
+                <div class="box box-success">
                     <div class="box-body">
-                        <table id="manTable" class="row-border" cellspacing="0" width="100%">
+                        <table id="manTable" class="row-border" cellspacing="0" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th>日期</th>
@@ -86,9 +86,9 @@
         <div class="row">
             <div class="col-xs-12">
                 <h4>自動通報</h4>
-                <div class="box" style="border-top-color: #0094ff;">
+                <div class="box box-success">
                     <div class="box-body">
-                        <table id="autoTable" class="row-border" cellspacing="0" width="100%">
+                        <table id="autoTable" class="row-border" cellspacing="0" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th>日期</th>
@@ -188,10 +188,10 @@
 
     function setInspectTable(type) {
         $.get(
-            'QueryInspect',
+            'QueryItem',
             {
                 roomId: $('#roomSelect').val(),
-                roomItem: $('#itemSelect').val(),
+                itemId: $('#itemSelect').val(),
                 startDate: startDate,
                 endDate: endDate,
                 type: type
@@ -199,7 +199,7 @@
             function (data) {
                 if (data !== "[]") {
                     for (var record in data) {
-                        t.row.add([
+                        $('#' + type + 'Table').DataTable().row.add([
                             record.dispatchTime,
                             record.total,
                             record.normal,
