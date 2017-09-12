@@ -12,15 +12,12 @@ namespace InspectionWeb.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class roomCheckRecord
+    public partial class systemSettings
     {
-        public string checkId { get; set; }
-        public string dispatchId { get; set; }
-        public string roomId { get; set; }
-        public Nullable<System.DateTime> checkDate { get; set; }
-        public string inspectorId { get; set; }
-        public Nullable<short> status { get; set; }
-        public Nullable<short> checkTimeType { get; set; }
+        public string id { get; set; }
+        public string keyName { get; set; }
+        public string description { get; set; }
+        public string value { get; set; }
         public Nullable<byte> isDelete { get; set; }
         public Nullable<System.DateTime> createTime { get; set; }
         public Nullable<System.DateTime> lastUpdateTime { get; set; }
