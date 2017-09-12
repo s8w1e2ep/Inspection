@@ -70,7 +70,6 @@ namespace InspectionWeb
             container.RegisterType<IRepository<otherAbnormalRecord>, GenericRepository<otherAbnormalRecord>>();
 
 
-
             //Service
             container.RegisterType<IAbnormalDefinitionService, AbnormalDefinitionService>();
             container.RegisterType<IAbnormalRecordService, AbnormalRecordService>();
@@ -90,6 +89,9 @@ namespace InspectionWeb
             container.RegisterType<ISolutionService, SolutionService>();
             container.RegisterType<IExhibitionRoomService, ExhibitionRoomService>();
             container.RegisterType<IOtherAbnormalRecordService, OtherAbnormalRecordService>();
+            container.RegisterType<IMaintenanceWorkService, MaintenanceWorkService>();
+
+
         }
     }
 }

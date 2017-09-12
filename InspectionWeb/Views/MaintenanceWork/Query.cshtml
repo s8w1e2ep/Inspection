@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<InspectionWeb.Models.ViewModel.MaintenanceWorkDetailViewModel>
+
+@{
     ViewBag.Title = "維修綜合查詢";
 }
 <div class="wrapper">
@@ -41,13 +43,13 @@
                             <div class="col-md-6 form-group">
                                 <label class="control-label col-md-2">通報來源</label>
                                 <select class="form-control select2" style="width: 50%;">
-                                    <option selected="selected">巡檢填單</option>
+                                    <option selected="selected">其它</option>
+                                    <option>巡檢填單</option>
                                     <option>6000填單</option>
                                     <option>NM</option>
                                     <option>通報按鈕</option>
                                     <option>監控軟體</option>
                                     <option>app</option>
-                                    <option>其它</option>
                                 </select>
                             </div>
                             <div class="col-md-6 form-group">
