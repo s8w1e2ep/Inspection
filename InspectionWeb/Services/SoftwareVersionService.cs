@@ -60,7 +60,8 @@ namespace InspectionWeb.Services
 
             try
             {
-                
+
+                instance.lastUpdateTime = DateTime.Now;
                 this._repository.Update(instance);
                 result.Success = true;
             }
@@ -132,7 +133,7 @@ namespace InspectionWeb.Services
 
         public softwareVersion GetById(string softwareId)
         {
-            return this._repository.Get(x => x.softwareId == softwareId);
+            return this._repository.Get(x => x.softwareId == softwareId && x.isDelete == 0);
         }
 
         public softwareVersion GetBySoftwareCode(string softwareCode)
@@ -142,7 +143,7 @@ namespace InspectionWeb.Services
 
         public IEnumerable<softwareVersion> GetAll()
         {
-            return this._repository.GetAll().OrderBy(x => x.isDelete == 0);
+            return this._repository.GetAll().Where(x => x.isDelete == 0);
         }
     }
 }
