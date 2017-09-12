@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using InspectionWeb.Models;
+using InspectionWeb.Models.Misc;
 
 namespace InspectionWeb.Services
 {
@@ -28,12 +29,22 @@ namespace InspectionWeb.Services
 
             try
             {
+                instance.lastUpdateTime = DateTime.Now;
+                instance.createTime = DateTime.Now;
+                IdGenerator idg = new IdGenerator();
+                string softwareId = idg.GetID("softwareVersion");
+                instance.softwareId = softwareId;
+                instance.isDelete = 0;
+
+
                 this._repository.Create(instance);
                 result.Success = true;
+                result.Message = softwareId;
             }
             catch (Exception ex)
             {
                 result.Exception = ex;
+                result.ErrorMsg = "新增軟體版本失敗"; 
             }
             return result;
         }
@@ -49,6 +60,7 @@ namespace InspectionWeb.Services
 
             try
             {
+                
                 this._repository.Update(instance);
                 result.Success = true;
             }
