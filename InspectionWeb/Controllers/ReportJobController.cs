@@ -11,6 +11,7 @@ using InspectionWeb.Services.Misc;
 
 namespace InspectionWeb.Controllers
 {
+    [AuthorizeUser(Super = true, Manager = true, Dispatch = true)]
     public class ReportJobController : Controller
     {
         private IExhibitionRoomService _exhibitionRoomService;

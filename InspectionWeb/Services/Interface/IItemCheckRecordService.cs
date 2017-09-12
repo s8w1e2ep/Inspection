@@ -9,12 +9,12 @@ namespace InspectionWeb.Services.Interface
 
         IResult Create(itemCheckRecord instance);
 
-        IResult Update(itemCheckRecord instance);
+        IResult Create(string itemId, string inspectorId, string date, int status, int type);
 
-        IResult Delete(string dispatchId);
-
-        itemCheckRecord GetById(string dispatchId);
+        itemCheckRecord GetById(string checkId);
 
         IEnumerable<itemCheckRecord> GetAll();
+
+        IEnumerable<itemInspectionDispatchDetail> GetAllByDate(System.DateTime date);
     }
 }

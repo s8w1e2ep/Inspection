@@ -9,15 +9,15 @@ namespace InspectionWeb.Services.Interface
 
         IResult Create(roomCheckRecord instance);
 
-        IResult Update(roomCheckRecord instance);
-
-        IResult Delete(string dispatchId);
+        IResult Create(string roomId, string inspectorId, string date, int status, int type);
 
         roomCheckRecord GetById(string dispatchId);
 
-        IEnumerable<roomCheckRecord> GetAll(System.DateTime date);
+        IEnumerable<roomCheckRecord> GetAll(System.DateTime date); 
 
-        IEnumerable<roomCheckRecord> GetAll();
+        IEnumerable<roomInspectionDispatchDetail> GetAllByDate(System.DateTime date);
+
+        IEnumerable<roomCheckRecord> GetAllByDateRange(string startDate, string endDate, string roomId);
 
     }
 }

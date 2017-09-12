@@ -14,6 +14,7 @@ using InspectionWeb.Services.Misc;
 
 namespace InspectionWeb.Controllers
 {
+    [AuthorizeUser(Super = true, Manager = true, User = true)]
     public class QuickSolutionController : Controller
     {
         private ISolutionService _solutionService;

@@ -125,10 +125,10 @@ namespace InspectionWeb.Services
             {
 
                 DateTime now = DateTime.Now;
-                string lastUpdateTime = now.ToString("yyyy/MM/dd HH:mm:ss");
+                string lastUpdateTime = now.ToString("yyyy-MM-dd HH:mm:ss");
 
-                DicUpdate.Add(propertyName, (string)value);
-                DicUpdate.Add("lastUpdateTime", lastUpdateTime);
+                DicUpdate.Add(propertyName, value);
+                DicUpdate.Add("lastUpdateTime", now);
 
                 _repository.Update(instance, DicUpdate);
                 result.Success = true;

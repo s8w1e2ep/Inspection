@@ -5,7 +5,9 @@
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
         <ol class="breadcrumb">
-            <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>Home</a></li>
+            <li>
+                <a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>Home</a>
+            </li>
             <li class="active">體驗設施正常率</li>
         </ol>
     </section>
@@ -16,8 +18,10 @@
                     <div class="box-header with-border">
                         <h3 class="box-title">篩選條件</h3>
                     </div>
-                    <br />
-                    <div class="row">
+                    <div class="box-body row">
+                        <div id="errDiv" class="form-group has-error" style="display: none;">
+                            <label id="errMsg" class="col-sm-12">查無資料</label>
+                        </div>
                         <div class="col-md-6 form-group">
                             <label class="control-label col-md-2" for="startDatePicker">開始日期</label>
                             <div class="input-group col-md-8">
@@ -39,11 +43,16 @@
                         <div class="col-md-12 form-group">
                             <label class="control-label col-md-1" for="facilitySelect">體驗設施</label>
                             <select class="form-control" id="facilitySelect" style="width: 40%;">
-                                <option value="facility1">體驗設施-1</option>
-                                <option value="facility2">體驗設施-2</option>
-                                <option value="facility3">體驗設施-3</option>
+                                <option value="#">--請選擇體驗設施--</option>
+                                @foreach (var item in ViewBag.facilities)
+                                {
+                                    <option value="@item.itemId">@item.itemName</option>
+                                }
                             </select>
                         </div>
+                    </div>
+                    <div class="box-footer">
+                        <button class="btn btn-primary" onclick="query()">確定</button>
                     </div>
                 </div>
             </div>
@@ -54,7 +63,7 @@
                 <h4>人工巡檢</h4>
                 <div class="box" style="border-top-color: #0094ff;">
                     <div class="box-body">
-                        <table id="fieldTable" class="row-border" cellspacing="0" width="100%">
+                        <table id="manTable" class="row-border" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
                                     <th>日期</th>
@@ -63,20 +72,7 @@
                                     <th>正常率</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr id="t1">
-                                    <td>a</td>
-                                    <td>b</td>
-                                    <td>c</td>
-                                    <td>d</td>
-                                </tr>
-                                <tr id="t2">
-                                    <td>g</td>
-                                    <td>h</td>
-                                    <td>r</td>
-                                    <td>a</td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -88,7 +84,7 @@
                 <h4>自動通報</h4>
                 <div class="box" style="border-top-color: #0094ff;">
                     <div class="box-body">
-                        <table id="fieldTable2" class="row-border" cellspacing="0" width="100%">
+                        <table id="autoTable" class="row-border" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
                                     <th>日期</th>
@@ -97,20 +93,7 @@
                                     <th>正常率</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr id="a1">
-                                    <td>a</td>
-                                    <td>b</td>
-                                    <td>c</td>
-                                    <td>d</td>
-                                </tr>
-                                <tr id="a2">
-                                    <td>c</td>
-                                    <td>d</td>
-                                    <td>a</td>
-                                    <td>b</td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -118,4 +101,90 @@
         </div>
     </section>
 </div>
-<script src="~/Scripts/facility.js"></script>
+<script>
+    var startDate = null;
+    var endDate = null;
+
+    $(document).ready(function () {
+        $('#manTable').DataTable({
+            "paging": true,
+            "info": false,
+            "searching": true,
+            "columnDefs": [
+                { "targets": 0, "width": "25%", "orderable": true },
+                { "targets": 1, "width": "25%", "orderable": true },
+                { "targets": 2, "width": "25%", "orderable": true },
+                { "targets": 3, "width": "25%", "orderable": true }
+            ]
+        });
+
+        $('#autoTable').DataTable({
+            "paging": true,
+            "info": false,
+            "searching": true,
+            "columnDefs": [
+                { "targets": 0, "width": "25%", "orderable": true },
+                { "targets": 1, "width": "25%", "orderable": true },
+                { "targets": 2, "width": "25%", "orderable": true },
+                { "targets": 3, "width": "25%", "orderable": true }
+            ]
+        });
+
+        // single Date picker
+        $('#startDatePicker, #endDatePicker').datepicker({
+            language: 'zh-TW',
+            format: 'yyyy/mm/dd'
+        }).on('changeDate', function (ev) {
+            startDate = $('#startDatePicker').val();
+            endDate = $('#endDatePicker').val();
+            $('.datepicker').hide();
+        });
+
+    });
+
+    function query() {
+        if (startDate === null || startDate === "") {
+            alert('請選擇開始日期!');
+        } else if (endDate === null || endDate === "") {
+            alert('請選擇結束日期!');
+        } else if (endDate < startDate) {
+            alert('結束日期不能比開始日期早');
+        } else if ($('#facilitySelect').val() === '#') {
+            alert('請選擇體驗設施');
+        } else {
+            setInspectTable('man');
+            setInspectTable('auto');
+        }
+    }
+
+    function setDispatchTable(type) {
+        $.get(
+            'QueryInspect',
+            {
+                facilityId: $('#facilitySelect').val(),
+                startDate: startDate,
+                endDate: endDate,
+                type: type
+            },
+            function (data) {
+                if (data !== "[]") {
+                    for (var record in data) {
+                        t.row.add([
+                            record.dispatchTime,
+                            record.total,
+                            record.normal,
+                            record.prob
+                        ]).draw(false);
+                    }
+                    $('#errDiv').css('display', 'none');
+                } else {
+                    $('#errDiv').css('display', 'block');
+                }
+            },
+            'json'
+        ).fail(function () {
+            //console.log(e);
+            alert("抱歉! 伺服器無法接受您的查詢!");
+        });
+    }
+</script>

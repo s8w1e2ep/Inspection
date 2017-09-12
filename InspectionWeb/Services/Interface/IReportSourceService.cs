@@ -19,13 +19,9 @@ namespace InspectionWeb.Services.Interface
 
         bool IsExists(string sourceId);
 
-        string GetId(string sourceCode);
-
         reportSource GetById(string sourceId);
 
         reportSource GetBySourceCode(string sourceCode);
-
-        reportSource GetBySourceName(string name);
 
         IEnumerable<reportSource> GetAll();
     }

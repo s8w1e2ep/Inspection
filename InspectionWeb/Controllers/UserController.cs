@@ -12,102 +12,18 @@ using InspectionWeb.Services.Misc;
 
 namespace InspectionWeb.Controllers
 {
-    [AuthorizeUser(Normal = true)]
+    [AuthorizeUser(Super = true, Manager = true, User = true)]
     public class UserController : Controller
     {
         private IUserService _userService;
         private IUserGroupService _userGroupService;
+        private IExhibitionRoomService _exhibitionRoomService;
 
-        public UserController(IUserService service, IUserGroupService service2)
+        public UserController(IUserService service, IUserGroupService service2, IExhibitionRoomService service3)
         {
             this._userService = service;
             this._userGroupService = service2;
-        }
-
-        // GET: /User/Login
-        [AllowAnonymous]
-        public ActionResult Login()
-        {
-            return View();
-        }
-
-        // POST: /User/Login/account/password
-        [AllowAnonymous]
-        [HttpPost]
-        public ActionResult Login(string account, string password)
-        {
-            user user = this._userService.Login(account, password);
-
-            if (user != null)
-            {
-                Session["authenticated"] = true;
-                Session["account"] = user.userCode;
-                Session["userId"] = user.userId;
-                //TODO: 依照 groupId 設定權限
-
-                //使用 MVC 內建登入並利用自訂權限 [AuthorizeUser] 功能
-                LoginProcess(user, false);
-
-                //取得權限寫法
-                if (System.Web.HttpContext.Current.User.Identity.IsAuthenticated == true)
-                {
-                    FormsIdentity id = (FormsIdentity)User.Identity;
-                    FormsAuthenticationTicket ticket = id.Ticket;
-                    var userData = ticket.UserData.Split(',');
-                }
-
-                return RedirectToAction("Index", "Home");
-            }
-
-            return View();
-        }
-
-        private void LoginProcess(user loginUser, bool isRemember)
-        {
-            var now = DateTime.Now;
-            string roles = "Normal";
-            // TODO: 依照 groupId 設定角色名稱，Ex: roles = roles + ",Manager";
-
-            FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
-                1,                          // version
-                loginUser.userId,           // 使用者ID
-                DateTime.Now,               // 核發日期
-                DateTime.Now.AddMinutes(10),// 到期時間 10 分鐘 
-                isRemember,                 // 永續性
-                roles,                      // 使用者定義的資料
-                FormsAuthentication.FormsCookiePath
-            );
-
-            var encryptedTicket = FormsAuthentication.Encrypt(ticket);
-            var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
-            cookie.Expires = ticket.Expiration;
-            Response.Cookies.Add(cookie);
-        }
-
-        // GET: /User/Logout
-        [AllowAnonymous]
-        public ActionResult Logout()
-        {
-            //使用者登出
-            FormsAuthentication.SignOut();
-
-            //清除所有的 session
-            Session.RemoveAll();
-
-            //建立一個同名的 Cookie 來覆蓋原本的 Cookie
-            HttpCookie cookie1 = new HttpCookie(FormsAuthentication.FormsCookieName, "");
-            cookie1.Expires = DateTime.Now.AddYears(-1);
-            Response.Cookies.Add(cookie1);
-
-            //建立 ASP.NET 的 Session Cookie 同樣是為了覆蓋
-            HttpCookie cookie2 = new HttpCookie("ASP.NET_SessionId", "");
-            cookie2.Expires = DateTime.Now.AddYears(-1);
-            Response.Cookies.Add(cookie2);
-
-            //Session.Clear();
-            Session.Abandon();
-
-            return RedirectToAction("Login");
+            this._exhibitionRoomService = service3;
         }
 
         // GET: /User
@@ -182,9 +98,9 @@ namespace InspectionWeb.Controllers
                 if (result.Success == false)
                 {
                     UserAddViewModel vm = new UserAddViewModel();
-                    vm.Account = account;
-                    vm.Password = password;
-                    vm.ErrorMsg = result.ErrorMsg;
+                    vm.account = account;
+                    vm.password = password;
+                    vm.errorMsg = result.ErrorMsg;
 
                     return View("Add", vm);
                 }
@@ -194,9 +110,9 @@ namespace InspectionWeb.Controllers
             else
             {
                 UserAddViewModel vm = new UserAddViewModel();
-                vm.Account = account;
-                vm.Password = password;
-                vm.ErrorMsg = "帳號或密碼空白";
+                vm.account = account;
+                vm.password = password;
+                vm.errorMsg = "帳號或密碼空白";
 
                 return View("Add", vm);
             }
@@ -460,6 +376,7 @@ namespace InspectionWeb.Controllers
             UserEditViewModel vm = new UserEditViewModel();
             var groups = this._userGroupService.GetAll().Where(x => x.isDelete == 0 && x.groupId != instance.userId).ToList();
             var agents = this._userService.GetAll().Where(x => x.isDelete == 0 && x.userId != instance.userId).ToList();
+            var rooms = this._exhibitionRoomService.GetAll().Where(x => x.inspectionUserId == instance.userId);
 
             vm.user = User2ViewModel(instance);
 
@@ -471,6 +388,22 @@ namespace InspectionWeb.Controllers
             {
                 vm.agents.Add(User2ViewModel(agent));
             }
+            foreach (var room in rooms)
+            {
+                vm.rooms.Add(Room2ViewModel(room));
+            }
+
+            return vm;
+        }
+
+        private ExhibitionRoomListViewModel Room2ViewModel(exhibitionRoom instance)
+        {
+            ExhibitionRoomListViewModel vm = new ExhibitionRoomListViewModel();
+
+            vm.roomId = instance.roomId;
+            vm.roomName = instance.roomName;
+            vm.createTime = instance.createTime;
+            vm.lastUpdateTime = instance.lastUpdateTime;
 
             return vm;
         }

@@ -16,7 +16,7 @@ namespace InspectionWeb.Models.ViewModel
 
         public string abnormalDefinitionDescription { get; set; }
 
-        public int? isDelete { get; set; }
+        public Nullable<byte> isDelete { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
         public Nullable<System.DateTime> createTime { get; set; }
