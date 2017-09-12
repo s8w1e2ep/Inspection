@@ -20,6 +20,28 @@ namespace InspectionWeb.Controllers
         }
 
        
+        public ActionResult AddSoftware()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddSoftware(FormCollection fc)
+        {
+            softwareVersion software = new softwareVersion();
+
+            software.softwareName = fc["softwareName"];
+            software.softwareCode = fc["softwareCode"];
+            IResult result = _softwareVersionService.Create(software);
+            string softwareId = result.Message;
+            if(result.Success == false)
+            {
+                return View("AddSoftware");
+            }
+
+            return RedirectToAction("EditSoftwareVersion", new { id = softwareId });
+        }
+
 
        
     }

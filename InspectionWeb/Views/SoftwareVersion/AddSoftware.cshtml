@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "AddSoftware";
+}
+
+<h2>AddSoftware</h2>
+
+<div class="content-wrapper">
+    <section class="content-header" style="margin-bottom: 15px;">
+        <ol class="breadcrumb">
+            <li><a href="/"><i class="fa fa-dashboard"></i>Home</a></li>
+            <li class="active"> 新增軟體</li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">新增軟體</h3>
+                    </div>
+                    <!-- form start -->
+                    <form class="form-horizontal" method="post" action="@Url.Action("AddSoftware")" onsubmit="return formValidation();">
+                        <div class="box-body">
+                            <div id="softwareCodeDiv" class="form-group">
+                                <label for="softwareCode" class="col-md-2 control-label">軟體代號</label>
+                                <div class="col-md-10">
+                                    <input id="softwareCode" type="text" class="form-control" name="softwareName" placeholder="輸入軟體代號">
+                                </div>
+                            </div>
+                            <div id="softwareNameDiv" class="form-group">
+                                <label for="softwareName" class="col-md-2 control-label">軟體名稱</label>
+                                <div class="col-md-10">
+                                    <input id="softwareName" type="text" class="form-control" name="softwareName" placeholder="輸入軟體名稱">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-success pull-right">確認新增</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
