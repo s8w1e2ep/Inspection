@@ -18,7 +18,7 @@ namespace InspectionWeb.Services.Interface
         /// </summary>
         /// <param name="name", "sourceId", "abnormalId"></param>
         /// <returns></returns>
-        IResult Create(string name, string sourceId, string abnormalId);
+        IResult Create(string name, string sourceId, string abnormalId, string reporter);
 
         ///// <summary>
         ///// add new abnormal record

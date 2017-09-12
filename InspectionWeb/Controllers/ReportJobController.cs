@@ -149,11 +149,11 @@ namespace InspectionWeb.Controllers
 
         //新增其他設施通報紀錄於資料表中
         [HttpPost]
-        public ActionResult Addother(string name, string sourceId, string abnormalId)
+        public ActionResult Addother(string name, string sourceId, string abnormalId, string reporter)
         {
             if ( !string.IsNullOrEmpty(name) && ModelState.IsValid )
             {
-                IResult result = this._otherAbnormalRecordService.Create(name, sourceId, abnormalId);
+                IResult result = this._otherAbnormalRecordService.Create(name, sourceId, abnormalId, reporter);
 
                 if (result.Success == false)
                 {

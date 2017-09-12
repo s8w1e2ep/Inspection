@@ -41,10 +41,10 @@ namespace InspectionWeb.Services
             return result;
         }
 
-        public IResult Create(string name, string sourceId, string abnormalId)
+        public IResult Create(string name, string sourceId, string abnormalId, string reporter)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(sourceId)
-                || string.IsNullOrEmpty(abnormalId) )
+                || string.IsNullOrEmpty(abnormalId) || string.IsNullOrEmpty(abnormalId))
             {
                 throw new ArgumentNullException();
             }
@@ -67,7 +67,7 @@ namespace InspectionWeb.Services
                     newRecord.recordId = recordId;
                     newRecord.name = name;
                     newRecord.sourceId = sourceId;
-                    //newRecord.deviceId = reporter;      // 6000通報時deviceid = 通報者
+                    newRecord.deviceId = reporter;      // 6000通報時deviceid = 通報者
                     newRecord.abnormalId = abnormalId;
 
                     newRecord.isClose = 0;          
