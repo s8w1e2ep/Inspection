@@ -33,37 +33,9 @@ namespace InspectionWeb.Controllers
             this._otherAbnormalRecordService = service6;
         }
 
-        
-
-        // GET: /ReportJob/AddExperience
-        public ActionResult AddExperience()
-        {
-            ViewBag.exhibitionRooms = this._exhibitionRoomService.GetAll().Where(x => x.active == 1);
-            ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
-            ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
-
-            return View();
-        }
-
-        
-        public ActionResult AddOther()
-        {
-            ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
-            ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
-            return View();
-        }
-
         // GET: /ReportJob/EditExhibitionItem
         public ActionResult EditExhibitionItem()
         {
-            return View();
-        }
-
-        // GET: /ReportJob/Query
-        public ActionResult Query()
-        {
-            ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
-            ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
             return View();
         }
 
@@ -85,8 +57,43 @@ namespace InspectionWeb.Controllers
             return View();
         }
 
-        
-        // POST: /User/AddUser
+        // GET: /ReportJob/AddExperience
+        public ActionResult AddExperience()
+        {
+            ViewBag.exhibitionRooms = this._exhibitionRoomService.GetAll().Where(x => x.active == 1);
+            ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+            ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
+
+            return View();
+        }
+
+        // GET: /ReportJob/AddOther
+        public ActionResult AddOther()
+        {
+            ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+            ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
+            return View();
+        }
+
+        // GET: /ReportJob/Query
+        public ActionResult Query()
+        {
+            string str;
+            ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+            ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
+            ViewBag.record = this._otherAbnormalRecordService.GetAll().Where(x => x.isDelete == 0);
+            
+            foreach (var item in ViewBag.record)
+            {
+                str = this._reportSourceService.GetById(item.sourceId).sourceName;
+            }
+            
+            return View();
+        }
+
+        //======================功能區==========================//
+
+        // POST: /User/AddUser ; 新增展項通報紀錄於資料表中
         [HttpPost]
         public ActionResult AddItem(string itemId, string sourceId, string abnormalId, string reporter)
         {
@@ -113,6 +120,7 @@ namespace InspectionWeb.Controllers
             }
         }
 
+        //新增體驗設施通報紀錄於資料表中
         [HttpPost]
         public ActionResult AddExp(string itemId, string sourceId, string abnormalId, string reporter)
         {
@@ -139,6 +147,7 @@ namespace InspectionWeb.Controllers
             }
         }
 
+        //新增其他設施通報紀錄於資料表中
         [HttpPost]
         public ActionResult Addother(string name, string sourceId, string abnormalId)
         {
@@ -168,6 +177,7 @@ namespace InspectionWeb.Controllers
             }
         }
 
+        //取得隸屬於某展示廳下的展項
         [HttpPost]
         public ActionResult GetItems(roomJson data)
         {
@@ -188,6 +198,7 @@ namespace InspectionWeb.Controllers
             return Json(vms);
         }
 
+        //取得隸屬於某展示廳下的體驗設施
         [HttpPost]
         public ActionResult GetExperience(roomJson data)
         {
