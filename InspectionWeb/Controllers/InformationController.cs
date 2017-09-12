@@ -78,6 +78,7 @@ namespace InspectionWeb.Controllers
             vm.FieldId = fieldId;
             vm.FieldName = field.fieldName;
             vm.Description = field.description;
+            vm.Floor = field.floor;
             vm.MapFileName = field.mapFileName;
             vm.Photo = field.photo;
             vm.Version = field.version;

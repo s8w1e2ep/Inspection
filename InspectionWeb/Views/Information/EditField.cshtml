@@ -9,7 +9,7 @@
 
 
     $(document).ready(function () {
-        $('#fieldName, #description, #version').editable({
+        $('#fieldName, #description, #version, #floor').editable({
             emptytext: "未設定",
             success: function (response) {
                 //change the content of #lastUpdateTime
@@ -97,6 +97,14 @@
                                         </td>
                                     </tr>
 
+                                    @*樓層*@
+                                    <tr>
+                                        <td>樓層</td>
+                                        <td>
+                                            <a href="#" id="floor" data-type="text" data-pk="@Model.Floor" data-url="@Url.Action("EditField")" data-title="輸入樓層">@Model.Floor</a>
+                                        </td>
+                                    </tr>
+                                    
                                     @*說明*@
                                     <tr>
                                         <td>說明</td>
