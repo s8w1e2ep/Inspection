@@ -142,7 +142,7 @@ namespace InspectionWeb.Services
 
         public IEnumerable<softwareVersion> GetAll()
         {
-            return this._repository.GetAll().OrderBy(abnormalDefinition => abnormalDefinition.createTime);
+            return this._repository.GetAll().OrderBy(x => x.isDelete == 0);
         }
     }
 }
