@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using InspectionWeb.Services.Misc;
 using InspectionWeb.Models;
 

@@ -1,12 +1,11 @@
-﻿using InspectionWeb.Models.Interface;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
 using InspectionWeb.Models;
 using InspectionWeb.Models.Misc;
+using InspectionWeb.Models.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 
 namespace InspectionWeb.Services
 {

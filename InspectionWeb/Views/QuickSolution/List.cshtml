@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<InspectionWeb.Models.ViewModel.SolutionViewModel>
+
+@{
     ViewBag.Title = "常用解決方法列表";
 }
 
@@ -26,14 +28,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Hello</td>
-                                    <td>2017-08-08 00:00:00</td>
-                                    <td>
-                                        <a href="@Url.Action("Edit", "QuickSolution")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                        <a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>
-                                    </td>
-                                </tr>
+                                @foreach (var data in Model)
+                                {
+                                    <tr id="@data.solutionId">
+                                        <td>@data.description</td>
+                                        <td>@Html.DisplayFor(modelItem => data.lastUpdateTime)</td>
+                                        <td>
+                                            <a href="@Url.Action("Edit", new { id= data.solutionId})" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                            <a href="#" class="btn btn-sm btn-danger" onclick="setId('@data.solutionId')" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                                
                             </tbody>
                         </table>
                     </div>
@@ -51,7 +57,7 @@
                         <h4 class="modal-title">刪除確認</h4>
                     </div>
                     <div class="modal-body">
-                        <p>是否刪除此方法？刪除此方法會將一併刪除所有的相關資料。</p>
+                        <p>是否刪除此方法？刪除此方法將一併刪除所有的相關資料。</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">否</button>

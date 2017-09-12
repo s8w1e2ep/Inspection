@@ -23,10 +23,11 @@
                             <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
+                            @*人員與群組管理*@
                             <li class="">
                                 <a href="#">
                                     <i class="fa fa-edit"></i>
-                                    <span>人員管理</span>
+                                    <span>人員基本資料管理</span>
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </a>
                                 <ul class="treeview-menu">
@@ -41,7 +42,7 @@
                             <li class="">
                                 <a href="#">
                                     <i class="fa fa-edit"></i>
-                                    <span>群組管理</span>
+                                    <span>人員群組管理</span>
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </a>
                                 <ul class="treeview-menu">
@@ -50,6 +51,46 @@
                                     </li>
                                     <li>
                                         <a href="@Url.Action("ListGroup", "User")"><i class="fa fa-circle-o"></i>群組列表</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            @*異常定義管理*@
+                            <li>
+                                <a href="#"><i class="fa fa-edit"></i> <span>異常定義</span> <i class="fa fa-angle-left pull-right"></i></a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a href="@Url.Action("AddAbnormalDefinition", "AbnormalDefinition")"><i class="fa fa-circle-o"></i>新增異常定義</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("ListAbnormalDefinition", "AbnormalDefinition")"><i class="fa fa-circle-o"></i>異常定義列表</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            @*故障來源定義管理*@
+                            <li>
+                                <a href="#"><i class="fa fa-edit"></i> <span>故障來源定義</span> <i class="fa fa-angle-left pull-right"></i></a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a href="@Url.Action("AddReportSource", "ReportSource")"><i class="fa fa-circle-o"></i>新增故障來源定義</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("ListReportSource", "ReportSource")"><i class="fa fa-circle-o"></i>故障來源定義列表</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            @*常用解決方法*@
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-edit"></i>
+                                    <span>常用解決方法</span>
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a href="@Url.Action("Add", "QuickSolution")"><i class="fa fa-circle-o"></i>新增常用解決方法</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("List", "QuickSolution")"><i class="fa fa-circle-o"></i>常用解決方法列表</a>
                                     </li>
                                 </ul>
                             </li>
@@ -141,57 +182,14 @@
                             </li>
                         </ul>
                     </li>
-                    @*異常定義管理*@
-                    <li>
-                        <a href="#"><i class="fa fa-dashboard"></i> <span>異常定義管理</span> <i class="fa fa-angle-left pull-right"></i></a>
-                        <ul class="treeview-menu">
-                            <li>
-                                <a href="@Url.Action("AddAbnormalDefinition", "AbnormalDefinition")"><i class="fa fa-circle-o"></i>新增異常定義</a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("ListAbnormalDefinition", "AbnormalDefinition")"><i class="fa fa-circle-o"></i>異常定義檢視/修改</a>
-                            </li>
-                        </ul>
-                    </li>
-                    @*故障來源定義管理*@
-                    <li>
-                        <a href="#"><i class="fa fa-dashboard"></i> <span>故障來源定義管理</span> <i class="fa fa-angle-left pull-right"></i></a>
-                        <ul class="treeview-menu">
-                            <li>
-                                <a href="@Url.Action("AddReportSource", "ReportSource")"><i class="fa fa-circle-o"></i>新增故障來源定義</a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("ListReportSource", "ReportSource")"><i class="fa fa-circle-o"></i>故障來源定義檢視/修改</a>
-                            </li>
-                        </ul>
-                    </li>
-                    @*常用解決方法*@
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-dashboard"></i>
-                            <span>常用解決方法</span>
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li>
-                                <a href="@Url.Action("Add", "QuickSolution")"><i class="fa fa-circle-o"></i>新增</a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("Edit", "QuickSolution")"><i class="fa fa-circle-o"></i>檢視/修改</a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("List", "QuickSolution")"><i class="fa fa-circle-o"></i>列表</a>
-                            </li>
-                        </ul>
-                    </li>
                 }
                 if ((Session["super"] != null && (bool)Session["super"]) ||
                      (Session["system"] != null && (bool)Session["system"]) ||
                      (Session["dispatch"] != null && (bool)Session["dispatch"]))
                 {
-                    @*派工/巡檢管理*@
+                    @*巡檢作業*@
                     <li>
-                        <a href="#"><i class="fa fa-dashboard"></i> <span>派工/巡檢管理</span> <i class="fa fa-angle-left pull-right"></i></a>
+                        <a href="#"><i class="fa fa-dashboard"></i> <span>巡檢作業</span> <i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
                             <li>
                                 <a href="#"><i class="fa fa-edit"></i> <span>派工</span> <i class="fa fa-angle-left pull-right"></i></a>
@@ -256,8 +254,18 @@
                             <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="@Url.Action("AddExhibitionItem", "ReportJob")"><i class="fa fa-circle-o"></i>新增通報</a></li>
-                            <li><a href="@Url.Action("EditExhibitionItem", "ReportJob")"><i class="fa fa-circle-o"></i>檢視/修改 通報</a></li>
+                            <li>
+                                <a href="@Url.Action("AddExhibitionItem", "ReportJob")"><i class="fa fa-circle-o"></i>新增展項通報</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("AddExperience", "ReportJob")"><i class="fa fa-circle-o"></i>新增體驗設施通報</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("AddOther", "ReportJob")"><i class="fa fa-circle-o"></i>新增其他設施通報</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Query", "ReportJob")"><i class="fa fa-circle-o"></i>整體通報查詢</a>
+                            </li>
                         </ul>
                     </li>
                     @*統計資料*@
@@ -287,6 +295,5 @@
                     </li>
                 }
             }
-        </ul>
     </section>
 </aside>

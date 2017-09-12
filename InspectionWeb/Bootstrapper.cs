@@ -65,6 +65,10 @@ namespace InspectionWeb
             container.RegisterType<IRepository<user>, GenericRepository<user>>();
             container.RegisterType<IRepository<userGroup>, GenericRepository<userGroup>>();
             container.RegisterType<IRepository<fieldMap>, GenericRepository<fieldMap>>();
+            container.RegisterType<IRepository<quickSolution>, GenericRepository<quickSolution>>();
+            container.RegisterType<IRepository<exhibitionRoom>, GenericRepository<exhibitionRoom>>();
+            container.RegisterType<IRepository<otherAbnormalRecord>, GenericRepository<otherAbnormalRecord>>();
+
 
 
             //Service
@@ -83,7 +87,9 @@ namespace InspectionWeb
             container.RegisterType<IUserService, UserService>();
             container.RegisterType<IUserGroupService, UserGroupService>();
             container.RegisterType<IFieldMapService, FieldMapService>();
-
+            container.RegisterType<ISolutionService, SolutionService>();
+            container.RegisterType<IExhibitionRoomService, ExhibitionRoomService>();
+            container.RegisterType<IOtherAbnormalRecordService, OtherAbnormalRecordService>();
         }
     }
 }
