@@ -287,6 +287,7 @@
     <Compile Include="Models\otherAbnormalRecord.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\queryEntity.cs" />
     <Compile Include="Models\quickSolution.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
@@ -306,6 +307,7 @@
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\itemInspectionDispatchDetail.cs" />
+    <Compile Include="Models\queryInspectionByDateStatusDetail.cs" />
     <Compile Include="Models\roomInspectionDispatchDetail.cs" />
     <Compile Include="Models\softwareVersion.cs">
       <DependentUpon>inspection.tt</DependentUpon>

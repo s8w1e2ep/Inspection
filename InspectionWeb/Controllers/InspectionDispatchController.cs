@@ -82,28 +82,28 @@ namespace InspectionWeb.Controllers
             bool isExist = this._RoomInspectionDispatchService.IsExists(date);
             
             //是不是非巡檢日
-            IResult nonCkeck = new Result(false);
+            IResult nonCheck = new Result(false);
             int isNonCheckDate = this._noCheckDateService.IsExists(date);
             if (isNonCheckDate == 1)
             {
-                nonCkeck.ErrorMsg = "此日非巡檢日";
-                nonCkeck.Message = "1";
-                return View(Data2RoomViewModel(null, null, nonCkeck, date));
+                nonCheck.ErrorMsg = "此日非巡檢日";
+                nonCheck.Message = "1";
+                return View(Data2RoomViewModel(null, null, nonCheck, date));
             }
             else if (isNonCheckDate == 2)
             {
-                nonCkeck.ErrorMsg = "上午非巡檢日";
-                nonCkeck.Message = "2";
+                nonCheck.ErrorMsg = "上午非巡檢日";
+                nonCheck.Message = "2";
             }
             else if (isNonCheckDate == 3)
             {
-                nonCkeck.ErrorMsg = "下午非巡檢日";
-                nonCkeck.Message = "3";
+                nonCheck.ErrorMsg = "下午非巡檢日";
+                nonCheck.Message = "3";
             }
             else
             {
-                nonCkeck.ErrorMsg = "";
-                nonCkeck.Message = "0";
+                nonCheck.ErrorMsg = "";
+                nonCheck.Message = "0";
             }
 
             IEnumerable<exhibitionRoom> rooms = this._ExhibitionRoomService.GetAll().Where(x => x.active == 1);
@@ -123,7 +123,7 @@ namespace InspectionWeb.Controllers
                     }
 
                     List<userListForInspectionViweModel> userList = GetUserListForInspection();
-                    return View(Data2RoomViewModel(roomDispatchDetail, userList, nonCkeck, date));
+                    return View(Data2RoomViewModel(roomDispatchDetail, userList, nonCheck, date));
                 }
                 else
                 {
@@ -147,7 +147,7 @@ namespace InspectionWeb.Controllers
                             roomDispatchDetail.Add(roomDispatch);
                         }
                         List<userListForInspectionViweModel> userList = GetUserListForInspection();
-                        return View(Data2RoomViewModel(roomDispatchDetail, userList, nonCkeck, date));
+                        return View(Data2RoomViewModel(roomDispatchDetail, userList, nonCheck, date));
                     }
                 }
 
@@ -172,7 +172,7 @@ namespace InspectionWeb.Controllers
                         roomDispatchDetail.Add(roomDispatch);
                     }
                     List<userListForInspectionViweModel> userList = GetUserListForInspection();
-                    return View(Data2RoomViewModel(roomDispatchDetail, userList, nonCkeck, date));
+                    return View(Data2RoomViewModel(roomDispatchDetail, userList, nonCheck, date));
                 }
             }
         }
@@ -261,28 +261,28 @@ namespace InspectionWeb.Controllers
             string setupId = timeJson.userId;
             bool isExist = this._ItemInspectionDispatchService.IsExists(date);
             //確認是不是非巡檢日
-            IResult nonCkeck = new Result(false);
+            IResult nonCheck = new Result(false);
             int isNonCheckDate = this._noCheckDateService.IsExists(date);
             if (isNonCheckDate == 1)
             {
-                nonCkeck.ErrorMsg = "此日非巡檢日";
-                nonCkeck.Message = "1";
-                return View(Data2ItemViewModel(null, null, nonCkeck, date));
+                nonCheck.ErrorMsg = "此日非巡檢日";
+                nonCheck.Message = "1";
+                return View(Data2ItemViewModel(null, null, nonCheck, date));
             }
             else if (isNonCheckDate == 2)
             {
-                nonCkeck.ErrorMsg = "上午非巡檢日";
-                nonCkeck.Message = "2";
+                nonCheck.ErrorMsg = "上午非巡檢日";
+                nonCheck.Message = "2";
             }
             else if (isNonCheckDate == 3)
             {
-                nonCkeck.ErrorMsg = "下午非巡檢日";
-                nonCkeck.Message = "3";
+                nonCheck.ErrorMsg = "下午非巡檢日";
+                nonCheck.Message = "3";
             }
             else
             {
-                nonCkeck.ErrorMsg = "";
-                nonCkeck.Message = "0";
+                nonCheck.ErrorMsg = "";
+                nonCheck.Message = "0";
             }
                         
             IEnumerable<exhibitionItem> items = this._ExhibitionItemService.GetAll().Where(x => x.itemType == 1);
@@ -302,7 +302,7 @@ namespace InspectionWeb.Controllers
                     }
 
                     List<userListForInspectionViweModel> userList = GetUserListForInspection();
-                    return View(Data2ItemViewModel(itemDispatchDetail, userList, nonCkeck, date));
+                    return View(Data2ItemViewModel(itemDispatchDetail, userList, nonCheck, date));
                 }
                 else
                 {
@@ -327,7 +327,7 @@ namespace InspectionWeb.Controllers
                             itemDispatchDetail.Add(itemDispatch);
                         }
                         List<userListForInspectionViweModel> userList = GetUserListForInspection();
-                        return View(Data2ItemViewModel(itemDispatchDetail, userList, nonCkeck, date));
+                        return View(Data2ItemViewModel(itemDispatchDetail, userList, nonCheck, date));
                     }
                 }
 
@@ -353,7 +353,7 @@ namespace InspectionWeb.Controllers
                        itemDispatchDetail.Add(itemDispatch);
                     }
                     List<userListForInspectionViweModel> userList = GetUserListForInspection();
-                    return View(Data2ItemViewModel(itemDispatchDetail, userList, nonCkeck, date));
+                    return View(Data2ItemViewModel(itemDispatchDetail, userList, nonCheck, date));
                 }
             }
         }
@@ -656,17 +656,42 @@ namespace InspectionWeb.Controllers
         public ActionResult QueryInspectionByDate(string dispatchDate)
         {
             System.DateTime date = Convert.ToDateTime(dispatchDate);
+            bool isExist = this._ItemInspectionDispatchService.IsExists(date);
+            //確認是不是非巡檢日
+            IResult nonCheck = new Result(false);
+            int isNonCheckDate = this._noCheckDateService.IsExists(date);
+            if (isNonCheckDate == 1)
+            {
+                return View(Data2QueryByDateViewModel(null, null, null, dispatchDate, isNonCheckDate, "此日非巡檢日"));
+            }
+            else if (isNonCheckDate == 2)
+            {
+                nonCheck.ErrorMsg = "上午非巡檢日";
+            }
+            else if (isNonCheckDate == 3)
+            {
+                nonCheck.ErrorMsg = "下午非巡檢日";
+            }
+            else
+            {
+                nonCheck.ErrorMsg = "";
+            }
+
             IEnumerable<itemInspectionDispatchDetail> itemDispatchList = this._ItemInspectionDispatchService.GetAllByDate(date);
-            IEnumerable<roomInspectionDispatchDetail> roomDispatchList = this._RoomInspectionDispatchService.GetAllByDate(date);
-            return View(Data2QueryByDateViewModel(itemDispatchList, roomDispatchList , dispatchDate));
+            IEnumerable<roomInspectionDispatchDetail> roomDispatchList = this._RoomInspectionDispatchService.GetAllByDate(date).OrderBy(x => x.roomId);
+            List<queryInspectionByDateStatusDetail> status = this._RoomInspectionDispatchService.GetInspectionStatus(date);
+            return View(Data2QueryByDateViewModel(itemDispatchList, roomDispatchList, status, dispatchDate, isNonCheckDate, nonCheck.ErrorMsg));
         }
 
-        private ListQueryInspectionByDateViewModel Data2QueryByDateViewModel(IEnumerable<itemInspectionDispatchDetail> itemDispatchList, IEnumerable<roomInspectionDispatchDetail> roomDispatchList, string date)
+        private ListQueryInspectionByDateViewModel Data2QueryByDateViewModel(IEnumerable<itemInspectionDispatchDetail> itemDispatchList, IEnumerable<roomInspectionDispatchDetail> roomDispatchList, List<queryInspectionByDateStatusDetail>status, string date, int dateType, string ErrorMsg)
         {
             ListQueryInspectionByDateViewModel viewModel = new ListQueryInspectionByDateViewModel();
             viewModel.itemInspectionDispatch = itemDispatchList;
             viewModel.roomInspectionDispatch = roomDispatchList;
+            viewModel.inspectionStatus = status;
             viewModel.checkDate = date;
+            viewModel.dateType = dateType;
+            viewModel.ErrorMsg = ErrorMsg;
             return viewModel;
         }
     }

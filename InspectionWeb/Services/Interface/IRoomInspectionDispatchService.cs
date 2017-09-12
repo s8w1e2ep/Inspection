@@ -31,5 +31,7 @@ namespace InspectionWeb.Services.Interface
         IEnumerable<roomInspectionDispatchDetail> GetAllByRoomCondition(string startDate, string endDate, List<string> roomId);
 
         IEnumerable<roomInspectionDispatchDetail> GetAllByUserCondition(string startDate, string endDate, List<string> userId);
+
+        List<queryInspectionByDateStatusDetail> GetInspectionStatus(System.DateTime date);
     }
 }
