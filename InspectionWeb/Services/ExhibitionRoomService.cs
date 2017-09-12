@@ -142,9 +142,10 @@ namespace InspectionWeb.Services
 
         public IEnumerable<exhibitionRoom> GetUndispatchRoom(System.DateTime date)
         {
-            string sqlString = " SELECT exhibitionRoom.* " +
+            string sqlString = "SELECT exhibitionRoom.* " +
                                 "FROM exhibitionRoom " +
-                                "WHERE NOT EXISTS( " +
+                                "WHERE active = 1 AND isDelete = 0 " +
+                                "AND NOT EXISTS( " +
                                 "SELECT roomInspectionDispatch.roomId " +
                                 "FROM roomInspectionDispatch " +
                                 "WHERE roomInspectionDispatch.roomId = exhibitionRoom.roomId " +

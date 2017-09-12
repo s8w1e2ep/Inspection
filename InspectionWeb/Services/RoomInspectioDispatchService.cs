@@ -43,7 +43,6 @@ namespace InspectionWeb.Services
         public IResult Create(System.DateTime date, IEnumerable<exhibitionRoom> rooms, string setupId)
         {
             IResult result = new Result(false);
-            GetAll().Where(x => x.isDelete == 0);
             for (int i = 0; i < rooms.Count(); i++)
             {
                 roomInspectionDispatch roomDispatch = new roomInspectionDispatch();
@@ -176,18 +175,19 @@ namespace InspectionWeb.Services
 
         public bool checkRoomInsert(System.DateTime date)
         {
-            string sqlString = "SELECT COUNT(DISTINCT(roomId)) "
-                            + "FROM roomInspectionDispatch "
-                            + "WHERE checkDate='" + date.ToString("d") + "';";
-
-            string sqlString2 = "SELECT COUNT(DISTINCT(roomId)) "
-                            + "FROM exhibitionRoom;";
+            string sqlString = "SELECT COUNT(exhibitionRoom.roomId) AS num " +
+                                "FROM exhibitionRoom " +
+                                "WHERE active = 1 AND isDelete = 0 " +
+                                "AND NOT EXISTS( " +
+                                "SELECT roomInspectionDispatch.roomId " +
+                                "FROM roomInspectionDispatch " +
+                                "WHERE roomInspectionDispatch.roomId = exhibitionRoom.roomId " +
+                                "AND roomInspectionDispatch.checkDate = '" + date.ToString("d") + "')";
 
             using (inspectionEntities db = new inspectionEntities())
             {
-                var existNum = (int)db.Database.SqlQuery<int>(sqlString).First();
-                var roomNum = db.Database.SqlQuery<int>(sqlString2).First();
-                return (existNum - roomNum == 0) ? false : true;
+                var num = (int)db.Database.SqlQuery<int>(sqlString).First();
+                return (num == 0) ? false : true;
             }
         }
 

@@ -78,8 +78,10 @@ namespace InspectionWeb.Controllers
         {
             System.DateTime date = Convert.ToDateTime(timeJson.dispatchDate);
             string setupId = timeJson.userId;
+            //是否已有派工紀錄
             bool isExist = this._RoomInspectionDispatchService.IsExists(date);
-            //確認是不是非巡檢日
+            
+            //是不是非巡檢日
             IResult nonCkeck = new Result(false);
             int isNonCheckDate = this._noCheckDateService.IsExists(date);
             if (isNonCheckDate == 1)
@@ -104,13 +106,12 @@ namespace InspectionWeb.Controllers
                 nonCkeck.Message = "0";
             }
 
-            bool roomNumCheck = this._RoomInspectionDispatchService.checkRoomInsert(date);
             IEnumerable<exhibitionRoom> rooms = this._ExhibitionRoomService.GetAll().Where(x => x.active == 1);
             //檢查有無分派的紀錄
             if (isExist)
             {
                 //檢查有無新增展覽廳
-                System.Diagnostics.Debug.WriteLine("has dispatch.");
+                bool roomNumCheck = this._RoomInspectionDispatchService.checkRoomInsert(date);
                 if (!roomNumCheck)
                 {
                     System.Diagnostics.Debug.WriteLine("number of rooms is same");
@@ -126,7 +127,6 @@ namespace InspectionWeb.Controllers
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine("number of rooms is different");
                     //找出還未建檔的展覽廳
                     rooms = this._ExhibitionRoomService.GetUndispatchRoom(date);
                     IResult result = this._RoomInspectionDispatchService.Create(date, rooms, setupId);
@@ -135,7 +135,7 @@ namespace InspectionWeb.Controllers
                         System.Diagnostics.Debug.WriteLine("insert error");
                         result.Message = "4";
                         System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
-                        return View(Data2RoomViewModel(null, null, result,date));
+                        return View(Data2RoomViewModel(null, null, result, date));
                     }
                     else
                     {
@@ -154,7 +154,6 @@ namespace InspectionWeb.Controllers
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("has not dispatch yet");
                 IResult result = this._RoomInspectionDispatchService.Create(date, rooms, setupId);
                 if (result.Success == false)
                 {
@@ -267,30 +266,34 @@ namespace InspectionWeb.Controllers
             if (isNonCheckDate == 1)
             {
                 nonCkeck.ErrorMsg = "此日非巡檢日";
+                nonCkeck.Message = "1";
+                return View(Data2ItemViewModel(null, null, nonCkeck, date));
             }
             else if (isNonCheckDate == 2)
             {
                 nonCkeck.ErrorMsg = "上午非巡檢日";
+                nonCkeck.Message = "2";
             }
             else if (isNonCheckDate == 3)
             {
                 nonCkeck.ErrorMsg = "下午非巡檢日";
+                nonCkeck.Message = "3";
             }
             else
             {
                 nonCkeck.ErrorMsg = "";
+                nonCkeck.Message = "0";
             }
-
-            bool itemNumCheck = this._ItemInspectionDispatchService.checkItemInsert(date);
-            IEnumerable<exhibitionItem> items = this._ExhibitionItemService.GetAll();
+                        
+            IEnumerable<exhibitionItem> items = this._ExhibitionItemService.GetAll().Where(x => x.itemType == 1);
             //檢查有無分派的紀錄
             if (isExist)
             {
                 //檢查有無新增展覽廳
-                System.Diagnostics.Debug.WriteLine("has dispatch.");
+                bool itemNumCheck = this._ItemInspectionDispatchService.checkItemInsert(date);
                 if (!itemNumCheck)
                 {
-                    System.Diagnostics.Debug.WriteLine("number of rooms is same");
+                    System.Diagnostics.Debug.WriteLine("number of item is same");
                     List<itemInspectionDispatchDetail> itemDispatchDetail = new List<itemInspectionDispatchDetail>();
                     var itemDispatchs = this._ItemInspectionDispatchService.GetAllByDate(date);
                     foreach (var itemDispatch in itemDispatchs)
@@ -303,14 +306,14 @@ namespace InspectionWeb.Controllers
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine("number of rooms is different");
+                    System.Diagnostics.Debug.WriteLine("number of item is different");
                     //找出還未建檔的展覽廳
                     items = this._ExhibitionItemService.GetUndispatchItem(date);
                     IResult result = this._ItemInspectionDispatchService.Create(date, items, setupId);
                     if (result.Success == false)
                     {
                         System.Diagnostics.Debug.WriteLine("insert error");
-                        //result.ErrorMsg = "Dispatch List construct error";
+                        result.Message = "4";
                         System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
                         return View(Data2ItemViewModel(null, null, result, date));
                     }
@@ -337,7 +340,7 @@ namespace InspectionWeb.Controllers
                 {
                     System.Diagnostics.Debug.WriteLine("insert error");
                     System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
-                    //result.ErrorMsg = "Dispatch List construct error";
+                    result.Message = "4";
                     return View(Data2ItemViewModel(null, null, result, date));
                 }
                 else
@@ -415,7 +418,7 @@ namespace InspectionWeb.Controllers
             if (result != null)
             {
                 viewModel.ErrorMsg = result.ErrorMsg;
-                System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
+                viewModel.ErrorType = Convert.ToInt32(result.Message);
             }
             else
             {

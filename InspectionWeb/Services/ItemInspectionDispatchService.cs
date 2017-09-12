@@ -166,19 +166,20 @@ namespace InspectionWeb.Services
 
         public bool checkItemInsert(System.DateTime date)
         {
-            string sqlString = "SELECT COUNT(DISTINCT(itemId)) "
-                            + "FROM itemInspectionDispatch "
-                            + "WHERE checkDate='" + date.ToString("d") + "';";
-
-            string sqlString2 = "SELECT COUNT(DISTINCT(itemId)) "
-                            + "FROM exhibitionItem;";
+            string sqlString = "SELECT COUNT(exhibitionItem.itemId) AS num " +
+                                "FROM exhibitionItem " +
+                                "WHERE itemType = 1 AND isDelete = 0 " +
+                                "AND NOT EXISTS( " +
+                                "SELECT itemInspectionDispatch.itemId " +
+                                "FROM itemInspectionDispatch " +
+                                "WHERE itemInspectionDispatch.itemId = exhibitionItem.itemId " +
+                                "AND itemInspectionDispatch.checkDate = '" + date.ToString("d") + "')";
 
             using (inspectionEntities db = new inspectionEntities())
             {
-                var existNum = db.Database.SqlQuery<int>(sqlString).First();
-                var itemNum = db.Database.SqlQuery<int>(sqlString2).First();
+                var num = db.Database.SqlQuery<int>(sqlString).First();
 
-                return ((existNum - itemNum) == 0) ? false : true;
+                return (num == 0) ? false : true;
             }
         }
 
