@@ -29,8 +29,8 @@ namespace InspectionWeb.Services
 
             try
             {
-                instance.lastUpdateTime = DateTime.Now;
                 instance.createTime = DateTime.Now;
+                instance.lastUpdateTime = instance.createTime;
                 IdGenerator idg = new IdGenerator();
                 string softwareId = idg.GetID("softwareVersion");
                 instance.softwareId = softwareId;
