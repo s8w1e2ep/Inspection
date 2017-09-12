@@ -308,6 +308,15 @@
     <Compile Include="Models\systemSettings.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\temp.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\temp1.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\temp2.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\user.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
