@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<InspectionWeb.Models.ViewModel.DeviceListViewModel>
+
+@{
     ViewBag.Title = "體驗設施列表";
 }
 
@@ -19,35 +21,40 @@
                         <h3 class="box-title">體驗設施列表</h3>
                     </div>
                     <div class="box-body">
-                        <table id="deviceListTable" class="row-border" cellspacing="0" style="width: 100%;">
+                        <table id="listDeviceTable" class="row-border" cellspacing="0" style="width: 100%;">
                             <thead>
                                 <tr>
-                                    <th>展項ID</th>
                                     <th>名稱</th>
+                                    <th>啟用狀態</th>
                                     <th>建立日期</th>
                                     <th>最後更新日期</th>
                                     <th>操作選項</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>AAA</td>
-                                    <td>BBB</td>
-                                    <td>2017-08-08 00:00:00</td>
-                                    <td>2017-08-08 00:00:00</td>
-                                    <td>
-                                        @{/* TODO: redirec to correct place
-                                           * Action(actionName, controller)
-                                            */}
-                                        <a href="@Url.Action("","")" class="btn btn-sm btn-primary">
-                                            <i class="glyphicon glyphicon-menu-hamburger"></i>
-                                        </a>
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="@item.ItemId">
+                                        <td>@item.ItemName</td>
+                                        <td>@item.Active</td>
+                                        <td>@item.CreateTime</td>
+                                        <td>@item.LastUpdateTime</td>
 
-                                        <a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal>
-                                            <i class="glyphicon glyphicon-remove"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                                        <td>
+                                            @*檢視按鈕*@
+                                            <a href="@Url.Action("EditDevice", new { id = item.ItemId })" class="btn btn-sm btn-primary">
+                                                <i class="glyphicon glyphicon-menu-hamburger"></i>
+                                            </a>
+
+                                            @*刪除按鈕*@
+                                            <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.ItemId')" data-toggle=modal data-target=#myModal>
+                                                <i class="glyphicon glyphicon-remove"></i>
+                                            </a>
+                                        </td>
+
+
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -78,8 +85,24 @@
 </div><!-- /.modal -->
 
 <script>
+    var toDeleteDeviceId;
+
+    function setId(deviceId) {
+        toDeleteDeviceId = deviceId;
+    }
+   
+
+    function deleteDevice() {
+        $.ajax({
+            type: "DELETE",
+            url: 'DeleteDevice',
+            data: $.param({ "deviceId": toDeleteDeviceId })
+        }).done(function (msg) {
+            $("#" + toDeleteDeviceId).remove();
+        });
+    }
     $(document).ready(function () {
-        $('#deviceListTable').DataTable({
+        $('#listDeviceTable').DataTable({
             "paging": false,
             "info": false,
             "searching": false,
@@ -96,11 +119,7 @@
             deleteDevice();
         });
 
-        function deleteDevice() {
-            @{/* TODO: use jquery AJAX method to send Message to Information controller.
-               */
-            }
-        }
+
     });
 </script>
 

@@ -516,25 +516,155 @@ namespace InspectionWeb.Controllers
             return Json(null);
         }
 
-
-        
-
         //GET: /Information/AddDevice
         public ActionResult AddDevice()
         {
             return View();
         }
 
-        //GET: /Information/EditDevice
-        public ActionResult EditDevice()
+        [HttpPost]
+        public ActionResult AddDevice(string itemName)
         {
-            return View();
+            exhibitionItem item = new exhibitionItem();
+            item.itemName = itemName;
+            item.itemType = 1;
+            item.roomId = "experience";
+            IResult result = _exhibitionItemService.Create(item);
+            string itemId = result.Message;
+            if(result.Success == false)
+            {
+                return View("AddDevice");
+            }
+
+            return RedirectToAction("EditDevice", new { id = itemId });
+        }
+
+        //GET: /Information/EditDevice
+        public ActionResult EditDevice(string id)
+        {
+            string itemId = id;
+            if (string.IsNullOrEmpty(itemId))
+            {
+                RedirectToAction("AddDevice");
+            }
+
+            exhibitionItem item = _exhibitionItemService.GetById(itemId);
+            DeviceEditViewModel vm = new DeviceEditViewModel();
+
+            if(item == null)
+            {
+                return RedirectToAction("ListDevice");
+            }
+
+            vm.ItemId = item.itemId;
+            vm.ItemName = item.itemName;
+            vm.IsLock = item.isLock;
+            vm.Active = item.active;
+            vm.Inspector = _userService.GetByID(item.inspectionUserId);
+            vm.CreateTime = item.createTime;
+            vm.LastUpdateTime = item.lastUpdateTime;
+            vm.Inspectors = _userService.GetAll().ToList();
+            return View(vm);
+            
+        }
+
+        [HttpPost]
+        public ActionResult EditDevice(FormCollection fc)
+        {
+            string deviceId = fc["pk"];
+            exhibitionItem device = _exhibitionItemService.GetById(deviceId);
+            if (device != null && ModelState.IsValid)
+            {
+                switch (fc["name"])
+                {
+                    case "itemName":
+                        device.itemName = fc["value"];
+                        break;
+                    case "inspectoinUserId":
+                        device.inspectionUserId = fc["value"];
+                        break;
+                    case "active":
+                        device.active = Convert.ToInt16(fc["value"]);
+                        break;
+                    case "isLock":
+                        device.isLock = Convert.ToByte(fc["value"]);
+                        break;
+                    default:
+                        break;
+                }
+
+                IResult result = _exhibitionItemService.Update(device);
+                if (result.Success)
+                {
+                    return Json(new { lastUpdateTime = device.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+                }
+            }
+            else
+            {
+                return RedirectToAction("EditDevice");
+            }
+
+            return RedirectToAction("ListDevice");
         }
 
         //GET: /Information/ListDevice
         public ActionResult ListDevice()
         {
-            return View();
+            List<DeviceListViewModel> vms = new List<DeviceListViewModel>();
+            List<exhibitionItem> allDevices = _exhibitionItemService.GetAll().Where(x => x.itemType == 1).ToList();
+            foreach(var device in allDevices)
+            {
+                DeviceListViewModel vm = new DeviceListViewModel();
+                vm.ItemId = device.itemId;
+                vm.ItemName = device.itemName;
+                switch (device.active)
+                {
+                    case 0:
+                        vm.Active = "停用";
+                        break;
+                    case 1:
+                        vm.Active = "啟用";
+                        break;
+                    case 2:
+                        vm.Active = "維護中";
+                        break;
+                    default:
+                        vm.Active = "未設定";
+                        break;
+                }
+                vm.CreateTime = device.createTime;
+                vm.LastUpdateTime = device.lastUpdateTime;
+                vms.Add(vm);
+            }
+
+            return View(vms);
+        }
+
+        public ActionResult DeleteDevice(string deviceId)
+        {
+            if (string.IsNullOrEmpty(deviceId))
+            {
+                return RedirectToAction("ListDevice");
+            }
+
+            exhibitionItem device = this._exhibitionItemService.GetById(deviceId);
+            if (device == null)
+            {
+                return RedirectToAction("ListDevice");
+            }
+
+            device.isDelete = 1;
+
+            try
+            {
+                this._exhibitionItemService.Update(device);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("ListDevice");
+            }
+
+            return RedirectToAction("ListDevice");
         }
 
         //GET: /Information/AddNotifyDevice
