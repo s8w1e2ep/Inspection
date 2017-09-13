@@ -83,9 +83,12 @@
             type: "DELETE",
             url: 'DeleteCompany',
             data: $.param({ "companyId": toDeleteId })
-        }).done(function (msg) {
-            if (msg){
+        }).done(function (data) {
+            if (data.success){
                 $("#" + toDeleteId).remove();
+                alert(data.msg);
+            } else {
+                alert(data.msg);
             }
         });
     }

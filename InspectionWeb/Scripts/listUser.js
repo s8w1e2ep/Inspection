@@ -5,8 +5,13 @@ function deleteUser() {
         type: "DELETE",
         url: 'DeleteUser',
         data: $.param({ "userId": toDeleteUserId })
-    }).done(function (msg) {
-        $("#" + toDeleteUserId).remove();
+    }).done(function (data) {
+        if (data.success) {
+            $("#" + toDeleteUserId).remove();
+            alert(data.msg);
+        } else {
+            alert(data.msg);
+        } 
     });
 }
 
