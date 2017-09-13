@@ -89,11 +89,16 @@
         // single Date picker
         $('#startDatePicker, #endDatePicker').datepicker({
             language: 'zh-TW',
-            format: 'yyyy/mm/dd'
+            format: 'yyyy/mm/dd',
+            autoclose: true
         }).on('changeDate', function (ev) {
             startDate = $('#startDatePicker').val();
             endDate = $('#endDatePicker').val();
-            $('.datepicker').hide();
+            if (ev.target.id === 'startDatePicker') {
+                $('#endDatePicker').datepicker('setStartDate', startDate);
+            } else {
+                $('#startDatePicker').datepicker('setEndDate', endDate);
+            }
         });
     });
 
@@ -102,8 +107,6 @@
             alert('請選擇開始日期!');
         } else if (endDate === null || endDate === "") {
             alert('請選擇結束日期!');
-        } else if (endDate < startDate) {
-            alert('結束日期不能比開始日期早');
         } else {
             setAbnormalTable();
         }
@@ -117,6 +120,8 @@
                 endDate: endDate
             },
             function (res) {
+                $('#abnormalTable').DataTable().clear().draw();
+                $.plot($('#chart'), '', {});
                 if (res.data.length != 0) {
                     var chartSet = [];
                     var total = res.total;

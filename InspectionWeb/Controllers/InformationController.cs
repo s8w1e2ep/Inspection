@@ -274,7 +274,6 @@ namespace InspectionWeb.Controllers
             {
                 return RedirectToAction("ListExhibition");
             }
-            return View();
         }
 
         [HttpPost]
@@ -442,8 +441,6 @@ namespace InspectionWeb.Controllers
                     case "periodReportTime":
                         item.periodReportTime = Convert.ToInt32(fc["value"]);
                         break;
-                    defualt:
-                        break;
                 }
 
                 IResult result = this._exhibitionItemService.Update(item);
@@ -461,7 +458,6 @@ namespace InspectionWeb.Controllers
             {
                 return RedirectToAction("EditExhibition");
             }
-            return View();
         }
         public ActionResult DeleteExhibitionItem(string itemId)
         {

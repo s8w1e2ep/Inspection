@@ -120,11 +120,11 @@ namespace InspectionWeb.Controllers
                 }
                 else
                 {
-                    return Json("[]", JsonRequestBehavior.AllowGet);
+                    return Json(null, JsonRequestBehavior.AllowGet);
                 }
                 
                 RecordJson re = new RecordJson();
-                re.dispatchDate = record.checkDate;
+                re.dispatchDate = record.checkDate.ToString();
                 re.total = num;
                 re.normal = normal;
                 if (re.total == 0)
@@ -140,7 +140,7 @@ namespace InspectionWeb.Controllers
 
             if (records.Count == 0)
             {
-                return Json("[]", JsonRequestBehavior.AllowGet);
+                return Json("", JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -184,11 +184,11 @@ namespace InspectionWeb.Controllers
                 }
                 else
                 {
-                    return Json("[]", JsonRequestBehavior.AllowGet);
+                    return Json("", JsonRequestBehavior.AllowGet);
                 }
 
                 RecordJson re = new RecordJson();
-                re.dispatchDate = record.checkDate;
+                re.dispatchDate = record.checkDate.ToString();
                 re.total = 1;
                 re.normal = normal;
                 re.prob = (int)((float)re.normal / re.total * 100);
@@ -198,7 +198,7 @@ namespace InspectionWeb.Controllers
 
             if (records.Count == 0)
             {
-                return Json("[]", JsonRequestBehavior.AllowGet);
+                return Json("", JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -242,11 +242,11 @@ namespace InspectionWeb.Controllers
                 }
                 else
                 {
-                    return Json("[]", JsonRequestBehavior.AllowGet);
+                    return Json("", JsonRequestBehavior.AllowGet);
                 }
                 
                 RecordJson re = new RecordJson();
-                re.dispatchDate = record.checkDate;
+                re.dispatchDate = record.checkDate.ToString();
                 re.total = 1;
                 re.normal = normal;
                 re.prob = (int)((float)re.normal / re.total * 100);
@@ -256,7 +256,7 @@ namespace InspectionWeb.Controllers
 
             if (records.Count == 0)
             {
-                return Json("[]", JsonRequestBehavior.AllowGet);
+                return Json("", JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -295,7 +295,7 @@ namespace InspectionWeb.Controllers
 
             if (ranks.Count == 0)
             {
-                return Json("[]", JsonRequestBehavior.AllowGet);
+                return Json("", JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -325,7 +325,7 @@ namespace InspectionWeb.Controllers
 
             if (ranks.Count == 0)
             {
-                return Json("[]", JsonRequestBehavior.AllowGet);
+                return Json("", JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -384,7 +384,15 @@ namespace InspectionWeb.Controllers
             foreach (var abnormal in others)
             {
                 ItemListJson ele = new ItemListJson();
-                ele.abName = this._defineService.GetById(abnormal.abnormalId).abnormalName;
+                if(this._defineService.GetById(abnormal.abnormalId) == null)
+                {
+                    ele.abName = "";
+                }
+                else
+                {
+                    ele.abName = this._defineService.GetById(abnormal.abnormalId).abnormalName == null ? "" : this._defineService.GetById(abnormal.abnormalId).abnormalName;
+                }
+                
                 ele.desc = abnormal.description;
                 ele.sourceName = abnormal.name;
                 ele.isClose = abnormal.isClose == 1 ? "已結案" : "未結案";
@@ -398,8 +406,7 @@ namespace InspectionWeb.Controllers
 
         public class RecordJson
         {
-            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
-            public Nullable<DateTime> dispatchDate { get; set; }
+            public string dispatchDate { get; set; }
             public int total { get; set; }
             public int normal { get; set; }
             public int prob { get; set; }
