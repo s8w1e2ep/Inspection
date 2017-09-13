@@ -255,6 +255,12 @@ namespace InspectionWeb.Controllers
             vm.Active = (int) room.active;
             vm.FieldId = room.fieldId;
             vm.Inspector = this._userService.GetByID(room.inspectionUserId);
+            vm.MapFileName = "";
+            if (!string.IsNullOrEmpty(room.fieldId))
+            {
+                fieldMap field = this._fieldMapService.GetById(room.fieldId);
+                vm.MapFileName = field.mapFileName;
+            }
             //TODO company field 
 
             vm.X = room.x;
@@ -292,7 +298,19 @@ namespace InspectionWeb.Controllers
                 IResult result = this._exhibitionRoomService.Update(room);
                 if (result.Success)
                 {
-                    return Json(new { lastUpdateTime = room.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+                    fieldMap field = this._fieldMapService.GetById(room.fieldId);
+                    if (field == null)
+                    {
+                        return Json(new
+                        {
+                            lastUpdateTime = room.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                            mapFileName = ""
+                        });
+                    }
+                    else {
+                        return Json(new { lastUpdateTime = room.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                                          mapFileName = field.mapFileName });
+                    }
                 }
                 else
                 {
@@ -332,7 +350,27 @@ namespace InspectionWeb.Controllers
             return Json(null);
         }
 
+        [HttpPost]
+        public ActionResult SaveRoomSvgChangeToServer(FormCollection fc)
+        {
+            string roomId = fc["roomId"];
+            exhibitionRoom room = _exhibitionRoomService.GetById(roomId);
+            if(room == null)
+            {
+                return Json(null);
+            }
+            room.x = Convert.ToInt32(fc["x"]);
+            room.y = Convert.ToInt32(fc["y"]);
+            room.width = Convert.ToInt32(fc["width"]);
+            room.height = Convert.ToInt32(fc["height"]);
+            IResult result = _exhibitionRoomService.Update(room);
+            if (result.Success)
+            {
+                return Json(new { lastUpdateTime = room.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+            }
 
+            return Json(null);
+        }
         //GET: /Information/ListExhibition
         public ActionResult ListExhibition()
         {
