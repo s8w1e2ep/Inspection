@@ -299,6 +299,16 @@ namespace InspectionWeb.Services
                                         "AND roomInspectionDispatch.roomId = exhibitionItem.roomId " +
                                         "GROUP BY exhibitionItem.roomId " +
                                         "ORDER BY exhibitionItem.roomId; ";
+
+            string GetHasInspectionItemSql = "SELECT roomCheckRecord.roomId, COUNT(roomCheckRecord.roomId) AS num " +
+                                            "FROM roomCheckRecord, roomInspectionDispatch " +
+                                            "WHERE roomCheckRecord.checkDate = '" + date.ToString("d") + "' " +
+                                            "AND roomInspectionDispatch.checkDate = '" + date.ToString("d") + "' " +
+                                            "AND roomCheckRecord.roomId = roomInspectionDispatch.roomId " +
+                                            "AND roomInspectionDispatch.isDelete = 0 " +
+                                            "GROUP BY roomCheckRecord.roomId " +
+                                            "ORDER BY roomCheckRecord.roomId";
+
             string GetAbnormalInspectionItemSql = "SELECT exhibitionItem.roomId, COUNT(abnormalRecord.itemId) AS num " +
                                                 "FROM abnormalRecord, exhibitionItem, roomInspectionDispatch " +
                                                 "WHERE abnormalRecord.happenedTime = '" + date.ToString("d") + "' " +
@@ -308,6 +318,7 @@ namespace InspectionWeb.Services
                                                 "AND roomInspectionDispatch.isDelete = 0 " +
                                                 "GROUP BY exhibitionItem.roomId " +
                                                 "ORDER BY exhibitionItem.roomId";
+
             string GetSolveInspectionItemSql = "SELECT exhibitionItem.roomId, COUNT(abnormalRecord.itemId) AS num " +
                                             "FROM abnormalRecord, exhibitionItem, roomInspectionDispatch " +
                                             "WHERE abnormalRecord.happenedTime = '" + date.ToString("d") + "' " +
@@ -323,36 +334,51 @@ namespace InspectionWeb.Services
             {
                 var allRoom = db.Database.SqlQuery<string>(GetAllRoomSql).ToList();
                 List<queryEntity> allItemNum = db.Database.SqlQuery<queryEntity>(GetAllItemNumSql).ToList();
-                int allItemNumIndex = 0;
-                List<queryEntity> abnormalInspectionItem = db.Database.SqlQuery<queryEntity>(GetAbnormalInspectionItemSql).ToList();
+                int allItemIndex = 0;
+                List<queryEntity> hasInspectionItemNum = db.Database.SqlQuery<queryEntity>(GetHasInspectionItemSql).ToList();
+                int hasInspectionItemIndex = 0;
+                List<queryEntity> abnormalInspectionItemNum = db.Database.SqlQuery<queryEntity>(GetAbnormalInspectionItemSql).ToList();
                 int abnormalInspectionItemIndex = 0;
-                List<queryEntity> solveInspectionItem = db.Database.SqlQuery<queryEntity>(GetSolveInspectionItemSql).ToList();
+                List<queryEntity> solveInspectionItemNum = db.Database.SqlQuery<queryEntity>(GetSolveInspectionItemSql).ToList();
                 int solveInspectionItemIndex = 0;
                 List<queryInspectionByDateStatusDetail> status = new List<queryInspectionByDateStatusDetail>();
                 foreach(var item in allRoom)
                 {
                     queryInspectionByDateStatusDetail x = new queryInspectionByDateStatusDetail();
                     x.roomId = item;
-                    if (allItemNum.Count>0) {
-                        if (string.Compare(allItemNum.ElementAt(allItemNumIndex).roomId, item) == 0)
+                    if (allItemNum.Count > 0 && allItemIndex < allItemNum.Count) {
+                        if (string.Compare(allItemNum.ElementAt(allItemIndex).roomId, item) == 0)
                         {
-                            x.allItemNum = allItemNum.ElementAt(allItemNumIndex).num;
-                            x.hasInspection = allItemNum.ElementAt(allItemNumIndex).num;
-                            allItemNumIndex++;
+                            x.allItemNum = allItemNum.ElementAt(allItemIndex).num; 
+                            allItemIndex++;
                         }
                         else
                         {
                             x.allItemNum = 0;
-                            x.hasInspection = 0;
                         }
                     } else {
                         x.allItemNum = 0;
+                    }
+                    if (hasInspectionItemNum.Count > 0 && hasInspectionItemIndex < hasInspectionItemNum.Count)
+                    {
+                        if (string.Compare(hasInspectionItemNum.ElementAt(hasInspectionItemIndex).roomId, item) == 0)
+                        {
+                            x.hasInspection = x.allItemNum;
+                            hasInspectionItemIndex++;
+                        }
+                        else
+                        {
+                            x.hasInspection = 0;
+                        }
+                    }
+                    else
+                    {
                         x.hasInspection = 0;
                     }
-                    if (abnormalInspectionItem.Count>0) {
-                        if (string.Compare(abnormalInspectionItem.ElementAt(abnormalInspectionItemIndex).roomId, item) == 0)
+                    if (abnormalInspectionItemNum.Count > 0 && abnormalInspectionItemIndex < abnormalInspectionItemNum.Count) {
+                        if (string.Compare(abnormalInspectionItemNum.ElementAt(abnormalInspectionItemIndex).roomId, item) == 0)
                         {
-                            x.abnormalNum = abnormalInspectionItem.ElementAt(abnormalInspectionItemIndex).num;
+                            x.abnormalNum = abnormalInspectionItemNum.ElementAt(abnormalInspectionItemIndex).num;
                             abnormalInspectionItemIndex++;
                         }
                         else
@@ -363,10 +389,10 @@ namespace InspectionWeb.Services
                     } else {
                         x.abnormalNum = 0;
                     }
-                    if (solveInspectionItem.Count>0) {
-                        if (string.Compare(solveInspectionItem.ElementAt(solveInspectionItemIndex).roomId, item) == 0)
+                    if (solveInspectionItemNum.Count>0 && solveInspectionItemIndex < solveInspectionItemNum.Count()) {
+                        if (string.Compare(solveInspectionItemNum.ElementAt(solveInspectionItemIndex).roomId, item) == 0)
                         {
-                            x.solveNum = solveInspectionItem.ElementAt(solveInspectionItemIndex).num;
+                            x.solveNum = solveInspectionItemNum.ElementAt(solveInspectionItemIndex).num;
                             solveInspectionItemIndex++;
                         }
                         else

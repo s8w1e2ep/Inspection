@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="cea723bfe120417b935960ff16b092be" Name="Diagram1" ZoomLevel="10">
+      <Diagram DiagramId="cea723bfe120417b935960ff16b092be" Name="Diagram1" ZoomLevel="100">
         <EntityTypeShape EntityType="inspectionModel.abnormalDefinition" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="inspectionModel.company" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="inspectionModel.exhibitionRoom" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
@@ -12,7 +12,7 @@
         <EntityTypeShape EntityType="inspectionModel.itemCheckRecord" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="inspectionModel.itemInspectionDispatch" PointX="15.375" PointY="4.75" Width="1.5" IsExpanded="true" />
         <EntityTypeShape EntityType="inspectionModel.reportDevice" Width="1.5" PointX="8.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="inspectionModel.reportSource" Width="1.5" PointX="26.25" PointY="16.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="inspectionModel.reportSource" Width="1.5" PointX="15.25" PointY="14.5" IsExpanded="true" />
         <EntityTypeShape EntityType="inspectionModel.user" Width="1.5" PointX="11.375" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="inspectionModel.userGroup" Width="1.5" PointX="0.75" PointY="12.75" IsExpanded="true" />
         <EntityTypeShape EntityType="inspectionModel.quickSolution" Width="1.5" PointX="3.375" PointY="12.75" />
@@ -26,8 +26,6 @@
         <EntityTypeShape EntityType="inspectionModel.roomInspectionDispatch" Width="1.5" PointX="15.25" PointY="9.375" />
         <EntityTypeShape EntityType="inspectionModel.systemSetting" Width="1.5" PointX="15.375" PointY="0.75" />      
         <EntityTypeShape EntityType="inspectionModel.temp" Width="1.5" PointX="15.375" PointY="0.75" />
-        <EntityTypeShape EntityType="inspectionModel.temp1" Width="1.5" PointX="0.75" PointY="9.75" />
-        <EntityTypeShape EntityType="inspectionModel.temp2" Width="1.5" PointX="2.75" PointY="9.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
