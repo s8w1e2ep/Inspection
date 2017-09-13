@@ -7,16 +7,7 @@
     $.fn.editable.defaults.mode = 'inline';
 
     $(document).ready(function () {
-        $('#infoExhibitItem').DataTable({
-            "paging": false,
-            "info": false,
-            "searching": false,
-            "columnDefs": [
-                { "targets": 0, "width": "40%", "orderable": true },
-                { "targets": 1, "width": "40%", "orderable": true },
-                { "targets": 2, "width": "20%", "orderable": true },
-            ],
-        });
+        
 
         $('#itemCode, #itemName, #description').editable({
             emptytext: "未設定",
@@ -58,15 +49,6 @@
         });
 
 
-        $('#modalYes').on('click', function (e) {
-            deleteExhibitionItem();
-        });
-
-        function deleteExhibitionItem() {
-            @{/* TODO: use jquery AJAX method to send Message to Exhibition controller.
-               */
-            }
-        }
     });
 
 
