@@ -135,6 +135,35 @@ namespace InspectionWeb.Controllers
             return Json(null);
         }
 
+        [HttpPost]
+        public ActionResult UpdateFieldMap(HttpPostedFileBase upload, string fieldId)
+        {
+            if (upload.ContentLength > 0)
+            {
+                try
+                {
+                    //var fileName = System.IO.Path.GetFileName(upload.FileName);
+                    var fileName = fieldId + ".svg";
+                    var path = System.IO.Path.Combine(Server.MapPath("~/media/map"), fileName);
+                    upload.SaveAs(path);
+
+                    fieldMap field = _fieldMapService.GetById(fieldId);
+                    field.mapFileName = fileName;
+                    IResult result = _fieldMapService.Update(field);
+
+                    if (result.Success) return Json( new {  lastUpdateTime = field.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                                                            mapName = fileName });
+                }
+                catch (Exception ex)
+                { }
+                return Json(null);
+            }
+
+            else
+            {
+                return Json(null);
+            }
+        }
 
         public ActionResult ListField()
         {

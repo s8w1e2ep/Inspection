@@ -16,6 +16,11 @@
                 $('#lastUpdateTime').html(response.lastUpdateTime);
             }
         });
+
+         @if(!string.IsNullOrEmpty(Model.MapFileName))
+        {
+            @:loadMap('@Url.Content("~/media/map/")@Model.MapFileName');
+        }
     });
 
 
@@ -61,6 +66,52 @@
           });
 
     }
+
+    function uploadSVG(obj) {
+        var file = obj.files[0];
+        $('#mapProgress').css('width', '0%').html('0%');
+
+        var formData = new FormData();
+        formData.append('upload', file);
+        $.ajax({
+            url: "@Url.Content("~/Information/UpdateFieldMap?fieldId=")@Model.FieldId",
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            cache: false,
+            data: formData,
+            dataType: 'json',
+            xhr: function () {
+                var myXhr = $.ajaxSettings.xhr();
+                myXhr.upload.addEventListener('progress', function (e) {
+                    var progress = parseInt(e.loaded / e.toatal * 100, 10);
+                    $('mapProgress').css('width', progress + '%').html(progress + '%');
+                }, false);
+                return myXhr;
+            }
+        }).done(function (data) {
+            console.log(data);
+                if (data) {
+                    $('#photoProgress').css('display', 'none');
+                    $('#lastUpdateTime').html(data.lastUpdateTime);
+                    loadMap("~/media/map/" + data.mapName + '? timestamp =' + new Date().getTime());
+
+                }
+            })
+
+          .fail(function () {
+              alert("Sorry, Server unavailable. ");
+          });
+    }
+
+    function loadMap(mapName) {
+        $('#fieldMap').load(mapName, status, function () {
+            if (status != 'error') {
+                svg = d3.select('svg');
+                createMapObject();
+            }
+        });
+    }
 </script>
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
@@ -101,7 +152,7 @@
                                     <tr>
                                         <td>樓層</td>
                                         <td>
-                                            <a href="#" id="floor" data-type="text" data-pk="@Model.Floor" data-url="@Url.Action("EditField")" data-title="輸入樓層">@Model.Floor</a>
+                                            <a href="#" id="floor" data-type="text" data-pk="@Model.FieldId" data-url="@Url.Action("EditField")" data-title="輸入樓層">@Model.Floor</a>
                                         </td>
                                     </tr>
                                     
@@ -142,15 +193,23 @@
 
                                     @*場域地圖*@
                                     <tr>
+                                        
                                         <td>
                                             場域地圖
-                                            <input id="svgUpload" type="file" onchange="uploadSVG(this)" style="display: none">
+                                            <input id="svgUpload" type="file" onchange="uploadSVG(this)" style="display: none" accept=".svg">
                                             <div class="btn btn-sm btn-success" onclick="onUploadFile('#svgUpload')">
                                                 <i class="fa fa-map"></i>
                                                 上傳地圖
                                             </div>
                                         </td>
-                                        <td></td>
+                                        <td>
+                                            <div class="progress" style="margin-bottom: 10px;">
+                                                <div id="mapProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                                            </div>
+                                            
+                                            <div id="fieldMap"></div>
+
+                                        </td>
                                     </tr>
                                     
                                     @*建立日期*@
