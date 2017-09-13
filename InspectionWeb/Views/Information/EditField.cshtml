@@ -108,7 +108,6 @@
         $('#fieldMap').load(mapName, status, function () {
             if (status != 'error') {
                 svg = d3.select('svg');
-                createMapObject();
             }
         });
     }
