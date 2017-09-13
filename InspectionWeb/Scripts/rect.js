@@ -59,6 +59,13 @@ var selectionRect = {
         this.currentY = newY;
         this.element.attr(this.getNewAttributes());
     },
+    dragUpdate: function (deltaX, deltaY) {
+        this.originX += deltaX;
+        this.originY += deltaY;
+        this.currentX += deltaX;
+        this.currentY += deltaY;
+        this.element.attr(this.getNewAttributes());
+    },
     focus: function () {
         this.element
             .style("stroke", "#DE695B")
@@ -72,6 +79,10 @@ var selectionRect = {
         if (this.previousElement) {
             this.previousElement.remove();
         }
+    },
+    pointInRect: function (mouseX,mouseY) {
+        return (this.originX < mouseX && this.currentX > mouseX) &&
+            (this.originY < mouseY && this.currentY > mouseY);
     }
 };
 
@@ -79,19 +90,37 @@ var selectionRect = {
 //var clickTime = d3.select("#clicktime");
 //var attributesText = d3.select("#attributestext");
 
+var clickInRect = false;
+var startPoint = {x:0 , y:0};
 function dragStart() {
     console.log("dragStart");
     var p = d3.mouse(this);
-    selectionRect.init(p[0], p[1]);
-    selectionRect.removePrevious();
+    if (selectionRect.pointInRect(p[0], p[1])) {
+        startPoint.x = p[0];
+        startPoint.y = p[1];
+        clickInRect = true;
+    } else {
+        selectionRect.init(p[0], p[1]);
+        selectionRect.removePrevious();
+        clickInRect = false;
+    }
 }
 
 function dragMove() {
     console.log("dragMove");
     var p = d3.mouse(this);
-    selectionRect.update(p[0], p[1]);
-    attributesText.text(selectionRect.getCurrentAttributesAsText());
+    if (clickInRect == true) {
+        //drag orginal rect
+        selectionRect.dragUpdate(deltaX = p[0] - startPoint.x,
+            deltaY = p[1] - startPoint.y);
 
+        startPoint.x = p[0];
+        startPoint.y = p[1];
+
+    } else {
+        selectionRect.update(p[0], p[1]);
+        attributesText.text(selectionRect.getCurrentAttributesAsText());
+    }
 }
 
 function dragEnd() {
