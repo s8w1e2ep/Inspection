@@ -354,6 +354,8 @@
     <Compile Include="Models\ViewModel\ListItemInspectionDispatchViewModel.cs" />
     <Compile Include="Models\ViewModel\ListRoomInspectionDispatchViewModel.cs" />
     <Compile Include="Models\ViewModel\userListForInspectionViewModel.cs" />
+    <Compile Include="Services\CompanyService.cs" />
+    <Compile Include="Services\Interface\ICompanyService.cs" />
     <Compile Include="Services\Interface\INoCheckDateService.cs" />
     <Compile Include="Services\Interface\ISystemArgService.cs" />
     <Compile Include="Services\NoCheckDateService.cs" />
