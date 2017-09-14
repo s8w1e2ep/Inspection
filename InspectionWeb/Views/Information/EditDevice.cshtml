@@ -12,6 +12,26 @@
             }
         });
 
+        $('#fieldId').editable({
+            value: ["@if (@Model.FieldId != null) {<text>@Model.FieldId</text>}"],
+            emptytext: '未設定',
+            source: [
+                // value :選擇後會回傳的值
+                // text : value相對應的值, 顯示的是此值
+                @foreach (var item in Model.Fields)
+                {
+                    <text>{ value: '@item.fieldId', text: '@item.fieldName' },</text>
+                }
+            ],
+            success: function (response) {
+                $('#lastUpdateTime').html(response.lastUpdateTime);
+                if (response.mapFileName) {
+                    loadMap("@Url.Content("~/media/map/")" + response.mapFileName);
+                } else {
+                    $('#fieldMap').html('');
+                }
+            }
+        });
 
         $('#active').editable({
             value: [@Model.Active],
@@ -26,7 +46,7 @@
             }
         });
 
-         $('#isLock').editable({
+        $('#isLock').editable({
             value: [@Model.IsLock],
             source: [
                 { value: 0, text: '否' },
@@ -46,7 +66,7 @@
                 // text : value相對應的值, 顯示的是此值
                 @foreach (var item in Model.Inspectors)
                 {
-                    <text>{value: '@item.userId', text: '@item.userName'},</text>
+                    <text>{ value: '@item.userId', text: '@item.userName' },</text>
                 }
             ],
             success: function (response) {
@@ -55,17 +75,70 @@
         });
 
 
-
-
+       @if (!string.IsNullOrEmpty(Model.FieldId))
+        {
+           @:loadMap('@Url.Content("~/media/map/")@Model.FieldId' + '.svg');
+        }
+        else {
+            <text>$('#fieldMap').html('');</text>
+        }
     });
 
-    $('#modalYes').on('click', function (e) {
-            deleteDevice();
-    });
-    function deleteDevice() {
+     // variables for d3
+    var svg;
+    var dragBehavior;
+    var attributesText;
 
+    function loadMap(mapName) {
+        $('#fieldMap').load(mapName, status, function () {
+            if (status != 'error') {
+                svg = d3.select("svg");
+                attributesText = d3.select("#attributestext");
+                getSvgChangeFromServer();
+                dragBehavior = d3.behavior.drag()
+                    .on("drag", dragMove)
+                    .on("dragstart", dragStart)
+                    .on("dragend", dragEnd);
+                svg.call(dragBehavior);
+                scalable = false;
+            }
+        });
     }
 
+    function getSvgChangeFromServer() {
+        selectionRect.init(@Model.X, @Model.Y);
+        selectionRect.update(@Model.X + 15,@Model.Y + 15);
+    }
+
+    function saveSvgChangeToServer() {
+
+        var formData = new FormData();
+        var rect = selectionRect.getNewAttributes();
+
+        formData.append('deviceId', '@Model.ItemId');
+        formData.append('x', parseInt(rect.x, 10));
+        formData.append('y', parseInt(rect.y, 10));
+
+        $.ajax({
+            url: "@Url.Content("~/Information/SaveDeviceSvgChangeToServer")",
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            cache: false,
+            data: formData,
+            dataType: 'json',
+
+        }).done(function (data) {
+            console.log(data);
+            if (data) {
+                $('#lastUpdateTime').html(data.lastUpdateTime);
+            }
+        })
+
+            .fail(function () {
+                alert("Sorry, Server unavailable. ");
+            });
+    }
 
 </script>
 
@@ -84,7 +157,7 @@
             <div class="col-md-12">
                 <div class="box box-success">
                     <div class="box-header with-border">
-                        <h3 class="box-title">系統參數檢視/修改</h3>
+                        <h3 class="box-title">體驗設施檢視/修改</h3>
                     </div>
                     <!-- form start -->
 
@@ -97,11 +170,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @*參數名稱*@
+                                @*體驗設施名稱*@
                                 <tr>
                                     <td>體驗設施名稱</td>
                                     <td>
                                         <a href="#" id="itemName" data-type="text" data-pk="@Model.ItemId" data-url="@Url.Action("EditDevice")" data-title="輸入體驗設施名稱">@Model.ItemName</a>
+                                    </td>
+                                </tr>
+
+                                @*所屬場域*@
+                                <tr>
+                                    <td>所屬場域</td>
+                                    <td>
+                                        <a href="#" id="fieldId" data-type="select" data-pk="@Model.ItemId" data-url="@Url.Action("EditDevice")" data-title="選擇場域"></a>
                                     </td>
                                 </tr>
 
@@ -126,6 +207,19 @@
                                     <td>是否鎖定</td>
                                     <td>
                                         <a href="#" id="isLock" data-type="select" data-pk="@Model.ItemId" data-url="@Url.Action("EditDevice")" data-title="是否鎖定"></a>
+                                    </td>
+                                </tr>
+
+                                @*場域地圖*@
+                                <tr>
+                                    <td>場域地圖</td>
+                                    <td>
+                                        <div class="progress" style="margin-bottom: 10px;">
+                                            <div id="mapProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                                        </div>
+
+                                        <div id="fieldMap"></div>
+
                                     </td>
                                 </tr>
 

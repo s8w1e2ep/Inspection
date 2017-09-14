@@ -649,7 +649,12 @@ namespace InspectionWeb.Controllers
             vm.Inspector = _userService.GetByID(item.inspectionUserId);
             vm.CreateTime = item.createTime;
             vm.LastUpdateTime = item.lastUpdateTime;
+            vm.X = item.x;
+            vm.Y = item.y;
+            vm.FieldId = item.fieldId;
             vm.Inspectors = _userService.GetAll().ToList();
+            vm.Fields = this._fieldMapService.GetAll().ToList();
+
             return View(vm);
             
         }
@@ -666,7 +671,7 @@ namespace InspectionWeb.Controllers
                     case "itemName":
                         device.itemName = fc["value"];
                         break;
-                    case "inspectoinUserId":
+                    case "inspectionUserId":
                         device.inspectionUserId = fc["value"];
                         break;
                     case "active":
@@ -675,6 +680,10 @@ namespace InspectionWeb.Controllers
                     case "isLock":
                         device.isLock = Convert.ToByte(fc["value"]);
                         break;
+                    case "fieldId":
+                        device.fieldId = fc["value"];
+                        break;
+
                     default:
                         break;
                 }
@@ -753,6 +762,25 @@ namespace InspectionWeb.Controllers
             return RedirectToAction("ListDevice");
         }
 
+        [HttpPost]
+        public ActionResult SaveDeviceSvgChangeToServer(FormCollection fc)
+        {
+            string deviceId = fc["deviceId"];
+            exhibitionItem item = _exhibitionItemService.GetById(deviceId);
+            if (item == null)
+            {
+                return Json(null);
+            }
+            item.x = Convert.ToInt32(fc["x"]);
+            item.y = Convert.ToInt32(fc["y"]);
+            IResult result = _exhibitionItemService.Update(item);
+            if (result.Success)
+            {
+                return Json(new { lastUpdateTime = item.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+            }
+
+            return Json(null);
+        }
         //GET: /Information/AddNotifyDevice
         public ActionResult AddNotifyDevice()
         {
