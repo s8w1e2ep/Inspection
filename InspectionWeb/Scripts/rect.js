@@ -92,14 +92,16 @@ var selectionRect = {
 
 var clickInRect = false;
 var startPoint = {x:0 , y:0};
+var scalable = true;
 function dragStart() {
     console.log("dragStart");
     var p = d3.mouse(this);
-    if (selectionRect.pointInRect(p[0], p[1])) {
+
+    if (selectionRect.pointInRect(p[0], p[1]) ) {
         startPoint.x = p[0];
         startPoint.y = p[1];
         clickInRect = true;
-    } else {
+    } else if (scalable === true){
         selectionRect.init(p[0], p[1]);
         selectionRect.removePrevious();
         clickInRect = false;
@@ -109,7 +111,7 @@ function dragStart() {
 function dragMove() {
     console.log("dragMove");
     var p = d3.mouse(this);
-    if (clickInRect == true) {
+    if (clickInRect === true) {
         //drag orginal rect
         selectionRect.dragUpdate(deltaX = p[0] - startPoint.x,
             deltaY = p[1] - startPoint.y);
@@ -117,7 +119,7 @@ function dragMove() {
         startPoint.x = p[0];
         startPoint.y = p[1];
 
-    } else {
+    } else if (scalable === true) {
         selectionRect.update(p[0], p[1]);
         attributesText.text(selectionRect.getCurrentAttributesAsText());
     }
@@ -138,7 +140,7 @@ function dragEnd() {
         selectionRect.remove();
         // trigger click event manually
     }
-    saveSvgChangeToServer();
+        saveSvgChangeToServer();
 }
 
 
