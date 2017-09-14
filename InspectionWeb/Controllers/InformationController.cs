@@ -583,6 +583,25 @@ namespace InspectionWeb.Controllers
             return Json(null);
         }
 
+        [HttpPost]
+        public ActionResult SaveItemSvgChangeToServer(FormCollection fc)
+        {
+            string itemId = fc["itemId"];
+            exhibitionItem item = _exhibitionItemService.GetById(itemId);
+            if (item == null)
+            {
+                return Json(null);
+            }
+            item.x = Convert.ToInt32(fc["x"]);
+            item.y = Convert.ToInt32(fc["y"]);
+            IResult result = _exhibitionItemService.Update(item);
+            if (result.Success)
+            {
+                return Json(new { lastUpdateTime = item.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+            }
+
+            return Json(null);
+        }
         //GET: /Information/AddDevice
         public ActionResult AddDevice()
         {

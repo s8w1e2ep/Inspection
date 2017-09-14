@@ -7,7 +7,7 @@
     $.fn.editable.defaults.mode = 'inline';
 
     $(document).ready(function () {
-        
+
 
         $('#itemCode, #itemName, #description').editable({
             emptytext: "未設定",
@@ -48,6 +48,15 @@
             }
         });
 
+        @if (!string.IsNullOrEmpty(Model.FieldId))
+        {
+           @:loadMap('@Url.Content("~/media/map/")@Model.FieldId' + '.svg');
+        }
+        else {
+            <text>$('#fieldMap').html('');</text>
+        }
+
+
 
     });
 
@@ -80,19 +89,78 @@
             }
         }).done(function (data) {
             console.log(data);
-                if (data) {
-                    console.log(data);
-                    $('#photo').attr('src', '@Url.Content("~/media/exhibitionItem/")' + data.photoName + '?timestamp=' + new Date().getTime());
-                    $('.photoProgress').css('display', 'none');
-                    $('#lastUpdateTime').html(data.lastUpdateTime);
-                }
-            })
+            if (data) {
+                console.log(data);
+                $('#photo').attr('src', '@Url.Content("~/media/exhibitionItem/")' + data.photoName + '?timestamp=' + new Date().getTime());
+                $('.photoProgress').css('display', 'none');
+                $('#lastUpdateTime').html(data.lastUpdateTime);
+            }
+        })
 
-          .fail(function () {
-              alert("Sorry, Server unavailable. ");
-          });
-
+            .fail(function () {
+                alert("Sorry, Server unavailable. ");
+            });
     }
+
+
+
+    // variables for d3
+    var svg;
+    var dragBehavior;
+    var attributesText;
+
+    function loadMap(mapName) {
+        $('#fieldMap').load(mapName, status, function () {
+            if (status != 'error') {
+                svg = d3.select("svg");
+                attributesText = d3.select("#attributestext");
+                getSvgChangeFromServer();
+                dragBehavior = d3.behavior.drag()
+                    .on("drag", dragMove)
+                    .on("dragstart", dragStart)
+                    .on("dragend", dragEnd);
+                svg.call(dragBehavior);
+                scalable = false;
+            }
+        });
+    }
+
+    function getSvgChangeFromServer() {
+        selectionRect.init(@Model.X, @Model.Y);
+        selectionRect.update(@Model.X + 15,@Model.Y + 15);
+    }
+
+    function saveSvgChangeToServer() {
+
+        var formData = new FormData();
+        var rect = selectionRect.getNewAttributes();
+
+        formData.append('itemId', '@Model.ItemId');
+        formData.append('x', parseInt(rect.x, 10));
+        formData.append('y', parseInt(rect.y, 10));
+
+        $.ajax({
+            url: "@Url.Content("~/Information/SaveItemSvgChangeToServer")",
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            cache: false,
+            data: formData,
+            dataType: 'json',
+
+        }).done(function (data) {
+            console.log(data);
+            if (data) {
+                $('#lastUpdateTime').html(data.lastUpdateTime);
+            }
+        })
+
+            .fail(function () {
+                alert("Sorry, Server unavailable. ");
+            });
+    }
+
+    
 </script>
 
 <div class="content-wrapper">
@@ -199,11 +267,16 @@
                                     </td>
                                 </tr>
 
-                                @*地圖*@
+                                @*場域地圖*@
                                 <tr>
-                                    <td>地圖</td>
+                                    <td>場域地圖</td>
                                     <td>
-                                        @*TODO: svg upload*@
+                                        <div class="progress" style="margin-bottom: 10px;">
+                                            <div id="mapProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                                        </div>
+
+                                        <div id="fieldMap"></div>
+
                                     </td>
                                 </tr>
 
