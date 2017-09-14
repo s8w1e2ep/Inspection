@@ -113,13 +113,6 @@
                     <!-- general form elements -->
                     <div class="box box-success">
                         <form class="form-horizontal" method="post" action="@Url.Action("ListItemInspectionDispatch")" onsubmit="return formValidation();">
-                            @if (@Model != null && @Model.ErrorMsg != null && !string.IsNullOrEmpty(@Model.ErrorMsg))
-                            {
-                                <div class="form-group has-error">
-                                    <label class="col-sm-2"></label>
-                                    <label class="col-sm-10">@Model.ErrorMsg</label>
-                                </div>
-                            }
                             <div class="box-header with-border">
                                 <div id="dispatchDateDiv" class="form-group">
                                     <div class="col-sm-1">
@@ -131,8 +124,10 @@
                                         </div>
                                         <input type="text" class="form-control pull-right" id="dispatchDate" name="dispatchDate">
                                     </div>
-                                    <div class="col-sm-7">
-                                        <button type="submit" class="btn btn-success pull-right">產生派工</button>
+                                    <br/>
+                                    <input type="hidden" class="form-control pull-right" id="userId" name="userId" value="123456">
+                                    <div class="col-sm-1">
+                                        <button type="submit" class="btn btn-success">產生派工</button>
                                     </div>
                                 </div>
                             </div><!-- /.box-header -->
@@ -143,6 +138,13 @@
                                     <h4>巡檢日期: @Model.checkDate</h4>
                                     <br>
                                 }
+                                @if (@Model != null && @Model.ErrorMsg != null && !string.IsNullOrEmpty(@Model.ErrorMsg))
+                                {
+                                    <div class="form-group has-error">
+                                        <label class="col-sm-2"></label>
+                                        <label class="col-sm-10">@Model.ErrorMsg</label>
+                                    </div>
+                                }
                                 <table id="itemInspectionTable" class="row-border" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
@@ -152,7 +154,7 @@
                                             <th>操作選項</th>
                                         </tr>
                                     </thead>
-                                    @if (@Model != null && @Model.itemInspectionDispatch != null)
+                                    @if (@Model != null && @Model.itemInspectionDispatch != null && @Model.ErrorType != 1)
                                     {
                                         <tbody>
                                             @foreach (var item in @Model.itemInspectionDispatch)
@@ -160,6 +162,8 @@
                                                 <tr id="@item.dispatchId">
                                                     <td>@item.itemName</td>
                                                     <td>
+                                                        @if (@Model.ErrorType != 2)
+                                                        {
                                                         <select class="form-control" id="inspectorId1_@item.dispatchId" onChange="updateInspector('@item.dispatchId','inspectorId1',this.value)">
                                                             @if (!string.IsNullOrEmpty(@item.inspectorId1) )
                                                             {
@@ -184,8 +188,12 @@
                                                                 }
                                                             }
                                                         </select>
+                                                         }else{
+                                                            <label>上午非巡檢日</label>
+                                                         }
                                                     </td>
                                                     <td>
+                                                        @if (@Model.ErrorType != 3){
                                                         <select class="form-control" id="inspectorId2_@item.dispatchId" onChange="updateInspector('@item.dispatchId','inspectorId2',this.value)">
                                                             @if (!string.IsNullOrEmpty(@item.inspectorId2))
                                                             {
@@ -210,6 +218,9 @@
                                                                 }
                                                             }
                                                         </select>
+                                                         }else{
+                                                            <label>下午非巡檢日</label>
+                                                         }
                                                     </td>
                                                     <td>
                                                         <a href="#" data-toggle=modal data-target=#myModal><button class="btn btn-sm btn-danger" onclick="storeId('@item.dispatchId','@Model.checkDate')"><i class="glyphicon glyphicon-remove"></i></button></a>

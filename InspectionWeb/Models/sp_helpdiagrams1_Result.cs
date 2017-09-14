@@ -10,12 +10,13 @@
 namespace InspectionWeb.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class temp1
+    public partial class sp_helpdiagrams1_Result
     {
-        public string id1 { get; set; }
-        public string u1 { get; set; }
-        public string n1 { get; set; }
+        public string Database { get; set; }
+        public string Name { get; set; }
+        public int ID { get; set; }
+        public string Owner { get; set; }
+        public int OwnerID { get; set; }
     }
 }

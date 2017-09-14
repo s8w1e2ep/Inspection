@@ -12,20 +12,14 @@ namespace InspectionWeb.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class otherAbnormalRecord
+    public partial class systemSetting
     {
-        public string recordId { get; set; }
-        public string name { get; set; }
-        public string sourceId { get; set; }
-        public string abnormalId { get; set; }
-        public Nullable<System.DateTime> happenedTime { get; set; }
+        public string id { get; set; }
+        public string keyName { get; set; }
         public string description { get; set; }
-        public Nullable<System.DateTime> fixDate { get; set; }
-        public Nullable<short> fixMethod { get; set; }
-        public Nullable<byte> isClose { get; set; }
+        public string value { get; set; }
         public Nullable<byte> isDelete { get; set; }
         public Nullable<System.DateTime> createTime { get; set; }
         public Nullable<System.DateTime> lastUpdateTime { get; set; }
-        public string deviceId { get; set; }
     }
 }

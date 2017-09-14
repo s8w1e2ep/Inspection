@@ -162,7 +162,8 @@ namespace InspectionWeb.Services
         {
             string sqlString = " SELECT exhibitionItem.* " +
                                 "FROM exhibitionItem " +
-                                "WHERE NOT EXISTS( " +
+                                "WHERE itemType = 1 AND isDelete = 0 " +
+                                "NOT EXISTS( " +
                                 "SELECT itemInspectionDispatch.itemId " +
                                 "FROM itemInspectionDispatch " +
                                 "WHERE itemInspectionDispatch.itemId = exhibitionItem.itemId " +

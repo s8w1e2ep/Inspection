@@ -290,6 +290,7 @@
     <Compile Include="Models\otherAbnormalRecord.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\queryEntity.cs" />
     <Compile Include="Models\quickSolution.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
@@ -308,20 +309,27 @@
     <Compile Include="Models\roomInspectionDispatch.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\queryInspectionByDateStatusDetail.cs" />
     <Compile Include="Models\roomInspectionDispatchDetail.cs" />
     <Compile Include="Models\softwareVersion.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\systemSettings.cs">
+    <Compile Include="Models\sp_helpdiagramdefinition1_Result.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams1_Result.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\systemSetting.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\temp.cs">
-      <DependentUpon>inspection.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\temp1.cs">
-      <DependentUpon>inspection.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\temp2.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\user.cs">
