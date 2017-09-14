@@ -351,7 +351,7 @@
     <Compile Include="Services\ExhibitionRoomService.cs" />
     <Compile Include="Services\FieldMapService.cs" />
     <Compile Include="Services\Interface\IFieldMapService.cs" />
-    <Compile Include="Models\ViewModel\ReportAddViewModel.cs" />
+    <Compile Include="Models\ViewModel\ReportJobViewModel.cs" />
     <Compile Include="Models\ViewModel\SolutionViewModel.cs" />
     <Compile Include="Services\Interface\IOtherAbnormalRecordService.cs" />
     <Compile Include="Services\Interface\ISolutionService.cs" />

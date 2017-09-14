@@ -25,14 +25,14 @@
                             <h3 class="box-title">篩選條件</h3>
                         </div>
                         <br />
-                        <form class="form-horizontal" method="post" action="@Url.Action("")">
+                        <div class="box-body">
                             <div class="col-md-6 form-group">
                                 <label class="control-label col-md-2" for="startDatePicker">開始日期</label>
                                 <div class="input-group col-md-8">
                                     <div class="input-group-addon">
                                         <i class="fa fa-clock-o"></i>
                                     </div>
-                                    <input type="text" class="form-control pull-right" id="dateAndTime1">
+                                    <input type="text" class="form-control pull-right" id="startTime">
                                 </div>
                             </div>
                             <div class="col-md-6 form-group">
@@ -41,42 +41,44 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-clock-o"></i>
                                     </div>
-                                    <input type="text" class="form-control pull-right" id="dateAndTime2">
+                                    <input type="text" class="form-control pull-right"  id="endTime">
                                 </div>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="control-label col-md-2">通報來源</label>
-                                <select class="form-control" id="exhibitionSelect" name="sourceId" style="width: 50%;">
-                                    <option>----請選擇通報來源----</option>
+                                <select class="form-control" id="reportSource" style="width: 50%;">
+                                    <option value="N" >----請選擇通報來源----</option>
                                     @foreach (var item in ViewBag.reportSources)
                                     {
                                         <option value="@item.sourceId">@item.sourceName</option>
                                     }
+                                    
                                 </select>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="control-label col-md-2">異常種類</label>
-                                <select class="form-control" id="exhibitionSelect" name="abnormalId" style="width: 50%;">
-                                    <option>----請選擇一個異常種類----</option>
+                                <select class="form-control" id="abnormal"  style="width: 50%;">
+                                    <option value="N">----請選擇一個異常種類----</option>
                                     @foreach (var item in ViewBag.abnormals)
                                     {
                                         <option value="@item.abnormalId">@item.abnormalName</option>
                                     }
                                 </select>
                             </div>
+
+                           
                             <div class="col-md-6 form-group">
                                 <label class="control-label col-md-2">是否結案</label>
-                                <select class="form-control" style="width: 50%;">
-                                    <option value="1">是</option>
-                                    <option value="0">否</option>
+                                <select class="form-control" id="Close" style="width: 50%;">
+                                    <option value= 2>----請選擇一個結案情形----</option>
+                                    <option value= 1>是</option>
+                                    <option value= 0>否</option>
                                 </select>
                             </div>
-                            <div class="box-body">
-                                <div class="box-footer">
-                                    <button type="submit" class="btn btn-success pull-left">查詢</button>
-                                </div>
-                            </div>
-                        </form>
+                        </div>
+                        <div class="box-footer">
+                            <button class="btn btn-success pull-right" onclick="query()">查詢</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -88,8 +90,11 @@
                         <div class="box-header">
                             <h3 class="box-title">通報列表-展項</h3>
                         </div>
+                        <div id="itemErrDiv" class="form-group has-error" style="display: none;">
+                            <label id="itemErrMsg" class="col-sm-12">查無展項資料</label>
+                        </div>
                         <div class="box-body">
-                            <table id="ReportList_Item" class="row-border" cellspacing="0" style="width: 100%;">
+                            <table id="itemTable" class="row-border" cellspacing="0" style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>通報來源</th>
@@ -101,52 +106,20 @@
                                         <th>詳細資料</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr id="t1">
-                                        <td>aa</td>
-                                        <td>b</td>
-                                        <td>Hello</td>
-                                        <td>World</td>
-                                        <td>2017-08-08 00:00:00</td>
-                                        <td>2017-08-08 00:00:00</td>
-                                        <td>
-                                            <a href="@Url.Action("ItemDetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                            
-                                        </td>
-                                    </tr>
-                                    <tr id="t2">
-                                        <td>bb</td>
-                                        <td>a</td>
-                                        <td>chayi</td>
-                                        <td>Tinab</td>
-                                        <td>2017-9-08 00:00:00</td>
-                                        <td>2017-9-07 00:00:00</td>
-                                        <td>
-                                            <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                           
-                                        </td>
-                                    </tr>
-                                    <tr id="t3">
-                                        <td>cc</td>
-                                        <td>c</td>
-                                        <td>chayi</td>
-                                        <td>Tinab</td>
-                                        <td>2017-9-08 00:00:00</td>
-                                        <td>2017-9-07 00:00:00</td>
-                                        <td>
-                                            <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                           
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                <tbody id="itemList"></tbody>
                             </table>
                         </div>
+                    </div>
+                    <div class="box box-info">
                         <!--Experience  List-->
                         <div class="box-header">
                             <h3 class="box-title">通報列表-體驗設施</h3>
                         </div>
+                        <div id="expErrDiv" class="form-group has-error" style="display: none;">
+                            <label id="expErrMsg" class="col-sm-12">查無體驗設施資料</label>
+                        </div>
                         <div class="box-body">
-                            <table id="ReportList_Experience" class="row-border" cellspacing="0" style="width: 100%;">
+                            <table id="expTable" class="row-border" cellspacing="0" style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>通報來源</th>
@@ -158,52 +131,20 @@
                                         <th>詳細資料</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr id="t1">
-                                        <td>aa</td>
-                                        <td>b</td>
-                                        <td>Hello</td>
-                                        <td>World</td>
-                                        <td>2017-08-08 00:00:00</td>
-                                        <td>2017-08-08 00:00:00</td>
-                                        <td>
-                                            <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                            @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
-                                        </td>
-                                    </tr>
-                                    <tr id="t2">
-                                        <td>bb</td>
-                                        <td>a</td>
-                                        <td>chayi</td>
-                                        <td>Tinab</td>
-                                        <td>2017-9-08 00:00:00</td>
-                                        <td>2017-9-07 00:00:00</td>
-                                        <td>
-                                            <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                            @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
-                                        </td>
-                                    </tr>
-                                    <tr id="t3">
-                                        <td>cc</td>
-                                        <td>c</td>
-                                        <td>chayi</td>
-                                        <td>Tinab</td>
-                                        <td>2017-9-08 00:00:00</td>
-                                        <td>2017-9-07 00:00:00</td>
-                                        <td>
-                                            <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                            @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                <tbody id="expList"></tbody>
                             </table>
                         </div>
+                    </div>
+                    <div class="box box-info">
                         <!--Other  List-->
                         <div class="box-header">
                             <h3 class="box-title">通報列表-其他設施</h3>
                         </div>
+                        <div id="otherErrDiv" class="form-group has-error" style="display: none;">
+                            <label id="otherErrMsg" class="col-sm-12">查無其他設施資料</label>
+                        </div>
                         <div class="box-body">
-                            <table id="ReportList_Other" class="row-border" cellspacing="0" style="width: 100%;">
+                            <table id="otherTable" class="row-border" cellspacing="0" style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>通報來源</th>
@@ -214,48 +155,7 @@
                                         <th>詳細資料</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach (var item in ViewBag.record)
-                                    {
-                                        <tr id="">
-                                            <td>item</td>
-                                            <td>b</td>
-                                            <td>Hello</td>
-                                            <td>World</td>
-                                            <td>2017-08-08 00:00:00</td>
-                                            <td>2017-08-08 00:00:00</td>
-                                            <td>
-                                                <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                                @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
-                                            </td>
-                                        </tr>
-                                    }
-                                    
-                                    <tr id="t2">
-                                        <td>bb</td>
-                                        <td>a</td>
-                                        <td>chayi</td>
-                                        <td>Tinab</td>
-                                        <td>2017-9-08 00:00:00</td>
-                                        <td>2017-9-07 00:00:00</td>
-                                        <td>
-                                            <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                            @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
-                                        </td>
-                                    </tr>
-                                    <tr id="t3">
-                                        <td>cc</td>
-                                        <td>c</td>
-                                        <td>chayi</td>
-                                        <td>Tinab</td>
-                                        <td>2017-9-08 00:00:00</td>
-                                        <td>2017-9-07 00:00:00</td>
-                                        <td>
-                                            <a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                            @*<a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>*@
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                <tbody id="otherList"></tbody>
                             </table>
                         </div>
                     </div>

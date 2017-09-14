@@ -8,6 +8,8 @@ using InspectionWeb.Models.ViewModel;
 using InspectionWeb.Models;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
+using System.Globalization;
+using System.Threading;
 
 namespace InspectionWeb.Controllers
 {
@@ -177,12 +179,15 @@ namespace InspectionWeb.Controllers
             }
         }
 
+       
+        
+
         //取得隸屬於某展示廳下的展項
         [HttpPost]
         public ActionResult GetItems(roomJson data)
         {
             var roomId = data.id;
-            var vms = new List<ReportAddViewModel>();
+            var vms = new List<ReportJobViewModel>();
             //取出一般展項
             var items = this._exhibitionItemService.GetAll().Where(x => x.roomId == roomId && x.itemType == 0
              && x.active == 1 && x.isDelete == 0);
@@ -203,7 +208,7 @@ namespace InspectionWeb.Controllers
         public ActionResult GetExperience(roomJson data)
         {
             var roomId = data.id;
-            var vms = new List<ReportAddViewModel>();
+            var vms = new List<ReportJobViewModel>();
             //取出體驗設施
             var items = this._exhibitionItemService.GetAll().Where(x => x.roomId == roomId && x.itemType == 1
              && x.active == 1 && x.isDelete == 0);
@@ -219,10 +224,130 @@ namespace InspectionWeb.Controllers
             return Json(vms);
         }
 
-
-        public ReportAddViewModel Item2ViewModel_item(exhibitionItem instance)
+        //按下查詢確定鈕後所接收資料的函數
+        [HttpPost]
+        public ActionResult GetQuery(string sourceId, string abnormalId, byte isClose, string startDate, 
+            string endDate, string type)
         {
-            ReportAddViewModel vm = new ReportAddViewModel();
+            List<ReportJobViewModel> vms = new List<ReportJobViewModel>();
+            
+            //只有某些條件的還沒寫
+            if(type == "item")
+            {
+                var records = GainRecords(sourceId, abnormalId, isClose, startDate, endDate);
+                
+                foreach (var record in records)
+                {
+                    var exhibitionItem = this._exhibitionItemService.GetById(record.itemId);
+                    if(exhibitionItem.itemType == 0)
+                    {
+                        vms.Add(this.Query2ViewModel(record));
+                    }
+                }
+            }
+            else if(type == "exp")
+            {
+                var records = GainRecords(sourceId, abnormalId, isClose, startDate, endDate);
+                
+                foreach (var record in records)
+                {
+                    var exhibitionItem = this._exhibitionItemService.GetById(record.itemId);
+                    if (exhibitionItem.itemType == 1)
+                    {
+                        vms.Add(this.Query2ViewModel(record));
+                    }
+                }
+            }
+            else if(type == "other")
+            {
+                //取得其他異常紀錄
+                var records = GainRecords_other(sourceId, abnormalId, isClose, startDate, endDate);
+
+                foreach (var record in records)
+                {
+                    vms.Add(this.Query2ViewModel_other(record));
+                }
+            }
+            return Json(vms);
+        }
+
+        public List<abnormalRecord> GainRecords(string sourceId, string abnormalId, byte isClose, string startDate, string endDate)
+        {
+            List<abnormalRecord> records = new List<abnormalRecord>();
+
+            records = this._abnormalRecordService.GetAll().Where( x=> x.createTime >= Convert.ToDateTime(startDate) && 
+            x.createTime <= Convert.ToDateTime(endDate)).ToList();
+            if (sourceId != "N")
+            {
+                records = records.Where(x => x.sourceId == sourceId).ToList();
+            }
+            if(abnormalId != "N")
+            {
+                records = records.Where(x => x.abnormalId == abnormalId).ToList();
+            }
+            if(isClose != 2)
+            {
+                records = records.Where(x => x.isClose == isClose).ToList();
+            }
+            
+            return records;
+        }
+        public List<otherAbnormalRecord> GainRecords_other(string sourceId, string abnormalId, byte isClose, string startDate, string endDate)
+        {
+            List<otherAbnormalRecord> records = new List<otherAbnormalRecord>();
+
+            records = this._otherAbnormalRecordService.GetAll().Where(x => x.createTime >= Convert.ToDateTime(startDate) &&
+           x.createTime <= Convert.ToDateTime(endDate)).ToList();
+            if (sourceId != "N")
+            {
+                records = records.Where(x => x.sourceId == sourceId).ToList();
+            }
+            if (abnormalId != "N")
+            {
+                records = records.Where(x => x.abnormalId == abnormalId).ToList();
+            }
+            if (isClose != 2)
+            {
+                records = records.Where(x => x.isClose == isClose).ToList();
+            }
+
+            return records;
+        }
+
+        public ReportJobViewModel Query2ViewModel(abnormalRecord instance)
+        {
+            ReportJobViewModel vm = new ReportJobViewModel();
+
+            vm.recordId = instance.recordId;
+            vm.sourceName = this._reportSourceService.GetById(instance.sourceId).sourceName;
+            vm.roomName = this._exhibitionRoomService.GetById(this._exhibitionItemService.GetById(instance.itemId).roomId).roomName;
+            vm.itemName = this._exhibitionItemService.GetById(instance.itemId).itemName;
+            vm.happenedTime = instance.happenedTime?.ToString("yyyy-MM-dd HH:mm:ss");
+            vm.fixDate = instance.fixDate?.ToString("yyyy-MM-dd HH:mm:ss");
+            vm.isClose = (instance.isClose == 1) ? "是" : "否";
+
+            return vm;
+        }
+
+
+        //轉換至ReportJJobViewModel (otherRecord版)
+        public ReportJobViewModel Query2ViewModel_other(otherAbnormalRecord instance)
+        {
+            ReportJobViewModel vm = new ReportJobViewModel();
+
+            vm.recordId = instance.recordId;
+            vm.sourceName = this._reportSourceService.GetById(instance.sourceId).sourceName;
+            vm.itemName = instance.name;
+            vm.happenedTime = instance.happenedTime?.ToString("yyyy-MM-dd HH:mm:ss");
+            vm.fixDate = instance.fixDate?.ToString("yyyy-MM-dd HH:mm:ss");
+            vm.isClose = (instance.isClose == 1) ? "是" : "否";
+
+            return vm;
+        }
+
+        public ReportJobViewModel Item2ViewModel_item(exhibitionItem instance)
+        {
+            ReportJobViewModel vm = new ReportJobViewModel();
 
             vm.itemId = instance.itemId;
             vm.itemName = instance.itemName;

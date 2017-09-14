@@ -66,10 +66,10 @@ namespace InspectionWeb.Services
                     newRecord.recordId = recordId;
                     newRecord.itemId = itemId;
                     newRecord.sourceId = sourceId;
-                    newRecord.deviceId = reporter;      // 6000通報時deviceid = 通報者
+                    newRecord.deviceId = reporter;      
                     newRecord.abnormalId = abnormalId;
 
-                    newRecord.isClose = 1;          //暫時 isrepeat也要記得家回去isclose()
+                    newRecord.isClose = 0;          
                     newRecord.isDelete = 0;
                     newRecord.createTime = nowTime;
                     newRecord.lastUpdateTime = nowTime;
@@ -185,7 +185,7 @@ namespace InspectionWeb.Services
 
         public bool IsRepeat(string itemId)
         {
-            return this._repository.GetAll().Any(x => x.isDelete == 0 && x.itemId == itemId);
+            return this._repository.GetAll().Any(x => x.isDelete == 0 && x.itemId == itemId && x.isClose == 0);
         }
 
     }
