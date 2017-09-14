@@ -18,19 +18,26 @@ namespace InspectionWeb.Controllers
         private IExhibitionRoomService _exhibitionRoomService;
         private IUserService _userService;
         private IExhibitionItemService _exhibitionItemService;
+        private IReportDeviceService _reportDeviceService;
+        private IReportSourceService _reportSourceService;
 
         public InformationController(IFieldMapService fieldMapService,
                                      IExhibitionRoomService exhibitionRoomService,
                                      IUserService userService,
-                                     IExhibitionItemService exhibitionItemService)
+                                     IExhibitionItemService exhibitionItemService,
+                                     IReportDeviceService reportDeviceService,
+                                     IReportSourceService reportSourceService)
         {
             this._fieldMapService = fieldMapService;
             this._exhibitionRoomService = exhibitionRoomService;
             this._userService = userService;
             this._exhibitionItemService = exhibitionItemService;
+            this._reportDeviceService = reportDeviceService;
+            this._reportSourceService = reportSourceService;
 
             //TODO: add company service
         }
+
 
         // GET: Field
         public ActionResult Index()
@@ -56,10 +63,10 @@ namespace InspectionWeb.Controllers
 
             if (result.Success == false)
             {
-                return View("AddField",vm);
+                return View("AddField", vm);
             }
 
-             return RedirectToAction("EditField", new { id = vm.FieldId});
+            return RedirectToAction("EditField", new { id = vm.FieldId });
 
         }
 
@@ -70,7 +77,7 @@ namespace InspectionWeb.Controllers
             fieldMap field = this._fieldMapService.GetById(fieldId);
             FieldAddViewModel vm = new FieldAddViewModel();
 
-            if(field == null)
+            if (field == null)
             {
                 return RedirectToAction("ListField");
             }
@@ -94,29 +101,30 @@ namespace InspectionWeb.Controllers
         {
             string fieldId = fc["pk"];
             fieldMap field = this._fieldMapService.GetById(fieldId);
-            if(field != null && ModelState.IsValid)
+            if (field != null && ModelState.IsValid)
             {
                 field.GetType().GetProperty(fc["name"]).SetValue(field, fc["value"], null);
                 IResult result = this._fieldMapService.Update(field);
                 if (result.Success)
                 {
-                    return Json(new { lastUpdateTime=field.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+                    return Json(new { lastUpdateTime = field.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
                 }
                 else
                 {
                     return RedirectToAction("EditField");
                 }
-                
+
             }
-            else{
-                    return RedirectToAction("ListField");
+            else
+            {
+                return RedirectToAction("ListField");
             }
         }
 
         [HttpPost]
         public ActionResult UpdateFieldPhoto(HttpPostedFileBase upload, string fieldId)
         {
-            if(upload.ContentLength > 0)
+            if (upload.ContentLength > 0)
             {
                 string fileName = fieldId;
                 fileName = fileName + Path.GetExtension(upload.FileName);
@@ -128,8 +136,11 @@ namespace InspectionWeb.Controllers
                 IResult result = _fieldMapService.Update(field);
                 if (result.Success)
                 {
-                    return Json(new { lastUpdateTime = field.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
-                                      photoName = fileName});
+                    return Json(new
+                    {
+                        lastUpdateTime = field.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                        photoName = fileName
+                    });
                 }
             }
             return Json(null);
@@ -151,8 +162,11 @@ namespace InspectionWeb.Controllers
                     field.mapFileName = fileName;
                     IResult result = _fieldMapService.Update(field);
 
-                    if (result.Success) return Json( new {  lastUpdateTime = field.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
-                                                            mapName = fileName });
+                    if (result.Success) return Json(new
+                    {
+                        lastUpdateTime = field.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                        mapName = fileName
+                    });
                 }
                 catch (Exception ex)
                 { }
@@ -168,9 +182,9 @@ namespace InspectionWeb.Controllers
         public ActionResult ListField()
         {
             List<FieldListViewModel> vms = new List<FieldListViewModel>();
-            List <fieldMap> allFieldMaps = this._fieldMapService.GetAll().ToList();
+            List<fieldMap> allFieldMaps = this._fieldMapService.GetAll().ToList();
 
-            foreach(var field in allFieldMaps)
+            foreach (var field in allFieldMaps)
             {
                 FieldListViewModel vm = new FieldListViewModel();
                 vm.FieldId = field.fieldId;
@@ -179,7 +193,7 @@ namespace InspectionWeb.Controllers
                 vm.CreateTime = field.createTime.Value;
                 vm.LastUpdateTime = field.lastUpdateTime.Value;
                 vms.Add(vm);
-                   
+
             }
             return View(vms);
         }
@@ -193,7 +207,7 @@ namespace InspectionWeb.Controllers
 
 
             fieldMap field = this._fieldMapService.GetById(fieldId);
-            if(field == null)
+            if (field == null)
             {
                 return RedirectToAction("ListField");
             }
@@ -228,7 +242,8 @@ namespace InspectionWeb.Controllers
             vm.RoomName = roomName;
             vm.ErrorMsg = result.ErrorMsg;
 
-            if (result.Success == false) {
+            if (result.Success == false)
+            {
                 return View("AddExhibition", vm);
             }
             return RedirectToAction("EditExhibition", new { id = vm.RoomId });
@@ -252,7 +267,7 @@ namespace InspectionWeb.Controllers
             vm.Description = room.description;
             vm.Floor = room.floor;
             vm.Picture = room.picture;
-            vm.Active = (int) room.active;
+            vm.Active = (int)room.active;
             vm.FieldId = room.fieldId;
             vm.Inspector = this._userService.GetByID(room.inspectionUserId);
             vm.MapFileName = "";
@@ -279,7 +294,8 @@ namespace InspectionWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditExhibition(FormCollection fc) {
+        public ActionResult EditExhibition(FormCollection fc)
+        {
             string roomId = fc["pk"];
             exhibitionRoom room = this._exhibitionRoomService.GetById(roomId);
             if (room != null && ModelState.IsValid)
@@ -307,9 +323,13 @@ namespace InspectionWeb.Controllers
                             mapFileName = ""
                         });
                     }
-                    else {
-                        return Json(new { lastUpdateTime = room.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
-                                          mapFileName = field.mapFileName });
+                    else
+                    {
+                        return Json(new
+                        {
+                            lastUpdateTime = room.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                            mapFileName = field.mapFileName
+                        });
                     }
                 }
                 else
@@ -355,7 +375,7 @@ namespace InspectionWeb.Controllers
         {
             string roomId = fc["roomId"];
             exhibitionRoom room = _exhibitionRoomService.GetById(roomId);
-            if(room == null)
+            if (room == null)
             {
                 return Json(null);
             }
@@ -384,12 +404,12 @@ namespace InspectionWeb.Controllers
                 vm.roomName = room.roomName;
                 fieldMap field = _fieldMapService.GetById(room.fieldId);
                 user inspector = _userService.GetByID(room.inspectionUserId);
-                if(field != null)
+                if (field != null)
                 {
                     vm.fieldName = field.fieldName;
                 }
 
-                if(inspector != null)
+                if (inspector != null)
                 {
                     vm.InspectorName = inspector.userName;
                 }
@@ -408,7 +428,7 @@ namespace InspectionWeb.Controllers
             }
 
             exhibitionRoom room = this._exhibitionRoomService.GetById(roomId);
-            if(room == null)
+            if (room == null)
             {
                 return RedirectToAction("ListExhibition");
             }
@@ -427,7 +447,7 @@ namespace InspectionWeb.Controllers
             return RedirectToAction("ListExhibition");
         }
 
-
+        //GET: /Information/ListExhibition
         public ActionResult AddExhibitItem(string id)
         {
 
@@ -456,9 +476,9 @@ namespace InspectionWeb.Controllers
             exhibitionItem item = _exhibitionItemService.GetById(itemId);
             ExhibitionItemEditViewModel vm = new ExhibitionItemEditViewModel();
 
-            if(item != null && ModelState.IsValid)
+            if (item != null && ModelState.IsValid)
             {
-                vm.ItemId = item.itemId; 
+                vm.ItemId = item.itemId;
                 vm.RoomId = item.roomId;
                 vm.FieldId = item.fieldId;
 
@@ -477,7 +497,7 @@ namespace InspectionWeb.Controllers
                 vm.LastUpdateTime = item.lastUpdateTime;
             }
             return View(vm);
-            
+
         }
 
         [HttpPost]
@@ -510,7 +530,7 @@ namespace InspectionWeb.Controllers
                     case "periodReportTime":
                         item.periodReportTime = Convert.ToInt32(fc["value"]);
                         break;
-                    defualt:
+                        defualt:
                         break;
                 }
 
@@ -617,7 +637,7 @@ namespace InspectionWeb.Controllers
             item.roomId = "experience";
             IResult result = _exhibitionItemService.Create(item);
             string itemId = result.Message;
-            if(result.Success == false)
+            if (result.Success == false)
             {
                 return View("AddDevice");
             }
@@ -637,7 +657,7 @@ namespace InspectionWeb.Controllers
             exhibitionItem item = _exhibitionItemService.GetById(itemId);
             DeviceEditViewModel vm = new DeviceEditViewModel();
 
-            if(item == null)
+            if (item == null)
             {
                 return RedirectToAction("ListDevice");
             }
@@ -656,7 +676,7 @@ namespace InspectionWeb.Controllers
             vm.Fields = this._fieldMapService.GetAll().ToList();
 
             return View(vm);
-            
+
         }
 
         [HttpPost]
@@ -707,7 +727,7 @@ namespace InspectionWeb.Controllers
         {
             List<DeviceListViewModel> vms = new List<DeviceListViewModel>();
             List<exhibitionItem> allDevices = _exhibitionItemService.GetAll().Where(x => x.itemType == 1).ToList();
-            foreach(var device in allDevices)
+            foreach (var device in allDevices)
             {
                 DeviceListViewModel vm = new DeviceListViewModel();
                 vm.ItemId = device.itemId;
@@ -787,16 +807,213 @@ namespace InspectionWeb.Controllers
             return View();
         }
 
-        //GET: /Information/EditNotifyDevice
-        public ActionResult EditNotifyDevice()
+        [HttpPost]
+        public ActionResult AddNotifyDevice(FormCollection fc)
         {
-            return View();
+            reportDevice report = new reportDevice();
+            report.name = fc["name"];
+            report.sourceId = fc["sourceId"];
+            report.deviceCode = fc["deviceCode"];
+
+
+            IResult result = _reportDeviceService.Create(report);
+            ReportDeviceEditViewModel vm = new ReportDeviceEditViewModel();
+            vm.DeviceId = result.Message;
+            vm.SourceId = report.sourceId;
+            vm.DeviceCode = report.deviceCode;
+            vm.Name = report.name;
+
+            if (result.Success == false)
+            {
+                return View("AddNotifyDevice", vm);
+            }
+            return RedirectToAction("EditNotifyDevice", new { id = vm.DeviceId });
+        }
+
+
+
+        //GET: /Information/EditNotifyDevice
+        public ActionResult EditNotifyDevice(string id)
+        {
+            string deviceId = id;
+            if (string.IsNullOrEmpty(deviceId))
+            {
+                RedirectToAction("AddNotifyDevice");
+            }
+
+            reportDevice device = _reportDeviceService.GetById(deviceId);
+            ReportDeviceEditViewModel vm = new ReportDeviceEditViewModel();
+
+            if (device == null)
+            {
+                return RedirectToAction("ListNotifyDevice");
+            }
+
+            vm.Name = device.name;
+            vm.DeviceId = device.deviceId;
+            vm.DeviceCode = device.deviceCode;
+            vm.Description = device.description;
+            vm.SourceId = device.sourceId;
+            vm.Photo = device.photo;
+            vm.Item = _exhibitionItemService.GetById(device.itemId);
+            vm.X = device.x;
+            vm.Y = device.y;
+            vm.CreateTime = device.createTime;
+            vm.LastUpdateTime = device.lastUpdateTime;
+            vm.MapFileName = _fieldMapService.GetById(device.fieldId)?.mapFileName;
+            vm.ReportSources = _reportSourceService.GetAll().ToList();
+            vm.Field = _fieldMapService.GetById(device.fieldId);
+            vm.Rooms = _exhibitionRoomService.GetAll().ToList();
+            vm.Items = _exhibitionItemService.GetAll().ToList();
+            vm.Fields = _fieldMapService.GetAll().ToList();
+
+
+
+
+            return View(vm);
+
+        }
+
+        [HttpPost]
+        public ActionResult EditNotifyDevice(FormCollection fc)
+        {
+            string deviceId = fc["pk"];
+            reportDevice device = _reportDeviceService.GetById(deviceId);
+            if (device != null && ModelState.IsValid)
+            {
+                switch (fc["name"])
+                {
+                    case "name":
+                        device.name = fc["value"];
+                        break;
+                    case "sourceId":
+                        device.sourceId = fc["value"];
+                        break;
+                    case "deviceCode":
+                        device.deviceCode = fc["value"];
+                        break;
+                    case "description":
+                        device.description = fc["value"];
+                        break;
+                    case "itemId":
+                        device.itemId = fc["value"];
+                        break;
+                    case "fieldId":
+                        device.fieldId = fc["value"];
+                        break;
+                    default:
+                        break;
+                }
+
+
+                IResult result = _reportDeviceService.Update(device);
+                fieldMap field = _fieldMapService.GetById(device.fieldId);
+                if (result.Success)
+                {
+                    return Json(new { lastUpdateTime = device.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                                      mapFileName = field?.mapFileName});
+                }
+            }
+            else
+            {
+                return RedirectToAction("EditNotifyDevice");
+            }
+
+            return RedirectToAction("ListNotifyDevice");
         }
 
         //GET: /Information/ListNotifyDevice
         public ActionResult ListNotifyDevice()
         {
-            return View();
+            List<ReportDeviceListViewModel> vms = new List<ReportDeviceListViewModel>();
+            List<reportDevice> reportDevices = _reportDeviceService.GetAll().ToList();
+            foreach (var device in reportDevices)
+            {
+                ReportDeviceListViewModel vm = new ReportDeviceListViewModel();
+                vm.DeviceId = device.deviceId;
+                vm.DeviceCode = device.deviceCode;
+                vm.DeviceName = device.name;
+                vm.FieldName = _fieldMapService.GetById(device.fieldId)?.fieldName;
+                vm.ItemName = _exhibitionItemService.GetById(device.itemId)?.itemName;
+                vm.CreateTime = device.createTime.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                vm.LastUpdateTime = device.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                vms.Add(vm);
+            }
+
+            return View(vms);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateReportDevicePhoto(HttpPostedFileBase upload, string deviceId)
+        {
+            if (upload.ContentLength > 0)
+            {
+                string fileName = deviceId;
+                fileName = fileName + Path.GetExtension(upload.FileName);
+                string savePath = System.IO.Path.Combine(Server.MapPath("~/media/reportDevice"), fileName);
+                upload.SaveAs(savePath);
+
+                reportDevice device = _reportDeviceService.GetById(deviceId);
+                device.photo = fileName;
+                IResult result = _reportDeviceService.Update(device);
+                if (result.Success)
+                {
+                    return Json(new
+                    {
+                        lastUpdateTime = device.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                        photoName = fileName
+                    });
+                }
+            }
+            return Json(null);
+
+        }
+
+        public ActionResult DeleteReportDevice(string deviceId)
+        {
+            if (string.IsNullOrEmpty(deviceId))
+            {
+                return RedirectToAction("ListNotifyDevice");
+            }
+
+            reportDevice device = this._reportDeviceService.GetById(deviceId);
+            if (device == null)
+            {
+                return RedirectToAction("ListNotifyDevice");
+            }
+
+            device.isDelete = 1;
+
+            try
+            {
+                this._reportDeviceService.Update(device);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("ListNotifyDevice");
+            }
+
+            return RedirectToAction("ListNotifyDevice");
+        }
+
+        [HttpPost]
+        public ActionResult SaveReportDeviceSvgChangeToServer(FormCollection fc)
+        {
+            string deviceId = fc["deviceId"];
+            reportDevice device = _reportDeviceService.GetById(deviceId);
+            if (device == null)
+            {
+                return Json(null);
+            }
+            device.x = Convert.ToInt32(fc["x"]);
+            device.y = Convert.ToInt32(fc["y"]);
+            IResult result = _reportDeviceService.Update(device);
+            if (result.Success)
+            {
+                return Json(new { lastUpdateTime = device.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+            }
+
+            return Json(null);
         }
     }
 }

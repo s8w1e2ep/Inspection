@@ -345,6 +345,8 @@
     <Compile Include="Models\ViewModel\ListQueryInspectionByRoomViewModel.cs" />
     <Compile Include="Models\ViewModel\ListRoomCheckRecordViewModel.cs" />
     <Compile Include="Models\ViewModel\ListItemCheckRecordViewModel.cs" />
+    <Compile Include="Models\ViewModel\ReportDeviceEditViewModel.cs" />
+    <Compile Include="Models\ViewModel\ReportDeviceListViewModel.cs" />
     <Compile Include="Models\ViewModel\SoftwareVersionAddViewModel.cs" />
     <Compile Include="Models\ViewModel\SoftwareVersionListViewModel.cs" />
     <Compile Include="Models\ViewModel\SystemArgAddViewModel.cs" />
