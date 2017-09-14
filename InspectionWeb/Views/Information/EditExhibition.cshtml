@@ -58,6 +58,22 @@
                 }
         });
 
+        $('#companyId').editable({
+            value: ["@if (@Model.Company != null) {<text>@Model.Company.companyId</text>}"],
+            emptytext: '未設定',
+            source: [
+                // value :選擇後會回傳的值
+                // text : value相對應的值, 顯示的是此值
+                @foreach (var item in Model.Companys)
+                {
+                    <text>{value: '@item.companyId', text: '@item.companyName'},</text>
+                }
+            ],
+            success: function (response) {
+                $('#lastUpdateTime').html(response.lastUpdateTime);
+                }
+        });
+
         $('#fieldId').editable({
             value: ["@if (@Model.FieldId != null) {<text>@Model.FieldId</text>}"],
             emptytext: '未設定',
@@ -296,7 +312,7 @@
                                 <tr>
                                     <td>承包商</td>
                                     <td>
-                                        @*TODO:承包商選單*@
+                                        <a href="#" id="companyId" data-type="select" data-pk="@Model.RoomId" data-url="@Url.Action("EditExhibition")" data-title="選擇承包商"></a>
                                     </td>
                                 </tr>
 

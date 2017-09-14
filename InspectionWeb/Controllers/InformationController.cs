@@ -20,13 +20,15 @@ namespace InspectionWeb.Controllers
         private IExhibitionItemService _exhibitionItemService;
         private IReportDeviceService _reportDeviceService;
         private IReportSourceService _reportSourceService;
+        private ICompanyService _companyService;
 
         public InformationController(IFieldMapService fieldMapService,
                                      IExhibitionRoomService exhibitionRoomService,
                                      IUserService userService,
                                      IExhibitionItemService exhibitionItemService,
                                      IReportDeviceService reportDeviceService,
-                                     IReportSourceService reportSourceService)
+                                     IReportSourceService reportSourceService,
+                                     ICompanyService companyService)
         {
             this._fieldMapService = fieldMapService;
             this._exhibitionRoomService = exhibitionRoomService;
@@ -34,6 +36,7 @@ namespace InspectionWeb.Controllers
             this._exhibitionItemService = exhibitionItemService;
             this._reportDeviceService = reportDeviceService;
             this._reportSourceService = reportSourceService;
+            this._companyService = companyService;
 
             //TODO: add company service
         }
@@ -270,6 +273,7 @@ namespace InspectionWeb.Controllers
             vm.Active = (int)room.active;
             vm.FieldId = room.fieldId;
             vm.Inspector = this._userService.GetByID(room.inspectionUserId);
+            vm.Company = _companyService.GetByID(room.companyId);
             vm.MapFileName = "";
             if (!string.IsNullOrEmpty(room.fieldId))
             {
@@ -288,6 +292,7 @@ namespace InspectionWeb.Controllers
             vm.ExhibitionItems = this._exhibitionItemService.GetAll().Where(x => x.roomId == roomId).ToList();
             vm.Fields = this._fieldMapService.GetAll().ToList();
             vm.Inspectors = this._userService.GetAll().ToList();
+            vm.Companys = this._companyService.GetAll().ToList();
             // }}}
 
             return View(vm);
