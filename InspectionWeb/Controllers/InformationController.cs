@@ -492,7 +492,7 @@ namespace InspectionWeb.Controllers
                 vm.ItemType = item.itemType;
                 vm.Description = item.description;
                 vm.Picture = item.picture;
-                // TODO:comapny list
+                vm.Company = _companyService.GetByID(item.companyId);
                 vm.X = item.x;
                 vm.Y = item.y;
                 vm.Active = item.active;
@@ -500,6 +500,7 @@ namespace InspectionWeb.Controllers
                 vm.PeriodReportTime = item.periodReportTime;
                 vm.CreateTime = item.createTime;
                 vm.LastUpdateTime = item.lastUpdateTime;
+                vm.Companys = _companyService.GetAll().ToList();
             }
             return View(vm);
 
@@ -523,7 +524,7 @@ namespace InspectionWeb.Controllers
                     case "description":
                         item.description = fc["value"];
                         break;
-                    case "company":
+                    case "companyId":
                         item.companyId = fc["value"];
                         break;
                     case "active":

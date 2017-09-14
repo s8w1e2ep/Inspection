@@ -16,6 +16,22 @@
             }
         });
 
+        $('#companyId').editable({
+            value: ["@if (@Model.Company != null) {<text>@Model.Company.companyId</text>}"],
+            emptytext: '未設定',
+            source: [
+                // value :選擇後會回傳的值
+                // text : value相對應的值, 顯示的是此值
+                @foreach (var item in Model.Companys)
+                {
+                    <text>{value: '@item.companyId', text: '@item.companyName'},</text>
+                }
+            ],
+            success: function (response) {
+                $('#lastUpdateTime').html(response.lastUpdateTime);
+                }
+        });
+
         $('#periodReportTime').editable({
             emptytext: "未設定",
             success: function (response) {
@@ -160,7 +176,7 @@
             });
     }
 
-    
+
 </script>
 
 <div class="content-wrapper">
@@ -239,7 +255,7 @@
                                 <tr>
                                     <td>承包商</td>
                                     <td>
-                                        @*TODO*@
+                                        <a href="#" id="companyId" data-type="select" data-pk="@Model.ItemId" data-url="@Url.Action("EditExhibitItem")" data-title="選擇承包商"></a>
                                     </td>
                                 </tr>
 
