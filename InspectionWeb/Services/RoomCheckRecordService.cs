@@ -125,7 +125,6 @@ namespace InspectionWeb.Services
                              + "' AND CAST(checkDate AS date) <= '" + endDate
                              + "' ORDER BY checkDate ASC";
 
-            System.Diagnostics.Debug.WriteLine("GGG0: \n\n" + sqlString);
             using (inspectionEntities db = new inspectionEntities())
             {
                 var roomCheckRecordList = db.Database.SqlQuery<roomCheckRecord>(sqlString).ToList();

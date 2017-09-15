@@ -15,7 +15,7 @@
         <section class="content">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="box box-info" style="padding: 5px;">
+                    <div class="box box-success" style="padding: 5px;">
                         <div class="box-header with-border">
                             <h3 class="box-title">篩選條件</h3>
                         </div>
@@ -62,7 +62,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <h4>人工巡檢</h4>
-                    <div class="box" style="border-top-color: #0094ff;">
+                    <div class="box box-success">
                         <div class="box-body">
                             <table id="manTable" class="row-border" cellspacing="0" style="width: 100%;">
                                 <thead>
@@ -84,7 +84,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <h4>自動通報</h4>
-                    <div class="box" style="border-top-color: #0094ff;">
+                    <div class="box box-success">
                         <div class="box-body">
                             <table id="autoTable" class="row-border" cellspacing="0" style="width: 100%;">
                                 <thead>
@@ -162,7 +162,7 @@
 
     function setInspectTable(type) {
         $.get(
-            'QueryInspect',
+            'QueryRoom',
             {
                 roomId: $('#roomSelect').val(),
                 startDate: startDate,
@@ -172,7 +172,7 @@
             function (data) {
                 if (data !== "[]") {
                     for (var record in data) {
-                        t.row.add([
+                        $('#' + type + 'Table').DataTable().row.add([
                             record.dispatchTime,
                             record.total,
                             record.normal,

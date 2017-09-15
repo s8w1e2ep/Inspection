@@ -213,6 +213,7 @@
     <Compile Include="Class\WebApi\AutoReportPost.cs" />
     <Compile Include="Class\IdGenerator.cs" />
     <Compile Include="Controllers\AuthenticationController.cs" />
+    <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\InformationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MailController.cs" />
@@ -346,6 +347,8 @@
     <Compile Include="Models\ViewModel\ListItemInspectionDispatchViewModel.cs" />
     <Compile Include="Models\ViewModel\ListRoomInspectionDispatchViewModel.cs" />
     <Compile Include="Models\ViewModel\userListForInspectionViewModel.cs" />
+    <Compile Include="Services\CompanyService.cs" />
+    <Compile Include="Services\Interface\ICompanyService.cs" />
     <Compile Include="Services\Interface\INoCheckDateService.cs" />
     <Compile Include="Services\NoCheckDateService.cs" />
     <Compile Include="Services\ExhibitionRoomService.cs" />
@@ -497,8 +500,6 @@
     <Content Include="Views\User\AddGroup.cshtml" />
     <Content Include="Views\User\ListGroup.cshtml" />
     <Content Include="Views\User\EditGroup.cshtml" />
-    <Content Include="Views\User\EditPassword.cshtml" />
-    <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\ReportJob\AddExhibitionItem.cshtml" />
     <Content Include="Views\Information\AddField.cshtml" />
     <Content Include="Views\Information\EditField.cshtml" />
@@ -547,6 +548,11 @@
     <Content Include="Views\InspectionDispatch\ListRoomInspectionDispatch.cshtml" />
     <Content Include="Views\Authentication\AuthenticationFail.cshtml" />
     <Content Include="Views\Authentication\Login.cshtml" />
+    <Content Include="Views\Statistic\RankItemList.cshtml" />
+    <Content Include="Views\Statistic\RankReportList.cshtml" />
+    <Content Include="Views\Company\Edit.cshtml" />
+    <Content Include="Views\Company\Add.cshtml" />
+    <Content Include="Views\Company\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

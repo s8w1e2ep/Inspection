@@ -21,11 +21,11 @@ namespace InspectionWeb.Models
         public string abnormalId { get; set; }
         public Nullable<System.DateTime> happenedTime { get; set; }
         public string description { get; set; }
-        public Nullable<System.DateTime> fixDate { get; set; }
         public Nullable<short> fixMethod { get; set; }
         public Nullable<byte> isClose { get; set; }
         public Nullable<byte> isDelete { get; set; }
         public Nullable<System.DateTime> createTime { get; set; }
         public Nullable<System.DateTime> lastUpdateTime { get; set; }
+        public Nullable<System.DateTime> fixDate { get; set; }
     }
 }

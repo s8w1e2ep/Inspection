@@ -18,7 +18,7 @@ function setId(userId) {
 $(document).ready(function () {
     // 使用者表格設定
     $('#userTable').DataTable({
-        "paging": false,
+        "paging": true,
         "info": false,
         "searching": true,
         "columnDefs": [

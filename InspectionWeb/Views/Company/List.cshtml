@@ -1,0 +1,120 @@
+﻿@model IEnumerable<InspectionWeb.Models.ViewModel.UserDetailViewModel>
+
+@{
+    ViewBag.Title = "公司列表";
+}
+
+<div class="content-wrapper">
+    <section class="content-header" style="margin-bottom: 15px;">
+        <ol class="breadcrumb">
+            <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>Home</a></li>
+            <li class="active">公司列表</li>
+        </ol>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-success">
+                    <div class="box-header">
+                        <h3 class="box-title">公司列表</h3>
+                    </div>
+                    <div class="box-body">
+                        <table id="companyTable" class="row-border" cellspacing="0" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>公司名稱</th>
+                                    <th>電話</th>
+                                    <th>電子郵件</th>
+                                    <th>網站</th>
+                                    <th>建立日期</th>
+                                    <th>最後更新日期</th>
+                                    <th>操作選項</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ViewBag.companys)
+                                {
+                                    <tr id="@item.companyId">
+                                        <td>@item.companyName</td>
+                                        <td>@item.tel</td>
+                                        <td>@item.email</td>
+                                        <td><a href="@item.website"></a></td>
+                                        <td>@item.createTime</td>
+                                        <td>@item.lastUpdateTime</td>
+                                        <td>
+                                            <a href="@Url.Action("Edit", new { companyId = item.companyId })" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                            <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.companyId')" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- delete dialog -->
+        <div class="modal modal-danger" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">刪除確認</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>是否刪除此廠商？刪除此廠商會一併刪除所有的相關資料。</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">否</button>
+                        <button id="modalYes" type="button" class="btn btn-outline" data-dismiss="modal">是</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    var toDeleteId;
+
+    function deleteUser() {
+        $.ajax({
+            type: "DELETE",
+            url: 'DeleteCompany',
+            data: $.param({ "companyId": toDeleteId })
+        }).done(function (msg) {
+            if (msg){
+                $("#" + toDeleteId).remove();
+            }
+        });
+    }
+
+    // 設定刪除的 companyId
+    function setId(companyId) {
+        toDeleteId = companyId;
+    }
+
+    $(document).ready(function () {
+        // 使用者表格設定
+        $('#companyTable').DataTable({
+            "paging": true,
+            "info": false,
+            "searching": true,
+            "columnDefs": [
+                { "targets": 0, "width": "15%", "orderable": true },
+                { "targets": 1, "width": "15%", "orderable": true },
+                { "targets": 2, "width": "15%", "orderable": true },
+                { "targets": 3, "width": "15%", "orderable": true },
+                { "targets": 4, "width": "15%", "orderable": true },
+                { "targets": 5, "width": "15%", "orderable": true },
+                { "targets": 6, "width": "10%", "orderable": false }
+            ]
+        });
+
+        // delete dialog 確定事件
+        $('#modalYes').click(function () {
+            deleteUser();
+        });
+    });
+</script>
