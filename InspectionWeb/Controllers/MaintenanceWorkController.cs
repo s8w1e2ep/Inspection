@@ -128,22 +128,23 @@ namespace InspectionWeb.Controllers
 
         private MaintenanceWorkDetailViewModel MaintenanceWorkDetailViewModule(abnormalRecord instance)
         {
-            MaintenanceWorkDetailViewModel vm = new MaintenanceWorkDetailViewModel();
-            vm.recordId = instance.recordId;
-            vm.itemName = this._exhibitionItemService.GetById(instance.itemId).itemName;
-            vm.roomName = this._exhibitionRoomService.GetById(this._exhibitionItemService.GetById(instance.itemId).roomId).roomName;
-            vm.sourceName = this._reportSourceService.GetById(instance.sourceId).sourceName;
-            vm.deviceId = instance.deviceId;
-            vm.abnormalId = instance.abnormalId;
-            vm.happendedTime = instance.happenedTime.HasValue ? instance.happenedTime?.ToString("yyyy-MM-dd hh:mm:ss") : "";
-            vm.description = instance.description;
-            vm.fixMethod = instance.fixMethod;
-            vm.isClose = instance.isClose;
-            vm.isDelete = instance.isDelete;
-            vm.createTime = instance.createTime.HasValue ? instance.createTime?.ToString("yyyy-MM-dd hh:mm:ss") : "";
-            vm.lastUpdateTime = instance.lastUpdateTime.HasValue ? instance.lastUpdateTime?.ToString("yyyy-MM-dd hh:mm:ss") : "";
-            vm.fixDate = instance.fixDate.HasValue ? instance.fixDate?.ToString("yyyy-MM-dd hh:mm:ss") : "";
-
+            MaintenanceWorkDetailViewModel vm = new MaintenanceWorkDetailViewModel()
+            {
+                recordId = instance.recordId,
+                itemName = this._exhibitionItemService.GetById(instance.itemId).itemName,
+                roomName = this._exhibitionRoomService.GetById(this._exhibitionItemService.GetById(instance.itemId).roomId).roomName,
+                sourceName = this._reportSourceService.GetById(instance.sourceId).sourceName,
+                deviceId = instance.deviceId,
+                abnormalId = instance.abnormalId,
+                happendedTime = instance.happenedTime.HasValue ? instance.happenedTime?.ToString("yyyy-MM-dd hh:mm:ss") : "",
+                description = instance.description,
+                fixMethod = instance.fixMethod,
+                isClose = instance.isClose,
+                isDelete = instance.isDelete,
+                createTime = instance.createTime.HasValue ? instance.createTime?.ToString("yyyy-MM-dd hh:mm:ss") : "",
+                lastUpdateTime = instance.lastUpdateTime.HasValue ? instance.lastUpdateTime?.ToString("yyyy-MM-dd hh:mm:ss") : "",
+                fixDate = instance.fixDate.HasValue ? instance.fixDate?.ToString("yyyy-MM-dd hh:mm:ss") : ""
+            };
             if (this._exhibitionItemService.GetById(instance.itemId).itemType == 0)
                 vm.listName = "Item";
             else
@@ -153,22 +154,24 @@ namespace InspectionWeb.Controllers
 
         private MaintenanceWorkDetailViewModel MaintenanceWorkDetailViewModule(otherAbnormalRecord instance)
         {
-            MaintenanceWorkDetailViewModel vm = new MaintenanceWorkDetailViewModel();
-            vm.recordId = instance.recordId;
-            vm.itemName = instance.name;
-            vm.roomName = "";
-            vm.sourceName = this._reportSourceService.GetById(instance.sourceId).sourceName;
-            vm.deviceId = instance.deviceId;
-            vm.abnormalId = instance.abnormalId;
-            vm.happendedTime = instance.happenedTime.HasValue ? instance.happenedTime?.ToString("yyyy-MM-dd hh:mm:ss") : "";
-            vm.description = instance.description;
-            vm.fixMethod = instance.fixMethod;
-            vm.isClose = instance.isClose;
-            vm.isDelete = instance.isDelete;
-            vm.createTime = instance.createTime.HasValue ? instance.createTime?.ToString("yyyy-MM-dd hh:mm:ss") : "";
-            vm.lastUpdateTime = instance.lastUpdateTime.HasValue ? instance.lastUpdateTime?.ToString("yyyy-MM-dd hh:mm:ss") : "";
-            vm.fixDate = instance.fixDate.HasValue ? instance.fixDate?.ToString("yyyy-MM-dd hh:mm:ss") : "";
-            vm.listName = "Other";
+            MaintenanceWorkDetailViewModel vm = new MaintenanceWorkDetailViewModel()
+            {
+                recordId = instance.recordId,
+                itemName = instance.name,
+                roomName = "",
+                sourceName = this._reportSourceService.GetById(instance.sourceId).sourceName,
+                deviceId = instance.deviceId,
+                abnormalId = instance.abnormalId,
+                happendedTime = instance.happenedTime.HasValue ? instance.happenedTime?.ToString("yyyy-MM-dd hh:mm:ss") : "",
+                description = instance.description,
+                fixMethod = instance.fixMethod,
+                isClose = instance.isClose,
+                isDelete = instance.isDelete,
+                createTime = instance.createTime.HasValue ? instance.createTime?.ToString("yyyy-MM-dd hh:mm:ss") : "",
+                lastUpdateTime = instance.lastUpdateTime.HasValue ? instance.lastUpdateTime?.ToString("yyyy-MM-dd hh:mm:ss") : "",
+                fixDate = instance.fixDate.HasValue ? instance.fixDate?.ToString("yyyy-MM-dd hh:mm:ss") : "",
+                listName = "Other"
+            };
             return vm;
         }
     }
