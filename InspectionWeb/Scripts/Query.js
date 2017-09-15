@@ -95,9 +95,10 @@ function setInspectTable(type) {
 
                 $('#' + type + 'ErrDiv').css('display', 'none');
                 $('#' + type + 'Table').DataTable().clear().draw();
-                str = '<a href="@Url.Action("DetailedData", "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>'
+                str = '<a href="' + 'ItemDetailedData' + '" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>';
                 
                 for (var i = 0; i < data.length; i++){
+                    str = '<a href="ItemDetailedData/' + data[i].recordId + '" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>';
                     if (type !== 'other')
                     {
                         $('#' + type + 'Table').DataTable().row.add([

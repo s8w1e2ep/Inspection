@@ -123,6 +123,28 @@ namespace InspectionWeb.Services
 
             try
             {
+                if (propertyName == "isClose" || propertyName == "isDelete" )
+                {
+                    int iValue;
+                    bool ret = JsonValue2Int(value, out iValue);
+
+                    if (ret == true)
+                    {
+                        value = Convert.ToByte(iValue);
+                    }
+                    else //轉換異常寫入預設值
+                    {
+                        value = Convert.ToByte(1); ;
+                    }
+                }
+                else if(propertyName == "happenedTime" || propertyName == "fixDate")
+                {
+                    value = Convert.ToDateTime(value);
+                }
+                else if(propertyName == "fixMethod")
+                {
+                    value = Convert.ToInt16(value);
+                }
 
                 DateTime now = DateTime.Now;
                 string lastUpdateTime = now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -132,6 +154,8 @@ namespace InspectionWeb.Services
 
                 _repository.Update(instance, DicUpdate);
                 result.Success = true;
+                result.lastUpdateTime = lastUpdateTime;
+
             }
             catch (Exception ex)
             {
@@ -139,6 +163,25 @@ namespace InspectionWeb.Services
             }
 
             return result;
+        }
+
+        private bool JsonValue2Int(object value, out int transValue)
+        {
+
+            if (value == null)   //介面未選擇Yes 會傳回null,所以寫入0(No)
+            {
+                transValue = 0;
+                return true;
+
+            }
+            else if (Int32.TryParse((string)value, out transValue))
+            {
+                return true;
+            }
+            else //轉換異常
+            {
+                return false;
+            }
         }
 
         public IResult Delete(string recordId)
