@@ -2,7 +2,6 @@
 using System.Web.Http;
 using InspectionWeb.WebSupport;
 using InspectionWeb.WebSupport.WebApi;
-using System.Diagnostics;
 using InspectionWeb.Models;
 using InspectionWeb.Services.Interface;
 using System.Collections.Generic;

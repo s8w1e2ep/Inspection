@@ -12,7 +12,7 @@ namespace InspectionWeb.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class systemSetting
+    public partial class systemSettings
     {
         public string id { get; set; }
         public string keyName { get; set; }

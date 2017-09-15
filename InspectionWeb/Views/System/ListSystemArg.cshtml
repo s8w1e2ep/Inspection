@@ -1,14 +1,13 @@
-﻿@model IEnumerable<InspectionWeb.Models.ViewModel.DeviceListViewModel>
-
+﻿@model IEnumerable<InspectionWeb.Models.ViewModel.SystemArgAddViewModel>
 @{
-    ViewBag.Title = "體驗設施列表";
+    ViewBag.Title = "系統參數";
 }
 
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
         <ol class="breadcrumb">
-            <li><a href="/"><i class="fa fa-dashboard"></i>Home</a></li>
-            <li class="active">體驗設施列表</li>
+            <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>Home</a></li>
+            <li class="active">系統參數</li>
         </ol>
     </section>
     <!-- Main content -->
@@ -18,41 +17,39 @@
             <div class="col-md-12">
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">體驗設施列表</h3>
+                        <h3 class="box-title">系統參數</h3>
                     </div>
                     <div class="box-body">
-                        <table id="listDeviceTable" class="row-border" cellspacing="0" style="width: 100%;">
+                        <table id="listSystemArgTable" class="row-border" cellspacing="0" style="width: 100%;">
                             <thead>
                                 <tr>
-                                    <th>名稱</th>
-                                    <th>啟用狀態</th>
-                                    <th>建立日期</th>
-                                    <th>最後更新日期</th>
-                                    <th>操作選項</th>
+                                    <th>參數名稱</th>
+                                    <th>說明</th>
+                                    <th>參數值</th>
+                                    <th>檢視/修改</th>
                                 </tr>
                             </thead>
                             <tbody>
+
                                 @foreach (var item in Model)
                                 {
-                                    <tr id="@item.ItemId">
-                                        <td>@item.ItemName</td>
-                                        <td>@item.Active</td>
-                                        <td>@item.CreateTime</td>
-                                        <td>@item.LastUpdateTime</td>
+                                    <tr id="@item.Id">
+                                        <td>@item.KeyName</td>
+                                        <td>@item.Description</td>
+                                        <td>@item.Value</td>
 
                                         <td>
+
                                             @*檢視按鈕*@
-                                            <a href="@Url.Action("EditDevice", new { id = item.ItemId })" class="btn btn-sm btn-primary">
+                                            <a href="@Url.Action("EditSystemArg", new { id = item.Id })" class="btn btn-sm btn-primary">
                                                 <i class="glyphicon glyphicon-menu-hamburger"></i>
                                             </a>
 
                                             @*刪除按鈕*@
-                                            <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.ItemId')" data-toggle=modal data-target=#myModal>
+                                            <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.Id')" data-toggle=modal data-target=#myModal>
                                                 <i class="glyphicon glyphicon-remove"></i>
                                             </a>
                                         </td>
-
-
                                     </tr>
                                 }
                             </tbody>
@@ -74,7 +71,7 @@
                 <h4 class="modal-title">刪除確認</h4>
             </div>
             <div class="modal-body">
-                <p>是否刪除此展項?刪除此展項會將一併刪除所有的相關資料。</p>
+                <p>是否刪除此軟體?刪除此軟體會將一併刪除所有的相關資料。</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">否</button>
@@ -85,41 +82,42 @@
 </div><!-- /.modal -->
 
 <script>
-    var toDeleteDeviceId;
+    var toDeleteSystemArg;
 
-    function setId(deviceId) {
-        toDeleteDeviceId = deviceId;
-    }
-   
-
-    function deleteDevice() {
+    function deleteSystemArg() {
         $.ajax({
             type: "DELETE",
-            url: 'DeleteDevice',
-            data: $.param({ "deviceId": toDeleteDeviceId })
+            url: 'DeleteSystemArg',
+            data: $.param({ "Id": toDeleteSystemArg })
         }).done(function (msg) {
-            $("#" + toDeleteDeviceId).remove();
+            $("#" + toDeleteSystemArg).remove();
         });
     }
+
+    // 設定刪除的 userId
+    function setId(systemArg) {
+        toDeleteSystemArg = systemArg;
+    }
+
     $(document).ready(function () {
-        $('#listDeviceTable').DataTable({
+        // 使用者表格設定
+        $('#listSystemArgTable').DataTable({
             "paging": false,
             "info": false,
-            "searching": false,
+            "searching": true,
             "columnDefs": [
-                { "targets": 0, "width": "20%", "orderable": true },
-                { "targets": 1, "width": "20%", "orderable": true },
-                { "targets": 2, "width": "20%", "orderable": true },
-                { "targets": 3, "width": "20%", "orderable": true },
-                { "targets": 4, "width": "20%", "orderable": true },
-            ],
+                { "targets": 0, "width": "25%", "orderable": true },
+                { "targets": 1, "width": "25%", "orderable": true },
+                { "targets": 2, "width": "25%", "orderable": true },
+                { "targets": 3, "width": "25%", "orderable": true },
+            ]
         });
 
-        $('#modalYes').on('click', function (e) {
-            deleteDevice();
+        // delete dialog 確定事件
+        $('#modalYes').click(function () {
+            deleteSystemArg();
         });
-
-
     });
+
 </script>
 

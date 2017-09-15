@@ -16,7 +16,7 @@ namespace InspectionWeb.Models.ViewModel
         public string FieldId;
         public user Inspector;
         public company Company;
-
+        public string MapFileName;
 
 
         public int Active;

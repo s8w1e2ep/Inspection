@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
 using InspectionWeb.Models;
-using InspectionWeb.Models.Misc;
 using InspectionWeb.Models.ViewModel;
-using System.Web.Hosting;
-using System.IO;
 
 namespace InspectionWeb.Controllers
 {

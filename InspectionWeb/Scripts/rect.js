@@ -1,320 +1,146 @@
-var svg;
-var POINT_WIDTH = 8;
-var POINT_WIDTH_OFFSET = POINT_WIDTH / 2;
-var selectedParkingBlock;
-
-function OldRectangle(dataId, parkingBlockId, x, y, width, height) {
-  var self = this,
-    rect, rectData = [],
-    isDown = false,
-    m1, m2, isDrag = true;
-
-  self.rectData = [{
-    x: x,
-    y: y
-  }, {
-    x: x + width,
-    y: y + height
-  }];
-
-  // define prototypes
-  var dragR = d3.behavior.drag().on('drag', dragRect);
-  var dragC1 = d3.behavior.drag().on('drag', dragPoint1);
-  var dragC2 = d3.behavior.drag().on('drag', dragPoint2);
-  var dragC3 = d3.behavior.drag().on('drag', dragPoint3);
-  var dragC4 = d3.behavior.drag().on('drag', dragPoint4);
-
-  svg.on('mousedown', function () {
-	if (selectedParkingBlock != null) {
-	  selectedParkingBlock.selectAll('.pointC').style('visibility', 'hidden');
-	  hidePropertyPanel(PARKING_BLOCK);
-	}
-  });
-  
-  self.graphicElement = svg.select('#parkingBlock_g').append('g').attr('id', dataId).attr('class', parkingBlockId);
-
-  self.rectangleElement = self.graphicElement.append('rect')
-    .attr('class', 'parkingBlock')
-	.attr('x', x)
-	.attr('y', y)
-	.attr('width', width)
-	.attr('height', height)
-	.call(dragR)
-    .on('mousedown', function () {
-      // hide four corner black blocks
-	  if (selectedParkingBlock != null) {
-	    selectedParkingBlock.selectAll('.pointC').style('visibility', 'hidden');
-	  }
-      self.graphicElement.selectAll('.pointC').style('visibility', '');
-	  selectedParkingBlock = self.graphicElement;
-  	  showPropertyPanel(PARKING_BLOCK);
-
-	  updateRect();	  
-	  d3.event.stopPropagation();
-    })
-	.on('mouseup', function () {
-	  updateParkingBlockRangeToServer(self.graphicElement, rect.attr('x'), rect.attr('y'), rect.attr('width'), rect.attr('height'));
-    })
-	.on('mouseover', function() {
-	  d3.select(this).style('cursor', 'move');
-	})
-	.on('mouseout', function() {
-	  d3.select(this).style('cursor', '');
-	});
-	
-  self.pointElement1 = self.graphicElement.append('rect').attr('class', 'pointC').call(dragC1); // upper left
-  self.pointElement2 = self.graphicElement.append('rect').attr('class', 'pointC').call(dragC2); // down right
-  self.pointElement3 = self.graphicElement.append('rect').attr('class', 'pointC').call(dragC3); // upper right
-  self.pointElement4 = self.graphicElement.append('rect').attr('class', 'pointC').call(dragC4); // down left
-  
-  self.graphicElement.selectAll('.pointC')
-  .on('mousedown', function() {
-    d3.event.stopPropagation();
-  })
-  .on('mouseup', function () {
-    updateParkingBlockRangeToServer(self.graphicElement, rect.attr('x'), rect.attr('y'), rect.attr('width'), rect.attr('height'));
-  });
-  
-  function updateRect() {
-    rect = d3.select(self.rectangleElement[0][0]);
-    rect.attr({
-      x: self.rectData[1].x - self.rectData[0].x > 0 ? self.rectData[0].x : self.rectData[1].x,
-      y: self.rectData[1].y - self.rectData[0].y > 0 ? self.rectData[0].y : self.rectData[1].y,
-      width: Math.abs(self.rectData[1].x - self.rectData[0].x),
-      height: Math.abs(self.rectData[1].y - self.rectData[0].y)
-    });
-	
-    var point1 = d3.select(self.pointElement1[0][0]).data(self.rectData);
-    point1.attr('width', POINT_WIDTH)
-	  .attr('height', POINT_WIDTH)
-      .attr('x', self.rectData[0].x - POINT_WIDTH_OFFSET)
-      .attr('y', self.rectData[0].y - POINT_WIDTH_OFFSET);
-    var point2 = d3.select(self.pointElement2[0][0]).data(self.rectData);
-    point2.attr('width', POINT_WIDTH)
-      .attr('height', POINT_WIDTH)
-	  .attr('x', self.rectData[1].x - POINT_WIDTH_OFFSET)
-      .attr('y', self.rectData[1].y - POINT_WIDTH_OFFSET);
-    var point3 = d3.select(self.pointElement3[0][0]).data(self.rectData);
-    point3.attr('width', POINT_WIDTH)
-      .attr('height', POINT_WIDTH)
-	  .attr('x', self.rectData[1].x - POINT_WIDTH_OFFSET)
-      .attr('y', self.rectData[0].y - POINT_WIDTH_OFFSET);
-    var point3 = d3.select(self.pointElement4[0][0]).data(self.rectData);
-    point3.attr('width', POINT_WIDTH)
-      .attr('height', POINT_WIDTH)
-	  .attr('x', self.rectData[0].x - POINT_WIDTH_OFFSET)
-      .attr('y', self.rectData[1].y - POINT_WIDTH_OFFSET);
-  }
-
-  function dragRect() {
-    var e = d3.event;
-    for (var i = 0; i < self.rectData.length; i++) {
-      d3.select(self.rectangleElement[0][0])
-        .attr('x', self.rectData[i].x += e.dx)
-        .attr('y', self.rectData[i].y += e.dy);
+var selectionRect = {
+    element: null,
+    previousElement: null,
+    currentY: 0,
+    currentX: 0,
+    originX: 0,
+    originY: 0,
+    setElement: function (ele) {
+        this.previousElement = this.element;
+        this.element = ele;
+    },
+    getNewAttributes: function () {
+        var x = this.currentX < this.originX ? this.currentX : this.originX;
+        var y = this.currentY < this.originY ? this.currentY : this.originY;
+        var width = Math.abs(this.currentX - this.originX);
+        var height = Math.abs(this.currentY - this.originY);
+        return {
+            x: x,
+            y: y,
+            width: width,
+            height: height
+        };
+    },
+    getCurrentAttributes: function () {
+        // use plus sign to convert string into number
+        var x = +this.element.attr("x");
+        var y = +this.element.attr("y");
+        var width = +this.element.attr("width");
+        var height = +this.element.attr("height");
+        return {
+            x1: x,
+            y1: y,
+            x2: x + width,
+            y2: y + height
+        };
+    },
+    getCurrentAttributesAsText: function () {
+        var attrs = this.getCurrentAttributes();
+        return "x1: " + attrs.x1 + " x2: " + attrs.x2 + " y1: " + attrs.y1 + " y2: " + attrs.y2;
+    },
+    init: function (newX, newY) {
+        var rectElement = svg.append("rect")
+            .attr({
+                rx: 4,
+                ry: 4,
+                x: 0,
+                y: 0,
+                width: 0,
+                height: 0
+            })
+            .classed("selection", true);
+        this.setElement(rectElement);
+        this.originX = newX;
+        this.originY = newY;
+        this.update(newX, newY);
+    },
+    update: function (newX, newY) {
+        this.currentX = newX;
+        this.currentY = newY;
+        this.element.attr(this.getNewAttributes());
+    },
+    dragUpdate: function (deltaX, deltaY) {
+        this.originX += deltaX;
+        this.originY += deltaY;
+        this.currentX += deltaX;
+        this.currentY += deltaY;
+        this.element.attr(this.getNewAttributes());
+    },
+    focus: function () {
+        this.element
+            .style("stroke", "#DE695B")
+            .style("stroke-width", "2.5");
+    },
+    remove: function () {
+        this.element.remove();
+        this.element = null;
+    },
+    removePrevious: function () {
+        if (this.previousElement) {
+            this.previousElement.remove();
+        }
+    },
+    pointInRect: function (mouseX,mouseY) {
+        return (this.originX < mouseX && this.currentX > mouseX) &&
+            (this.originY < mouseY && this.currentY > mouseY);
     }
-    rect.style('cursor', 'move');
-    updateRect();
-  }
+};
 
-  function dragPoint1() {
-    var e = d3.event;
-    d3.select(self.pointElement1[0][0])
-      .attr('x', function(d) {
-        return d.x += e.dx
-      })
-      .attr('y', function(d) {
-        return d.y += e.dy
-      });
-    updateRect();
-  }
+//var svg = d3.select("svg");
+//var clickTime = d3.select("#clicktime");
+//var attributesText = d3.select("#attributestext");
 
-  function dragPoint2() {
-    var e = d3.event;
-    d3.select(self.pointElement2[0][0])
-      .attr('x', self.rectData[1].x += e.dx)
-      .attr('y', self.rectData[1].y += e.dy);
-    updateRect();
-  }
+var clickInRect = false;
+var startPoint = {x:0 , y:0};
+var scalable = true;
+function dragStart() {
+    console.log("dragStart");
+    var p = d3.mouse(this);
 
-  function dragPoint3() {
-    var e = d3.event;
-    d3.select(self.pointElement3[0][0])
-      .attr('x', self.rectData[1].x += e.dx)
-      .attr('y', self.rectData[0].y += e.dy);
-    updateRect();
-  }
+    if (selectionRect.pointInRect(p[0], p[1]) ) {
+        startPoint.x = p[0];
+        startPoint.y = p[1];
+        clickInRect = true;
+    } else if (scalable === true){
+        selectionRect.init(p[0], p[1]);
+        selectionRect.removePrevious();
+        clickInRect = false;
+    }
+}
 
-  function dragPoint4() {
-    var e = d3.event;
-    d3.select(self.pointElement4[0][0])
-      .attr('x', self.rectData[0].x += e.dx)
-      .attr('y', self.rectData[1].y += e.dy);
-    updateRect();
-  }
-} //end Rectangle
+function dragMove() {
+    console.log("dragMove");
+    var p = d3.mouse(this);
+    if (clickInRect === true) {
+        //drag orginal rect
+        selectionRect.dragUpdate(deltaX = p[0] - startPoint.x,
+            deltaY = p[1] - startPoint.y);
 
-function Rectangle() {
-  var self = this,
-    rect, rectData = [],
-    isDown = false,
-    m1, m2, isDrag = false;
+        startPoint.x = p[0];
+        startPoint.y = p[1];
 
-  svg.on('mousedown', function() {
-    m1 = d3.mouse(this);
-    if (!isDown && !isDrag) {
-      self.rectData = [{
-        x: m1[0],
-        y: m1[1]
-      }, {
-        x: m1[0],
-        y: m1[1]
-      }];
-	  
-      // 1. create a parking block graphic
-	  self.graphicElement = svg.select('#parkingBlock_g').append('g');
-      self.rectangleElement = self.graphicElement.append('rect').attr('class', 'parkingBlock').call(dragR);
-	  self.rectangleElement
-	  .on('mousedown', function () {
-        // select rectangle
-	    if (selectedParkingBlock != null) {
-	      selectedParkingBlock.selectAll('.pointC').style('visibility', 'hidden');
-	    }
-        self.graphicElement.selectAll('.pointC').style('visibility', '');
-	    selectedParkingBlock = self.graphicElement;
-	    updateRect();
-	    d3.event.stopPropagation();
-      })
-	  .on('mouseup', function() {
-		updateParkingBlockRangeToServer(self.graphicElement, rect.attr('x'), rect.attr('y'), rect.attr('width'), rect.attr('height'));
-      });
-      self.pointElement1 = self.graphicElement.append('rect').attr('class', 'pointC').call(dragC1); // upper left
-      self.pointElement2 = self.graphicElement.append('rect').attr('class', 'pointC').call(dragC2); // down right
-      self.pointElement3 = self.graphicElement.append('rect').attr('class', 'pointC').call(dragC3); // upper right
-      self.pointElement4 = self.graphicElement.append('rect').attr('class', 'pointC').call(dragC4); // down left
-	  
-      self.graphicElement.selectAll('.pointC')
-      .on('mousedown', function () {
-        //d3.event.stopPropagation();
-        updateRect();
-      })
-      .on('mouseup', function () {
-        updateParkingBlockRangeToServer(self.graphicElement, rect.attr('x'), rect.attr('y'), rect.attr('width'), rect.attr('height'));
-      });
+    } else if (scalable === true) {
+        selectionRect.update(p[0], p[1]);
+        attributesText.text(selectionRect.getCurrentAttributesAsText());
+    }
+}
 
-      updateRect();
-      isDrag = false;
+function dragEnd() {
+    console.log("dragEnd");
+    var finalAttributes = selectionRect.getCurrentAttributes();
+    console.dir(finalAttributes);
+    if (finalAttributes.x2 - finalAttributes.x1 > 1 && finalAttributes.y2 - finalAttributes.y1 > 1) {
+        console.log("range selected");
+        // range selected
+        d3.event.sourceEvent.preventDefault();
+        selectionRect.focus();
     } else {
-	  if (!isDrag) {
-		// not drag, add new parking block
-        addParkingBlockToServer(self.graphicElement, self.rectangleElement.attr('x'), self.rectangleElement.attr('y'), 
-		  self.rectangleElement.attr('width'), self.rectangleElement.attr('height'));
-		selectedParkingBlock = self.graphicElement;
-	  } else {
-	    if (selectedParkingBlock != null) {
-	      selectedParkingBlock.selectAll('.pointC').style('visibility', 'hidden');
-	    }
-	  }
-      isDrag = true;
-	}
-	
-    isDown = !isDown;
-  })
-  .on('mousemove', function() {
-    m2 = d3.mouse(this);
-    if (isDown && !isDrag) {
-	  //console.log(m2[0]);
-      self.rectData[1] = {
-        x: m2[0],
-        y: m2[1]
-      };
-      updateRect();
+        console.log("single point");
+        // single point selected
+        selectionRect.remove();
+        // trigger click event manually
     }
-  })
-  
-  function updateRect() {
-    rect = d3.select(self.rectangleElement[0][0]);
-    rect.attr({
-      x: self.rectData[1].x - self.rectData[0].x > 0 ? self.rectData[0].x : self.rectData[1].x,
-      y: self.rectData[1].y - self.rectData[0].y > 0 ? self.rectData[0].y : self.rectData[1].y,
-      width: Math.abs(self.rectData[1].x - self.rectData[0].x),
-      height: Math.abs(self.rectData[1].y - self.rectData[0].y)
-    });
+        saveSvgChangeToServer();
+}
 
-    var point1 = d3.select(self.pointElement1[0][0]).data(self.rectData);
-    point1.attr('width', POINT_WIDTH)
-	  .attr('height', POINT_WIDTH)
-      .attr('x', self.rectData[0].x - POINT_WIDTH_OFFSET)
-      .attr('y', self.rectData[0].y - POINT_WIDTH_OFFSET);
-    var point2 = d3.select(self.pointElement2[0][0]).data(self.rectData);
-    point2.attr('width', POINT_WIDTH)
-      .attr('height', POINT_WIDTH)
-	  .attr('x', self.rectData[1].x - POINT_WIDTH_OFFSET)
-      .attr('y', self.rectData[1].y - POINT_WIDTH_OFFSET);
-    var point3 = d3.select(self.pointElement3[0][0]).data(self.rectData);
-    point3.attr('width', POINT_WIDTH)
-      .attr('height', POINT_WIDTH)
-	  .attr('x', self.rectData[1].x - POINT_WIDTH_OFFSET)
-      .attr('y', self.rectData[0].y - POINT_WIDTH_OFFSET);
-    var point3 = d3.select(self.pointElement4[0][0]).data(self.rectData);
-    point3.attr('width', POINT_WIDTH)
-      .attr('height', POINT_WIDTH)
-	  .attr('x', self.rectData[0].x - POINT_WIDTH_OFFSET)
-      .attr('y', self.rectData[1].y - POINT_WIDTH_OFFSET);
-  }
 
-  var dragR = d3.behavior.drag().on('drag', dragRect);
-
-  function dragRect() {
-    var e = d3.event;
-    for (var i = 0; i < self.rectData.length; i++) {
-      d3.select(self.rectangleElement[0][0])
-        .attr('x', self.rectData[i].x += e.dx)
-        .attr('y', self.rectData[i].y += e.dy);
-    }
-    rect.style('cursor', 'move');
-    updateRect();
-  }
-
-  var dragC1 = d3.behavior.drag().on('drag', dragPoint1);
-  var dragC2 = d3.behavior.drag().on('drag', dragPoint2);
-  var dragC3 = d3.behavior.drag().on('drag', dragPoint3);
-  var dragC4 = d3.behavior.drag().on('drag', dragPoint4);
-
-  function dragPoint1() {
-    var e = d3.event;
-    d3.select(self.pointElement1[0][0])
-      .attr('x', function(d) {
-        return d.x += e.dx
-      })
-      .attr('y', function(d) {
-        return d.y += e.dy
-      });
-    updateRect();
-  }
-
-  function dragPoint2() {
-    var e = d3.event;
-    d3.select(self.pointElement2[0][0])
-      .attr('x', self.rectData[1].x += e.dx)
-      .attr('y', self.rectData[1].y += e.dy);
-    updateRect();
-  }
-
-  function dragPoint3() {
-    var e = d3.event;
-    d3.select(self.pointElement3[0][0])
-      .attr('x', self.rectData[1].x += e.dx)
-      .attr('y', self.rectData[0].y += e.dy);
-    updateRect();
-  }
-
-  function dragPoint4() {
-    var e = d3.event;
-    d3.select(self.pointElement4[0][0])
-      .attr('x', self.rectData[0].x += e.dx)
-      .attr('y', self.rectData[1].y += e.dy);
-    updateRect();
-  }
-
-} //end Rectangle

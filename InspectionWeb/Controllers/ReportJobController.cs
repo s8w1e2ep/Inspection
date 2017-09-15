@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
-using System.Web.Security;
-using System.Web;
 using System.Web.Mvc;
 using InspectionWeb.Models.ViewModel;
 using InspectionWeb.Models;

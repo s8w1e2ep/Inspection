@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<InspectionWeb.Models.ViewModel.ReportDeviceListViewModel>
+
+@{
     ViewBag.Title = "通報裝置列表";
 }
 
@@ -32,26 +34,30 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>AAA</td>
-                                    <td>9527</td>
-                                    <td>YOYO</td>
-                                    <td>TTTT</td>
-                                    <td>2017-08-08 00:00:00</td>
-                                    <td>2017-08-08 00:00:00</td>
-                                    <td>
-                                        @{/* TODO: redirec to correct place
-* Action(actionName, controller)
-*/}
-                                        <a href="@Url.Action("","")" class="btn btn-sm btn-primary">
-                                            <i class="glyphicon glyphicon-menu-hamburger"></i>
-                                        </a>
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="@item.DeviceId">
+                                        <td>@item.DeviceName</td>
+                                        <td>@item.FieldName</td>
+                                        <td></td>
+                                        <td>@item.ItemName</td>
+                                        <td>@item.CreateTime</td>
+                                        <td>@item.LastUpdateTime</td>
+                                        <td>
+                                            @*檢視按鈕*@
+                                            <a href="@Url.Action("EditNotifyDevice", new { id = item.DeviceId })" class="btn btn-sm btn-primary">
+                                                <i class="glyphicon glyphicon-menu-hamburger"></i>
+                                            </a>
 
-                                        <a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal>
-                                            <i class="glyphicon glyphicon-remove"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                                            @*刪除按鈕*@
+                                            <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.DeviceId')" data-toggle=modal data-target=#myModal>
+                                                <i class="glyphicon glyphicon-remove"></i>
+                                            </a>
+                                        </td>
+
+
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -82,6 +88,22 @@
 </div><!-- /.modal -->
 
 <script>
+    var toDeleteReportDeviceId;
+
+    function setId(deviceId) {
+        toDeleteReportDeviceId = deviceId;
+    }
+
+    function deleteReportDevice() {
+           $.ajax({
+            type: "DELETE",
+            url: 'DeleteReportDevice',
+            data: $.param({ "deviceId": toDeleteReportDeviceId })
+        }).done(function (msg) {
+            $("#" + toDeleteReportDeviceId).remove();
+        });
+     }
+
     $(document).ready(function () {
         $('#notifyDeviceListTable').DataTable({
             "paging": false,
@@ -92,22 +114,17 @@
                 { "targets": 1, "width": "10%", "orderable": true },
                 { "targets": 2, "width": "10%", "orderable": true },
                 { "targets": 3, "width": "10%", "orderable": true },
-                { "targets": 4, "width": "10%", "orderable": true },
-                { "targets": 5, "width": "20%", "orderable": true },
-                { "targets": 6, "width": "20%", "orderable": true },
-                { "targets": 7, "width": "10%", "orderable": true },
+                { "targets": 4, "width": "25%", "orderable": true },
+                { "targets": 5, "width": "25%", "orderable": true },
+                { "targets": 6, "width": "10%", "orderable": true },
             ],
         });
 
         $('#modalYes').on('click', function (e) {
-            deleteDevice();
+            deleteReportDevice();
         });
 
-        function deleteDevice() {
-            @{/* TODO: use jquery AJAX method to send Message to Information controller.
-               */
-            }
-        }
+
     });
 </script>
 
