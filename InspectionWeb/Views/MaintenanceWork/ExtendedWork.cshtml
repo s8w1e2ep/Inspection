@@ -18,7 +18,7 @@
                 <div class="col-md-12">
                     <div class="box box-info">
                         <div class="box-body">
-                            <table id="userTable" class="row-border" cellspacing="0" style="width: 100%;">
+                            <table id="PendingList" class="row-border" cellspacing="0" style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>通報來源</th>
@@ -35,20 +35,15 @@
                                     {
                                         <tr>
                                             <td>@item.sourceName</td>
-                                            <td>留白</td>
+                                            <td>@item.roomName</td>
                                             <td>@item.itemName</td>
                                             <td>@item.description</td>
                                             <td>@Html.DisplayFor(modelItem => item.happendedTime)</td>
                                             <td id="@item.recordId">@Html.DisplayFor(modelItem => item.fixDate)</td>
-                                            <td for="endDatePicker">
+                                            <td>
                                                 <div class="col-md-10 form-group">
                                                     <div class="input-group col-md-8">
-                                                        <div class="input-group-addon">
-                                                            <i class="fa fa-clock-o"></i>
-                                                        </div>
-                                                        <div class="input-group bootstrap-timepicker timepicker col-md-12">
-                                                            <input class="form-control input-sm " id="endDatePicker" type="text" data-pk="@item.recordId" placeholder="yyyy-mm-dd hh:mm:ss">
-                                                        </div>
+                                                        <i class="fa fa-clock-o" name="DateRangePicker" data-pk="@item.recordId"></i>
                                                     </div>
                                                 </div>
                                             </td>

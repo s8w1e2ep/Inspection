@@ -18,7 +18,7 @@
                 <div class="col-md-12">
                     <div class="box box-info">
                         <div class="box-body">
-                            <table id="userTable" class="row-border" cellspacing="0" style="width: 100%;">
+                            <table id="PendingList" class="row-border" cellspacing="0" style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>通報來源</th>
@@ -36,7 +36,7 @@
                                     {
                                         <tr >
                                             <td>@item.sourceName</td>
-                                            <td>留白</td>
+                                            <td>@item.roomName</td>
                                             <td>@item.itemName</td>
                                             <td>@item.description</td>
                                             <td>@item.deviceId</td>
@@ -57,4 +57,4 @@
         </section>
     </div>
 </div>
-<script src="~/Scripts/exhibition.js"></script>
+<script src="~/Scripts/showpedningList.js"></script>
