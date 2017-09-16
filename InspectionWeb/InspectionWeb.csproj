@@ -213,6 +213,7 @@
     <Compile Include="Class\WebApi\AutoReportPost.cs" />
     <Compile Include="Class\IdGenerator.cs" />
     <Compile Include="Controllers\AuthenticationController.cs" />
+    <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\InformationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MailController.cs" />
@@ -224,6 +225,7 @@
     <Compile Include="Controllers\InspectionDispatchController.cs" />
     <Compile Include="Controllers\ReportSourceController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Controllers\SoftwareVersionController.cs" />
     <Compile Include="Controllers\StatisticController.cs" />
     <Compile Include="Controllers\SystemController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -289,6 +291,7 @@
     <Compile Include="Models\otherAbnormalRecord.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\queryEntity.cs" />
     <Compile Include="Models\quickSolution.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
@@ -307,8 +310,21 @@
     <Compile Include="Models\roomInspectionDispatch.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\queryInspectionByDateStatusDetail.cs" />
     <Compile Include="Models\roomInspectionDispatchDetail.cs" />
     <Compile Include="Models\softwareVersion.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition1_Result.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams1_Result.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\systemSettings.cs">
@@ -317,18 +333,14 @@
     <Compile Include="Models\temp.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\temp1.cs">
-      <DependentUpon>inspection.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\temp2.cs">
-      <DependentUpon>inspection.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\user.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\userGroup.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModel\DeviceEditViewModel.cs" />
+    <Compile Include="Models\ViewModel\DeviceListViewModel.cs" />
     <Compile Include="Models\ViewModel\ExhibitionItemEditViewModel.cs" />
     <Compile Include="Models\ViewModel\ExhibitionRoomAddViewModel.cs" />
     <Compile Include="Models\ViewModel\ExhibitionRoomListViewModel.cs" />
@@ -344,13 +356,21 @@
     <Compile Include="Models\ViewModel\ListItemCheckRecordViewModel.cs" />
     <Compile Include="Models\ViewModel\ManRepairViewModel.cs" />
     <Compile Include="Models\ViewModel\reportDetailedViewModel.cs" />
+    <Compile Include="Models\ViewModel\ReportDeviceEditViewModel.cs" />
+    <Compile Include="Models\ViewModel\ReportDeviceListViewModel.cs" />
+    <Compile Include="Models\ViewModel\SoftwareVersionAddViewModel.cs" />
+    <Compile Include="Models\ViewModel\SoftwareVersionListViewModel.cs" />
+    <Compile Include="Models\ViewModel\SystemArgAddViewModel.cs" />
     <Compile Include="Models\ViewModel\UserEditViewModel.cs" />
     <Compile Include="Models\ViewModel\ListItemInspectionDispatchViewModel.cs" />
     <Compile Include="Models\ViewModel\ListRoomInspectionDispatchViewModel.cs" />
     <Compile Include="Models\ViewModel\userListForInspectionViewModel.cs" />
     <Compile Include="Services\Interface\IManRepairRecordService.cs" />
-    <Compile Include="Services\Interface\INoCheckDateService.cs" />
     <Compile Include="Services\ManRepairRecordService.cs" />
+    <Compile Include="Services\CompanyService.cs" />
+    <Compile Include="Services\Interface\ICompanyService.cs" />
+    <Compile Include="Services\Interface\INoCheckDateService.cs" />
+    <Compile Include="Services\Interface\ISystemArgService.cs" />
     <Compile Include="Services\NoCheckDateService.cs" />
     <Compile Include="Services\ExhibitionRoomService.cs" />
     <Compile Include="Services\FieldMapService.cs" />
@@ -397,6 +417,7 @@
     <Compile Include="Services\Misc\Result.cs" />
     <Compile Include="Services\OtherAbnormalRecordService.cs" />
     <Compile Include="Services\SolutionService.cs" />
+    <Compile Include="Services\SystemArgService.cs" />
     <Compile Include="Services\UserGroupService.cs" />
     <Compile Include="Services\ReportDeviceService.cs" />
     <Compile Include="Services\ReportSourceService.cs" />
@@ -498,8 +519,6 @@
     <Content Include="Views\User\AddGroup.cshtml" />
     <Content Include="Views\User\ListGroup.cshtml" />
     <Content Include="Views\User\EditGroup.cshtml" />
-    <Content Include="Views\User\EditPassword.cshtml" />
-    <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\ReportJob\AddExhibitionItem.cshtml" />
     <Content Include="Views\Information\AddField.cshtml" />
     <Content Include="Views\Information\EditField.cshtml" />
@@ -514,9 +533,6 @@
     <Content Include="Views\Information\AddNotifyDevice.cshtml" />
     <Content Include="Views\Information\EditNotifyDevice.cshtml" />
     <Content Include="Views\Information\ListNotifyDevice.cshtml" />
-    <Content Include="Views\System\AddSoftware.cshtml" />
-    <Content Include="Views\System\EditSoftware.cshtml" />
-    <Content Include="Views\System\ListSoftware.cshtml" />
     <Content Include="Views\ReportJob\AddExperience.cshtml" />
     <Content Include="Views\ReportJob\AddOther.cshtml" />
     <Content Include="Views\ReportJob\EditExhibitionItem.cshtml" />
@@ -548,6 +564,17 @@
     <Content Include="Views\InspectionDispatch\ListRoomInspectionDispatch.cshtml" />
     <Content Include="Views\Authentication\AuthenticationFail.cshtml" />
     <Content Include="Views\Authentication\Login.cshtml" />
+    <Content Include="Views\Statistic\RankItemList.cshtml" />
+    <Content Include="Views\Statistic\RankReportList.cshtml" />
+    <Content Include="Views\Company\Edit.cshtml" />
+    <Content Include="Views\Company\Add.cshtml" />
+    <Content Include="Views\Company\List.cshtml" />
+    <Content Include="Views\SoftwareVersion\AddSoftware.cshtml" />
+    <Content Include="Views\SoftwareVersion\EditSoftware.cshtml" />
+    <Content Include="Views\SoftwareVersion\ListSoftware.cshtml" />
+    <Content Include="Views\System\AddSystemArg.cshtml" />
+    <Content Include="Views\System\EditSystemArg.cshtml" />
+    <Content Include="Views\System\ListSystemArg.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
