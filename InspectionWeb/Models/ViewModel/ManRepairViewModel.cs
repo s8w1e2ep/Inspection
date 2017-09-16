@@ -11,6 +11,11 @@ namespace InspectionWeb.Models.ViewModel
         public string cost { get; set; }
 
 
+        public string imgFile1 { get; set; }
+        public string imgFile2 { get; set; }
+        public string imgFile3 { get; set; }
+        public string imgFixFile1 { get; set; }
+
         public string imgDesc1 { get; set; }
         public string imgDesc2 { set; get; }
         public string imgDesc3 { get; set; }

@@ -7,6 +7,10 @@ namespace InspectionWeb.Models.ViewModel
     {
         public string recordId { get; set; }
 
+        public string deviceId { get; set; }
+
+        public string itemtypeName { get; set; }
+
         public string roomId { get; set; }
         public string roomName { get; set; }
 
