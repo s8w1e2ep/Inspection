@@ -108,7 +108,7 @@ function setInspectTable(type) {
                             data[i].happenedTime,
                             data[i].fixDate,
                             data[i].isClose,
-                            str,
+                            str
                         ]).draw();
                     }
                     else
@@ -119,7 +119,7 @@ function setInspectTable(type) {
                             data[i].happenedTime,
                             data[i].fixDate,
                             data[i].isClose,
-                            str,
+                            str
                         ]).draw();
                     }
                 }

@@ -75,8 +75,7 @@ namespace InspectionWeb.Controllers
             var data = this._solutionService.GetByID(id);
             ViewBag.description = data.description;
 
-            ViewBag.createTime = data.createTime;
-            //ViewBag.createTime = data.createTime.ToString("yyyy-MM-dd HH:mm:ss");
+            ViewBag.createTime = data.createTime?.ToString("yyyy-MM-dd HH:mm:ss");
             ViewBag.solutionId = data.solutionId;
             return View();
         }
