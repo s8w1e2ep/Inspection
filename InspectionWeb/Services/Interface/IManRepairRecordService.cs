@@ -3,7 +3,7 @@ using InspectionWeb.Models;
 using System.Collections.Generic;
 namespace InspectionWeb.Services.Interface
 {
-    public interface IManRepairRecord
+    public interface IManRepairRecordService
     {
         IResult Create(manRepairRecord instance);
         IResult Create(string account, string password);
@@ -12,10 +12,10 @@ namespace InspectionWeb.Services.Interface
         IResult Delete(string userId);
        
 
-        user Login(string account, string password);
-        bool IsExists(string userId);
        
-        user GetByID(string userId);
+        bool IsExists(string userId);
+
+        manRepairRecord GetByID(string recordId);
         IEnumerable<manRepairRecord> GetAll();
     }
 }

@@ -68,6 +68,7 @@ namespace InspectionWeb
             container.RegisterType<IRepository<quickSolution>, GenericRepository<quickSolution>>();
             container.RegisterType<IRepository<exhibitionRoom>, GenericRepository<exhibitionRoom>>();
             container.RegisterType<IRepository<otherAbnormalRecord>, GenericRepository<otherAbnormalRecord>>();
+            container.RegisterType<IRepository<manRepairRecord>, GenericRepository<manRepairRecord>>();
 
 
             //Service
@@ -90,6 +91,7 @@ namespace InspectionWeb
             container.RegisterType<IExhibitionRoomService, ExhibitionRoomService>();
             container.RegisterType<IOtherAbnormalRecordService, OtherAbnormalRecordService>();
             container.RegisterType<IMaintenanceWorkService, MaintenanceWorkService>();
+            container.RegisterType<IManRepairRecordService, ManRepairRecordService>();
 
 
         }
