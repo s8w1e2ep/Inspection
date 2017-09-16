@@ -103,7 +103,7 @@ namespace InspectionWeb.Controllers
         [HttpPost]
         public ActionResult AddItem(string itemId, string sourceId, string abnormalId, string reporter)
         {
-            if (ModelState.IsValid)
+            if (itemId != "empty" && sourceId != "empty" && abnormalId != "empty" && reporter != "empty" && ModelState.IsValid)
             {
                 IResult result = this._abnormalRecordService.Create(itemId, sourceId, abnormalId, reporter);
 
@@ -122,6 +122,11 @@ namespace InspectionWeb.Controllers
             }
             else
             {
+                //取出展示廳資料
+                ViewBag.exhibitionRooms = this._exhibitionRoomService.GetAll().Where(x => x.active == 1);
+                ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+                ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
+                ViewBag.ErrorMsg = "尚有欄位尚未選擇";
                 return View("AddExhibitionItem");
             }
         }
@@ -151,7 +156,7 @@ namespace InspectionWeb.Controllers
         [HttpPost]
         public ActionResult AddExp(string itemId, string sourceId, string abnormalId, string reporter)
         {
-            if (ModelState.IsValid)
+            if (itemId != "#" && sourceId != "#" && abnormalId != "#" && reporter != "#" && ModelState.IsValid)
             {
                 IResult result = this._abnormalRecordService.Create(itemId, sourceId, abnormalId, reporter);
 
@@ -170,6 +175,11 @@ namespace InspectionWeb.Controllers
             }
             else
             {
+                //取出展示廳資料
+                ViewBag.exhibitionRooms = this._exhibitionRoomService.GetAll().Where(x => x.active == 1);
+                ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+                ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
+                ViewBag.ErrorMsg = "尚有欄位尚未選擇";
                 return View("AddExperience");
             }
         }
@@ -199,7 +209,7 @@ namespace InspectionWeb.Controllers
         [HttpPost]
         public ActionResult Addother(string name, string sourceId, string abnormalId, string reporter)
         {
-            if ( !string.IsNullOrEmpty(name) && ModelState.IsValid )
+            if (sourceId != "#" && abnormalId != "#" && reporter != "#" && !string.IsNullOrEmpty(name) && ModelState.IsValid )
             {
                 IResult result = this._otherAbnormalRecordService.Create(name, sourceId, abnormalId, reporter);
 
@@ -220,7 +230,7 @@ namespace InspectionWeb.Controllers
                 //取出展示廳資料
                 ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
                 ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
-                ViewBag.ErrorMsg = "設施名稱空白";
+                ViewBag.ErrorMsg = "尚有欄位未填選";
                 return View("AddOther");
             }
         }

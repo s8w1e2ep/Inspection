@@ -40,7 +40,7 @@
                                     <label class="control-label col-md-2" for="exhibitionSelect">故障來源</label>
                                     <div class="col-md-7">
                                         <select class="form-control" id="exhibitionSelect" name="sourceId">
-                                            <option>----請選擇一個故障來源----</option>
+                                            <option value="#">----請選擇一個故障來源----</option>
                                             @foreach (var item in ViewBag.reportSources)
                                             {
                                                 <option value="@item.sourceId">@item.sourceName</option>
@@ -52,7 +52,7 @@
                                     <label class="control-label col-md-2" for="exhibitionSelect">異常狀況</label>
                                     <div class="col-md-7">
                                         <select class="form-control" id="exhibitionSelect" name="abnormalId">
-                                            <option>----請選擇一個異常狀況----</option>
+                                            <option value="#">----請選擇一個異常狀況----</option>
                                             @foreach (var item in ViewBag.abnormals)
                                             {
                                                 <option value="@item.abnormalId">@item.abnormalName</option>
@@ -64,7 +64,7 @@
                                     <label class="control-label col-md-2" for="exhibitionSelect">通報者</label>
                                     <div class="col-md-7">
                                         <select class="form-control" id="exhibitionSelect" name="reporter">
-                                            <option>----請選擇一個通報者----</option>
+                                            <option value="#">----請選擇一個通報者----</option>
                                             <option value="保全">保全</option>
                                             <option value="志工">志工</option>
                                             <option value="館員">館員</option>

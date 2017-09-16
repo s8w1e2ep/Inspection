@@ -171,11 +171,13 @@
             $('.editable').editable('option', 'disabled', true);
             $('#happenedTime, #fixDate, #expectDate, #imgButton1, #imgButton2, #imgButton3, #imgButton4').attr('disabled', true);
             $('#isClose').editable('option', 'disabled', false);
+            $('#AddButton').css('display', 'none');
         }
         else
         {
             $('#happenedTime, #fixDate, #expectDate, #imgButton1, #imgButton2, #imgButton3, #imgButton4').attr('disabled', false);
             $('.editable').editable('option', 'disabled', false);
+            $('#AddButton').css('display', 'block');
         }
     }
     function controllClose()
@@ -434,9 +436,9 @@
                     </div>
                     @if (Model.ManRecord == null)
                     {
-                        <div style="display:inline">
-                            <a href="#" id="AddButton" onclick="AddManRepair()" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
-                        </div>
+                        
+                        <a href="#" id="AddButton" onclick="AddManRepair()" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
+                        
                        
                     }else
                     {

@@ -36,9 +36,9 @@
                                         <select class="form-control" id="exhibitionSelect">
                                             <option>----請選擇一個展示廳----</option>
                                             @foreach (var item in ViewBag.exhibitionRooms)
-                                        {
-                                        <option value="@item.roomId">@item.roomName</option>
-                                        }
+                                             {
+                                              <option value="@item.roomId">@item.roomName</option>
+                                             }
                                             <option value="experience">不屬於任何展示廳</option>
                                         </select>
                                     </div>
@@ -47,7 +47,7 @@
                                     <label class="control-label col-md-2" for="exhibitionSelect">體驗設施</label>
                                     <div class="col-md-7">
                                         <select class="form-control" id="expSelect" name="itemId">
-                                            <option>----請選擇一個體驗設施----</option>
+                                            <option value="#">----請選擇一個體驗設施----</option>
                                         </select>
                                     </div>
                                 </div>
@@ -55,7 +55,7 @@
                                     <label class="control-label col-md-2" for="exhibitionSelect">故障來源</label>
                                     <div class="col-md-7">
                                         <select class="form-control" id="exhibitionSelect" name="sourceId">
-                                            <option>----請選擇一個故障來源----</option>
+                                            <option value="#">----請選擇一個故障來源----</option>
                                             @foreach (var item in ViewBag.reportSources)
                                         {
                                         <option value="@item.sourceId">@item.sourceName</option>
@@ -67,7 +67,7 @@
                                     <label class="control-label col-md-2" for="exhibitionSelect">異常狀況</label>
                                     <div class="col-md-7">
                                         <select class="form-control" id="exhibitionSelect" name="abnormalId">
-                                            <option>----請選擇一個異常狀況----</option>
+                                            <option value="#">----請選擇一個異常狀況----</option>
                                             @foreach (var item in ViewBag.abnormals)
                                         {
                                         <option value="@item.abnormalId">@item.abnormalName</option>
@@ -79,7 +79,7 @@
                                     <label class="control-label col-md-2" for="exhibitionSelect">通報者</label>
                                     <div class="col-md-7">
                                         <select class="form-control" id="exhibitionSelect" name="reporter">
-                                            <option>----請選擇一個通報者----</option>
+                                            <option value="#">----請選擇一個通報者----</option>
                                             <option value="保全">保全</option>
                                             <option value="志工">志工</option>
                                             <option value="館員">館員</option>
@@ -110,7 +110,7 @@
                 id: val
             },
             function (data) {//data 是 GetItem傳回來的
-                var str = '<option>----請選擇一個體驗設施----</option>';
+                var str = '<option value="#">----請選擇一個體驗設施----</option>';
                 for (var i = 0; i < data.length; i++) {
                     str += '<option value="' + data[i].itemId + '">' + data[i].itemName + '</option>'
                 }
