@@ -1,12 +1,14 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System;
+using System.Web;
 using System.Web.Mvc;
+using System.Linq;
+using System.Collections.Generic;
 using InspectionWeb.Models.ViewModel;
 using InspectionWeb.Models;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
-using System.Globalization;
-using System.Threading;
+
+
 
 namespace InspectionWeb.Controllers
 {
@@ -46,6 +48,7 @@ namespace InspectionWeb.Controllers
         // GET: /ReportJob/DetailedData/id
         public ActionResult ItemDetailedData(string id)
         {
+
             reportDetailedViewModel vm = new reportDetailedViewModel();
             vm = GainDetail(id);
             
@@ -90,6 +93,8 @@ namespace InspectionWeb.Controllers
             ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
             return View();
         }
+
+
 
         //======================功能區==========================//
 
@@ -161,7 +166,7 @@ namespace InspectionWeb.Controllers
                     return View("AddExperience");
                 }
 
-                return RedirectToAction("ItemDetailedData", new { id = result.Message });           ////////////////////actionName待修改
+                return RedirectToAction("ItemDetailedData", new { id = result.Message });           
             }
             else
             {
@@ -208,7 +213,7 @@ namespace InspectionWeb.Controllers
                     return View("AddOther");
                 }
 
-                return RedirectToAction("ItemDetailedData", new { id = result.Message });           ////////////////////actionName待修改
+                return RedirectToAction("ItemDetailedData", new { id = result.Message });           
             }
             else
             {
@@ -272,11 +277,21 @@ namespace InspectionWeb.Controllers
         public ActionResult UpdateRecord(string name, string pk, string value)
         {
             var id = pk;
-            var record = this._abnormalRecordService.GetById(id);
-            if (record != null && ModelState.IsValid)
+            IResult result = new Result();
+            
+            if (ModelState.IsValid)
             {
-                if (value == "") value = null;
-                IResult result = this._abnormalRecordService.Update(record, name, value);
+                if(id[0] == 'O')
+                {
+                    var record = this._otherAbnormalRecordService.GetById(id);
+                    result = this._otherAbnormalRecordService.Update(record, name, value);
+                }
+                else
+                {
+                    var record = this._abnormalRecordService.GetById(id);
+                    result = this._abnormalRecordService.Update(record, name, value);
+                }
+                
 
                 if (result.Success)
                 {
@@ -359,48 +374,136 @@ namespace InspectionWeb.Controllers
                 return RedirectToAction("Query");
             }
         }
-        
 
-        //取得通報詳細資料
+        // POST: /ReportJob/UploadImg
+        [HttpPost]
+        public ActionResult UpdateImg(HttpPostedFileBase upload, string recordId, string type, string No)
+        {
+            if (upload.ContentLength > 0)
+            {
+                try
+                {
+                    var fileName = recordId + No;
+
+                    if (type == "jpeg")
+                    {
+                        fileName += ".jpg";
+                    }
+                    else
+                    {
+                        fileName += ".png";
+                    }
+
+                    var path = System.IO.Path.Combine(Server.MapPath("~/media/manRepairRecord"), fileName);
+                    upload.SaveAs(path);
+
+                    manRepairRecord instance = _manRepairRecordService.GetByID(recordId);
+                    IResult result;
+
+                    if(No != "_4")
+                    {
+                        result = _manRepairRecordService.Update(instance, "imgFile" + No.Substring(1), fileName);
+                    }
+                    else
+                    {
+                        result = _manRepairRecordService.Update(instance, "imgFixFile1", fileName);
+                    }
+
+                    if (result.Success)
+                    {
+                        result.Message = fileName;
+                        return Json(result);
+                    }
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine("UploadImg ex:\n" + e.ToString());
+                }
+                return Json(null);
+            }
+            else
+            {
+                return Json(null);
+            }
+        }
+
+
+        //取得通報詳細資料, 人員維修紀錄
         public reportDetailedViewModel GainDetail(string id)
         {
             reportDetailedViewModel vmD = new reportDetailedViewModel();
             ReportJobViewModel vm = new ReportJobViewModel();
+
             abnormalRecord instance = new abnormalRecord();
             manRepairRecord instanceM = new manRepairRecord();
+            otherAbnormalRecord instanceO = new otherAbnormalRecord();
             ManRepairViewModel vmm = new ManRepairViewModel();
 
             List<user> users = new List<user>();
             List<reportSource> sources = new List<reportSource>();
             List<abnormalDefinition> abnormals = new List<abnormalDefinition>();
 
-            instance = this._abnormalRecordService.GetById(id);
+            //紀錄詳細資料物件
+            
             instanceM = this._manRepairRecordService.GetByID(id);
             
+
             //選單
             sources = this._reportSourceService.GetAll().ToList();
             abnormals = this._abnormalDefinitionService.GetAll().ToList();
             users = this._userService.GetAll().ToList();
 
-            //通報紀錄
-            vm.recordId = instance.recordId;
-            vm.roomName = this._exhibitionRoomService.GetById(this._exhibitionItemService.GetById(instance.itemId).roomId).roomName;
-            vm.itemName = this._exhibitionItemService.GetById(instance.itemId).itemName;
-            vm.sourceName = this._reportSourceService.GetById(instance.sourceId).sourceName;
-            var abnormal = this._abnormalDefinitionService.GetById(instance.abnormalId);
-            vm.abnormalName = abnormal.abnormalName;
-            vm.abnormalDescription = abnormal.description;
-            vm.happenedTime = instance.happenedTime?.ToString("yyyy/MM/dd HH:mm:ss");
-            vm.description = instance.description;
-            vm.fixDate = instance.fixDate?.ToString("yyyy/MM/dd HH:mm:ss");
-            if (instance.fixMethod == 1)
-                vm.fixMethod = "人員排除";
-            else if (instance.fixMethod == 0)
-                vm.fixMethod = "自動排除";
+            //其他異常通報
+            if (id[0] == 'O')
+            {
+                instanceO = this._otherAbnormalRecordService.GetById(id);
+                
+                vm.recordId = instanceO.recordId;
+                vm.deviceId = instanceO.deviceId;
+                vm.itemName = instanceO.name;
+                vm.itemtypeName = "其他設施";
+                vm.sourceName = this._reportSourceService.GetById(instanceO.sourceId).sourceName;
+                var abnormalDef = this._abnormalDefinitionService.GetById(instanceO.abnormalId);
+                vm.abnormalName = abnormalDef.abnormalName;
+                vm.abnormalDescription = abnormalDef.description;
+                vm.happenedTime = instanceO.happenedTime?.ToString("yyyy/MM/dd HH:mm:ss");
+                vm.description = instanceO.description;
+                vm.fixDate = instanceO.fixDate?.ToString("yyyy/MM/dd HH:mm:ss");
+                if (instanceO.fixMethod == 1)
+                    vm.fixMethod = "人員排除";
+                else if (instanceO.fixMethod == 0)
+                    vm.fixMethod = "自動排除";
 
-            vm.isClose_s = instance.isClose;
-            vm.createTime = instance.createTime?.ToString("yyyy-MM-dd HH:mm:ss");
-            vm.lastUpdateTime = instance.lastUpdateTime?.ToString("yyyy-MM-dd HH:mm:ss");
+                vm.isClose_s = instanceO.isClose;
+                vm.createTime = instanceO.createTime?.ToString("yyyy-MM-dd HH:mm:ss");
+                vm.lastUpdateTime = instanceO.lastUpdateTime?.ToString("yyyy-MM-dd HH:mm:ss");
+            }
+            else
+            {   //一般通報紀錄
+                instance = this._abnormalRecordService.GetById(id);
+                
+                vm.recordId = instance.recordId;
+                vm.deviceId = instance.deviceId;
+                vm.roomName = this._exhibitionRoomService.GetById(this._exhibitionItemService.GetById(instance.itemId).roomId).roomName;
+                vm.itemName = this._exhibitionItemService.GetById(instance.itemId).itemName;
+                vm.itemtypeName = (this._exhibitionItemService.GetById(instance.itemId).itemType == 0) ? "展項" : "體驗設施";
+                vm.sourceName = this._reportSourceService.GetById(instance.sourceId).sourceName;
+                var abnormal = this._abnormalDefinitionService.GetById(instance.abnormalId);
+                vm.abnormalName = abnormal.abnormalName;
+                vm.abnormalDescription = abnormal.description;
+                vm.happenedTime = instance.happenedTime?.ToString("yyyy/MM/dd HH:mm:ss");
+                vm.description = instance.description;
+                vm.fixDate = instance.fixDate?.ToString("yyyy/MM/dd HH:mm:ss");
+                if (instance.fixMethod == 1)
+                    vm.fixMethod = "人員排除";
+                else if (instance.fixMethod == 0)
+                    vm.fixMethod = "自動排除";
+
+                vm.isClose_s = instance.isClose;
+                vm.createTime = instance.createTime?.ToString("yyyy-MM-dd HH:mm:ss");
+                vm.lastUpdateTime = instance.lastUpdateTime?.ToString("yyyy-MM-dd HH:mm:ss");
+            }
+            
 
             //人員維修紀錄
             if(instanceM != null)
@@ -413,6 +516,9 @@ namespace InspectionWeb.Controllers
                 vmm.fixnote = instanceM.fixNote;
                 vmm.cost = instanceM.cost;
                 vmm.expectDate = instanceM.expectDate?.ToString("yyyy-MM-dd");
+                vmm.imgFile1 = instanceM.imgFile1;
+                vmm.imgFile2 = instanceM.imgFile2;
+                vmm.imgFile3 = instanceM.imgFile3;
                 vmm.imgDesc1 = instanceM.imgDesc1;
                 vmm.imgDesc2 = instanceM.imgDesc2;
                 vmm.imgDesc3 = instanceM.imgDesc3;

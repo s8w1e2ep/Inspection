@@ -24,7 +24,6 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">篩選條件</h3>
                         </div>
-                        <br />
                         <div class="box-body">
                             <div class="col-md-6 form-group">
                                 <label class="control-label col-md-2" for="startDatePicker">開始日期</label>
@@ -46,34 +45,37 @@
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="control-label col-md-2">通報來源</label>
-                                <select class="form-control" id="reportSource" style="width: 50%;">
-                                    <option value="N" >----請選擇通報來源----</option>
-                                    @foreach (var item in ViewBag.reportSources)
-                                    {
-                                        <option value="@item.sourceId">@item.sourceName</option>
-                                    }
-                                    
-                                </select>
+                                <div class="col-md-8">
+                                    <select class="form-control" id="reportSource">
+                                        <option value="N">----請選擇通報來源----</option>
+                                        @foreach (var item in ViewBag.reportSources)
+                                        {
+                                            <option value="@item.sourceId">@item.sourceName</option>
+                                        }
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="control-label col-md-2">異常種類</label>
-                                <select class="form-control" id="abnormal"  style="width: 50%;">
-                                    <option value="N">----請選擇一個異常種類----</option>
-                                    @foreach (var item in ViewBag.abnormals)
-                                    {
-                                        <option value="@item.abnormalId">@item.abnormalName</option>
-                                    }
-                                </select>
+                                <div class="col-md-8">
+                                    <select class="form-control" id="abnormal">
+                                        <option value="N">----請選擇一個異常種類----</option>
+                                        @foreach (var item in ViewBag.abnormals)
+                                        {
+                                            <option value="@item.abnormalId">@item.abnormalName</option>
+                                        }
+                                    </select>
+                                </div>
                             </div>
-
-                           
                             <div class="col-md-6 form-group">
                                 <label class="control-label col-md-2">是否結案</label>
-                                <select class="form-control" id="Close" style="width: 50%;">
-                                    <option value= 2>----請選擇一個結案情形----</option>
-                                    <option value= 1>是</option>
-                                    <option value= 0>否</option>
-                                </select>
+                                <div class="col-md-8">
+                                    <select class="form-control" id="Close">
+                                        <option value=2>----請選擇一個結案情形----</option>
+                                        <option value=1>是</option>
+                                        <option value=0>否</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="box-footer">
