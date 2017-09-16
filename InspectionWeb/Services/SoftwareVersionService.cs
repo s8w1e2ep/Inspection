@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using InspectionWeb.Models;
+using InspectionWeb.Models.Misc;
 
 namespace InspectionWeb.Services
 {
@@ -28,12 +29,22 @@ namespace InspectionWeb.Services
 
             try
             {
+                instance.createTime = DateTime.Now;
+                instance.lastUpdateTime = instance.createTime;
+                IdGenerator idg = new IdGenerator();
+                string softwareId = idg.GetID("softwareVersion");
+                instance.softwareId = softwareId;
+                instance.isDelete = 0;
+
+
                 this._repository.Create(instance);
                 result.Success = true;
+                result.Message = softwareId;
             }
             catch (Exception ex)
             {
                 result.Exception = ex;
+                result.ErrorMsg = "新增軟體版本失敗"; 
             }
             return result;
         }
@@ -49,6 +60,8 @@ namespace InspectionWeb.Services
 
             try
             {
+
+                instance.lastUpdateTime = DateTime.Now;
                 this._repository.Update(instance);
                 result.Success = true;
             }
@@ -120,7 +133,7 @@ namespace InspectionWeb.Services
 
         public softwareVersion GetById(string softwareId)
         {
-            return this._repository.Get(x => x.softwareId == softwareId);
+            return this._repository.Get(x => x.softwareId == softwareId && x.isDelete == 0);
         }
 
         public softwareVersion GetBySoftwareCode(string softwareCode)
@@ -130,7 +143,7 @@ namespace InspectionWeb.Services
 
         public IEnumerable<softwareVersion> GetAll()
         {
-            return this._repository.GetAll().OrderBy(abnormalDefinition => abnormalDefinition.createTime);
+            return this._repository.GetAll().Where(x => x.isDelete == 0);
         }
     }
 }

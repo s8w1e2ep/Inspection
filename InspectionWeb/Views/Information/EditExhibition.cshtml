@@ -3,6 +3,8 @@
     ViewBag.Title = "展示廳管理";
 }
 
+
+
 <script>
     $.fn.editable.defaults.mode = 'inline';
 
@@ -40,7 +42,6 @@
                 $('#lastUpdateTime').html(response.lastUpdateTime)
             }
         });
-
         $('#inspectionUserId').editable({
             value: ["@if (@Model.Inspector != null) {<text>@Model.Inspector.userId</text>}"],
             emptytext: '未設定',
@@ -50,6 +51,22 @@
                 @foreach (var item in Model.Inspectors)
                 {
                     <text>{value: '@item.userId', text: '@item.userName'},</text>
+                }
+            ],
+            success: function (response) {
+                $('#lastUpdateTime').html(response.lastUpdateTime);
+                }
+        });
+
+        $('#companyId').editable({
+            value: ["@if (@Model.Company != null) {<text>@Model.Company.companyId</text>}"],
+            emptytext: '未設定',
+            source: [
+                // value :選擇後會回傳的值
+                // text : value相對應的值, 顯示的是此值
+                @foreach (var item in Model.Companys)
+                {
+                    <text>{value: '@item.companyId', text: '@item.companyName'},</text>
                 }
             ],
             success: function (response) {
@@ -70,6 +87,11 @@
             ],
             success: function (response) {
                 $('#lastUpdateTime').html(response.lastUpdateTime);
+                if (response.mapFileName) {
+                    loadMap("@Url.Content("~/media/map/")" + response.mapFileName);
+                } else {
+                    $('#fieldMap').html('');
+                }
             }
         });
 
@@ -77,6 +99,14 @@
             deleteExhibitionItem();
         });
 
+
+        @if (!string.IsNullOrEmpty(Model.MapFileName))
+        {
+           @:loadMap('@Url.Content("~/media/map/")@Model.MapFileName');
+        }
+        else {
+            <text>$('#fieldMap').html('');</text>
+        }
 
 
 
@@ -140,7 +170,62 @@
 
     }
 
+    // variables for d3
+    var svg;
+    var dragBehavior;
+    var attributesText;
 
+    function loadMap(mapName) {
+        $('#fieldMap').load(mapName, status, function () {
+            if (status != 'error') {
+                svg = d3.select("svg");
+                attributesText = d3.select("#attributestext");
+                getSvgChangeFromServer();
+                dragBehavior = d3.behavior.drag()
+                    .on("drag", dragMove)
+                    .on("dragstart", dragStart)
+                    .on("dragend", dragEnd);
+                svg.call(dragBehavior);
+            }
+        });
+    }
+
+    function getSvgChangeFromServer() {
+        selectionRect.init(@Model.X, @Model.Y);
+        selectionRect.update(@Model.X + @Model.Width,@Model.Y + @Model.Height);
+    }
+
+    function saveSvgChangeToServer(){
+
+        var formData = new FormData();
+        var rect = selectionRect.getNewAttributes();
+
+        formData.append('roomId', '@Model.RoomId');
+        formData.append('x', parseInt(rect.x, 10));
+        formData.append('y', parseInt(rect.y, 10));
+        formData.append('width', parseInt(rect.width, 10));
+        formData.append('height', parseInt(rect.height, 10));
+
+        $.ajax({
+            url: "@Url.Content("~/Information/SaveRoomSvgChangeToServer")",
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            cache: false,
+            data: formData,
+            dataType: 'json',
+
+        }).done(function (data) {
+            console.log(data);
+                if (data) {
+                    $('#lastUpdateTime').html(data.lastUpdateTime);
+                }
+            })
+
+          .fail(function () {
+              alert("Sorry, Server unavailable. ");
+          });
+    }
 
 </script>
 
@@ -160,6 +245,7 @@
                         <h3 class="box-title">展示廳檢視/修改</h3>
                     </div>
                     <!-- form start -->
+
 
                     <div class="box-body">
                         <table class="table table-striped table-hover table-bordered" cellspacing="0" style="width: 100%;">
@@ -186,9 +272,9 @@
                                     </td>
                                 </tr>
 
-                                @*場域*@
+                                @*所屬場域*@
                                 <tr>
-                                    <td>場域</td>
+                                    <td>所屬場域</td>
                                     <td>
                                         <a href="#" id="fieldId" data-type="select" data-pk="@Model.RoomId" data-url="@Url.Action("EditExhibition")" data-title="選擇場域"></a>
                                     </td>
@@ -226,7 +312,7 @@
                                 <tr>
                                     <td>承包商</td>
                                     <td>
-                                        @*TODO:承包商選單*@
+                                        <a href="#" id="companyId" data-type="select" data-pk="@Model.RoomId" data-url="@Url.Action("EditExhibition")" data-title="選擇承包商"></a>
                                     </td>
                                 </tr>
 
@@ -238,11 +324,19 @@
                                     </td>
                                 </tr>
 
-                                @*地圖*@
+                                @*場域地圖*@
                                 <tr>
-                                    <td>地圖</td>
+
                                     <td>
-                                        @*TODO: svg upload*@
+                                        場域地圖
+                                    </td>
+                                    <td>
+                                        <div class="progress" style="margin-bottom: 10px;">
+                                            <div id="mapProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                                        </div>
+
+                                        <div id="fieldMap"></div>
+
                                     </td>
                                 </tr>
 

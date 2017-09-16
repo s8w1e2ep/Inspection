@@ -14,7 +14,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-                <div class="box box-info" style="padding: 5px;">
+                <div class="box box-success" style="padding: 5px;">
                     <div class="box-header with-border">
                         <h3 class="box-title">篩選條件</h3>
                     </div>
@@ -61,9 +61,9 @@
         <div class="row">
             <div class="col-xs-12">
                 <h4>人工巡檢</h4>
-                <div class="box" style="border-top-color: #0094ff;">
+                <div class="box box-success">
                     <div class="box-body">
-                        <table id="manTable" class="row-border" cellspacing="0" width="100%">
+                        <table id="manTable" class="row-border" cellspacing="0" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th>日期</th>
@@ -82,9 +82,9 @@
         <div class="row">
             <div class="col-xs-12">
                 <h4>自動通報</h4>
-                <div class="box" style="border-top-color: #0094ff;">
+                <div class="box box-success">
                     <div class="box-body">
-                        <table id="autoTable" class="row-border" cellspacing="0" width="100%">
+                        <table id="autoTable" class="row-border" cellspacing="0" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th>日期</th>
@@ -133,11 +133,16 @@
         // single Date picker
         $('#startDatePicker, #endDatePicker').datepicker({
             language: 'zh-TW',
-            format: 'yyyy/mm/dd'
+            format: 'yyyy/mm/dd',
+            autoclose: true
         }).on('changeDate', function (ev) {
             startDate = $('#startDatePicker').val();
             endDate = $('#endDatePicker').val();
-            $('.datepicker').hide();
+            if (ev.target.id === 'startDatePicker') {
+                $('#endDatePicker').datepicker('setStartDate', startDate);
+            } else {
+                $('#startDatePicker').datepicker('setEndDate', endDate);
+            }
         });
 
     });
@@ -147,8 +152,6 @@
             alert('請選擇開始日期!');
         } else if (endDate === null || endDate === "") {
             alert('請選擇結束日期!');
-        } else if (endDate < startDate) {
-            alert('結束日期不能比開始日期早');
         } else if ($('#facilitySelect').val() === '#') {
             alert('請選擇體驗設施');
         } else {
@@ -157,9 +160,9 @@
         }
     }
 
-    function setDispatchTable(type) {
+    function setInspectTable(type) {
         $.get(
-            'QueryInspect',
+            'QueryFacility',
             {
                 facilityId: $('#facilitySelect').val(),
                 startDate: startDate,
@@ -167,15 +170,16 @@
                 type: type
             },
             function (data) {
-                if (data !== "[]") {
-                    for (var record in data) {
-                        t.row.add([
-                            record.dispatchTime,
+                $('#' + type + 'Table').DataTable().clear().draw();
+                if (data.length != 0) {
+                    data.forEach(function (record, index) {
+                        $('#' + type + 'Table').DataTable().row.add([
+                            record.dispatchDate,
                             record.total,
                             record.normal,
                             record.prob
                         ]).draw(false);
-                    }
+                    });
                     $('#errDiv').css('display', 'none');
                 } else {
                     $('#errDiv').css('display', 'block');

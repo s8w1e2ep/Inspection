@@ -8,7 +8,7 @@ namespace InspectionWeb.Services.Interface
     {
         IResult Create(roomInspectionDispatch instance);
 
-        IResult Create(System.DateTime date, IEnumerable<exhibitionRoom> rooms);
+        IResult Create(System.DateTime date, IEnumerable<exhibitionRoom> rooms, string setupId);
 
         IResult Update(roomInspectionDispatch instance);
 
@@ -31,5 +31,7 @@ namespace InspectionWeb.Services.Interface
         IEnumerable<roomInspectionDispatchDetail> GetAllByRoomCondition(string startDate, string endDate, List<string> roomId);
 
         IEnumerable<roomInspectionDispatchDetail> GetAllByUserCondition(string startDate, string endDate, List<string> userId);
+
+        List<queryInspectionByDateStatusDetail> GetInspectionStatus(System.DateTime date);
     }
 }

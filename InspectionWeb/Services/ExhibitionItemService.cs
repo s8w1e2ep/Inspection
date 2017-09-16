@@ -38,7 +38,8 @@ namespace InspectionWeb.Services
                 instance.createTime = DateTime.Now;
                 instance.lastUpdateTime = instance.createTime;
                 instance.isDelete = 0;
-
+                instance.x = 0;
+                instance.y = 0;
 
                 this._repository.Create(instance);
                 result.Success = true;
@@ -162,7 +163,8 @@ namespace InspectionWeb.Services
         {
             string sqlString = " SELECT exhibitionItem.* " +
                                 "FROM exhibitionItem " +
-                                "WHERE NOT EXISTS( " +
+                                "WHERE itemType = 1 AND isDelete = 0 " +
+                                "NOT EXISTS( " +
                                 "SELECT itemInspectionDispatch.itemId " +
                                 "FROM itemInspectionDispatch " +
                                 "WHERE itemInspectionDispatch.itemId = exhibitionItem.itemId " +

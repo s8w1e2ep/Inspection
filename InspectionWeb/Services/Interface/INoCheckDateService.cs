@@ -7,7 +7,7 @@ namespace InspectionWeb.Services.Interface
     public interface INoCheckDateService
     {
 
-        IResult Create(System.DateTime date, string description, bool am, bool pm);
+        IResult Create(System.DateTime date, string description, bool am, bool pm, string setupId);
 
         IResult Create(noCheckDate instance);
 

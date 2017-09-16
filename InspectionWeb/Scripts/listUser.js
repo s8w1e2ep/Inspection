@@ -5,8 +5,13 @@ function deleteUser() {
         type: "DELETE",
         url: 'DeleteUser',
         data: $.param({ "userId": toDeleteUserId })
-    }).done(function (msg) {
-        $("#" + toDeleteUserId).remove();
+    }).done(function (data) {
+        if (data.success) {
+            $("#" + toDeleteUserId).remove();
+            alert(data.msg);
+        } else {
+            alert(data.msg);
+        } 
     });
 }
 
@@ -18,7 +23,7 @@ function setId(userId) {
 $(document).ready(function () {
     // 使用者表格設定
     $('#userTable').DataTable({
-        "paging": false,
+        "paging": true,
         "info": false,
         "searching": true,
         "columnDefs": [

@@ -12,7 +12,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-                <div class="box box-info" style="padding: 5px;">
+                <div class="box box-success" style="padding: 5px;">
                     <div class="box-header with-border">
                         <h3 class="box-title">篩選條件</h3>
                     </div>
@@ -46,11 +46,11 @@
         <div class="row">
             <div class="col-xs-12">
                 <h4>前10名異常比例</h4>
-                <hr />
+                <div id="chart" class="col-md-12" style="height: 200px;"></div>
                 <h4>展項</h4>
-                <div class="box" style="border-top-color: #0094ff;">
+                <div class="box box-success">
                     <div class="box-body">
-                        <table id="abnormalTable" class="row-border" cellspacing="0" width="100%">
+                        <table id="abnormalTable" class="row-border" cellspacing="0" style="width:100%;">
                             <thead>
                                 <tr>
                                     <th>展項</th>
@@ -95,11 +95,16 @@
         // single Date picker
         $('#startDatePicker, #endDatePicker').datepicker({
             language: 'zh-TW',
-            format: 'yyyy/mm/dd'
+            format: 'yyyy/mm/dd',
+            autoclose: true
         }).on('changeDate', function (ev) {
             startDate = $('#startDatePicker').val();
             endDate = $('#endDatePicker').val();
-            $('.datepicker').hide();
+            if (ev.target.id === 'startDatePicker') {
+                $('#endDatePicker').datepicker('setStartDate', startDate);
+            } else {
+                $('#startDatePicker').datepicker('setEndDate', endDate);
+            }
         });
     });
 
@@ -108,31 +113,65 @@
             alert('請選擇開始日期!');
         } else if (endDate === null || endDate === "") {
             alert('請選擇結束日期!');
-        } else if (endDate < startDate) {
-            alert('結束日期不能比開始日期早');
         } else {
             setAbnormalTable();
         }
     }
 
     function setAbnormalTable() {
+        $('#abnormalTable').DataTable().clear().draw(true);
+        $.plot($('#chart'), '', {});
         $.get(
-            'QueryInspect',
+            'QueryRankItem',
             {
-                roomId: $('#roomSelect').val(),
                 startDate: startDate,
-                endDate: endDate,
+                endDate: endDate
             },
-            function (data) {
-                if (data !== "[]") {
-                    for (var record in data) {
-                        t.row.add([
-                            record.dispatchTime,
-                            record.total,
-                            record.normal,
-                            record.prob
+            function (res) {
+                if (res.data.length != 0) {
+                    var chartSet = [];
+                    var total = res.total;
+                    var proba;
+                    res.data.forEach(function (record, index) {
+                        var sum = record.manNum + record.autoNum;
+                        var itemId = record.itemId;
+
+                        if (total == 0) {
+                            proba = total;
+                        } else {
+                            proba = sum / total * 100;
+                        }
+                        chartSet.push({ label: record.itemName, data: proba });
+
+                        $('#abnormalTable').DataTable().row.add([
+                            record.itemName,
+                            record.roomName,
+                            record.manNum,
+                            record.autoNum,
+                            sum,
+                            proba + "%",
+                            '<button class="btn btn-sm btn-primary" onclick="itemList(\'' + itemId + '\', \'' + startDate + '\', \'' + endDate + '\')"><i class="glyphicon glyphicon-menu-hamburger"></i></button>'
                         ]).draw(false);
-                    }
+                    });
+
+                    chartSet.sort(function (a, b) { return a.proba - b.proba; });
+                    var topTen = chartSet.splice(0, 10);
+                    // 畫圖
+                    $.plot($('#chart'), topTen, {
+                        series: {
+                            pie: {
+                                show: true,
+                                combine: {
+                                    color: '#999',
+                                    threshold: 0.1
+                                }
+                            }
+                        },
+                        legend: {
+                            show: false
+                        }
+                    });
+
                     $('#errDiv').css('display', 'none');
                 } else {
                     $('#errDiv').css('display', 'block');
@@ -142,5 +181,9 @@
         ).fail(function () {
             alert("抱歉! 伺服器無法接受您的查詢!");
         });
+    }
+
+    function itemList(itemId, start, end) {
+        location.replace("/Statistic/RankItemList?itemId=" + itemId + "&start=" + start + "&end=" + end);
     }
 </script>

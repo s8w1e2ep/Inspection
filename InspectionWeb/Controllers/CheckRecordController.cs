@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
 using InspectionWeb.Models;
-using InspectionWeb.Models.Misc;
 using InspectionWeb.Models.ViewModel;
-using System.Web.Hosting;
-using System.IO;
 
 namespace InspectionWeb.Controllers
 {
@@ -72,19 +67,23 @@ namespace InspectionWeb.Controllers
             if (isNonCheckDate == 1)
             {
                 nonCkeck.ErrorMsg = "此日非巡檢日";
-                return View(Data2ItemViewModel(null, nonCkeck, checkDate));
+                nonCkeck.Message = "1";
+                return View(Data2RoomViewModel(null, nonCkeck, checkDate));
             }
             else if (isNonCheckDate == 2)
             {
                 nonCkeck.ErrorMsg = "上午非巡檢日";
+                nonCkeck.Message = "2";
             }
             else if (isNonCheckDate == 3)
             {
                 nonCkeck.ErrorMsg = "下午非巡檢日";
+                nonCkeck.Message = "3";
             }
             else
             {
                 nonCkeck.ErrorMsg = "";
+                nonCkeck.Message = "0";
             }
             List<roomInspectionDispatchDetail> allDetailData = new List<roomInspectionDispatchDetail>();
             var allData = this._RoomCheckRecordService.GetAllByDate(checkDate);
@@ -103,7 +102,7 @@ namespace InspectionWeb.Controllers
             if (result != null)
             {
                 viewModel.ErrorMsg = result.ErrorMsg;
-                System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
+                viewModel.ErrorType = Convert.ToInt16(result.Message);
             }
             else
             {
@@ -124,7 +123,6 @@ namespace InspectionWeb.Controllers
             if (result.Success == false)
             {
                 System.Diagnostics.Debug.WriteLine("insert error");
-                //result.ErrorMsg = "Dispatch List construct error";
                 System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
                 return Json(new { result = 0, ErrorMsg = result.ErrorMsg });
             }
@@ -150,19 +148,23 @@ namespace InspectionWeb.Controllers
             if (isNonCheckDate == 1)
             {
                 nonCkeck.ErrorMsg = "此日非巡檢日";
+                nonCkeck.Message = "1";
                 return View(Data2ItemViewModel(null, nonCkeck, checkDate));
             }
             else if (isNonCheckDate == 2)
             {
                 nonCkeck.ErrorMsg = "上午非巡檢日";
+                nonCkeck.Message = "2";
             }
             else if (isNonCheckDate == 3)
             {
                 nonCkeck.ErrorMsg = "下午非巡檢日";
+                nonCkeck.Message = "3";
             }
             else
             {
                 nonCkeck.ErrorMsg = "";
+                nonCkeck.Message = "0";
             }
             List<itemInspectionDispatchDetail> allDetailData = new List<itemInspectionDispatchDetail>();
             var allData = this._ItemCheckRecordServices.GetAllByDate(checkDate);
@@ -181,7 +183,7 @@ namespace InspectionWeb.Controllers
             if (result != null)
             {
                 viewModel.ErrorMsg = result.ErrorMsg;
-                System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
+                viewModel.ErrorType = Convert.ToInt16(result.Message);
             }
             else
             {
@@ -202,7 +204,6 @@ namespace InspectionWeb.Controllers
             if (result.Success == false)
             {
                 System.Diagnostics.Debug.WriteLine("insert error");
-                //result.ErrorMsg = "Dispatch List construct error";
                 System.Diagnostics.Debug.WriteLine(result.ErrorMsg);
                 return Json(new { result = 0, ErrorMsg = result.ErrorMsg });
             }

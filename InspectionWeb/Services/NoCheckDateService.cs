@@ -18,7 +18,7 @@ namespace InspectionWeb.Services
             _repository = repository;
         }
 
-        public IResult Create(System.DateTime date, string description, bool am, bool pm)
+        public IResult Create(System.DateTime date, string description, bool am, bool pm, string setupId)
         {
             IResult result = new Result(false);
             noCheckDate noCheckDate = new noCheckDate();
@@ -32,7 +32,7 @@ namespace InspectionWeb.Services
                 noCheckDate.am = Convert.ToByte(am);
                 noCheckDate.pm = Convert.ToByte(pm);
                 noCheckDate.description = description;
-                noCheckDate.setupUserId = "";
+                noCheckDate.setupUserId = setupId;
                 noCheckDate.isDelete = Convert.ToByte(0);
                 noCheckDate.createTime = now;
                 noCheckDate.lastUpdateTime = now;

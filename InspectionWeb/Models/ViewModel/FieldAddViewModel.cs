@@ -16,6 +16,8 @@ namespace InspectionWeb.Models.ViewModel
         [Display(Name = "說明")]
         public string Description { get; set; }
 
+        public string Floor { get; set; }
+
         public string MapFileName { get; set; }
 
         public string Photo { get; set; }

@@ -40,10 +40,9 @@ namespace InspectionWeb.Services
             return result;
         }
 
-        public IResult Create(System.DateTime date, IEnumerable<exhibitionRoom> rooms)
+        public IResult Create(System.DateTime date, IEnumerable<exhibitionRoom> rooms, string setupId)
         {
             IResult result = new Result(false);
-            GetAll().Where(x => x.isDelete == 0);
             for (int i = 0; i < rooms.Count(); i++)
             {
                 roomInspectionDispatch roomDispatch = new roomInspectionDispatch();
@@ -57,7 +56,7 @@ namespace InspectionWeb.Services
                     roomDispatch.roomId = rooms.ElementAt(i).roomId;
                     roomDispatch.inspectorId1 = rooms.ElementAt(i).inspectionUserId;
                     roomDispatch.inspectorId2 = rooms.ElementAt(i).inspectionUserId;
-                    roomDispatch.setupUserId = "";
+                    roomDispatch.setupUserId = setupId;
                     roomDispatch.isDelete = Convert.ToByte(0);
                     roomDispatch.createTime = now;
                     roomDispatch.lastUpdateTime = now;
@@ -176,18 +175,19 @@ namespace InspectionWeb.Services
 
         public bool checkRoomInsert(System.DateTime date)
         {
-            string sqlString = "SELECT COUNT(DISTINCT(roomId)) "
-                            + "FROM roomInspectionDispatch "
-                            + "WHERE checkDate='" + date.ToString("d") + "';";
-
-            string sqlString2 = "SELECT COUNT(DISTINCT(roomId)) "
-                            + "FROM exhibitionRoom;";
+            string sqlString = "SELECT COUNT(exhibitionRoom.roomId) AS num " +
+                                "FROM exhibitionRoom " +
+                                "WHERE active = 1 AND isDelete = 0 " +
+                                "AND NOT EXISTS( " +
+                                "SELECT roomInspectionDispatch.roomId " +
+                                "FROM roomInspectionDispatch " +
+                                "WHERE roomInspectionDispatch.roomId = exhibitionRoom.roomId " +
+                                "AND roomInspectionDispatch.checkDate = '" + date.ToString("d") + "')";
 
             using (inspectionEntities db = new inspectionEntities())
             {
-                var existNum = (int)db.Database.SqlQuery<int>(sqlString).First();
-                var roomNum = db.Database.SqlQuery<int>(sqlString2).First();
-                return (existNum - roomNum == 0) ? false : true;
+                var num = (int)db.Database.SqlQuery<int>(sqlString).First();
+                return (num == 0) ? false : true;
             }
         }
 
@@ -198,7 +198,6 @@ namespace InspectionWeb.Services
 
         public IEnumerable<roomInspectionDispatchDetail> GetAllByDate(System.DateTime date)
         {
-            System.Diagnostics.Debug.WriteLine(date.Date.ToString());
             string sqlString = "IF OBJECT_ID('temp','U') IS NOT NULL DROP TABLE temp;"
                     + "SELECT RID.dispatchId, R.roomId, R.roomName, RID.checkDate, RID.inspectorId1, " 
                     + "U1.userCode AS inspectorCode1, U1.userName AS inspectorName1, RID.inspectorId2 "
@@ -282,6 +281,131 @@ namespace InspectionWeb.Services
             {
                 var detailDate = db.Database.SqlQuery<roomInspectionDispatchDetail>(sqlString).ToList();
                 return detailDate;
+            }
+        }
+
+        public List<queryInspectionByDateStatusDetail> GetInspectionStatus(System.DateTime date)
+        {
+            string GetAllRoomSql = "SELECT roomInspectionDispatch.roomId " +
+                                   "FROM roomInspectionDispatch " +
+                                   "WHERE roomInspectionDispatch.checkDate = '" + date.ToString("d") + "' " +
+                                   "AND roomInspectionDispatch.isDelete = 0 ";
+
+            string GetAllItemNumSql = "SELECT exhibitionItem.roomId, COUNT(exhibitionItem.itemId) AS num " +
+                                        "FROM roomInspectionDispatch, exhibitionItem " +
+                                        "WHERE roomInspectionDispatch.checkDate = '" + date.ToString("d") + "' " +
+                                        "AND roomInspectionDispatch.isDelete = 0 " +
+                                        "AND exhibitionItem.isDelete = 0 " +
+                                        "AND roomInspectionDispatch.roomId = exhibitionItem.roomId " +
+                                        "GROUP BY exhibitionItem.roomId " +
+                                        "ORDER BY exhibitionItem.roomId; ";
+
+            string GetHasInspectionItemSql = "SELECT roomCheckRecord.roomId, COUNT(roomCheckRecord.roomId) AS num " +
+                                            "FROM roomCheckRecord, roomInspectionDispatch " +
+                                            "WHERE roomCheckRecord.checkDate = '" + date.ToString("d") + "' " +
+                                            "AND roomInspectionDispatch.checkDate = '" + date.ToString("d") + "' " +
+                                            "AND roomCheckRecord.roomId = roomInspectionDispatch.roomId " +
+                                            "AND roomInspectionDispatch.isDelete = 0 " +
+                                            "GROUP BY roomCheckRecord.roomId " +
+                                            "ORDER BY roomCheckRecord.roomId";
+
+            string GetAbnormalInspectionItemSql = "SELECT exhibitionItem.roomId, COUNT(abnormalRecord.itemId) AS num " +
+                                                "FROM abnormalRecord, exhibitionItem, roomInspectionDispatch " +
+                                                "WHERE abnormalRecord.happenedTime = '" + date.ToString("d") + "' " +
+                                                "AND roomInspectionDispatch.checkDate = '" + date.ToString("d") + "' " +
+                                                "AND abnormalRecord.itemId = exhibitionItem.itemId " +
+                                                "AND exhibitionItem.roomId = roomInspectionDispatch.roomId " +
+                                                "AND roomInspectionDispatch.isDelete = 0 " +
+                                                "GROUP BY exhibitionItem.roomId " +
+                                                "ORDER BY exhibitionItem.roomId";
+
+            string GetSolveInspectionItemSql = "SELECT exhibitionItem.roomId, COUNT(abnormalRecord.itemId) AS num " +
+                                            "FROM abnormalRecord, exhibitionItem, roomInspectionDispatch " +
+                                            "WHERE abnormalRecord.happenedTime = '" + date.ToString("d") + "' " +
+                                            "AND roomInspectionDispatch.checkDate = '" + date.ToString("d") + "' " +
+                                            "AND abnormalRecord.itemId = exhibitionItem.itemId " +
+                                            "AND exhibitionItem.roomId = roomInspectionDispatch.roomId " +
+                                            "AND roomInspectionDispatch.isDelete = 0 " +
+                                            "AND abnormalRecord.fixDate IS NOT NULL " +
+                                            "GROUP BY exhibitionItem.roomId " +
+                                            "ORDER BY exhibitionItem.roomId";
+
+            using (inspectionEntities db = new inspectionEntities())
+            {
+                var allRoom = db.Database.SqlQuery<string>(GetAllRoomSql).ToList();
+                List<queryEntity> allItemNum = db.Database.SqlQuery<queryEntity>(GetAllItemNumSql).ToList();
+                int allItemIndex = 0;
+                List<queryEntity> hasInspectionItemNum = db.Database.SqlQuery<queryEntity>(GetHasInspectionItemSql).ToList();
+                int hasInspectionItemIndex = 0;
+                List<queryEntity> abnormalInspectionItemNum = db.Database.SqlQuery<queryEntity>(GetAbnormalInspectionItemSql).ToList();
+                int abnormalInspectionItemIndex = 0;
+                List<queryEntity> solveInspectionItemNum = db.Database.SqlQuery<queryEntity>(GetSolveInspectionItemSql).ToList();
+                int solveInspectionItemIndex = 0;
+                List<queryInspectionByDateStatusDetail> status = new List<queryInspectionByDateStatusDetail>();
+                foreach(var item in allRoom)
+                {
+                    queryInspectionByDateStatusDetail x = new queryInspectionByDateStatusDetail();
+                    x.roomId = item;
+                    if (allItemNum.Count > 0 && allItemIndex < allItemNum.Count) {
+                        if (string.Compare(allItemNum.ElementAt(allItemIndex).roomId, item) == 0)
+                        {
+                            x.allItemNum = allItemNum.ElementAt(allItemIndex).num; 
+                            allItemIndex++;
+                        }
+                        else
+                        {
+                            x.allItemNum = 0;
+                        }
+                    } else {
+                        x.allItemNum = 0;
+                    }
+                    if (hasInspectionItemNum.Count > 0 && hasInspectionItemIndex < hasInspectionItemNum.Count)
+                    {
+                        if (string.Compare(hasInspectionItemNum.ElementAt(hasInspectionItemIndex).roomId, item) == 0)
+                        {
+                            x.hasInspection = x.allItemNum;
+                            hasInspectionItemIndex++;
+                        }
+                        else
+                        {
+                            x.hasInspection = 0;
+                        }
+                    }
+                    else
+                    {
+                        x.hasInspection = 0;
+                    }
+                    if (abnormalInspectionItemNum.Count > 0 && abnormalInspectionItemIndex < abnormalInspectionItemNum.Count) {
+                        if (string.Compare(abnormalInspectionItemNum.ElementAt(abnormalInspectionItemIndex).roomId, item) == 0)
+                        {
+                            x.abnormalNum = abnormalInspectionItemNum.ElementAt(abnormalInspectionItemIndex).num;
+                            abnormalInspectionItemIndex++;
+                        }
+                        else
+                        {
+                            x.abnormalNum = 0;
+                        }
+
+                    } else {
+                        x.abnormalNum = 0;
+                    }
+                    if (solveInspectionItemNum.Count>0 && solveInspectionItemIndex < solveInspectionItemNum.Count()) {
+                        if (string.Compare(solveInspectionItemNum.ElementAt(solveInspectionItemIndex).roomId, item) == 0)
+                        {
+                            x.solveNum = solveInspectionItemNum.ElementAt(solveInspectionItemIndex).num;
+                            solveInspectionItemIndex++;
+                        }
+                        else
+                        {
+                            x.solveNum = 0;
+                        }
+
+                    } else {
+                        x.solveNum = 0;
+                    }
+                    status.Add(x);
+                }
+                return status;
             }
         }
     }

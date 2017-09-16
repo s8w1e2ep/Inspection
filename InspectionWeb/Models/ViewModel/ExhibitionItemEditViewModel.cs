@@ -15,6 +15,7 @@ namespace InspectionWeb.Models.ViewModel
         public string Description;
         public string Picture;
         public string FieldId;
+        public company Company;
 
         public Nullable<int> X;
         public Nullable<int> Y;
@@ -25,6 +26,7 @@ namespace InspectionWeb.Models.ViewModel
         public Nullable<DateTime> LastUpdateTime;
         
         public List<company> Companys;
+       
         
         public string ErrorMsg;
     }
