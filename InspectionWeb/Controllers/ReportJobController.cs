@@ -21,11 +21,14 @@ namespace InspectionWeb.Controllers
         private IAbnormalRecordService _abnormalRecordService;
         private IOtherAbnormalRecordService _otherAbnormalRecordService;
         private IMailService _mailService;
+        private IRoomInspectionDispatchService _roomInspectionDispatchService;
+        private IItemInspectionDispatchService _itemInspectionDispatchService;
         private MailController _mailController;
 
         public ReportJobController(IExhibitionRoomService service, IExhibitionItemService service2, IReportSourceService service3,
             IAbnormalDefinitionService service4, IAbnormalRecordService service5, IOtherAbnormalRecordService service6,
-            IMailService service7, MailController controller)
+            IMailService service7, IRoomInspectionDispatchService service8, IItemInspectionDispatchService service9,
+            MailController controller)
         {
             this._exhibitionRoomService = service;
             this._exhibitionItemService = service2;
@@ -34,6 +37,8 @@ namespace InspectionWeb.Controllers
             this._abnormalRecordService = service5;
             this._otherAbnormalRecordService = service6;
             this._mailService = service7;
+            this._roomInspectionDispatchService = service8;
+            this._itemInspectionDispatchService = service9;
             this._mailController = controller;
         }
 
@@ -108,7 +113,36 @@ namespace InspectionWeb.Controllers
                     return View("AddExhibitionItem");
                 }
 
-                var systemSettings = this._mailService.GetAll().ToList();
+                var now = DateTime.Now;
+                var startDate = now.ToString("yyyy/MM/dd");
+                var endDate = now.ToString("yyyy/MM/dd");
+                var roomId = _exhibitionItemService.GetById(itemId).roomId;
+                var systemSettings = _mailService.GetAll().ToList(); // get systemSettings<list> to 'from' value.
+                var roominspectionList = _roomInspectionDispatchService.GetAll().ToList();
+                var nowtime = Convert.ToDateTime(now.ToString("hh:mm:ss"));
+                var time = Convert.ToDateTime("12:00:00");
+                var userId = string.Empty;
+                roomInspectionDispatch roomInspection = new roomInspectionDispatch();
+
+                foreach (var item in roominspectionList)
+                {
+                    if(item.checkDate == now)
+                    {
+                        if (item.roomId == roomId)
+                        {
+                            roomInspection = item;
+                            break;
+                        }
+                    }
+                }
+                
+                if (DateTime.Compare(nowtime, time) < 0)   // am inspectionuser
+                    userId = roomInspection.inspectorId1;
+                else
+                    userId = roomInspection.inspectorId2;
+                
+
+                // get inspectionUser<list> to 'to' value.
                 var emailJson = new MailController.EmailJson(){
                     from = systemSettings[0].keyName,
                     to = "P76064342@ncku.edu.tw",
