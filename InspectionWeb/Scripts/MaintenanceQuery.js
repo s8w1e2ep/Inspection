@@ -119,6 +119,8 @@ $(document).ready(function () {
     function chickQuery() {
         //alert('startDate = ' + startDate + '\nendDate = ' + endDate + '\nreportSource = ' + sourceId + '\nabnormalDefinition = ' + abnormalId);
         $('#MaintenanceList_Item').DataTable().clear().draw();
+        $('#MaintenanceList_Experience').DataTable().clear().draw();
+        $('#MaintenanceList_Other').DataTable().clear().draw();
         $.get(
             'RefreshQuery',
             {

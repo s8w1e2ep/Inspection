@@ -20,10 +20,12 @@ namespace InspectionWeb.Controllers
         private IAbnormalDefinitionService _abnormalDefinitionService;
         private IAbnormalRecordService _abnormalRecordService;
         private IOtherAbnormalRecordService _otherAbnormalRecordService;
-      
+        private IMailService _mailService;
+        private MailController _mailController;
 
         public ReportJobController(IExhibitionRoomService service, IExhibitionItemService service2, IReportSourceService service3,
-            IAbnormalDefinitionService service4, IAbnormalRecordService service5, IOtherAbnormalRecordService service6)
+            IAbnormalDefinitionService service4, IAbnormalRecordService service5, IOtherAbnormalRecordService service6,
+            IMailService service7, MailController controller)
         {
             this._exhibitionRoomService = service;
             this._exhibitionItemService = service2;
@@ -31,10 +33,11 @@ namespace InspectionWeb.Controllers
             this._abnormalDefinitionService = service4;
             this._abnormalRecordService = service5;
             this._otherAbnormalRecordService = service6;
+            this._mailService = service7;
+            this._mailController = controller;
         }
 
         
-
         // GET: /ReportJob/AddExperience
         public ActionResult AddExperience()
         {
@@ -104,6 +107,17 @@ namespace InspectionWeb.Controllers
                     
                     return View("AddExhibitionItem");
                 }
+
+                var systemSettings = this._mailService.GetAll().ToList();
+                var emailJson = new MailController.EmailJson(){
+                    from = systemSettings[0].keyName,
+                    to = "P76064342@ncku.edu.tw",
+                    subject = "單元故障通知，故障單元：" + this._exhibitionItemService.GetById(itemId).itemName,
+                    msg = "您好：\n\n" + DateTime.Now.ToString("yyyy/MM/dd") + "通報故障之「" +
+                        this._exhibitionItemService.GetById(itemId).itemName + "」，已派" + itemId +
+                        "處理。\n系統在此告知。"
+                };
+                this._mailController.SendEmail(emailJson);
 
                 return RedirectToAction("ItemDetailedData", new { id = result.Message });
             }

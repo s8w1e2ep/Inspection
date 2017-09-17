@@ -1,4 +1,7 @@
-﻿using System.Net.Mail;
+﻿using System.Net;
+using System.Net.Mail;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Web.Mvc;
 
 namespace InspectionWeb.Controllers
@@ -10,7 +13,12 @@ namespace InspectionWeb.Controllers
         {
             return View();
         }
-
+        /*
+        private static bool RemoteCertificateValidate(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors error)
+        {
+            return true;
+        }
+        */
         // POST: /User/AddUser
         [HttpPost]
         public ActionResult SendEmail(EmailJson data)
@@ -29,7 +37,7 @@ namespace InspectionWeb.Controllers
                 data.msg
             );
             mail.IsBodyHtml = true;
-
+            //ServicePointManager.ServerCertificateValidationCallback += RemoteCertificateValidate;
             smtpClient.Send(mail);
 
             return Json(new { result = true });

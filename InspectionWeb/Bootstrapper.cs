@@ -69,6 +69,7 @@ namespace InspectionWeb
             container.RegisterType<IRepository<exhibitionRoom>, GenericRepository<exhibitionRoom>>();
             container.RegisterType<IRepository<otherAbnormalRecord>, GenericRepository<otherAbnormalRecord>>();
             container.RegisterType<IRepository<company>, GenericRepository<company>>();
+            container.RegisterType<IRepository<systemSettings>, GenericRepository<systemSettings>>();
 
             //Service
             container.RegisterType<IAbnormalDefinitionService, AbnormalDefinitionService>();
@@ -83,13 +84,13 @@ namespace InspectionWeb
             container.RegisterType<IRoomCheckRecordService, RoomCheckRecordService>();
             container.RegisterType<IItemCheckRecordService, ItemCheckRecordService>();
             container.RegisterType<INoCheckDateService, NoCheckDateService>();
+            container.RegisterType<IMailService, MailService>();
             container.RegisterType<IUserService, UserService>();
             container.RegisterType<IUserGroupService, UserGroupService>();
             container.RegisterType<IFieldMapService, FieldMapService>();
             container.RegisterType<ISolutionService, SolutionService>();
             container.RegisterType<IExhibitionRoomService, ExhibitionRoomService>();
             container.RegisterType<IOtherAbnormalRecordService, OtherAbnormalRecordService>();
-            container.RegisterType<IMaintenanceWorkService, MaintenanceWorkService>();
             container.RegisterType<ICompanyService, CompanyService>();
 
         }

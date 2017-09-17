@@ -343,13 +343,16 @@
     <Compile Include="Models\ViewModel\ListQueryInspectionByRoomViewModel.cs" />
     <Compile Include="Models\ViewModel\ListRoomCheckRecordViewModel.cs" />
     <Compile Include="Models\ViewModel\ListItemCheckRecordViewModel.cs" />
+    <Compile Include="Models\ViewModel\MailViewModel.cs" />
     <Compile Include="Models\ViewModel\UserEditViewModel.cs" />
     <Compile Include="Models\ViewModel\ListItemInspectionDispatchViewModel.cs" />
     <Compile Include="Models\ViewModel\ListRoomInspectionDispatchViewModel.cs" />
     <Compile Include="Models\ViewModel\userListForInspectionViewModel.cs" />
     <Compile Include="Services\CompanyService.cs" />
     <Compile Include="Services\Interface\ICompanyService.cs" />
+    <Compile Include="Services\Interface\IMailService.cs" />
     <Compile Include="Services\Interface\INoCheckDateService.cs" />
+    <Compile Include="Services\MailService.cs" />
     <Compile Include="Services\NoCheckDateService.cs" />
     <Compile Include="Services\ExhibitionRoomService.cs" />
     <Compile Include="Services\FieldMapService.cs" />
@@ -391,7 +394,6 @@
     <Compile Include="Services\Interface\IUserService.cs" />
     <Compile Include="Services\ItemCheckRecordService.cs" />
     <Compile Include="Services\ItemInspectionDispatchService.cs" />
-    <Compile Include="Services\MaintenanceWorkService.cs" />
     <Compile Include="Services\Misc\IResult.cs" />
     <Compile Include="Services\Misc\Result.cs" />
     <Compile Include="Services\OtherAbnormalRecordService.cs" />
