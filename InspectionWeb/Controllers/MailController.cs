@@ -1,11 +1,10 @@
-﻿using System.Net;
-using System.Net.Mail;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Net.Mail;
 using System.Web.Mvc;
+using InspectionWeb.Models;
 
 namespace InspectionWeb.Controllers
 {
+    [AuthorizeUser(Super = true, Manager = true, Dispatch = true)]
     public class MailController : Controller
     {
         // GET: Mail

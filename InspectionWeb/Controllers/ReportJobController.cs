@@ -127,7 +127,7 @@ namespace InspectionWeb.Controllers
                     return View("AddExhibitionItem");
                 }
                 //沒有派工會出錯，正常執行會認證錯誤
-                autoSendMail(itemId);
+                //autoSendMail(itemId);
 
                 return RedirectToAction("ItemDetailedData", new { id = result.Message });
             }
@@ -182,7 +182,7 @@ namespace InspectionWeb.Controllers
                     return View("AddExperience");
                 }
                 //沒有派工會出錯，正常執行會認證錯誤
-                autoSendMail(itemId);
+                //autoSendMail(itemId);
 
                 return RedirectToAction("ItemDetailedData", new { id = result.Message });           
             }
