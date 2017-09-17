@@ -342,9 +342,7 @@
     <Compile Include="Models\ViewModel\ListQueryInspectionByRoomViewModel.cs" />
     <Compile Include="Models\ViewModel\ListRoomCheckRecordViewModel.cs" />
     <Compile Include="Models\ViewModel\ListItemCheckRecordViewModel.cs" />
-<<<<<<< HEAD
     <Compile Include="Models\ViewModel\MailViewModel.cs" />
-=======
     <Compile Include="Models\ViewModel\ManRepairViewModel.cs" />
     <Compile Include="Models\ViewModel\reportDetailedViewModel.cs" />
     <Compile Include="Models\ViewModel\ReportDeviceEditViewModel.cs" />
@@ -352,7 +350,6 @@
     <Compile Include="Models\ViewModel\SoftwareVersionAddViewModel.cs" />
     <Compile Include="Models\ViewModel\SoftwareVersionListViewModel.cs" />
     <Compile Include="Models\ViewModel\SystemArgAddViewModel.cs" />
->>>>>>> refs/remotes/origin/dev
     <Compile Include="Models\ViewModel\UserEditViewModel.cs" />
     <Compile Include="Models\ViewModel\ListItemInspectionDispatchViewModel.cs" />
     <Compile Include="Models\ViewModel\ListRoomInspectionDispatchViewModel.cs" />
@@ -363,11 +360,8 @@
     <Compile Include="Services\Interface\ICompanyService.cs" />
     <Compile Include="Services\Interface\IMailService.cs" />
     <Compile Include="Services\Interface\INoCheckDateService.cs" />
-<<<<<<< HEAD
     <Compile Include="Services\MailService.cs" />
-=======
     <Compile Include="Services\Interface\ISystemArgService.cs" />
->>>>>>> refs/remotes/origin/dev
     <Compile Include="Services\NoCheckDateService.cs" />
     <Compile Include="Services\ExhibitionRoomService.cs" />
     <Compile Include="Services\FieldMapService.cs" />
@@ -540,7 +534,6 @@
     <Content Include="Views\QuickSolution\Add.cshtml" />
     <Content Include="Views\QuickSolution\Edit.cshtml" />
     <Content Include="Views\QuickSolution\List.cshtml" />
-    <Content Include="Views\MaintenanceWork\DetailedData.cshtml" />
     <Content Include="Views\MaintenanceWork\ExtendedWork.cshtml" />
     <Content Include="Views\MaintenanceWork\PendingList.cshtml" />
     <Content Include="Views\MaintenanceWork\Query.cshtml" />

@@ -21,25 +21,17 @@ namespace InspectionWeb.Controllers
         private IAbnormalDefinitionService _abnormalDefinitionService;
         private IAbnormalRecordService _abnormalRecordService;
         private IOtherAbnormalRecordService _otherAbnormalRecordService;
-<<<<<<< HEAD
+        private IUserService _userService;
+        private IManRepairRecordService _manRepairRecordService;
         private IMailService _mailService;
         private IRoomInspectionDispatchService _roomInspectionDispatchService;
         private IItemInspectionDispatchService _itemInspectionDispatchService;
         private MailController _mailController;
 
         public ReportJobController(IExhibitionRoomService service, IExhibitionItemService service2, IReportSourceService service3,
-            IAbnormalDefinitionService service4, IAbnormalRecordService service5, IOtherAbnormalRecordService service6,
-            IMailService service7, IRoomInspectionDispatchService service8, IItemInspectionDispatchService service9,
-            MailController controller)
-=======
-        private IUserService _userService;
-        private IManRepairRecordService _manRepairRecordService;
-
-
-        public ReportJobController(IExhibitionRoomService service, IExhibitionItemService service2, IReportSourceService service3,
             IAbnormalDefinitionService service4, IAbnormalRecordService service5, IOtherAbnormalRecordService service6, IUserService service7,
-            IManRepairRecordService service8)
->>>>>>> refs/remotes/origin/dev
+            IManRepairRecordService service8, IMailService service9, IRoomInspectionDispatchService service10, IItemInspectionDispatchService service11,
+            MailController controller)
         {
             this._exhibitionRoomService = service;
             this._exhibitionItemService = service2;
@@ -47,21 +39,15 @@ namespace InspectionWeb.Controllers
             this._abnormalDefinitionService = service4;
             this._abnormalRecordService = service5;
             this._otherAbnormalRecordService = service6;
-<<<<<<< HEAD
-            this._mailService = service7;
-            this._roomInspectionDispatchService = service8;
-            this._itemInspectionDispatchService = service9;
+            this._userService = service7;
+            this._manRepairRecordService = service8;
+            this._mailService = service9;
+            this._roomInspectionDispatchService = service10;
+            this._itemInspectionDispatchService = service11;
             this._mailController = controller;
         }
 
         
-        // GET: /ReportJob/AddExperience
-        public ActionResult AddExperience()
-=======
-            this._userService = service7;
-            this._manRepairRecordService = service8;
-        }
-
         // GET: /ReportJob/EditExhibitionItem
         public ActionResult EditExhibitionItem()
         {
@@ -70,7 +56,6 @@ namespace InspectionWeb.Controllers
 
         // GET: /ReportJob/DetailedData/id
         public ActionResult ItemDetailedData(string id)
->>>>>>> refs/remotes/origin/dev
         {
 
             reportDetailedViewModel vm = new reportDetailedViewModel();
@@ -141,52 +126,10 @@ namespace InspectionWeb.Controllers
                     
                     return View("AddExhibitionItem");
                 }
-<<<<<<< HEAD
+                //沒有派工會出錯，正常執行會認證錯誤
+                autoSendMail(itemId);
 
-                var now = DateTime.Now;
-                var startDate = now.ToString("yyyy/MM/dd");
-                var endDate = now.ToString("yyyy/MM/dd");
-                var roomId = _exhibitionItemService.GetById(itemId).roomId;
-                var systemSettings = _mailService.GetAll().ToList(); // get systemSettings<list> to 'from' value.
-                var roominspectionList = _roomInspectionDispatchService.GetAll().ToList();
-                var nowtime = Convert.ToDateTime(now.ToString("hh:mm:ss"));
-                var time = Convert.ToDateTime("12:00:00");
-                var userId = string.Empty;
-                roomInspectionDispatch roomInspection = new roomInspectionDispatch();
-
-                foreach (var item in roominspectionList)
-                {
-                    if(item.checkDate == now)
-                    {
-                        if (item.roomId == roomId)
-                        {
-                            roomInspection = item;
-                            break;
-                        }
-                    }
-                }
-                
-                if (DateTime.Compare(nowtime, time) < 0)   // am inspectionuser
-                    userId = roomInspection.inspectorId1;
-                else
-                    userId = roomInspection.inspectorId2;
-                
-
-                // get inspectionUser<list> to 'to' value.
-                var emailJson = new MailController.EmailJson(){
-                    from = systemSettings[0].keyName,
-                    to = "P76064342@ncku.edu.tw",
-                    subject = "單元故障通知，故障單元：" + this._exhibitionItemService.GetById(itemId).itemName,
-                    msg = "您好：\n\n" + DateTime.Now.ToString("yyyy/MM/dd") + "通報故障之「" +
-                        this._exhibitionItemService.GetById(itemId).itemName + "」，已派" + itemId +
-                        "處理。\n系統在此告知。"
-                };
-                this._mailController.SendEmail(emailJson);
-
-=======
->>>>>>> refs/remotes/origin/dev
                 return RedirectToAction("ItemDetailedData", new { id = result.Message });
-                
             }
             else
             {
@@ -238,6 +181,8 @@ namespace InspectionWeb.Controllers
 
                     return View("AddExperience");
                 }
+                //沒有派工會出錯，正常執行會認證錯誤
+                autoSendMail(itemId);
 
                 return RedirectToAction("ItemDetailedData", new { id = result.Message });           
             }
@@ -271,6 +216,50 @@ namespace InspectionWeb.Controllers
             //for loop convert items to ItemviewModel
 
             return Json(vms);
+        }
+
+        //郵件傳送
+        public void autoSendMail(string itemId) {
+            var now = DateTime.Now;
+            var startDate = now.ToString("yyyy/MM/dd");
+            var endDate = now.ToString("yyyy/MM/dd");
+            var roomId = _exhibitionItemService.GetById(itemId).roomId;
+            var systemSettings = _mailService.GetAll().ToList(); // get systemSettings<list> to 'from' value.
+            var roominspectionList = _roomInspectionDispatchService.GetAll().ToList();
+            var nowtime = Convert.ToDateTime(now.ToString("hh:mm:ss"));
+            var time = Convert.ToDateTime("12:00:00");
+            var userId = string.Empty;
+            roomInspectionDispatch roomInspection = new roomInspectionDispatch();
+
+            foreach (var item in roominspectionList)
+            {
+                if (item.checkDate?.ToString("yyyy-MM-dd") == now.ToString("yyyy-MM-dd"))
+                {
+                    if (item.roomId == roomId)
+                    {
+                        roomInspection = item;
+                        break;
+                    }
+                }
+            }
+
+            if (DateTime.Compare(nowtime, time) < 0)   // am inspectionuser
+                userId = roomInspection.inspectorId1;
+            else
+                userId = roomInspection.inspectorId2;
+
+            var inspectordata = _userService.GetByID(userId);
+            // get inspectionUser<list> to 'to' value.
+            var emailJson = new MailController.EmailJson()
+            {
+                from = systemSettings[0].keyName,
+                to = inspectordata.email,
+                subject = "單元故障通知，故障單元：" + this._exhibitionItemService.GetById(itemId).itemName,
+                msg = "您好：\n\n" + DateTime.Now.ToString("yyyy/MM/dd") + "通報故障之「" +
+                    this._exhibitionItemService.GetById(itemId).itemName + "」，已派" + inspectordata.userName +
+                    "處理。\n系統在此告知。"
+            };
+            _mailController.SendEmail(emailJson);
         }
 
         //新增通報 : 其他設施通報

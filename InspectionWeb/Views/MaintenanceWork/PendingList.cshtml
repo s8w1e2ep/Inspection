@@ -43,7 +43,7 @@
                                             <td>@Html.DisplayFor(modelItem => item.happendedTime)</td>
                                             <td>@Html.DisplayFor(modelItem => item.fixDate)</td>
                                             <td>
-                                                <a href="@Url.Action("DetailedData", "MaintenanceWork")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
+                                                <a href="@Url.Action("ItemDetailedData/"+item.recordId, "ReportJob")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
                                       
                                             </td>
                                         </tr>

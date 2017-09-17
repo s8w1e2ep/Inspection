@@ -67,13 +67,16 @@
                     </div>
                 </div>
             </div>
-            <!-- Consequence List -->
+            <!-- list -->
             <div class="row">
                 <div class="col-md-12">
                     <div class="box box-info">
                         <!-- ExhibitionItem List-->
                         <div class="box-header">
                             <h3 class="box-title">維修列表-展項</h3>
+                        </div>
+                        <div id="ItemErrDiv" class="form-group has-error" style="display: none;">
+                            <label id="itemErrMsg" class="col-sm-12">查無展項資料</label>
                         </div>
                         <div class="box-body">
                             <table id="MaintenanceList_Item" class="row-border" cellspacing="0" style="width: 100%;">
@@ -92,9 +95,14 @@
                                 <tbody></tbody>
                             </table>
                         </div>
+                    </div>
+                    <div class="box box-info">
                         <!-- Experience List-->
                         <div class="box-header">
                             <h3 class="box-title">體驗設施維修列表</h3>
+                        </div>
+                        <div id="ExperienceErrDiv" class="form-group has-error" style="display: none;">
+                            <label id="expErrMsg" class="col-sm-12">查無體驗設施資料</label>
                         </div>
                         <div class="box-body">
                             <table id="MaintenanceList_Experience" class="row-border" cellspacing="0" style="width: 100%;">
@@ -113,9 +121,14 @@
                                 <tbody></tbody>
                             </table>
                         </div>
+                    </div>
+                    <div class="box box-info">
                         <!-- Other List-->
                         <div class="box-header">
                             <h3 class="box-title">維修列表-其他設施</h3>
+                        </div>
+                        <div id="OtherErrDiv" class="form-group has-error" style="display: none;">
+                            <label id="otherErrMsg" class="col-sm-12">查無其他設施資料</label>
                         </div>
                         <div class="box-body">
                             <table id="MaintenanceList_Other" class="row-border" cellspacing="0" style="width: 100%;">

@@ -7,6 +7,7 @@ using InspectionWeb.Models;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace InspectionWeb.Controllers
 {
@@ -20,9 +21,10 @@ namespace InspectionWeb.Controllers
         private IAbnormalDefinitionService _abnormalDefinitionService;
         private IOtherAbnormalRecordService _otherAbnormalRecordService;
 
-        public MaintenanceWorkController(IAbnormalRecordService abnormalRecordService, IExhibitionItemService exhibitionItemService, 
-            IReportSourceService reportSourceService, IExhibitionRoomService exhibitionRoomService, 
-            IAbnormalDefinitionService abnormalDefinitionService, IOtherAbnormalRecordService otherAbnormalRecordService)
+        public MaintenanceWorkController(IAbnormalRecordService abnormalRecordService, 
+            IExhibitionItemService exhibitionItemService, IReportSourceService reportSourceService,
+            IExhibitionRoomService exhibitionRoomService, IAbnormalDefinitionService abnormalDefinitionService, 
+            IOtherAbnormalRecordService otherAbnormalRecordService)
         {
             this._abnormalRecordService = abnormalRecordService;
             this._exhibitionItemService = exhibitionItemService;
@@ -88,9 +90,8 @@ namespace InspectionWeb.Controllers
             return View();
         }
 
-        // POST: /MaintenanceWork/UpdatdQuery
-        //[HttpPost]
-        public ActionResult RefreshQuery(string startDate, string endDate, string sourceId, string abnormalId)
+        // GET: /MaintenanceWork/GetQuery
+        public ActionResult GetQuery(string startDate, string endDate, string sourceId, string abnormalId)
         {
             var queryStartDate = DateTime.ParseExact(startDate, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
             var queryEndDate = DateTime.ParseExact(endDate, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
@@ -100,29 +101,17 @@ namespace InspectionWeb.Controllers
             var otherLists = this._otherAbnormalRecordService.GetAll().ToList();
             foreach (var item in abnormalLists)
             {
-                if (item.isClose == 0 && item.createTime >= queryStartDate && item.createTime <= queryEndDate && item.sourceId == sourceId && item.abnormalId == abnormalId)
+                if (item.createTime >= queryStartDate && item.createTime <= queryEndDate && item.sourceId == sourceId && item.abnormalId == abnormalId)
                     vms.Add(this.MaintenanceWorkDetailViewModule(item));
             }
             foreach (var item in otherLists)
             {
-                if (item.isClose == 0 && item.createTime >= queryStartDate && item.createTime <= queryEndDate && item.sourceId == sourceId && item.abnormalId == abnormalId)
+                if (item.createTime >= queryStartDate && item.createTime <= queryEndDate && item.sourceId == sourceId && item.abnormalId == abnormalId)
                     vms.Add(this.MaintenanceWorkDetailViewModule(item));
             }
             if (vms.Count == 0)
                 success = false;
             return Json(new { Success = success, vms  },JsonRequestBehavior.AllowGet);
-        }
-
-        // GET: /MaintenanceWork/DetailedData
-        public ActionResult DetailedData()
-        {
-            return View();
-        }
-
-        // GET: /MaintenanceWork/WriteDetailedData
-        public ActionResult WriteDetailedData()
-        {
-            return View();
         }
 
         private MaintenanceWorkDetailViewModel MaintenanceWorkDetailViewModule(abnormalRecord instance)
@@ -150,8 +139,8 @@ namespace InspectionWeb.Controllers
                 vm.listName = "Experience";
             return vm;
         }
-
-        private MaintenanceWorkDetailViewModel MaintenanceWorkDetailViewModule(otherAbnormalRecord instance)
+        
+            private MaintenanceWorkDetailViewModel MaintenanceWorkDetailViewModule(otherAbnormalRecord instance)
         {
             MaintenanceWorkDetailViewModel vm = new MaintenanceWorkDetailViewModel()
             {

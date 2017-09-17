@@ -117,12 +117,11 @@ $(document).ready(function () {
     });
     
     function chickQuery() {
-        //alert('startDate = ' + startDate + '\nendDate = ' + endDate + '\nreportSource = ' + sourceId + '\nabnormalDefinition = ' + abnormalId);
         $('#MaintenanceList_Item').DataTable().clear().draw();
         $('#MaintenanceList_Experience').DataTable().clear().draw();
         $('#MaintenanceList_Other').DataTable().clear().draw();
         $.get(
-            'RefreshQuery',
+            'GetQuery',
             {
                 startDate: startDate,
                 endDate: endDate,
@@ -131,10 +130,7 @@ $(document).ready(function () {
             },
             function (data) {
                 if (data.Success) {
-                    //alert('查詢成功');
                     for (var item in data.vms) {
-                        //alert(data.vms[item].sourceName);
-                        //alert('sourceId:' + data.vms[item].sourceName + '\nitem.roomName:' + data.vms[item].roomName + '\nitem.itemName:' + data.vms[item].itemName + '\nitem.description:' + data.vms[item].description + '\nitem.devicedId:' + data.vms[item].deviceId + '\nitem.happendedTime:' + Date.parse(data.vms[item].happendedTime) + '\nitem.fixDate:' + data.vms[item].fixDate);
                         if (data.vms[item].listName == "Item")
                             addlist('Item', data.vms[item]);
                         else if (data.vms[item].listName == "Experience")
@@ -142,18 +138,25 @@ $(document).ready(function () {
                         else
                             addlist('Other', data.vms[item]);
                     }
+                    checklist();
                 } else {
-                    alert('無符合條件之項目');
+                    nofind('Item');
+                    nofind('Experience');
+                    nofind('Other');
                 }
             },
             'json'
         ).fail(function (e) {
             console.log(e);
-            alert('無符合條件之項目');
+            alert('抱歉! 伺服器無法接受您的查詢!');
         });
     };
 
     function addlist(listName, data) {
+        $('#' + listName + 'ErrDiv').css('display', 'none');
+        $('#' + listName + 'Table').DataTable().clear().draw();
+        str = '<a href="http://' + document.domain + ':' + location.port + '/ReportJob/ItemDetailedData/' + data.recordId +
+            '" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>';
         $('#MaintenanceList_' + listName).DataTable().row.add([
             data.sourceName,
             data.roomName,
@@ -161,7 +164,21 @@ $(document).ready(function () {
             data.description,
             data.deviceId,data.happendedTime,
             data.fixDate,
-            data.fixDate
+            str
         ]).draw(false);
     };
+
+    function nofind(listName) {
+        $('#' + listName + 'Table').DataTable().clear().draw();
+        $('#' + listName + 'ErrDiv').css('display', 'block');
+    }
+
+    function checklist() {
+        if ($('#MaintenanceList_Item td').length == 1)
+            nofind('Item'); 
+        if ($('#MaintenanceList_Experience td').length == 1)
+            nofind('Experience');
+        if ($('#MaintenanceList_Other td').length == 1)
+            nofind('Other');
+    }
 });
