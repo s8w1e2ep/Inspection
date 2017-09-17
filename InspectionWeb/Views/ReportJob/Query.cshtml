@@ -1,0 +1,171 @@
+﻿@{
+    ViewBag.Title = "整體通報查詢";
+}
+<!-- daterange picker -->
+<link rel="stylesheet" href="~/theme/AdminLTE/plugins/daterangepicker/daterangepicker-bs3.css">
+
+<div class="wrapper">
+    <div class="content-wrapper">
+        <!--right corner path-->
+        <section class="content-header" style="margin-bottom: 15px;">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/Home/Index"><i class="fa fa-dashboard"></i>Home</a>
+                </li>
+                <li class="active">整體通報查詢</li>
+            </ol>
+        </section>
+        <section class="content">
+            <h3>整體通報查詢</h3>
+            <!--query condition-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-info" style="padding: 5px;">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">篩選條件</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="col-md-6 form-group">
+                                <label class="control-label col-md-2" for="startDatePicker">開始日期</label>
+                                <div class="input-group col-md-8">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="startTime">
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="control-label col-md-2" for="endDatePicker">結束日期</label>
+                                <div class="input-group col-md-8">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right"  id="endTime">
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="control-label col-md-2">通報來源</label>
+                                <div class="col-md-8">
+                                    <select class="form-control" id="reportSource">
+                                        <option value="N">----請選擇通報來源----</option>
+                                        @foreach (var item in ViewBag.reportSources)
+                                        {
+                                            <option value="@item.sourceId">@item.sourceName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="control-label col-md-2">異常種類</label>
+                                <div class="col-md-8">
+                                    <select class="form-control" id="abnormal">
+                                        <option value="N">----請選擇一個異常種類----</option>
+                                        @foreach (var item in ViewBag.abnormals)
+                                        {
+                                            <option value="@item.abnormalId">@item.abnormalName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="control-label col-md-2">是否結案</label>
+                                <div class="col-md-8">
+                                    <select class="form-control" id="Close">
+                                        <option value=2>----請選擇一個結案情形----</option>
+                                        <option value=1>是</option>
+                                        <option value=0>否</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <button class="btn btn-success pull-right" onclick="query()">查詢</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--list -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-info">
+                        <!--ExhibitionItem  List-->
+                        <div class="box-header">
+                            <h3 class="box-title">通報列表-展項</h3>
+                        </div>
+                        <div id="itemErrDiv" class="form-group has-error" style="display: none;">
+                            <label id="itemErrMsg" class="col-sm-12">查無展項資料</label>
+                        </div>
+                        <div class="box-body">
+                            <table id="itemTable" class="row-border" cellspacing="0" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>通報來源</th>
+                                        <th>展示廳</th>
+                                        <th>展項名稱</th>
+                                        <th>故障日期時間</th>
+                                        <th>故障排除日期時間</th>
+                                        <th>是否結案</th>
+                                        <th>詳細資料</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="itemList"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box box-info">
+                        <!--Experience  List-->
+                        <div class="box-header">
+                            <h3 class="box-title">通報列表-體驗設施</h3>
+                        </div>
+                        <div id="expErrDiv" class="form-group has-error" style="display: none;">
+                            <label id="expErrMsg" class="col-sm-12">查無體驗設施資料</label>
+                        </div>
+                        <div class="box-body">
+                            <table id="expTable" class="row-border" cellspacing="0" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>通報來源</th>
+                                        <th>展示廳</th>
+                                        <th>設施名稱</th>
+                                        <th>故障日期時間</th>
+                                        <th>故障排除日期時間</th>
+                                        <th>是否結案</th>
+                                        <th>詳細資料</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="expList"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box box-info">
+                        <!--Other  List-->
+                        <div class="box-header">
+                            <h3 class="box-title">通報列表-其他設施</h3>
+                        </div>
+                        <div id="otherErrDiv" class="form-group has-error" style="display: none;">
+                            <label id="otherErrMsg" class="col-sm-12">查無其他設施資料</label>
+                        </div>
+                        <div class="box-body">
+                            <table id="otherTable" class="row-border" cellspacing="0" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>通報來源</th>
+                                        <th>設施名稱</th>
+                                        <th>故障日期時間</th>
+                                        <th>故障排除日期時間</th>
+                                        <th>是否結案</th>
+                                        <th>詳細資料</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="otherList"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<script src="~/Scripts/Query.js"></script>
+
+

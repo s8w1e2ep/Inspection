@@ -1,0 +1,637 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D1053BD4-1FCE-4E43-91E2-28CA70DF8B0B}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>InspectionWeb</RootNamespace>
+    <AssemblyName>InspectionWeb</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mvc4, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.Mvc4.1.6.0.0\lib\net45\Unity.Mvc4.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.WebApi, Version=5.2.3.0, Culture=neutral, PublicKeyToken=43da31bc42a85347, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.WebAPI.5.2.3\lib\net45\Unity.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.ApplicationInsights">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.2.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.2.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.2.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.2.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.2.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\UnityConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
+    <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
+    <Compile Include="Areas\HelpPage\Controllers\HelpController.cs" />
+    <Compile Include="Areas\HelpPage\HelpPageAreaRegistration.cs" />
+    <Compile Include="Areas\HelpPage\HelpPageConfigurationExtensions.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\CollectionModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ComplexTypeModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\DictionaryModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\EnumTypeModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\EnumValueDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\IModelDocumentationProvider.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\KeyValuePairModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ModelDescriptionGenerator.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ModelNameAttribute.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ModelNameHelper.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ParameterAnnotation.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\ParameterDescription.cs" />
+    <Compile Include="Areas\HelpPage\ModelDescriptions\SimpleTypeModelDescription.cs" />
+    <Compile Include="Areas\HelpPage\Models\HelpPageApiModel.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\HelpPageSampleGenerator.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\HelpPageSampleKey.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\ImageSample.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\InvalidSample.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\ObjectGenerator.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
+    <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
+    <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Class\WebApi\ReportSourceResponse.cs" />
+    <Compile Include="Class\WebApi\AbnormalDefinitionResponse.cs" />
+    <Compile Include="Class\WebApi\UserReportPost.cs" />
+    <Compile Include="Class\WebApi\AutoReportPost.cs" />
+    <Compile Include="Class\IdGenerator.cs" />
+    <Compile Include="Controllers\AuthenticationController.cs" />
+    <Compile Include="Controllers\CompanyController.cs" />
+    <Compile Include="Controllers\InformationController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MailController.cs" />
+    <Compile Include="Controllers\QuickSolutionController.cs" />
+    <Compile Include="Controllers\MaintenanceWorkController.cs" />
+    <Compile Include="Controllers\ReportJobController.cs" />
+    <Compile Include="Controllers\AbnormalDefinitionController.cs" />
+    <Compile Include="Controllers\CheckRecordController.cs" />
+    <Compile Include="Controllers\InspectionDispatchController.cs" />
+    <Compile Include="Controllers\ReportSourceController.cs" />
+    <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Controllers\SoftwareVersionController.cs" />
+    <Compile Include="Controllers\StatisticController.cs" />
+    <Compile Include="Controllers\SystemController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\abnormalDefinition.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\abnormalRecord.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AuthorizeUserAttribute.cs" />
+    <Compile Include="Models\company.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DbContextFactory\DbContextFactory.cs" />
+    <Compile Include="Models\DbContextFactory\IDbContextFactory.cs" />
+    <Compile Include="Models\exhibitionItem.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\exhibitionItemList.cs" />
+    <Compile Include="Models\exhibitionRoom.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\exhibitionRoomList.cs" />
+    <Compile Include="Models\fieldMap.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GenericRepository\GenericRepository.cs" />
+    <Compile Include="Models\inspection.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>inspection.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\inspection.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\inspection.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>inspection.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Interface\IRepository.cs" />
+    <Compile Include="Models\itemCheckRecord.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\itemInspectionDispatch.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\manRepairRecord.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Misc\DateTimeHelper.cs" />
+    <Compile Include="Models\Misc\Encrypt.cs" />
+    <Compile Include="Models\Misc\IdGenerator.cs" />
+    <Compile Include="Models\itemInspectionDispatchDetail.cs" />
+    <Compile Include="Models\noCheckDate.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\otherAbnormalRecord.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\queryEntity.cs" />
+    <Compile Include="Models\quickSolution.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\reportDevice.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\reportSource.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\roomActiveRecord.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\roomCheckRecord.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\roomInspectionDispatch.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\queryInspectionByDateStatusDetail.cs" />
+    <Compile Include="Models\roomInspectionDispatchDetail.cs" />
+    <Compile Include="Models\softwareVersion.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\systemSettings.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\temp.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\user.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\userGroup.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModel\DeviceEditViewModel.cs" />
+    <Compile Include="Models\ViewModel\DeviceListViewModel.cs" />
+    <Compile Include="Models\ViewModel\ExhibitionItemEditViewModel.cs" />
+    <Compile Include="Models\ViewModel\ExhibitionRoomAddViewModel.cs" />
+    <Compile Include="Models\ViewModel\ExhibitionRoomListViewModel.cs" />
+    <Compile Include="Models\ViewModel\FieldAddViewModel.cs" />
+    <Compile Include="Models\ViewModel\FieldListViewModel.cs" />
+    <Compile Include="Models\ViewModel\GroupAddViewModel.cs" />
+    <Compile Include="Models\ViewModel\GroupDetailViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListQueryInspectionByItemViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListQueryInspectionByDateViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListQueryInspectionByUserIdViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListQueryInspectionByRoomViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListRoomCheckRecordViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListItemCheckRecordViewModel.cs" />
+    <Compile Include="Models\ViewModel\MailViewModel.cs" />
+    <Compile Include="Models\ViewModel\ManRepairViewModel.cs" />
+    <Compile Include="Models\ViewModel\reportDetailedViewModel.cs" />
+    <Compile Include="Models\ViewModel\ReportDeviceEditViewModel.cs" />
+    <Compile Include="Models\ViewModel\ReportDeviceListViewModel.cs" />
+    <Compile Include="Models\ViewModel\SoftwareVersionAddViewModel.cs" />
+    <Compile Include="Models\ViewModel\SoftwareVersionListViewModel.cs" />
+    <Compile Include="Models\ViewModel\SystemArgAddViewModel.cs" />
+    <Compile Include="Models\ViewModel\UserEditViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListItemInspectionDispatchViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListRoomInspectionDispatchViewModel.cs" />
+    <Compile Include="Models\ViewModel\userListForInspectionViewModel.cs" />
+    <Compile Include="Services\Interface\IManRepairRecordService.cs" />
+    <Compile Include="Services\ManRepairRecordService.cs" />
+    <Compile Include="Services\CompanyService.cs" />
+    <Compile Include="Services\Interface\ICompanyService.cs" />
+    <Compile Include="Services\Interface\IMailService.cs" />
+    <Compile Include="Services\Interface\INoCheckDateService.cs" />
+    <Compile Include="Services\MailService.cs" />
+    <Compile Include="Services\Interface\ISystemArgService.cs" />
+    <Compile Include="Services\NoCheckDateService.cs" />
+    <Compile Include="Services\ExhibitionRoomService.cs" />
+    <Compile Include="Services\FieldMapService.cs" />
+    <Compile Include="Services\Interface\IFieldMapService.cs" />
+    <Compile Include="Models\ViewModel\ReportJobViewModel.cs" />
+    <Compile Include="Models\ViewModel\SolutionViewModel.cs" />
+    <Compile Include="Services\Interface\IOtherAbnormalRecordService.cs" />
+    <Compile Include="Services\Interface\ISolutionService.cs" />
+    <Compile Include="Models\ViewModel\MaintenanceWorkDetailViewModel.cs" />
+    <Compile Include="Services\Interface\IMaintenanceWorkService.cs" />
+    <Compile Include="Services\Interface\IUserGroupService.cs" />
+    <Compile Include="Services\Interface\IReportSourceService.cs" />
+    <Compile Include="Models\ViewModel\AddAbnormalDefinitionViewModel.cs" />
+    <Compile Include="Models\ViewModel\ItemCheckRecordViewModel.cs" />
+    <Compile Include="Models\ViewModel\ItemInspectionDispatchViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListAbnormalDefinitionViewModel.cs" />
+    <Compile Include="Models\ViewModel\NoCheckDateViewModel.cs" />
+    <Compile Include="Models\ViewModel\GetAllRoomDispatchViewModel.cs" />
+    <Compile Include="Models\ViewModel\ReportSourceViewModel.cs" />
+    <Compile Include="Models\ViewModel\RoomCheckRecordViewModel.cs" />
+    <Compile Include="Models\ViewModel\RoomInspectionDispatchViewModel.cs" />
+    <Compile Include="Models\ViewModel\UserAddViewModel.cs" />
+    <Compile Include="Models\ViewModel\UserDetailViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AbnormalDefinitionService.cs" />
+    <Compile Include="Services\AbnormalRecordService.cs" />
+    <Compile Include="Services\ExhibitionItemService.cs" />
+    <Compile Include="Services\Interface\IAbnormalDefinitionService.cs" />
+    <Compile Include="Services\Interface\IAbnormalRecordService.cs" />
+    <Compile Include="Services\Interface\IExhibitionRoomService.cs" />
+    <Compile Include="Services\Interface\IExhibitionItemService.cs" />
+    <Compile Include="Services\Interface\IItemCheckRecordService.cs" />
+    <Compile Include="Services\Interface\IItemInspectionDispatchService.cs" />
+    <Compile Include="Services\Interface\IReportDeviceService.cs" />
+    <Compile Include="Services\Interface\IRoomCheckRecordService.cs" />
+    <Compile Include="Services\Interface\IInspectionDispatchService.cs" />
+    <Compile Include="Services\Interface\IRoomInspectionDispatchService.cs" />
+    <Compile Include="Services\Interface\ISoftwareVersionService.cs" />
+    <Compile Include="Services\Interface\IUserService.cs" />
+    <Compile Include="Services\ItemCheckRecordService.cs" />
+    <Compile Include="Services\ItemInspectionDispatchService.cs" />
+    <Compile Include="Services\Misc\IResult.cs" />
+    <Compile Include="Services\Misc\Result.cs" />
+    <Compile Include="Services\OtherAbnormalRecordService.cs" />
+    <Compile Include="Services\SolutionService.cs" />
+    <Compile Include="Services\SystemArgService.cs" />
+    <Compile Include="Services\UserGroupService.cs" />
+    <Compile Include="Services\ReportDeviceService.cs" />
+    <Compile Include="Services\ReportSourceService.cs" />
+    <Compile Include="Services\RoomCheckRecordService.cs" />
+    <Compile Include="Services\RoomInspectioDispatchService.cs" />
+    <Compile Include="Services\SoftwareVersionService.cs" />
+    <Compile Include="Services\UserService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Models\inspection.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>inspection.Context.cs</LastGenOutput>
+      <DependentUpon>inspection.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\inspection.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>inspection.edmx</DependentUpon>
+      <LastGenOutput>inspection.cs</LastGenOutput>
+    </Content>
+    <Content Include="Scripts\addGroup.js" />
+    <Content Include="Scripts\addUser.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Areas\HelpPage\Views\Web.config" />
+    <Content Include="Areas\HelpPage\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\ResourceModel.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\Index.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\TextSample.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\SimpleTypeModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\Samples.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\Parameters.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ModelDescriptionLink.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\KeyValuePairModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\InvalidSample.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ImageSample.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\HelpPageApiModel.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\EnumTypeModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\DictionaryModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ComplexTypeModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
+    <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EntityDeploy Include="Models\inspection.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>inspection.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\inspection.edmx.diagram">
+      <DependentUpon>inspection.edmx</DependentUpon>
+    </Content>
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\editGroup.js" />
+    <Content Include="Scripts\editPendingListDetailedData.js" />
+    <Content Include="Scripts\extendedWork.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\listGroup.js" />
+    <Content Include="Scripts\ListSolution.js" />
+    <Content Include="Scripts\listUser.js" />
+    <Content Include="Scripts\MaintenanceQuery.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\Query.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\showpedningList.js" />
+    <Content Include="Unity.Mvc4.README.txt" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\resource.cshtml" />
+    <Content Include="Views\Shared\footer.cshtml" />
+    <Content Include="Views\Shared\menu.cshtml" />
+    <Content Include="Views\Shared\header.cshtml" />
+    <Content Include="Views\Statistic\Exhibition.cshtml" />
+    <Content Include="Views\Statistic\ExhibitionItem.cshtml" />
+    <Content Include="Views\Statistic\Facility.cshtml" />
+    <Content Include="Views\Statistic\RankItem.cshtml" />
+    <Content Include="Views\Statistic\RankReport.cshtml" />
+    <Content Include="Views\User\Add.cshtml" />
+    <Content Include="Views\User\List.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\User\AddGroup.cshtml" />
+    <Content Include="Views\User\ListGroup.cshtml" />
+    <Content Include="Views\User\EditGroup.cshtml" />
+    <Content Include="Views\ReportJob\AddExhibitionItem.cshtml" />
+    <Content Include="Views\Information\AddField.cshtml" />
+    <Content Include="Views\Information\EditField.cshtml" />
+    <Content Include="Views\Information\AddExhibition.cshtml" />
+    <Content Include="Views\Information\EditExhibition.cshtml" />
+    <Content Include="Views\Information\ListField.cshtml" />
+    <Content Include="Views\Information\ListExhibition.cshtml" />
+    <Content Include="Views\Information\EditExhibitItem.cshtml" />
+    <Content Include="Views\Information\AddDevice.cshtml" />
+    <Content Include="Views\Information\EditDevice.cshtml" />
+    <Content Include="Views\Information\ListDevice.cshtml" />
+    <Content Include="Views\Information\AddNotifyDevice.cshtml" />
+    <Content Include="Views\Information\EditNotifyDevice.cshtml" />
+    <Content Include="Views\Information\ListNotifyDevice.cshtml" />
+    <Content Include="Views\ReportJob\AddExperience.cshtml" />
+    <Content Include="Views\ReportJob\AddOther.cshtml" />
+    <Content Include="Views\ReportJob\EditExhibitionItem.cshtml" />
+    <Content Include="Views\ReportJob\Query.cshtml" />
+    <Content Include="Views\ReportJob\ItemDetailedData.cshtml" />
+    <Content Include="Views\QuickSolution\Add.cshtml" />
+    <Content Include="Views\QuickSolution\Edit.cshtml" />
+    <Content Include="Views\QuickSolution\List.cshtml" />
+    <Content Include="Views\MaintenanceWork\ExtendedWork.cshtml" />
+    <Content Include="Views\MaintenanceWork\PendingList.cshtml" />
+    <Content Include="Views\MaintenanceWork\Query.cshtml" />
+    <Content Include="Views\MaintenanceWork\WriteDetailedData.cshtml" />
+    <Content Include="Views\AbnormalDefinition\AddAbnormalDefinition.cshtml" />
+    <Content Include="Views\AbnormalDefinition\EditAbnormalDefinition.cshtml" />
+    <Content Include="Views\AbnormalDefinition\ListAbnormalDefinition.cshtml" />
+    <Content Include="Views\CheckRecord\AddItemCheckRecord.cshtml" />
+    <Content Include="Views\CheckRecord\AddRoomCheckRecord.cshtml" />
+    <Content Include="Views\ReportSource\EditReportSource.cshtml" />
+    <Content Include="Views\ReportSource\ListReportSource.cshtml" />
+    <Content Include="Views\InspectionDispatch\QueryInspectionByDate.cshtml" />
+    <Content Include="Views\InspectionDispatch\QueryInspectionByItem.cshtml" />
+    <Content Include="Views\InspectionDispatch\QueryInspectionByRoom.cshtml" />
+    <Content Include="Views\InspectionDispatch\QueryInspectionByUserId.cshtml" />
+    <Content Include="Views\ReportSource\AddReportSource.cshtml" />
+    <Content Include="Views\InspectionDispatch\AddNonInspectionDispatchDate.cshtml" />
+    <Content Include="Views\InspectionDispatch\ListItemInspectionDispatch.cshtml" />
+    <Content Include="Views\InspectionDispatch\ListNonInspectionDispatchDate.cshtml" />
+    <Content Include="Views\InspectionDispatch\ListRoomInspectionDispatch.cshtml" />
+    <Content Include="Views\Authentication\AuthenticationFail.cshtml" />
+    <Content Include="Views\Authentication\Login.cshtml" />
+    <Content Include="Views\Statistic\RankItemList.cshtml" />
+    <Content Include="Views\Statistic\RankReportList.cshtml" />
+    <Content Include="Views\Company\Edit.cshtml" />
+    <Content Include="Views\Company\Add.cshtml" />
+    <Content Include="Views\Company\List.cshtml" />
+    <Content Include="Views\SoftwareVersion\AddSoftware.cshtml" />
+    <Content Include="Views\SoftwareVersion\EditSoftware.cshtml" />
+    <Content Include="Views\SoftwareVersion\ListSoftware.cshtml" />
+    <Content Include="Views\System\AddSystemArg.cshtml" />
+    <Content Include="Views\System\EditSystemArg.cshtml" />
+    <Content Include="Views\System\ListSystemArg.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Views\Mail\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>49363</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:49363/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>此專案參考這部電腦上所缺少的 NuGet 封裝。請啟用 NuGet 封裝還原，以下載該封裝。如需詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的檔案是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

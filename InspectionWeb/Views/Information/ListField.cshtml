@@ -1,0 +1,125 @@
+﻿@model IEnumerable<InspectionWeb.Models.ViewModel.FieldListViewModel>
+@{
+    ViewBag.Title = "場域列表";
+}
+
+<div class="content-wrapper">
+    <section class="content-header" style="margin-bottom: 15px;">
+        <ol class="breadcrumb">
+            <li><a href="/"><i class="fa fa-dashboard"></i>Home</a></li>
+            <li class="active">場域列表</li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">場域列表</h3>
+                    </div>
+                    <div class="box-body">
+                        <table id="listFieldTable" class="row-border" cellspacing="0" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>場域名稱</th>
+                                    <th>版本</th>
+                                    <th>建立時間</th>
+                                    <th>最後更新時間</th>
+                                    <th>檢視/修改</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="@item.FieldId">
+                                        <td>@item.FieldName</td>
+                                        <td>@item.Version</td>
+                                        <td>@Html.DisplayFor(modelItem => item.CreateTime)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.LastUpdateTime)</td>
+
+                                        <td> 
+                                           
+                                            @*檢視按鈕*@
+                                            <a href="@Url.Action("EditField", new { id = item.FieldId })" class="btn btn-sm btn-primary">
+                                            <i class="glyphicon glyphicon-menu-hamburger"></i>
+                                            </a>
+
+                                            @*刪除按鈕*@
+                                            <a href="#" class="btn btn-sm btn-danger" onclick="setId('@item.FieldId')" data-toggle=modal data-target=#myModal>
+                                                <i class="glyphicon glyphicon-remove"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="modal modal-success" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">刪除確認</h4>
+            </div>
+            <div class="modal-body">
+                <p>是否刪除此場域?刪除此場域會將一併刪除所有的相關資料。</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">否</button>
+                <button id="modalYes" type="button" class="btn btn-outline" data-dismiss="modal">是</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+    var toDeleteFieldId;
+
+    function deleteField() {
+        $.ajax({
+            type: "DELETE",
+            url: 'DeleteField',
+            data: $.param({ "fieldId": toDeleteFieldId })
+        }).done(function (msg) {
+            $("#" + toDeleteFieldId).remove();
+        });
+    }
+
+    // 設定刪除的 userId
+    function setId(fieldId) {
+        toDeleteFieldId = fieldId;
+    }
+
+    $(document).ready(function () {
+        // 使用者表格設定
+        $('#listFieldTable').DataTable({
+            "paging": false,
+            "info": false,
+            "searching": true,
+            "columnDefs": [
+                { "targets": 0, "width": "20%", "orderable": true },
+                { "targets": 1, "width": "20%", "orderable": true },
+                { "targets": 2, "width": "20%", "orderable": true },
+                { "targets": 3, "width": "20%", "orderable": true },
+                { "targets": 4, "width": "20%", "orderable": true },
+            ]
+        });
+
+        // delete dialog 確定事件
+        $('#modalYes').click(function () {
+            deleteField();
+        });
+    });
+
+</script>

@@ -1,0 +1,115 @@
+﻿@{
+    ViewBag.Title = "智慧巡檢管理系統";
+}
+
+<div class="wrapper">
+    <div class="content-wrapper">
+        <section class="content-header" style="margin-bottom: 15px;">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/"><i class="fa fa-dashboard"></i>Home</a>
+                </li>
+                <li class="active">展示廳通報檢視/修改</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">展示廳通報檢視/修改</h3>
+                        </div>
+                        <br />
+                        <form class="form-horizontal">
+                            <div class="box-body">
+                                
+                                <div class="form-group">
+                                    <label class="control-label col-md-4" for="exhibitionSelect">展示廳</label>
+                                    <select class="form-control" id="exhibitionSelect" style="width: 50%;">
+                                        <option value="exhibition2">展示廳-1</option>
+                                        <option value="exhibition2">展示廳-2</option>
+                                        <option value="exhibition2">展示廳-3</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4" for="exhibitionSelect">故障來源</label>
+                                    <select class="form-control" id="exhibitionSelect" style="width: 50%;">
+                                        <option value="exhibition2">巡檢填單</option>
+                                        <option value="exhibition2">6000填單</option>
+                                        <option value="exhibition2">NM</option>
+                                        <option value="exhibition1">通報按鈕</option>
+                                        <option value="exhibition2">監控軟體</option>
+                                        <option value="exhibition2">app</option>
+                                        <option value="exhibition3">其它</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4" for="exhibitionSelect">異常狀況</label>
+                                    <select class="form-control" id="exhibitionSelect" style="width: 50%;">
+                                        <option value="exhibition1">異常狀況-1</option>
+                                        <option value="exhibition2">異常狀況-2</option>
+                                        <option value="exhibition3">異常狀況-3</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4" for="exhibitionSelect">通報者</label>
+                                    <select class="form-control" id="exhibitionSelect" style="width: 50%;">
+                                        <option value="exhibition1">保全</option>
+                                        <option value="exhibition2">志工</option>
+                                        <option value="exhibition3">館員</option>
+                                        <option value="exhibition3">其他</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4" for="startDatePicker">故障日期時間</label>
+                                    <div class="input-group col-md-5">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" id="startDatePicker">
+                                    </div>
+                                </div>
+                                <div id="nameDiv" class="form-group">
+                                    <label for="account" class="col-md-4 control-label">故障附加描述</label>
+                                    <div class="col-md-4">
+                                        <input id="account" type="text" class="form-control" name="account" placeholder="故障描述">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4" for="startDatePicker">故障排除日期時間</label>
+                                    <div class="input-group col-md-5">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" id="startDatePicker">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4" for="exhibitionSelect">故障排除方法</label>
+                                    <select class="form-control" id="exhibitionSelect" style="width: 50%;">
+                                        <option value="exhibition2">故障排除方法-1</option>
+                                        <option value="exhibition2">故障排除方法-2</option>
+                                        <option value="exhibition2">故障排除方法-3</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4" for="exhibitionSelect">建立時間</label>
+                                    <h5>2017/8/26 17:30</h5>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4" for="exhibitionSelect">最後更新時間</label>
+                                    <h5>2017/8/26 17:30</h5>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<script src="~/Scripts/exhibition.js"></script>
+
+
+

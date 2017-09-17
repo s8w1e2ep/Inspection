@@ -1,0 +1,55 @@
+﻿@{
+    Layout = null;
+}
+
+<header class="main-header">
+    <!-- Logo -->
+    <div class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><img src="../../image/index_logo.jpg" style="width: 70%;"></span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg">
+            <img src="../../image/index_logo.jpg" style="width: 20%;">
+            @ViewBag.Title
+        </span>
+    </div>
+
+    <nav class="navbar navbar-static-top" role="navigation">
+        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+        </a>
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                @*@if (Session["authenticated"]!=null && (bool)Session["authenticated"]==true)*@
+                @if ((HttpContext.Current.User != null) && HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    // check authorization
+                    if (Session["userId"] != null)
+                    {
+                        <li class="dropdown notifications-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-bell-o"></i>
+                                <span class="label label-danger">5</span>
+                            </a>
+                        </li>
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="@if (@Session["picture"] != null) { @Url.Content("~/media/user/" + @Session["picture"]) } else { @Url.Content("~/theme/AdminLTE/dist/img/avatar.png") }" class="user-image" alt="User Image">
+                                <span class="hidden-xs">@Session["account"]</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- Menu Footer-->
+                                <li class="user-footer" style="background-color: #00a65a;">
+                                    <div class="pull-right">
+                                        <a href="@Url.Action("Logout", "Authentication")" class="btn btn-default btn-flat">登出(Sign out)</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </nav>
+</header>

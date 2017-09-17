@@ -1,0 +1,259 @@
+﻿@model InspectionWeb.Models.ViewModel.ListItemInspectionDispatchViewModel
+
+@{
+    ViewBag.Title = "ListItemInspetionDispatch";
+}
+<!-- datepicker -->
+<link href="../../Scripts/datepicker3.css" rel="stylesheet" type="text/css" />
+<script src="../../Scripts/jquery-ui.min.js"></script>
+<script src="../../Scripts/bootstrap-datepicker.js"></script>
+<script src="../../Scripts/locales/bootstrap-datepicker.zh-TW.js"></script>
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+<script>
+    var toDispatchId;
+    var theDate;
+
+    $(function () {
+        setItemInspectionTable();
+        $('#dispatchDate').datepicker({
+            format: "yyyy/mm/dd",
+            language: 'zh-TW',
+            todayHighlight: true
+        });
+        $('#modalYes').on('click', function (e) {
+            deleteDispatch();
+        });
+    });
+
+    function fieldValidation(field) {
+        if ($.trim($(field).val()) == '') {
+            $(field + 'Div').addClass('has-error');
+            $(field + 'Div').val('');
+            return false;
+        } else {
+            $(field + 'Div').removeClass('has-error');
+        }
+        return true;
+    }
+
+    function formValidation() {
+        if (fieldValidation('#dispatchDate')) {
+            return true;
+        }
+        return false;
+    }
+
+    function setItemInspectionTable() {
+        $('#itemInspectionTable').DataTable({
+            'columnDefs': [
+                { 'targets': 0, 'width': "25%", 'orderable': false },
+                { 'targets': 1, 'width': "25%", 'orderable': false },
+                { 'targets': 2, 'width': "25%", 'orderable': false },
+                { 'targets': 3, 'width': "25%", 'orderable': false }
+            ]
+        });
+    }
+
+    function updateInspector(dispatchId, inspectorType, inspectionId) {
+
+        $.ajax({
+            url: '@Url.Action("UpdateItemInspectionDispatch")',
+            data: $.param({ 'pk': dispatchId, 'name': inspectorType, 'value': inspectionId }),
+            type: 'UPDATE',
+        }).done(function (msg) {
+            //console.log(msg);
+            //$('#' + inspectorType + '_' + dispatchId).value = inspectorId;
+        });
+
+    }
+
+    function storeId(dispatchId,Date) {
+        toDispatchId = dispatchId;
+        theDate = Date;
+    }
+
+    function deleteDispatch() {
+        $.ajax({
+            url: '@Url.Action("DeleteItemInspectionDispatch")',
+            data: $.param({ 'dispatchId': toDispatchId, 'date': theDate }),
+        type: 'POST',
+        }).done(function (msg) {
+            console.log(msg);
+            if (msg.result == 1) {
+                $('#' + toDispatchId).remove();
+            }  
+        });
+    }
+</script>
+
+
+
+<div class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>體驗設施派工</h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+                <li class="active">體驗設施派工</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-8">
+                    <!-- general form elements -->
+                    <div class="box box-success">
+                        <form class="form-horizontal" method="post" action="@Url.Action("ListItemInspectionDispatch")" onsubmit="return formValidation();">
+                            <div class="box-header with-border">
+                                <div id="dispatchDateDiv" class="form-group">
+                                    <div class="col-sm-1">
+                                        <label for="dispatchDate" class="control-label">巡檢日期</label>
+                                    </div>
+                                    <div class="input-group col-sm-4">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" id="dispatchDate" name="dispatchDate">
+                                    </div>
+                                    <br/>
+                                    <input type="hidden" class="form-control pull-right" id="userId" name="userId" value="123456">
+                                    <div class="col-sm-1">
+                                        <button type="submit" class="btn btn-success">產生派工</button>
+                                    </div>
+                                </div>
+                            </div><!-- /.box-header -->
+                            </form>
+                            <div class="box-body">
+                                @if (@Model != null && @Model.checkDate != null)
+                                {
+                                    <h4>巡檢日期: @Model.checkDate</h4>
+                                    <br>
+                                }
+                                @if (@Model != null && @Model.ErrorMsg != null && !string.IsNullOrEmpty(@Model.ErrorMsg))
+                                {
+                                    <div class="form-group has-error">
+                                        <label class="col-sm-2"></label>
+                                        <label class="col-sm-10">@Model.ErrorMsg</label>
+                                    </div>
+                                }
+                                <table id="itemInspectionTable" class="row-border" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>展示廳</th>
+                                            <th>上午巡檢人員</th>
+                                            <th>下午巡檢人員</th>
+                                            <th>操作選項</th>
+                                        </tr>
+                                    </thead>
+                                    @if (@Model != null && @Model.itemInspectionDispatch != null && @Model.ErrorType != 1)
+                                    {
+                                        <tbody>
+                                            @foreach (var item in @Model.itemInspectionDispatch)
+                                            {
+                                                <tr id="@item.dispatchId">
+                                                    <td>@item.itemName</td>
+                                                    <td>
+                                                        @if (@Model.ErrorType != 2)
+                                                        {
+                                                        <select class="form-control" id="inspectorId1_@item.dispatchId" onChange="updateInspector('@item.dispatchId','inspectorId1',this.value)">
+                                                            @if (!string.IsNullOrEmpty(@item.inspectorId1) )
+                                                            {
+                                                                foreach (var user in @Model.userList)
+                                                                {
+                                                                    if (user.userId == item.inspectorId1)
+                                                                    {
+                                                                        <option selected="selected" value="@item.inspectorId1">@user.userCode  @user.userName</option>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option value="@user.userId">@user.userCode  @user.userName</option>
+                                                                    }
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <option selected="selected" value="null">請選擇巡檢人員</option>
+                                                                foreach (var user in @Model.userList)
+                                                                {
+                                                                    <option value="@user.userId">@user.userCode  @user.userName</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                         }else{
+                                                            <label>上午非巡檢日</label>
+                                                         }
+                                                    </td>
+                                                    <td>
+                                                        @if (@Model.ErrorType != 3){
+                                                        <select class="form-control" id="inspectorId2_@item.dispatchId" onChange="updateInspector('@item.dispatchId','inspectorId2',this.value)">
+                                                            @if (!string.IsNullOrEmpty(@item.inspectorId2))
+                                                            {
+                                                                foreach (var user in @Model.userList)
+                                                                {
+                                                                    if (user.userId == item.inspectorId2)
+                                                                    {
+                                                                        <option selected="selected" value="@item.inspectorId2">@user.userCode  @user.userName</option>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option value="@user.userId">@user.userCode  @user.userName</option>
+                                                                    }
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <option selected="selected" value="null">請選擇巡檢人員</option>
+                                                                foreach (var user in @Model.userList)
+                                                                {
+                                                                    <option value="@user.userId">@user.userCode  @user.userName</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                         }else{
+                                                            <label>下午非巡檢日</label>
+                                                         }
+                                                    </td>
+                                                    <td>
+                                                        <a href="#" data-toggle=modal data-target=#myModal><button class="btn btn-sm btn-danger" onclick="storeId('@item.dispatchId','@Model.checkDate')"><i class="glyphicon glyphicon-remove"></i></button></a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    }
+                                </table>
+                            </div>
+                        </div><!-- /.box -->
+                </div>
+            </div>
+
+            <div class="modal modal-success" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">刪除確認</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>是否刪除此派工資料？刪除此派工資料會將一併刪除所有的相關資料。</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">否</button>
+                            <button id="modalYes" type="button" class="btn btn-outline" data-dismiss="modal">是</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </section><!-- /.content -->
+    </div><!-- /.content-wrapper -->
+</div><!-- ./wrapper -->

@@ -1,0 +1,231 @@
+﻿@model InspectionWeb.Models.ViewModel.ListQueryInspectionByDateViewModel
+
+@{
+    ViewBag.Title = "QueryInspectionDispatchByDate";
+}
+
+<!-- datepicker -->
+<link href="../../Scripts/datepicker3.css" rel="stylesheet" type="text/css" />
+<script src="../../Scripts/jquery-ui.min.js"></script>
+<script src="../../Scripts/bootstrap-datepicker.js"></script>
+<script src="../../Scripts/locales/bootstrap-datepicker.zh-TW.js"></script>
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+<script>
+
+    $(function () {
+        setTables();
+        $('#dispatchDate').datepicker({
+            format: "yyyy/mm/dd",
+            language: 'zh-TW',
+            todayHighlight: true
+        });
+       
+    });
+
+    function fieldValidation(field) {
+        if ($.trim($(field).val()) == '') {
+            $(field + 'Div').addClass('has-error');
+            $(field + 'Div').val('');
+            return false;
+        } else {
+            $(field + 'Div').removeClass('has-error');
+        }
+        return true;
+    }
+
+    function formValidation() {
+        if (fieldValidation('#dispatchDate')) {
+            return true;
+        }
+        return false;
+    }
+
+    function setTables() {
+        $('#roomInspectionTable').DataTable({
+            'columnDefs': [
+                { 'targets': 0, 'width': "30%", 'orderable': false },
+                { 'targets': 1, 'width': "35%", 'orderable': false },
+                { 'targets': 2, 'width': "35%", 'orderable': false }
+            ]
+        });
+        $('#itemInspectionTable').DataTable({
+            'columnDefs': [
+                { 'targets': 0, 'width': "30%", 'orderable': false },
+                { 'targets': 1, 'width': "35%", 'orderable': false },
+                { 'targets': 2, 'width': "35%", 'orderable': false }
+            ]
+        });
+    }
+
+</script>
+
+
+
+<div class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>巡檢查詢</h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+                <li class="active">Dashboard</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="nav nav-tabs">
+                        <li><a href="@Url.Action("QueryInspectionByRoom")">依展示廳</a></li>
+                        <li><a href="@Url.Action("QueryInspectionByItem")">依體驗設施</a></li>
+                        <li><a href="@Url.Action("QueryInspectionByUserId")">依個人</a></li>
+                        <li class="active"><a href="@Url.Action("QueryInspectionByDate")">依日期彙整結果</a></li>
+                    </ul>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="box box-success">
+                        <form class="form-horizontal" method="post" action="@Url.Action("QueryInspectionByDate")" onsubmit="return formValidation();">
+                            <div class="box-body with-border">
+                                <div id="dispatchDateDiv" class="form-group">
+                                    <div class="col-sm-1">
+                                        <label for="dispatchDate" class="control-label">巡檢日期</label>
+                                    </div>
+                                    <div class="input-group col-sm-4">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" id="dispatchDate" name="dispatchDate">
+                                    </div>
+                                    <br>
+                                    <div class="col-sm-1">
+                                        <button type="submit" class="btn btn-success">搜尋</button>
+                                    </div>
+                                </div>
+                            </div><!-- /.box-header -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="box box-success">
+                        <div class="box-body">
+                            @if (@Model != null && @Model.checkDate != null)
+                            {
+                                <h4>巡檢日期: @Model.checkDate</h4>
+                                <br>
+                            }
+                            @if (@Model != null && @Model.ErrorMsg != null && !string.IsNullOrEmpty(@Model.ErrorMsg))
+                            {
+                                <div class="form-group has-error">
+                                    <label class="col-sm-2"></label>
+                                    <label class="col-sm-10">@Model.ErrorMsg</label>
+                                </div>
+                            }
+                            <table id="roomInspectionTable" class="row-border" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>展示廳</th>
+                                        <th>上午巡檢人員</th>
+                                        <th>下午巡檢人員</th>
+                                    </tr>
+                                </thead>
+                                @if (@Model != null && @Model.roomInspectionDispatch != null)
+                                {
+                                    <tbody>
+                                        @for(int i=0; i<@Model.roomInspectionDispatch.Count() ;i++)
+                                         {
+                                         <tr id="@Model.roomInspectionDispatch.ElementAt(i).dispatchId">
+                                             <td>@Model.roomInspectionDispatch.ElementAt(i).roomName (@Model.inspectionStatus.ElementAt(i).abnormalNum/@Model.inspectionStatus.ElementAt(i).solveNum/@Model.inspectionStatus.ElementAt(i).hasInspection/@Model.inspectionStatus.ElementAt(i).allItemNum)
+                                             </td>
+
+                                             <td>
+                                             @if (@Model.dateType != 2)
+                                             {
+                                                @Model.roomInspectionDispatch.ElementAt(i).inspectorCode1 @Model.roomInspectionDispatch.ElementAt(i).inspectorName1
+                                             }
+                                             else
+                                             {
+                                                @Model.ErrorMsg
+                                             }
+                                             </td>
+                                             <td>
+                                             @if (@Model.dateType != 3)
+                                             {
+                                                @Model.roomInspectionDispatch.ElementAt(i).inspectorCode2 @Model.roomInspectionDispatch.ElementAt(i).inspectorName2
+                                             }
+                                             else
+                                             {
+                                                @Model.ErrorMsg
+                                             }
+                                             </td>
+                                         </tr>
+                                         }
+                                    </tbody>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box box-success">
+                        <div class="box-body">
+                            @if (@Model != null && @Model.checkDate != null)
+                            {
+                                <h4>巡檢日期: @Model.checkDate</h4>
+                                <br>
+                            }
+                            <table id="itemInspectionTable" class="row-border" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>體驗項目</th>
+                                        <th>上午巡檢人員</th>
+                                        <th>下午巡檢人員</th>
+                                    </tr>
+                                </thead>
+                                @if (@Model != null && @Model.itemInspectionDispatch != null)
+                                {
+                                    <tbody>
+                                        @for (int i = 0; i < @Model.itemInspectionDispatch.Count(); i++)
+                                        {
+                                <tr id="@Model.itemInspectionDispatch.ElementAt(i).dispatchId">
+                                    <td>@Model.itemInspectionDispatch.ElementAt(i).itemName</td>
+                                    <td>
+                                        @if (@Model.dateType != 2)
+                                        {
+                                            @Model.itemInspectionDispatch.ElementAt(i).inspectorCode1 @Model.itemInspectionDispatch.ElementAt(i).inspectorName1
+                                        }
+                                        else
+                                        {
+                                            @Model.ErrorMsg
+                                        }
+                                    </td>
+                                    <td>
+                                    @if (@Model.dateType != 3)
+                                    {
+                                        @Model.itemInspectionDispatch.ElementAt(i).inspectorCode2 @Model.itemInspectionDispatch.ElementAt(i).inspectorName2
+                                    }
+                                    else
+                                    {
+                                        @Model.ErrorMsg
+                                    }</td>
+                                </tr>
+                                }
+                                    </tbody>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- /.content -->
+    </div><!-- /.content-wrapper -->
+</div><!-- ./wrapper -->

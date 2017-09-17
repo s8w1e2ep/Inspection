@@ -1,0 +1,138 @@
+﻿@Model InspectionWeb.Models.ViewModel.ListReportSourceViewModel
+@{
+    ViewBag.Title = "ListReportSource";
+}
+
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+
+<script>
+
+        var toDeleteReportSourceId;
+
+        function storeId(sourceId) {
+            toDeleteReportSourceId = sourceId;
+        }
+
+        function deleteSource() {
+            $.ajax({
+                url: '@Url.Action("DeleteReportSource")',
+                data: $.param({ 'sourceId': toDeleteReportSourceId }),
+                type: 'DELETE',
+            }).done(function (msg) {
+                $('#' + toDeleteReportSourceId).remove();
+            });
+        }
+
+        function setSourceTable() {
+            $('#sourceTable').DataTable({
+                'paging': true,
+                'info': false,
+                'searching': true,
+                'columnDefs': [
+    				{ 'targets': 0, 'width': "20%", 'orderable': true },
+					{ 'targets': 1, 'width': "20%", 'orderable': true },
+    				{ 'targets': 2, 'width': "25%", 'orderable': true },
+                    { 'targets': 3, 'width': "10%", 'orderable': true },
+                    { 'targets': 4, 'width': "10%", 'orderable': true },
+                    { 'targets': 5, 'width': "15%", 'orderable': false }
+                ],
+            });
+        }
+
+        $(function () {
+            setSourceTable();
+
+            $('#modalYes').on('click', function (e) {
+                deleteSource();
+            });
+        });
+
+</script>
+
+
+
+
+
+<div class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>故障來源定義<small>故障報告來源定義資料管理</small></h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+                <li class="active">故障報告來源定義資料管理</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">故障報告來源定義資料列表</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="sourceTable" class="row-border" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>來源編號</th>
+                                        <th>來源名稱</th>
+                                        <th>說明</th>
+                                        <th>建立時間</th>
+                                        <th>最後變更時間</th>
+                                        <th>操作選項</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var items in @Model)
+                                    {
+                                        <tr id="@items.sourceId">
+                                            <td>@items.sourceCode</td>
+                                            <td>@items.sourceName</td>
+                                            <td>@items.description</td>
+                                            <td>@items.createTime</td>
+                                            <td>@items.lastUpdateTime</td>
+                                            <td>
+                                                <a href="@Url.Action("EditReportSource", new { sourceId = items.sourceId })"><button class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></button></a>
+                                                <a href="#" data-toggle=modal data-target=#myModal><button class="btn btn-sm btn-danger" onclick="storeId('@items.sourceId')"> <i class="glyphicon glyphicon-remove"></i></button></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div><!-- /.box -->
+                </div>
+            </div>
+
+            <div class="modal modal-success" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">刪除確認</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>是否刪除此故障來源？刪除此故障來源會將一併刪除所有的相關資料。</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">否</button>
+                            <button id="modalYes" type="button" class="btn btn-outline" data-dismiss="modal">是</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </section><!-- /.content -->
+    </div><!-- /.content-wrapper -->
+</div><!-- ./wrapper -->
