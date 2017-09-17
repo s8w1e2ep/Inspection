@@ -41,10 +41,10 @@ namespace InspectionWeb.Services
             return result;
         }
 
-        public IResult Create(string name, string sourceId, string abnormalId)
+        public IResult Create(string name, string sourceId, string abnormalId, string reporter)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(sourceId)
-                || string.IsNullOrEmpty(abnormalId) )
+                || string.IsNullOrEmpty(abnormalId) || string.IsNullOrEmpty(abnormalId))
             {
                 throw new ArgumentNullException();
             }
@@ -67,7 +67,7 @@ namespace InspectionWeb.Services
                     newRecord.recordId = recordId;
                     newRecord.name = name;
                     newRecord.sourceId = sourceId;
-                    //newRecord.deviceId = reporter;      // 6000通報時deviceid = 通報者
+                    newRecord.deviceId = reporter;      // 6000通報時deviceid = 通報者
                     newRecord.abnormalId = abnormalId;
 
                     newRecord.isClose = 0;          
@@ -159,37 +159,78 @@ namespace InspectionWeb.Services
         //    return result;
         //}
 
-        //public IResult Update(abnormalRecord instance, string propertyName, object value)
-        //{
-        //    Dictionary<string, object> DicUpdate = new Dictionary<string, object>();
+        public IResult Update(otherAbnormalRecord instance, string propertyName, object value)
+        {
+            Dictionary<string, object> DicUpdate = new Dictionary<string, object>();
 
-        //    if (instance == null)
-        //    {
-        //        throw new ArgumentNullException();
-        //    }
+            if (instance == null)
+            {
+                throw new ArgumentNullException();
+            }
 
-        //    IResult result = new Result(false);
+            IResult result = new Result(false);
 
-        //    try
-        //    {
+            try
+            {
+                if (propertyName == "isClose" || propertyName == "isDelete")
+                {
+                    int iValue;
+                    bool ret = JsonValue2Int(value, out iValue);
 
-        //        DateTime now = DateTime.Now;
-        //        string lastUpdateTime = now.ToString("yyyy/MM/dd HH:mm:ss");
+                    if (ret == true)
+                    {
+                        value = Convert.ToByte(iValue);
+                    }
+                    else //轉換異常寫入預設值
+                    {
+                        value = Convert.ToByte(1); ;
+                    }
+                }
+                else if (propertyName == "happenedTime" || propertyName == "fixDate")
+                {
+                    value = Convert.ToDateTime(value);
+                }
+                else if (propertyName == "fixMethod")
+                {
+                    value = Convert.ToInt16(value);
+                }
 
-        //        DicUpdate.Add(propertyName, (string)value);
-        //        DicUpdate.Add("lastUpdateTime", lastUpdateTime);
+                DateTime now = DateTime.Now;
+                string lastUpdateTime = now.ToString("yyyy-MM-dd HH:mm:ss");
 
-        //        _repository.Update(instance, DicUpdate);
-        //        result.Success = true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        result.Exception = ex;
-        //    }
+                DicUpdate.Add(propertyName, value);
+                DicUpdate.Add("lastUpdateTime", now);
 
-        //    return result;
-        //}
+                _repository.Update(instance, DicUpdate);
+                result.Success = true;
+                result.lastUpdateTime = lastUpdateTime;
+            }
+            catch (Exception ex)
+            {
+                result.Exception = ex;
+            }
 
+            return result;
+        }
+
+        private bool JsonValue2Int(object value, out int transValue)
+        {
+
+            if (value == null)   //介面未選擇Yes 會傳回null,所以寫入0(No)
+            {
+                transValue = 0;
+                return true;
+
+            }
+            else if (Int32.TryParse((string)value, out transValue))
+            {
+                return true;
+            }
+            else //轉換異常
+            {
+                return false;
+            }
+        }
         //public IResult Delete(string recordId)
         //{
         //    IResult result = new Result(false);

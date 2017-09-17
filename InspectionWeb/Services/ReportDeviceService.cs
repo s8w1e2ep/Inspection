@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using InspectionWeb.Models;
+using InspectionWeb.Models.Misc;
 
 namespace InspectionWeb.Services
 {
@@ -28,8 +29,20 @@ namespace InspectionWeb.Services
 
             try
             {
+                IdGenerator idg = new IdGenerator();
+                instance.deviceId = idg.GetID("reportDevice");
+
+                instance.createTime = DateTime.Now;
+                instance.lastUpdateTime = instance.createTime;
+                instance.x = 0;
+                instance.y = 0;
+                instance.isDelete = 0;
+
+
                 this._repository.Create(instance);
                 result.Success = true;
+                result.Message = instance.deviceId;
+
             }
             catch (Exception ex)
             {
@@ -49,6 +62,7 @@ namespace InspectionWeb.Services
 
             try
             {
+                instance.lastUpdateTime = DateTime.Now;
                 this._repository.Update(instance);
                 result.Success = true;
             }
@@ -135,7 +149,7 @@ namespace InspectionWeb.Services
 
         public IEnumerable<reportDevice> GetAll()
         {
-            return this._repository.GetAll().OrderBy(reportDevice => reportDevice.createTime);
+            return this._repository.GetAll().OrderBy(reportDevice => reportDevice.createTime).Where(x=> x.isDelete == 0);
         }
     }
 }

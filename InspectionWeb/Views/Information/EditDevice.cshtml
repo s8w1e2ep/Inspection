@@ -1,14 +1,155 @@
-﻿
+﻿@model InspectionWeb.Models.ViewModel.DeviceEditViewModel
 @{
     ViewBag.Title = "體驗設施管理";
 }
+<script>
+    $.fn.editable.defaults.mode = 'inline';
+    $(document).ready(function () {
+        $('#itemName, #description').editable({
+            emptytext: "未設定",
+            success: function (response) {
+                $('#lastUpdateTime').html(response.lastUpdateTime);
+            }
+        });
+
+        $('#fieldId').editable({
+            value: ["@if (@Model.FieldId != null) {<text>@Model.FieldId</text>}"],
+            emptytext: '未設定',
+            source: [
+                // value :選擇後會回傳的值
+                // text : value相對應的值, 顯示的是此值
+                @foreach (var item in Model.Fields)
+                {
+                    <text>{ value: '@item.fieldId', text: '@item.fieldName' },</text>
+                }
+            ],
+            success: function (response) {
+                $('#lastUpdateTime').html(response.lastUpdateTime);
+                if (response.mapFileName) {
+                    loadMap("@Url.Content("~/media/map/")" + response.mapFileName);
+                } else {
+                    $('#fieldMap').html('');
+                }
+            }
+        });
+
+        $('#active').editable({
+            value: [@Model.Active],
+            source: [
+                { value: 0, text: '停用' },
+                { value: 1, text: '啟用' },
+                { value: 2, text: '維護中' }
+            ],
+            emptytext: '未設定',
+            success: function (response) {
+                $('#lastUpdateTime').html(response.lastUpdateTime)
+            }
+        });
+
+        $('#isLock').editable({
+            value: [@Model.IsLock],
+            source: [
+                { value: 0, text: '否' },
+                { value: 1, text: '是' },
+            ],
+            emptytext: '未設定',
+            success: function (response) {
+                $('#lastUpdateTime').html(response.lastUpdateTime)
+            }
+        });
+
+        $('#inspectionUserId').editable({
+            value: ["@if (@Model.Inspector != null) {<text>@Model.Inspector.userId</text>}"],
+            emptytext: '未設定',
+            source: [
+                // value :選擇後會回傳的值
+                // text : value相對應的值, 顯示的是此值
+                @foreach (var item in Model.Inspectors)
+                {
+                    <text>{ value: '@item.userId', text: '@item.userName' },</text>
+                }
+            ],
+            success: function (response) {
+                $('#lastUpdateTime').html(response.lastUpdateTime);
+            }
+        });
+
+
+       @if (!string.IsNullOrEmpty(Model.FieldId))
+        {
+           @:loadMap('@Url.Content("~/media/map/")@Model.FieldId' + '.svg');
+        }
+        else {
+            <text>$('#fieldMap').html('');</text>
+        }
+    });
+
+     // variables for d3
+    var svg;
+    var dragBehavior;
+    var attributesText;
+
+    function loadMap(mapName) {
+        $('#fieldMap').load(mapName, status, function () {
+            if (status != 'error') {
+                svg = d3.select("svg");
+                attributesText = d3.select("#attributestext");
+                getSvgChangeFromServer();
+                dragBehavior = d3.behavior.drag()
+                    .on("drag", dragMove)
+                    .on("dragstart", dragStart)
+                    .on("dragend", dragEnd);
+                svg.call(dragBehavior);
+                scalable = false;
+            }
+        });
+    }
+
+    function getSvgChangeFromServer() {
+        selectionRect.init(@Model.X, @Model.Y);
+        selectionRect.update(@Model.X + 15,@Model.Y + 15);
+    }
+
+    function saveSvgChangeToServer() {
+
+        var formData = new FormData();
+        var rect = selectionRect.getNewAttributes();
+
+        formData.append('deviceId', '@Model.ItemId');
+        formData.append('x', parseInt(rect.x, 10));
+        formData.append('y', parseInt(rect.y, 10));
+
+        $.ajax({
+            url: "@Url.Content("~/Information/SaveDeviceSvgChangeToServer")",
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            cache: false,
+            data: formData,
+            dataType: 'json',
+
+        }).done(function (data) {
+            console.log(data);
+            if (data) {
+                $('#lastUpdateTime').html(data.lastUpdateTime);
+            }
+        })
+
+            .fail(function () {
+                alert("Sorry, Server unavailable. ");
+            });
+    }
+
+</script>
 
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
-        <ol class="breadcrumb">
-            <li><a href="/"><i class="fa fa-dashboard"></i>Home</a></li>
-            <li class="active">體驗設施管理</li>
-        </ol>
+        <section class="content-header" style="margin-bottom: 15px;">
+            <ol class="breadcrumb">
+                <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>Home</a></li>
+                <li class="active">體驗設施檢視/修改</li>
+            </ol>
+        </section>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -16,119 +157,91 @@
             <div class="col-md-12">
                 <div class="box box-success">
                     <div class="box-header with-border">
-                        <h3 class="box-title">體驗設施管理</h3>
+                        <h3 class="box-title">體驗設施檢視/修改</h3>
                     </div>
                     <!-- form start -->
 
-                    <form class="form-horizontal">
-                        <div class="box-body">
-
-                            <div class="col-md-6">
-                                @*展品ID*@
-                                <div class="form-group">
-                                    <label for="deviceID" class="col-sm-2 control-label">展品ID</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="exhibitItemID" placeholder="展品ID">
-                                    </div>
-                                </div>
-
-                                @*名稱*@
-                                <div class="form-group">
-                                    <label for="deviceName" class="col-sm-2 control-label">名稱</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="exhibitItemName" placeholder="名稱">
-                                    </div>
-                                </div>
-
-
-
-                                @*啟用狀態*@
-                                <div class="form-group">
-                                    <label for="turnOnState" class="col-sm-2 control-label">啟用狀態:</label>
-                                    <div class="col-sm-5">
-                                        <select class="form-control" id="exhibitPlace">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="lockState" class="col-sm-2 control-label">是/否鎖定</label>
-                                    <div class="col-sm-5">
-                                        <button type="button" id="lockState" class="btn btn-primary" autocomplete="off">
-                                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        
-                            <div class="col-md-12">
-                                <img src="https://metrouk2.files.wordpress.com/2017/02/ad_234711139.jpg?w=748&h=498&crop=1" class="img-responsive" alt="Responsive image">
-                            </div>
-                            
-                            <div class="col-md-6">
-
-
-                                @*建立時間*@
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">建立時間</label>
-                                    <div class="col-sm-10">
-                                        <p class="form-control-static">1994/02/09</p>
-                                    </div>
-                                </div>
-
-                                @*最後更新時間*@
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">最後更新時間</label>
-                                    <div class="col-sm-10">
-                                        <p class="form-control-static">2017/02/09</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div><!-- /.box-body -->
-                    </form>
-                </div>
-
-
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="box box-info">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">展項新增</h3>
-                    </div>
                     <div class="box-body">
-                        <table id="infoExhibitItem" class="row-border" cellspacing="0" style="width: 100%;">
+                        <table class="table table-striped table-hover table-bordered" cellspacing="0" style="width: 100%;">
                             <thead>
                                 <tr>
-                                    <th>展項名稱</th>
-                                    <th>建立日期</th>
-                                    <th>操作選項</th>
+                                    <th class="col-md-3">屬性</th>
+                                    <th class="col-md-9">設定值</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @*體驗設施名稱*@
                                 <tr>
-                                    <td>AAA</td>
-                                    <td>2017-08-08 00:00:00</td>
+                                    <td>體驗設施名稱</td>
                                     <td>
-
-                                        @{/* TODO: redirec to correct place
-* Action(actionName, controller)
-*/}
-                                        <a href="@Url.Action("", "")" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                        <a href="#" class="btn btn-sm btn-danger" onclick="" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>
+                                        <a href="#" id="itemName" data-type="text" data-pk="@Model.ItemId" data-url="@Url.Action("EditDevice")" data-title="輸入體驗設施名稱">@Model.ItemName</a>
                                     </td>
                                 </tr>
+
+                                @*所屬場域*@
+                                <tr>
+                                    <td>所屬場域</td>
+                                    <td>
+                                        <a href="#" id="fieldId" data-type="select" data-pk="@Model.ItemId" data-url="@Url.Action("EditDevice")" data-title="選擇場域"></a>
+                                    </td>
+                                </tr>
+
+                                @*預設巡檢人員*@
+                                <tr>
+                                    <td>預設巡檢人員</td>
+                                    <td>
+                                        <a href="#" id="inspectionUserId" data-type="select" data-pk="@Model.ItemId" data-url="@Url.Action("EditDevice")" data-title="輸入預設巡檢人員"></a>
+                                    </td>
+                                </tr>
+
+                                @*啟用狀態*@
+                                <tr>
+                                    <td>啟用狀態</td>
+                                    <td>
+                                        <a href="#" id="active" data-type="select" data-pk="@Model.ItemId" data-url="@Url.Action("EditDevice")" data-title="選擇啟用狀態"></a>
+                                    </td>
+                                </tr>
+
+                                @*是否鎖定*@
+                                <tr>
+                                    <td>是否鎖定</td>
+                                    <td>
+                                        <a href="#" id="isLock" data-type="select" data-pk="@Model.ItemId" data-url="@Url.Action("EditDevice")" data-title="是否鎖定"></a>
+                                    </td>
+                                </tr>
+
+                                @*場域地圖*@
+                                <tr>
+                                    <td>場域地圖</td>
+                                    <td>
+                                        <div class="progress" style="margin-bottom: 10px;">
+                                            <div id="mapProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                                        </div>
+
+                                        <div id="fieldMap"></div>
+
+                                    </td>
+                                </tr>
+
+                                @*建立日期*@
+                                <tr>
+                                    <td>建立日期</td>
+                                    <td>@Model.CreateTime.Value.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                </tr>
+
+                                @*最後更新日期*@
+                                <tr>
+                                    <td>最後更新日期</td>
+                                    <td id="lastUpdateTime">@Model.LastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                </tr>
+
+
+
                             </tbody>
                         </table>
-                    </div>
+                    </div><!-- /.box-body -->
+
+
                 </div>
             </div>
         </div>
@@ -145,7 +258,7 @@
                 <h4 class="modal-title">刪除確認</h4>
             </div>
             <div class="modal-body">
-                <p>是否刪除此展項?刪除此展項會將一併刪除所有的相關資料。</p>
+                <p>是否刪除此體驗設施?刪除此體驗設施會將一併刪除所有的相關資料。</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">否</button>
@@ -155,42 +268,3 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<script>
-    $(document).ready(function () {
-        $('#infoExhibitItem').DataTable({
-            "paging": false,
-            "info": false,
-            "searching": false,
-            "columnDefs": [
-                { "targets": 0, "width": "40%", "orderable": true },
-                { "targets": 1, "width": "40%", "orderable": true },
-                { "targets": 2, "width": "20%", "orderable": true },
-            ],
-        });
-
-        $('#modalYes').on('click', function (e) {
-            deleteExhibitionItem();
-        });
-
-        function deleteExhibitionItem() {
-            @{/* TODO: use jquery AJAX method to send Message to Exhibition controller.
-               */
-            }
-        }
-
-        $('#lockState').on('click', function (e) {
-            var btn = $(this),
-                icon = btn.find('.glyphicon'),
-                toggleClass = 'lockState';
-
-            if (btn.hasClass(toggleClass)) {
-                icon.removeClass('glyphicon-ok').addClass('glyphicon-remove');
-                btn.removeClass('btn-primary').addClass('btn-danger');
-            } else {
-                icon.removeClass('glyphicon-remove').addClass('glyphicon-ok');
-                btn.removeClass('btn-danger').addClass('btn-primary');
-            }
-            btn.toggleClass(toggleClass);
-        });
-    });
-</script>

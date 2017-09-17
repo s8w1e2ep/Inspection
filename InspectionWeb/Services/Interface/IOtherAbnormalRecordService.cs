@@ -18,7 +18,7 @@ namespace InspectionWeb.Services.Interface
         /// </summary>
         /// <param name="name", "sourceId", "abnormalId"></param>
         /// <returns></returns>
-        IResult Create(string name, string sourceId, string abnormalId);
+        IResult Create(string name, string sourceId, string abnormalId, string reporter);
 
         ///// <summary>
         ///// add new abnormal record
@@ -34,14 +34,14 @@ namespace InspectionWeb.Services.Interface
         ///// <returns></returns>
         //IResult Update(otherAbnormalRecord instance);
 
-        ///// <summary>
-        ///// update a property of abnormal record
-        ///// </summary>
-        ///// <param name="instance"></param>
-        ///// <param name="propertyName"></param>
-        ///// <param name="value"></param>
-        ///// <returns></returns>
-        //IResult Update(otherAbnormalRecord instance, string propertyName, object value);
+        /// <summary>
+        /// update a property of abnormal record
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="propertyName"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        IResult Update(otherAbnormalRecord instance, string propertyName, object value);
 
         ///// <summary>
         ///// 刪除資料

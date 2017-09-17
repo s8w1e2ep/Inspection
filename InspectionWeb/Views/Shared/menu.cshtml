@@ -90,6 +90,19 @@
                                     </li>
                                 </ul>
                             </li>
+
+                            @*軟體版本管理*@
+                            <li>
+                                <a href="#"><i class="fa fa-edit"></i> <span>軟體版本管理</span> <i class="fa fa-angle-left pull-right"></i></a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a href="@Url.Action("AddSoftware", "SoftwareVersion")"><i class="fa fa-circle-o"></i>新增軟體</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("ListSoftware", "SoftwareVersion")"><i class="fa fa-circle-o"></i>軟體列表</a>
+                                    </li>
+                                </ul>
+                            </li>
                             @*常用解決方法*@
                             <li class="treeview">
                                 <a href="#">
@@ -128,9 +141,6 @@
                                         <a href="@Url.Action("AddField", "Information")"><i class="fa fa-circle-o"></i>新增場域</a>
                                     </li>
                                     <li>
-                                        <a href="@Url.Action("EditField", "Information")"><i class="fa fa-circle-o"></i>場域檢視/修改</a>
-                                    </li>
-                                    <li>
                                         <a href="@Url.Action("ListField", "Information")"><i class="fa fa-circle-o"></i>場域列表</a>
                                     </li>
                                 </ul>
@@ -145,9 +155,6 @@
                                 <ul class="treeview-menu">
                                     <li>
                                         <a href="@Url.Action("AddExhibition", "Information")"><i class="fa fa-circle-o"></i>新增展示廳</a>
-                                    </li>
-                                    <li>
-                                        <a href="@Url.Action("EditExhibition", "Information")"><i class="fa fa-circle-o"></i>展示廳檢視/修改</a>
                                     </li>
                                     <li>
                                         <a href="@Url.Action("ListExhibition", "Information")"><i class="fa fa-circle-o"></i>展示廳列表</a>
@@ -166,9 +173,6 @@
                                         <a href="@Url.Action("AddDevice", "Information")"><i class="fa fa-circle-o"></i>新增體驗設施</a>
                                     </li>
                                     <li>
-                                        <a href="@Url.Action("EditDevice", "Information")"><i class="fa fa-circle-o"></i>體驗設施檢視/修改</a>
-                                    </li>
-                                    <li>
                                         <a href="@Url.Action("ListDevice", "Information")"><i class="fa fa-circle-o"></i>體驗設施列表</a>
                                     </li>
                                 </ul>
@@ -185,10 +189,7 @@
                                         <a href="@Url.Action("AddNotifyDevice", "Information")"><i class="fa fa-circle-o"></i>新增通報裝置</a>
                                     </li>
                                     <li>
-                                        <a href="@Url.Action("EditNotifyDevic", "Information")"><i class="fa fa-circle-o"></i>通報裝置檢視/修改</a>
-                                    </li>
-                                    <li>
-                                        <a href="@Url.Action("ListNotifyDevic", "Information")"><i class="fa fa-circle-o"></i>通報裝置列表</a>
+                                        <a href="@Url.Action("ListNotifyDevice", "Information")"><i class="fa fa-circle-o"></i>通報裝置列表</a>
                                     </li>
                                 </ul>
                             </li>

@@ -24,9 +24,9 @@ $(document).ready(function () {
         "columnDefs": [
             { "targets": 0, "width": "70%", "orderable": true },
             { "targets": 1, "width": "20%", "orderable": true },
-            { "targets": 2, "width": "10%", "orderable": false },
+            { "targets": 2, "width": "10%", "orderable": false }
             
-        ],
+        ]
     });
 
     // delete dialog 確定事件

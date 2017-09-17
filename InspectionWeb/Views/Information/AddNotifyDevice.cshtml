@@ -19,13 +19,13 @@
                         <h3 class="box-title">新增通報裝置</h3>
                     </div>
                     <!-- form start -->
-                    <form class="form-horizontal" method="post" action="@Url.Action("addNotifyDevice")" onsubmit="return formValidation();">
+                    <form class="form-horizontal" method="post" action="@Url.Action("AddNotifyDevice")" onsubmit="return formValidation();">
                         <div class="box-body">
 
                             <div class="form-group">
-                                <label for="notifyDeviceName" class="col-sm-2 control-label">名稱</label>
+                                <label for="name" class="col-sm-2 control-label">名稱</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="fieldNo" placeholder="名稱">
+                                    <input id="name" type="text" class="form-control" name="name" placeholder="裝置類別">
                                 </div>
                             </div>
                             
@@ -44,9 +44,9 @@
 
 
                             <div class="form-group">
-                                <label for="group" class="col-md-2 control-label">裝置代碼</label>
+                                <label for="deviceCode" class="col-md-2 control-label">裝置代碼</label>
                                 <div class="col-md-10">
-                                    <input id="group" type="text" class="form-control" name="group" placeholder="裝置代碼">
+                                    <input id="deviceCode" type="text" class="form-control" name="deviceCode" placeholder="裝置代碼">
                                 </div>
                             </div>
 
@@ -61,4 +61,3 @@
         </div>
     </section>
 </div>
-

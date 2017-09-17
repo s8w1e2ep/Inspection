@@ -53,7 +53,7 @@ namespace InspectionWeb.Services
 
             if (IsRepeat(itemId))
             {
-                result.ErrorMsg = "該展項已申請過, 可至檢修頁面查看";
+                result.ErrorMsg = "該項目已申請過, 可至檢修頁面查看";
             }
             else
             {
@@ -66,10 +66,10 @@ namespace InspectionWeb.Services
                     newRecord.recordId = recordId;
                     newRecord.itemId = itemId;
                     newRecord.sourceId = sourceId;
-                    newRecord.deviceId = reporter;      // 6000通報時deviceid = 通報者
+                    newRecord.deviceId = reporter;      
                     newRecord.abnormalId = abnormalId;
 
-                    newRecord.isClose = 1;          //暫時 isrepeat也要記得家回去isclose()
+                    newRecord.isClose = 0;          
                     newRecord.isDelete = 0;
                     newRecord.createTime = nowTime;
                     newRecord.lastUpdateTime = nowTime;
@@ -123,6 +123,28 @@ namespace InspectionWeb.Services
 
             try
             {
+                if (propertyName == "isClose" || propertyName == "isDelete" )
+                {
+                    int iValue;
+                    bool ret = JsonValue2Int(value, out iValue);
+
+                    if (ret == true)
+                    {
+                        value = Convert.ToByte(iValue);
+                    }
+                    else //轉換異常寫入預設值
+                    {
+                        value = Convert.ToByte(1); ;
+                    }
+                }
+                else if(propertyName == "happenedTime" || propertyName == "fixDate")
+                {
+                    value = Convert.ToDateTime(value);
+                }
+                else if(propertyName == "fixMethod")
+                {
+                    value = Convert.ToInt16(value);
+                }
 
                 DateTime now = DateTime.Now;
                 string lastUpdateTime = now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -132,6 +154,8 @@ namespace InspectionWeb.Services
 
                 _repository.Update(instance, DicUpdate);
                 result.Success = true;
+                result.lastUpdateTime = lastUpdateTime;
+
             }
             catch (Exception ex)
             {
@@ -139,6 +163,25 @@ namespace InspectionWeb.Services
             }
 
             return result;
+        }
+
+        private bool JsonValue2Int(object value, out int transValue)
+        {
+
+            if (value == null)   //介面未選擇Yes 會傳回null,所以寫入0(No)
+            {
+                transValue = 0;
+                return true;
+
+            }
+            else if (Int32.TryParse((string)value, out transValue))
+            {
+                return true;
+            }
+            else //轉換異常
+            {
+                return false;
+            }
         }
 
         public IResult Delete(string recordId)
@@ -185,7 +228,7 @@ namespace InspectionWeb.Services
 
         public bool IsRepeat(string itemId)
         {
-            return this._repository.GetAll().Any(x => x.isDelete == 0 && x.itemId == itemId);
+            return this._repository.GetAll().Any(x => x.isDelete == 0 && x.itemId == itemId && x.isClose == 0);
         }
 
     }

@@ -5,8 +5,13 @@ function deleteGroup() {
         type: "DELETE",
         url: 'DeleteGroup',
         data: $.param({ "groupId": toDeleteGroupId })
-    }).done(function (msg) {
-        $("#" + toDeleteGroupId).remove();
+    }).done(function (data) {
+        if (data.success) {
+            $("#" + toDeleteGroupId).remove();
+            alert(data.msg);
+        } else {
+            alert(data.msg);
+        }      
     });
 }
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Web.Security;
-using System.Web;
 using System.Web.Mvc;
 using InspectionWeb.Models.ViewModel;
 using InspectionWeb.Models;
@@ -77,8 +75,7 @@ namespace InspectionWeb.Controllers
             var data = this._solutionService.GetByID(id);
             ViewBag.description = data.description;
 
-            ViewBag.createTime = data.createTime;
-            //ViewBag.createTime = data.createTime.ToString("yyyy-MM-dd HH:mm:ss");
+            ViewBag.createTime = data.createTime?.ToString("yyyy-MM-dd HH:mm:ss");
             ViewBag.solutionId = data.solutionId;
             return View();
         }

@@ -1,24 +1,335 @@
-﻿@{
+﻿@model InspectionWeb.Models.ViewModel.reportDetailedViewModel
+
+
+@{
     ViewBag.Title = "通報及人工維修資料";
 }
+<script>
 
+    var fixDate = '@Model.reportRecord.fixDate';
+    var fixMethod = '@Model.reportRecord.fixMethod';
+    var isfixDateSet = false;
+    var isfixMethodSet = false;
+    var isclose = false;
+    var closeValue = '@Model.reportRecord.isClose_s';
+    $.fn.editable.defaults.mode = 'inline';
+
+    $(document).ready(function () {
+
+        if (fixDate != '')
+            isfixDateSet = true;
+        if (fixMethod != '')
+            isfixMethodSet = true;
+        if (closeValue == 1)
+            isclose = true;
+
+        $('#happenedTime, #fixDate').daterangepicker({
+            timePicker: true,
+            timePickerSeconds: true,
+            singleDatePicker: true,
+            timePickerIncrement: 1,
+            format: 'YYYY-MM-DD HH:mm:ss',
+            locale: {
+                applyLabel: '確認',
+                cancelLabel: '取消',
+                daysOfWeek: ["日", "一", "二", "三", "四", "五", "六"],
+                monthNames: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+            }
+        });
+
+        $('#sourceId').editable({
+                value: 'Select status',
+                source: [
+                    @foreach (var data in Model.sources)
+                    {
+                        <text>{value: '@data.sourceId', text: '@data.sourceName' },</text>
+                    }
+                ],
+                success: function (response) {
+                    $('#lastUpdateTime').html(response.lastUpdateTime);
+                }
+        });
+
+
+        $('#abnormalId').editable({
+            value: 'Select status',
+            source: [
+                @foreach (var data in Model.abnormals)
+                {
+                        <text>{value: '@data.abnormalId', text: '@data.abnormalName' },</text>
+                }
+            ],
+            success: function (response) {
+                $('#lastUpdateTime').html(response.lastUpdateTime);
+                $('#abnorExplain').html(response.Message);
+            }
+        });
+
+        $('#deviceId').editable({
+            value: 'Select status',
+            source: [
+                { value: '保全', text: '保全' },
+                { value: '志工', text: '志工' },
+                { value: '館員', text: '館員' },
+                { value: '其他', text: '其他' },
+            ],
+            success: function (response) {
+                $('#lastUpdateTime').html(response.lastUpdateTime);
+            }
+        });
+
+        $('#description').editable({
+            success: function (response) {
+                $('#lastUpdateTime').html(response.lastUpdateTime);
+            }
+        });
+
+        $('#fixMethod').editable({
+            value: 'Select status',
+            source: [
+                {value: '0', text: '自動排除' },
+                {value: '1', text: '人員排除' }
+            ],
+            success: function (response) {
+
+                $('#lastUpdateTime').html(response.lastUpdateTime);
+                isfixMethodSet = true;
+                controllClose();
+            }
+        });
+
+        $('#isClose').editable({
+            value: ['@Model.reportRecord.isClose_s'],
+            source: [
+                { value: 0, text: '否' },
+                { value: 1, text: '是' }
+            ],
+            success: function (response) {
+                $('#lastUpdateTime').html(response.lastUpdateTime);
+            }
+        }).on('save', function (e, data) {
+            isclose = (data.newValue == 1) ? true:false;
+            controllerAllEdit();
+        });
+        $('#repairUserId').editable({
+                value: 'Select status',
+                source: [
+                    @foreach (var data in Model.repairUsers)
+                    {
+                        <text>{value: '@data.userId', text: '@data.userName' },</text>
+                    }
+                ],
+                success: function (response) {
+                    $('#ManLast').html(response.lastUpdateTime);
+                }
+        });
+        $('#fixNote, #cost, #imgDesc1, #imgDesc2, #imgDesc3, #imgFixDesc1').editable({
+            success: function (response) {
+                $('#ManLast').html(response.lastUpdateTime);
+            }
+        });
+
+        $('#expectDate').datepicker({
+            language: 'zh-TW',
+            format: 'yyyy-mm-dd'
+        }).on('changeDate', function (ev) {
+            $('.datepicker').hide();
+
+            $.post(
+            '/ReportJob/UpdateManRecord',
+            {
+                name:'expectDate',
+                pk: '@Model.reportRecord.recordId',
+                value: $('#expectDate').val()
+            },
+            function (data) {
+                $('#ManLast').html(data.lastUpdateTime);
+            },
+            'json'
+            ).fail(function () {
+            //console.log(e);
+            alert("抱歉! 伺服器無法接受您的資料!");
+            });
+        });
+
+        //控制受否可編輯
+        controllerAllEdit();
+
+        //控制是否可以結案
+        controllClose();
+    });
+
+
+    //function examCanClose()
+    //{
+
+    //}
+    function controllerAllEdit()
+    {
+        if (isclose)
+        {
+            $('.editable').editable('option', 'disabled', true);
+            $('#happenedTime, #fixDate, #expectDate, #imgButton1, #imgButton2, #imgButton3, #imgButton4').attr('disabled', true);
+            $('#isClose').editable('option', 'disabled', false);
+            $('#AddButton').css('display', 'none');
+        }
+        else
+        {
+            $('#happenedTime, #fixDate, #expectDate, #imgButton1, #imgButton2, #imgButton3, #imgButton4').attr('disabled', false);
+            $('.editable').editable('option', 'disabled', false);
+            $('#AddButton').css('display', 'block');
+        }
+    }
+    function controllClose()
+    {
+        if (!isfixDateSet || !isfixMethodSet) {
+            $('#isClose').editable('option', 'disabled', true);
+        }
+        else
+        {
+            $('#isClose').editable('option', 'disabled', false);
+        }
+    }
+    function UpdateHappenTime() {
+       $.post(
+            '/ReportJob/UpdateRecord',
+            {
+                name: 'happenedTime',
+                pk: '@Model.reportRecord.recordId' ,
+                value: $('#happenedTime').val()
+            },
+            function (data) {
+                $('#lastUpdateTime').html(data.lastUpdateTime);
+            },
+            'json'
+        ).fail(function () {
+            //console.log(e);
+            alert("抱歉! 伺服器無法接受您的資料!");
+        });
+    }
+    function UpdateFixTime() {
+
+       $.post(
+            '/ReportJob/UpdateRecord',
+            {
+                name: 'fixDate',
+                pk: '@Model.reportRecord.recordId' ,
+                value: $('#fixDate').val()
+            },
+            function (data) {
+
+                $('#lastUpdateTime').html(data.lastUpdateTime);
+                isfixDateSet = true;
+                controllClose();
+            },
+            'json'
+        ).fail(function () {
+            //console.log(e);
+            alert("抱歉! 伺服器無法接受您的資料!");
+        });
+    }
+    function AddManRepair() {
+        $('#ManRecord').css('display', 'block');
+        $('#AddButton').css('display', 'none');
+
+        $.post(
+            '/ReportJob/AddFixRecord',
+            {
+                recordId: '@Model.reportRecord.recordId' ,
+            },
+            function (data) {
+                $('#fillUser').html(data.filluserName);
+                $('#ManCreate').html(data.createTime);
+                $('#ManLast').html(data.lastUpdateTime);
+            },
+            'json'
+        ).fail(function () {
+            //console.log(e);
+            alert("抱歉! 伺服器無法接受您的資料!");
+        });
+
+        location.reload()
+    }
+
+    //======照片上傳======
+    function upload(id) {
+        // 觸發點擊事件
+
+        $('#uploadImage'+ id).trigger('click');
+    }
+
+    function uploadImage(obj, No) {
+    //    alert(obj);
+        var err_filetype = '只能上傳 png, jpeg 檔';
+        var imageType = ['image/png', 'image/jpeg'];
+        if ($.inArray(obj.files[0].type, imageType) < 0) {
+            alert(err_filetype);
+            return;
+        }
+        $('#imgProgress').css('width', '0%').html('0%');
+        $('.progress').css('display', 'block');
+
+        var type = obj.files[0].type.substring(obj.files[0].type.indexOf('/') + 1);
+        var data = new FormData();
+        data.append('upload', obj.files[0]);
+        ajaxUploadFile("@Url.Content("~/ReportJob/UpdateImg?recordId=")@Model.reportRecord.recordId" + "&type=" + type + "&No=" + No, data, No);
+    }
+
+    function ajaxUploadFile(url, data, No) {
+        $.ajax({
+            url: url,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            cache: false,
+            data: data,
+            // return JSON datatype
+            dataType: 'json',
+            // Custom XMLHttpRequest
+            xhr: function () {
+                var myXhr = $.ajaxSettings.xhr();
+                if (myXhr.upload) {
+                    myXhr.upload.addEventListener('progress', function (e) {
+                        var progress = parseInt(e.loaded / e.total * 100, 10);
+                        $('#imgProgress').css('width', progress + '%').html(progress + '%');
+                    }, false);
+                }
+                return myXhr;
+            }
+        }).done(function (data) {
+            if (data.Success) {
+                $('#photo' + No).attr('src', '@Url.Content("~/media/manRepairRecord/")' + data.Message + '?timestamp=' + new Date().getTime());
+                $('.progress').css('display', 'none');
+                $('#ManLast').html(data.lastUpdateTime);
+            } else {
+                alert('圖片更新失敗');
+            }
+        }).fail(function () {
+            alert("抱歉! 伺服器無法接受您的照片!");
+        });
+    }
+    //=======  /照片上傳  =======
+
+</script>
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
         <ol class="breadcrumb">
             <li>
-                <a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>Home</a>
+                <a href="/Home/Index"><i class="fa fa-dashboard"></i>Home</a>
             </li>
-            <li class="active">整體通報查詢-詳細資料</li>
+            <li class="active">通報及人工維修資料</li>
         </ol>
     </section>
     <!-- Main content -->
     <section class="content">
         <div class="row">
-            <!-- detailed data 1 -->
+            <!-- report data  -->
             <div class="col-md-12">
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">展項通報詳細資料</h3>
+                        <h3 class="box-title">
+                            @Model.reportRecord.itemtypeName 通報詳細資料
+                        </h3>
                     </div>
                     <div class="box-body">
                         <table class="table table-striped table-hover table-bordered" cellspacing="0" style="width: 100%;">
@@ -29,195 +340,235 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @if (Model.reportRecord.itemtypeName != "其他設施")
+                                {
+                                    <tr>
+                                        <td>展示廳</td>
+                                        <td>@Model.reportRecord.roomName</td>
+                                    </tr>
+                                }
                                 <tr>
-                                    <td>展示廳</td>
-                                    <td>
-                                        物質廳
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>展項名稱</td>
-                                    <td>
-                                        砝碼
-                                    </td>
+                                    <td>@Model.reportRecord.itemtypeName 名稱</td>
+                                    <td>@Model.reportRecord.itemName</td>
                                 </tr>
                                 
                                 <tr>
                                     <td>通報來源</td>
                                     <td>
-                                        <a href="#" id="reportsouce" data-type="select" data-pk="" data-url="" data-title="選擇通報來源"></a>
+                                        <a href="#" id="sourceId" data-type="select" data-pk="@Model.reportRecord.recordId" data-url="@Url.Action("UpdateRecord")" data-title="選擇通報來源">@Model.reportRecord.sourceName</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>異常狀況</td>
                                     <td>
-                                        <a href="#" id="abnormal" data-type="select" data-pk="" data-url="" data-title="選擇異常狀況"></a>
-                                          機組無法運作
+                                        <a href="#" id="abnormalId" data-type="select" data-pk="@Model.reportRecord.recordId" data-url="@Url.Action("UpdateRecord")" data-title="選擇異常狀況">@Model.reportRecord.abnormalName</a> 
+                                        <div style="display:inline" id="abnorExplain">@Model.reportRecord.abnormalDescription</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>通報者</td>
+                                    <td>
+                                        <a href="#" id="deviceId" data-type="select" data-pk="@Model.reportRecord.recordId" data-url="@Url.Action("UpdateRecord")" data-title="選擇通報者">@Model.reportRecord.deviceId</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>故障日期時間</td>
                                     <td>
-                                        <div class="input-group col-md-8">
+                                        <div class="input-group col-md-3">
                                             <div class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </div>
-                                            <input type="text" class="form-control pull-right" id="HappenTime">
+                                            <input type="text" class="form-control pull-right" onchange="UpdateHappenTime()" value="@Model.reportRecord.happenedTime" id="happenedTime" >
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>故障附加描述</td>
-                                    <td><a href="#" id="addiDescription" data-name="description" data-type="textarea" data-pk="" data-url="" data-title="輸入故障附加描述">321</a></td>
+                                    <td>
+                                        <a href="#" id="description" data-name="description" data-type="textarea" data-pk="@Model.reportRecord.recordId" data-url="@Url.Action("UpdateRecord")" data-title="輸入故障附加描述">@Model.reportRecord.description</a>
+                                       
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>故障排除日期時間</td>
                                     <td>
-                                        <div class="input-group col-md-8">
+                                        <div style="color:red; display:inline">*</div>
+                                        故障排除日期時間
+                                    </td>
+                                    <td>
+                                        <div class="input-group col-md-3">
                                             <div class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </div>
-                                            <input type="text" class="form-control pull-right" id="FinishFixTime">
+                                            <input type="text" class="form-control pull-right" onchange="UpdateFixTime()" value="@Model.reportRecord.fixDate" id="fixDate">
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>故障排除方法</td>
                                     <td>
-                                        <a href="#" id="selectSolution" data-type="select" data-pk="" data-url="" data-title="選擇故障排除方法"></a>
+                                        <div style="color:red; display:inline">*</div>
+                                        故障排除方法
+                                    </td>
+                                    <td>
+                                        <a href="#" id="fixMethod" data-type="select" data-pk="@Model.reportRecord.recordId" data-url="@Url.Action("UpdateRecord")" data-title="選擇故障排除方法">@Model.reportRecord.fixMethod</a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>是否結案</td>
                                     <td>
-                                        <a href="#" id="close" data-type="checklist" data-pk="" data-url="" data-title="結案">否</a>
+                                        是否結案
+                                    </td>
+                                    <td>
+                                        <a href="#"  id="isClose" data-type="select"  data-pk="@Model.reportRecord.recordId" data-url="@Url.Action("UpdateRecord")" data-title="結案"></a>
+                                        <div style="display:inline"> (倘若想要結案，請先填寫完 </div><div style="color:red; display:inline"> * </div> <div style="display:inline"> 處)</div>
                                     </td>
                                 </tr>
-                                <tr><td>建立時間</td><td>2017-8-06 17:05:30</td></tr>
-                                <tr><td>最新更新時間</td><td id="lastUpdateTime">2017-09-20 13:05:21</td></tr>
+                                <tr><td>建立時間</td><td>@Model.reportRecord.createTime</td></tr>
+                                <tr><td>最後更新時間</td><td id="lastUpdateTime">@Model.reportRecord.lastUpdateTime</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            <!-- detailed data 2 -->
+            <!-- man fix  -->
             <div class="col-md-12">
                 <div class="box box-info">
                     <div class="box-header with-border">
                         <h3 class="box-title">人工排除故障完工紀錄</h3>
-                        <a href="#" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
                     </div>
-                    <div class="box-body">
-                        <table class="table table-striped table-hover table-bordered" cellspacing="0" style="width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th class="col-md-3">屬性</th>
-                                    <th class="col-md-9">設定值</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>填單人員</td>
-                                    <td>王大明</td>
-                                </tr>
-                                <tr>
-                                    <td>維修人員</td>
-                                    <td>
-                                        不是我
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>維修過程描述</td>
-                                    <td>讓你猜</td>
-                                </tr>
-                                <tr>
-                                    <td>維修金額</td>
-                                    <td>
-                                        2000 NTD
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>預期完工日期</td>
-                                    <td>
-                                        2017-08-08
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>照片1</td>
-                                    <td>
-                                        <img class="profile-user-img img-responsive img-circle" src="../../theme/AdminLTE/dist/img/avatar.png" alt="User profile picture">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>照片1描述</td>
-                                    <td>
-                                        123
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>照片2</td>
-                                    <td>
-                                        <img class="profile-user-img img-responsive img-circle" src="../../theme/AdminLTE/dist/img/photo1.png" alt="User profile picture">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>照片2描述</td>
-                                    <td>456</td>
-                                </tr>
-                                <tr>
-                                    <td>照片3</td>
-                                    <td>
-                                        <img class="profile-user-img img-responsive img-circle" src="../../theme/AdminLTE/dist/img/photo2.png" alt="User profile picture"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>照片3描述</td>
-                                    <td>XXXX</td>
-                                </tr>
-                                <tr>
-                                    <td>完修照片</td>
-                                    <td>
-                                        <img class="profile-user-img img-responsive img-circle" src="../../theme/AdminLTE/dist/img/photo4.jpg" alt="User profile picture" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>完修照片描述</td>
-                                    <td>Perfect</td>
-                                </tr>
-                                <tr>
-                                    <td>資料建立日期</td>
-                                    <td>2017-08-08 00:00:00</td>
-                                </tr>
-                                <tr>
-                                    <td>資料最後變更日期</td>
-                                    <td>2017-08-08 00:00:00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- delete exhibition room -->
-        <div class="modal modal-danger" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title">刪除確認</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p id="modal-message">是否移除該人員負責的展示廳？</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">否</button>
-                        <button id="modalYes" type="button" class="btn btn-outline" data-dismiss="modal">是</button>
-                    </div>
+                    @if (Model.ManRecord == null)
+                    {
+                        
+                        <a href="#" id="AddButton" onclick="AddManRepair()" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
+                        
+                       
+                    }else
+                    {
+                        <div id="ManRecord" class="box-body">
+                            <table class="table table-striped table-hover table-bordered" cellspacing="0" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-3">屬性</th>
+                                        <th class="col-md-9">設定值</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>填單人員</td>
+                                        <td id="fillUser">
+                                            @Model.ManRecord.filluserName
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>維修人員</td>
+                                        <td>
+                                            <a href="#" id="repairUserId" data-type="select" data-pk="@Model.reportRecord.recordId" data-url="@Url.Action("UpdateManRecord")">@Model.ManRecord.repairUserName</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>維修過程描述</td>
+                                        <td>
+                                            <a href="#" id="fixNote" data-type="textarea" data-pk="@Model.reportRecord.recordId" data-url="@Url.Action("UpdateManRecord")">@Model.ManRecord.fixnote</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>維修金額</td>
+                                        <td>
+                                            <div style="display:inline">NT$ </div>
+                                            <a href="#" id="cost" data-type="text" data-pk="@Model.reportRecord.recordId" data-url="@Url.Action("UpdateManRecord")">@Model.ManRecord.cost</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>預期完工日期</td>
+                                        <td>
+                                            <div class="input-group col-md-3">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-clock-o"></i>
+                                                </div>
+                                                <input type="text" class="form-control pull-right" value="@Model.ManRecord.expectDate" id="expectDate">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>照片1</td>
+                                        <td>
+                                            <div class="progress" style="margin-bottom: 10px; display: none;">
+                                                <div id="imgProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                                            </div>
+                                            <input id="uploadImage_1" type='file' onchange="uploadImage(this, '_1')" style="display: none;">
+                                            <button class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="upload('_1')" id="imgButton1"><i class="fa fa-camera"></i> 上傳照片</button>
+                                            <img id="photo_1" class="img-responsive" src="@if (Model.ManRecord.imgFile1 != null) { @Url.Content("~/media/manRepairRecord/" + Model.ManRecord.imgFile1) } " alt="manRepair image 1">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>照片1描述</td>
+                                        <td>
+                                            <a href="#" id="imgDesc1" data-type="textarea" data-pk="@Model.reportRecord.recordId" data-url="@Url.Action("UpdateManRecord")">@Model.ManRecord.imgDesc1</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>照片2</td>
+                                        <td>
+                                            <div class="progress" style="margin-bottom: 10px; display: none;">
+                                                <div id="imgProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                                            </div>
+                                            <input id="uploadImage_2" type='file' onchange="uploadImage(this, '_2')" style="display: none;">
+                                            <button class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="upload('_2')" id="imgButton2"><i class="fa fa-camera"></i> 上傳照片</button>
+                                            <img id="photo_2" class="img-responsive" src="@if (Model.ManRecord.imgFile2 != null) { @Url.Content("~/media/manRepairRecord/" + Model.ManRecord.imgFile2) } " alt="manRepair image 2">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>照片2描述</td>
+                                        <td>
+                                            <a href="#" id="imgDesc2" data-type="textarea" data-pk="@Model.reportRecord.recordId" data-url="@Url.Action("UpdateManRecord")">@Model.ManRecord.imgDesc2</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>照片3</td>
+                                        <td>
+                                            <div class="progress" style="margin-bottom: 10px; display: none;">
+                                                <div id="imgProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                                            </div>
+                                            <input id="uploadImage_3" type='file' onchange="uploadImage(this, '_3')" style="display: none;">
+                                            <button class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="upload('_3')" id="imgButton3" ><i class="fa fa-camera"></i> 上傳照片</button>
+                                            <img id="photo_3" class="img-responsive" src="@if (Model.ManRecord.imgFile3 != null) { @Url.Content("~/media/manRepairRecord/" + Model.ManRecord.imgFile3) }" alt="manRepair image 3">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>照片3描述</td>
+                                        <td>
+                                            <a href="#" id="imgDesc3" data-type="textarea" data-pk="@Model.reportRecord.recordId" data-url="@Url.Action("UpdateManRecord")">@Model.ManRecord.imgDesc3</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>完修照片</td>
+                                        <td>
+                                            <div class="progress" style="margin-bottom: 10px; display: none;">
+                                                <div id="imgProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                                            </div>
+                                            <input id="uploadImage_4" type='file' onchange="uploadImage(this, '_4')" style="display: none;">
+                                            <button class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="upload('_4')" id="imgButton4" ><i class="fa fa-camera"></i> 上傳照片</button>
+                                            <img id="photo_4" class="img-responsive" src="@if (Model.ManRecord.imgFixFile1 != null) { @Url.Content("~/media/manRepairRecord/" + Model.ManRecord.imgFixFile1) } " alt="manRepair image 4">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>完修照片描述</td>
+                                        <td>
+                                            <a href="#" id="imgFixDesc1" data-type="textarea" data-pk="@Model.reportRecord.recordId" data-url="@Url.Action("UpdateManRecord")">@Model.ManRecord.imgFixDesc1</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>資料建立日期</td>
+                                        <td id="ManCreate">@Model.ManRecord.createTime</td>
+                                    </tr>
+                                    <tr>
+                                        <td>資料最後變更日期</td>
+                                        <td id="ManLast">@Model.ManRecord.lastUpdateTime</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </section>
 </div>
-<script src="~/Scripts/ItemDetailed.js"></script>

@@ -6,7 +6,7 @@
     <section class="content-header" style="margin-bottom: 15px;">
         <ol class="breadcrumb">
             <li>
-                <a href="/"><i class="fa fa-dashboard"></i>Home</a>
+                <a href="/Home/Index"><i class="fa fa-dashboard"></i>Home</a>
             </li>
             <li class="active">常用解決方法檢視/修改</li>
         </ol>
@@ -48,22 +48,22 @@
     </section>
 </div>
 <script>
-    function setSwitchEditable(tag, state) {
-        $(tag).editable({
-            value: [state],
-            source: { 1: 'Yes' },
-            emptytext: 'No',
+    //function setSwitchEditable(tag, state) {
+    //    $(tag).editable({
+    //        value: [state],
+    //        source: { 1: 'Yes' },
+    //        emptytext: 'No',
 
-            params: function (params) {
-                var data = {};
-                data['name'] = params.name;
-                data['pk'] = params.pk;
-                data['value'] = params.value.join(",");
+    //        params: function (params) {
+    //            var data = {};
+    //            data['name'] = params.name;
+    //            data['pk'] = params.pk;
+    //            data['value'] = params.value.join(",");
 
-                return data;
-            },
-        });
-    }
+    //            return data;
+    //        },
+    //    });
+    //}
 
     $.fn.editable.defaults.mode = 'inline';
 
@@ -71,10 +71,10 @@
         // x-editable for user table
         $('#description').editable();
 
-        setSwitchEditable('#system', '1');
-        setSwitchEditable('#manager', '0');
-        setSwitchEditable('#general', '0');
-        setSwitchEditable('#inspect', '0');
-        setSwitchEditable('#active', '0');
+        //setSwitchEditable('#system', '1');
+        //setSwitchEditable('#manager', '0');
+        //setSwitchEditable('#general', '0');
+        //setSwitchEditable('#inspect', '0');
+        //setSwitchEditable('#active', '0');
     });
 </script>

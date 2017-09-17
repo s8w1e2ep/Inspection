@@ -41,7 +41,7 @@ namespace InspectionWeb.Services
             return result;
         }
 
-        public IResult Create(System.DateTime date, IEnumerable<exhibitionItem> items)
+        public IResult Create(System.DateTime date, IEnumerable<exhibitionItem> items, string setupId)
         {
             IResult result = new Result(false);
             for (int i = 0; i < items.Count(); i++)
@@ -55,9 +55,9 @@ namespace InspectionWeb.Services
                     itemDispatch.dispatchId = idGen.GetID("itemDispatch");
                     itemDispatch.checkDate = date;
                     itemDispatch.itemId = items.ElementAt(i).itemId;
-                    itemDispatch.inspectorId1 = "";//items.ElementAt(i).inspectionUserId;
-                    itemDispatch.inspectorId2 = "";//items.ElementAt(i).inspectionUserId;
-                    itemDispatch.setupUserId = "";
+                    itemDispatch.inspectorId1 = items.ElementAt(i).inspectionUserId;
+                    itemDispatch.inspectorId2 = items.ElementAt(i).inspectionUserId;
+                    itemDispatch.setupUserId = setupId;
                     itemDispatch.isDelete = Convert.ToByte(0);
                     itemDispatch.createTime = now;
                     itemDispatch.lastUpdateTime = now;
@@ -166,19 +166,20 @@ namespace InspectionWeb.Services
 
         public bool checkItemInsert(System.DateTime date)
         {
-            string sqlString = "SELECT COUNT(DISTINCT(itemId)) "
-                            + "FROM itemInspectionDispatch "
-                            + "WHERE checkDate='" + date.ToString("d") + "';";
-
-            string sqlString2 = "SELECT COUNT(DISTINCT(itemId)) "
-                            + "FROM exhibitionItem;";
+            string sqlString = "SELECT COUNT(exhibitionItem.itemId) AS num " +
+                                "FROM exhibitionItem " +
+                                "WHERE itemType = 1 AND isDelete = 0 " +
+                                "AND NOT EXISTS( " +
+                                "SELECT itemInspectionDispatch.itemId " +
+                                "FROM itemInspectionDispatch " +
+                                "WHERE itemInspectionDispatch.itemId = exhibitionItem.itemId " +
+                                "AND itemInspectionDispatch.checkDate = '" + date.ToString("d") + "')";
 
             using (inspectionEntities db = new inspectionEntities())
             {
-                var existNum = db.Database.SqlQuery<int>(sqlString).First();
-                var itemNum = db.Database.SqlQuery<int>(sqlString2).First();
+                var num = db.Database.SqlQuery<int>(sqlString).First();
 
-                return ((existNum - itemNum) == 0) ? false : true;
+                return (num == 0) ? false : true;
             }
         }
 

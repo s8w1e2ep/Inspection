@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Web;
 using System.Web.Mvc;
-using InspectionWeb.Models.ViewModel;
 using InspectionWeb.Models;
+using InspectionWeb.Models.ViewModel;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
-using System.Web;
+using System.Linq;
 
 namespace InspectionWeb.Controllers
 {
@@ -12,10 +13,12 @@ namespace InspectionWeb.Controllers
     public class CompanyController : Controller
     {
         private ICompanyService _companyService;
+        private IExhibitionItemService _itemService;
 
-        public CompanyController(ICompanyService service)
+        public CompanyController(ICompanyService service, IExhibitionItemService service2)
         {
             this._companyService = service;
+            this._itemService = service2;
         }
 
         // GET: Company/Add
@@ -111,24 +114,31 @@ namespace InspectionWeb.Controllers
         {
             if (string.IsNullOrEmpty(companyId))
             {
-                return RedirectToAction("ListGroup");
+                return Json(new { success = false, msg = "廠商ID為空" });
             }
 
             var company = _companyService.GetByID(companyId);
 
             if (company == null)
             {
-                return RedirectToAction("List");
+                return Json(new { success = false, msg = "無此公司" });
             }
 
             try
             {
-                var result = this._companyService.Update(company, "isDelete", "1");
-                return RedirectToAction("List");
+                if(this._itemService.GetAll().Any(x => x.companyId == companyId))
+                {
+                    return Json(new { success = false, msg = "請先刪除此廠商的展項"});
+                }
+                else
+                {
+                    this._companyService.Update(company, "isDelete", "1");
+                    return Json(new { success = true, msg = "刪除成功" });
+                }
             }
             catch (Exception)
             {
-                return RedirectToAction("List");
+                return Json(new { success = false, msg = "刪除錯誤" });
             }    
         }
 

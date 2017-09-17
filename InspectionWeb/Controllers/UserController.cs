@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Web.Security;
 using System.Web;
 using System.Web.Mvc;
 using InspectionWeb.Models.ViewModel;
@@ -148,26 +147,32 @@ namespace InspectionWeb.Controllers
         {
             if (string.IsNullOrEmpty(userId))
             {
-                return RedirectToAction("List");
+                return Json(new { success = false, msg = "使用者ID為空" });
             }
 
             var user = _userService.GetByID(userId);
 
             if (user == null)
             {
-                return RedirectToAction("List");
+                return Json(new { success = false, msg = "無此使用者" });
             }
 
             try
             {
-                this._userService.Update(user, "isDelete", "1");
+                if (this._userService.GetAll().Any(x => x.agent == userId))
+                {
+                    return Json(new { success = false, msg = "無法刪除，此使用者為其他使用者的代理人" });
+                }
+                else
+                {
+                    this._userService.Update(user, "isDelete", "1");
+                    return Json(new { success = true, msg = "刪除成功" });
+                }    
             }
             catch (Exception)
             {
-                return RedirectToAction("List");
+                return Json(new { success = false, msg = "刪除錯誤" });
             }
-
-            return RedirectToAction("List");
         }
 
         // GET: /User/AddGroup
@@ -314,25 +319,33 @@ namespace InspectionWeb.Controllers
         {
             if (string.IsNullOrEmpty(groupId))
             {
-                return RedirectToAction("ListGroup");
+                return Json(new { success = false, msg = "群組ID為空" });
             }
 
             var group = _userGroupService.GetByID(groupId);
 
             if (group == null)
             {
-                return RedirectToAction("ListGroup");
+                return Json(new { success = false, msg = "無此群組" });
             }
 
             try
             {
-                this._userGroupService.Update(group, "isDelete", "1");
+                if (this._userService.GetAll().Any(x => x.groupId == groupId))
+                {
+                    return Json(new { success = false, msg = "請先刪除群組內的使用者" });
+                }
+                else
+                {
+                    this._userGroupService.Update(group, "isDelete", "1");
+                    return Json(new { success = true, msg = "刪除成功" });
+                }
+                
             }
             catch (Exception)
             {
-                return RedirectToAction("ListGroup");
+                return Json(new { success = false, msg = "刪除錯誤" });
             }
-            return RedirectToAction("ListGroup");
         }
 
         private UserDetailViewModel User2ViewModel(user instance)
