@@ -288,18 +288,21 @@ namespace InspectionWeb.Controllers
                     {
                         fileName += ".png";
                     }
-                    
-                    var path = Path.Combine(Server.MapPath("~/media/user"), fileName);
+
+                    var path = Server.MapPath("~/media/user/");
+
                     if (!Directory.Exists(path))
-                    {
+                    {                    
                         Directory.CreateDirectory(path);
                     }
+                    System.Diagnostics.Debug.WriteLine("GG: \n\n" + path);
+                    path = Path.Combine(path, fileName);
                     upload.SaveAs(path);
 
                     user instance = _userService.GetByID(userId);
 
                     var result = _userService.Update(instance, "picture", fileName);
-
+ 
                     if (result.Success)
                     {
                         result.Message = fileName;
