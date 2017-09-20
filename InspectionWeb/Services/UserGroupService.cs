@@ -64,6 +64,11 @@ namespace InspectionWeb.Services
 
                     newGroup.groupId = groupId;
                     newGroup.groupName = groupName;
+                    newGroup.superUserOnly = 0;
+                    newGroup.systemManagement = 0;
+                    newGroup.dispatchManagement = 0;
+                    newGroup.normalUser = 0;
+                    newGroup.userManagement = 0;
                     newGroup.isDelete = 0;
                     newGroup.createTime = nowTime;
                     newGroup.lastUpdateTime = nowTime;

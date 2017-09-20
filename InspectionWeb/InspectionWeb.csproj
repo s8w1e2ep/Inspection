@@ -232,6 +232,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HTMLHelperExtensions.cs" />
     <Compile Include="Models\abnormalDefinition.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
@@ -432,8 +433,6 @@
       <DependentUpon>inspection.edmx</DependentUpon>
       <LastGenOutput>inspection.cs</LastGenOutput>
     </Content>
-    <Content Include="Scripts\addGroup.js" />
-    <Content Include="Scripts\addUser.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -466,17 +465,13 @@
       <DependentUpon>inspection.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\editGroup.js" />
     <Content Include="Scripts\editPendingListDetailedData.js" />
     <Content Include="Scripts\extendedWork.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\listGroup.js" />
     <Content Include="Scripts\ListSolution.js" />
-    <Content Include="Scripts\listUser.js" />
     <Content Include="Scripts\MaintenanceQuery.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\Query.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\showpedningList.js" />
