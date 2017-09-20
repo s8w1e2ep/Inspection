@@ -4,6 +4,13 @@
     ViewBag.Title = "人員列表";
 }
 
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
         <ol class="breadcrumb">
@@ -22,7 +29,7 @@
                         <table id="userTable" class="row-border" cellspacing="0" style="width: 100%;">
                             <thead>
                                 <tr>
-                                    <th>帳號</th>
+                                    <th>使用者代碼</th>
                                     <th>姓名</th>
                                     <th>權限群組</th>
                                     <th>代理人</th>
@@ -75,4 +82,49 @@
         </div>
     </section>
 </div>
-<script src="~/Scripts/listUser.js"></script>
+<script>
+    var toDeleteUserId;
+
+    function deleteUser() {
+        $.ajax({
+            type: "DELETE",
+            url: 'DeleteUser',
+            data: $.param({ "userId": toDeleteUserId })
+        }).done(function (data) {
+            if (data.success) {
+                $("#" + toDeleteUserId).remove();
+                alert(data.msg);
+            } else {
+                alert(data.msg);
+            }
+        });
+    }
+
+    // 設定刪除的 userId
+    function setId(userId) {
+        toDeleteUserId = userId;
+    }
+
+    $(document).ready(function () {
+        // 使用者表格設定
+        $('#userTable').DataTable({
+            "paging": true,
+            "info": false,
+            "searching": true,
+            "columnDefs": [
+                { "targets": 0, "width": "15%", "orderable": true },
+                { "targets": 1, "width": "15%", "orderable": true },
+                { "targets": 2, "width": "15%", "orderable": true },
+                { "targets": 3, "width": "15%", "orderable": true },
+                { "targets": 4, "width": "15%", "orderable": true },
+                { "targets": 5, "width": "15%", "orderable": true },
+                { "targets": 6, "width": "10%", "orderable": false }
+            ]
+        });
+
+        // delete dialog 確定事件
+        $('#modalYes').click(function () {
+            deleteUser();
+        });
+    });
+</script>

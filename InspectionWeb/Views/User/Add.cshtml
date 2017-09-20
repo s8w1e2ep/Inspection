@@ -30,9 +30,9 @@
                                 </div>
                             }
                             <div id="accountDiv" class="form-group">
-                                <label for="account" class="col-md-2 control-label">帳號</label>
+                                <label for="account" class="col-md-2 control-label">使用者代碼</label>
                                 <div class="col-md-10">
-                                    <input id="account" type="text" class="form-control" name="account" placeholder="輸入使用者帳號">
+                                    <input id="account" type="text" class="form-control" name="account" placeholder="輸入使用者代碼">
                                 </div>
                             </div>
                             <div id="passwordDiv" class="form-group">
@@ -57,4 +57,31 @@
         </div>
     </section>
 </div>
-<script src="~/Scripts/addUser.js"></script>
+<script>
+    $(document).ready(function () {
+        // 顯示錯誤提醒 
+        function fieldValidation(field) {
+            if ($.trim($(field).val()) == '') {
+                $(field + 'Div').addClass('has-error');
+                $(field + 'Div').val('');
+                return false;
+            } else {
+                $(field + 'Div').removeClass('has-error');
+            }
+            return true;
+        }
+        // 驗證表單資料是否錯誤
+        function formValidation() {
+            if (fieldValidation('#account') && fieldValidation('#password') && fieldValidation('#repeatPassword')) {
+                var password = $('#passwordDiv input').val();
+                var repeatPassword = $('#repeatPasswordDiv input').val();
+                if (password == repeatPassword) {
+                    return true;
+                } else {
+                    $('#repeatPasswordDiv').addClass('has-error');
+                }
+            }
+            return false;
+        }
+    });
+</script>
