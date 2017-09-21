@@ -133,6 +133,27 @@ namespace InspectionWeb.Services
             return result;
         }
 
+        public IResult Reset(roomInspectionDispatch instance)
+        {
+            IResult result = new Result(false);
+            if (instance == null)
+            {
+                throw new ArgumentNullException();
+            }
+            try
+            {
+                instance.isDelete = Convert.ToByte(0);
+                this._repository.Update(instance);
+                result.Success = true;
+            }
+            catch (Exception ex)
+            {
+                result.Exception = ex;
+            }
+
+            return result;
+        }
+
         public IResult Delete(string dispatchId)
         {
             IResult result = new Result(false);
@@ -177,7 +198,7 @@ namespace InspectionWeb.Services
         {
             string sqlString = "SELECT COUNT(exhibitionRoom.roomId) AS num " +
                                 "FROM exhibitionRoom " +
-                                "WHERE active = 1 AND isDelete = 0 " +
+                                "WHERE isDelete = 0 " +
                                 "AND NOT EXISTS( " +
                                 "SELECT roomInspectionDispatch.roomId " +
                                 "FROM roomInspectionDispatch " +
@@ -198,18 +219,17 @@ namespace InspectionWeb.Services
 
         public IEnumerable<roomInspectionDispatchDetail> GetAllByDate(System.DateTime date)
         {
-            string sqlString = "IF OBJECT_ID('temp','U') IS NOT NULL DROP TABLE temp;"
-                    + "SELECT RID.dispatchId, R.roomId, R.roomName, RID.checkDate, RID.inspectorId1, " 
-                    + "U1.userCode AS inspectorCode1, U1.userName AS inspectorName1, RID.inspectorId2 "
-                    + "INTO temp "
-                    + "FROM exhibitionRoom R, "
-                    + "roomInspectionDispatch RID LEFT OUTER JOIN[user] U1 on RID.inspectorId1 = U1.userId "
-                    + "WHERE RID.roomId = R.roomId "
-                    + "AND RID.checkDate = '" + date.ToString("d") + "' "
-                    + "AND RID.isDelete = 0 "
-                    + "SELECT temp.*, U2.userCode AS inspectorCode2, U2.userName AS inspectorName2 "
-                    + "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId "
-                    + "ORDER BY temp.dispatchId;";
+            string sqlString = "IF OBJECT_ID('temp','U') IS NOT NULL DROP TABLE temp " +
+                "SELECT RID.dispatchId, R.roomId, R.roomName, R.active AS roomStatus, RID.checkDate, RID.inspectorId1, " +
+                "U1.userCode AS inspectorCode1, U1.userName AS inspectorName1, RID.inspectorId2, RID.isDelete AS ridStatus " +
+                "INTO temp " +
+                "FROM exhibitionRoom R, " +
+                "roomInspectionDispatch RID LEFT OUTER JOIN[user] U1 on RID.inspectorId1 = U1.userId " +
+                "WHERE RID.roomId = R.roomId " +
+                "AND RID.checkDate = '" + date.ToString("d") + "' " +
+                "SELECT temp.*, U2.userCode AS inspectorCode2, U2.userName AS inspectorName2 " +
+                "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId " +
+                "ORDER BY temp.dispatchId; "; 
 
             using (inspectionEntities db = new inspectionEntities())
             {

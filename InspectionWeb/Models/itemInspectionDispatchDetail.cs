@@ -27,5 +27,7 @@ namespace InspectionWeb.Models
 
         public string inspectorName2 { get; set; }
 
+        public byte iidStatus { get; set; }
+
     }
 }

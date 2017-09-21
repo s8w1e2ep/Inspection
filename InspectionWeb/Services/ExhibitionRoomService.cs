@@ -190,7 +190,7 @@ namespace InspectionWeb.Services
         {
             string sqlString = "SELECT exhibitionRoom.* " +
                                 "FROM exhibitionRoom " +
-                                "WHERE active = 1 AND isDelete = 0 " +
+                                "WHERE isDelete = 0 " +
                                 "AND NOT EXISTS( " +
                                 "SELECT roomInspectionDispatch.roomId " +
                                 "FROM roomInspectionDispatch " +
