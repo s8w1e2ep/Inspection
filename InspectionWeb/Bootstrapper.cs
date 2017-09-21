@@ -39,7 +39,7 @@ namespace InspectionWeb
 
         public static void RegisterTypes(IUnityContainer container)
         {
-            //¸ê®Æ®w³s±µ¦r¦ê¥Ñ°õ¦æºÝÀô¹Ò¨Óµ¹¤©¡A¦Ó¤£¼g¦º¦b DbContextFactory ·í¤¤.
+            //ï¿½ï¿½Æ®wï¿½sï¿½ï¿½ï¿½rï¿½ï¿½Ñ°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¨Óµï¿½ï¿½ï¿½ï¿½Aï¿½Ó¤ï¿½ï¿½gï¿½ï¿½ï¿½b DbContextFactory ï¿½ï¿½.
             string connectionString = WebConfigurationManager.ConnectionStrings["inspectionEntities"].ConnectionString;
 
             container.RegisterType<IDbContextFactory, DbContextFactory>(
@@ -64,9 +64,14 @@ namespace InspectionWeb
             container.RegisterType<IRepository<reportSource>, GenericRepository<reportSource>>();
             container.RegisterType<IRepository<user>, GenericRepository<user>>();
             container.RegisterType<IRepository<userGroup>, GenericRepository<userGroup>>();
-
             container.RegisterType<IRepository<fieldMap>, GenericRepository<fieldMap>>();
-
+            container.RegisterType<IRepository<quickSolution>, GenericRepository<quickSolution>>();
+            container.RegisterType<IRepository<exhibitionRoom>, GenericRepository<exhibitionRoom>>();
+            container.RegisterType<IRepository<otherAbnormalRecord>, GenericRepository<otherAbnormalRecord>>();
+            container.RegisterType<IRepository<manRepairRecord>, GenericRepository<manRepairRecord>>();
+            container.RegisterType<IRepository<softwareVersion>, GenericRepository<softwareVersion>>();
+            container.RegisterType<IRepository<systemSettings>, GenericRepository<systemSettings>>();
+            container.RegisterType<IRepository<company>, GenericRepository<company>>();
 
             //Service
             container.RegisterType<IAbnormalDefinitionService, AbnormalDefinitionService>();
@@ -81,10 +86,17 @@ namespace InspectionWeb
             container.RegisterType<IRoomCheckRecordService, RoomCheckRecordService>();
             container.RegisterType<IItemCheckRecordService, ItemCheckRecordService>();
             container.RegisterType<INoCheckDateService, NoCheckDateService>();
+            container.RegisterType<IMailService, MailService>();
             container.RegisterType<IUserService, UserService>();
             container.RegisterType<IUserGroupService, UserGroupService>();
-
             container.RegisterType<IFieldMapService, FieldMapService>();
+            container.RegisterType<ISolutionService, SolutionService>();
+            container.RegisterType<IExhibitionRoomService, ExhibitionRoomService>();
+            container.RegisterType<IOtherAbnormalRecordService, OtherAbnormalRecordService>();
+            container.RegisterType<IManRepairRecordService, ManRepairRecordService>();
+            container.RegisterType<ISoftwareVersionService, SoftwareVersionService>();
+            container.RegisterType<ISystemArgService, SystemArgService>();
+            container.RegisterType<ICompanyService, CompanyService>();
 
         }
     }

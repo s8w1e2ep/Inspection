@@ -117,5 +117,19 @@ namespace InspectionWeb.Services
             }
         }
 
+        public IEnumerable<itemCheckRecord> GetAllByDateRange(string startDate, string endDate, string itemId)
+        {
+
+            string sqlString = "SELECT * FROM itemCheckRecord WHERE itemId = '" + itemId
+                             + "' AND CAST(checkDate AS date) >= '" + startDate
+                             + "' AND CAST(checkDate AS date) <= '" + endDate
+                             + "' ORDER BY checkDate ASC";
+
+            using (inspectionEntities db = new inspectionEntities())
+            {
+                var itemCheckRecordList = db.Database.SqlQuery<itemCheckRecord>(sqlString).ToList();
+                return itemCheckRecordList;
+            }
+        }
     }
 }

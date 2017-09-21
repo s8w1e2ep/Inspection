@@ -1,6 +1,8 @@
-﻿@{
+﻿@model IEnumerable<InspectionWeb.Models.ViewModel.MaintenanceWorkDetailViewModel>
+@{
     ViewBag.Title = "展延作業";
 }
+
 <div class="wrapper">
     <div class="content-wrapper">
         <section class="content-header" style="margin-bottom: 15px;">
@@ -16,7 +18,7 @@
                 <div class="col-md-12">
                     <div class="box box-info">
                         <div class="box-body">
-                            <table id="userTable" class="row-border" cellspacing="0" style="width: 100%;">
+                            <table id="PendingList" class="row-border" cellspacing="0" style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>通報來源</th>
@@ -29,15 +31,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>自動通報</td>
-                                        <td>4F 交通夢想館</td>
-                                        <td>飛行車</td>
-                                        <td>不會動</td>
-                                        <td>2017-08-28 13:47:23</td>
-                                        <td>2017-08-30 10:00:00</td>
-                                        <td><input id="account" type="text" class="form-control" name="account" placeholder="yyyy-mm-dd hh:mm:ss"></td>
-                                    </tr>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.sourceName</td>
+                                            <td>@item.roomName</td>
+                                            <td>@item.itemName</td>
+                                            <td>@item.description</td>
+                                            <td>@Html.DisplayFor(modelItem => item.happendedTime)</td>
+                                            <td id="@item.recordId">@Html.DisplayFor(modelItem => item.fixDate)</td>
+                                            <td>
+                                                <div class="col-md-10 form-group">
+                                                    <div class="input-group col-md-8">
+                                                        <i class="fa fa-clock-o" name="DateRangePicker" data-pk="@item.recordId"></i>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -47,6 +58,6 @@
         </section>
     </div>
 </div>
-<script src="~/Scripts/exhibition.js"></script>
+<script src="~/Scripts/extendedWork.js"></script>
 
 

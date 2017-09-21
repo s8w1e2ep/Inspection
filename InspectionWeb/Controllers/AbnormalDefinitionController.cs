@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
 using InspectionWeb.Models;
-using InspectionWeb.Models.Misc;
 using InspectionWeb.Models.ViewModel;
-using System.Web.Hosting;
-using System.IO;
 
 namespace InspectionWeb.Controllers
 {
+    [AuthorizeUser(Super = true, Manager = true, User = true)]
     public class AbnormalDefinitionController : Controller
     {
         private IAbnormalDefinitionService _AbnormalDefinitionService;

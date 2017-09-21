@@ -7,7 +7,7 @@
         <section class="content-header" style="margin-bottom: 15px;">
             <ol class="breadcrumb">
                 <li>
-                    <a href="/"><i class="fa fa-dashboard"></i>Home</a>
+                    <a href="/Home/Index"><i class="fa fa-dashboard"></i>Home</a>
                 </li>
                 <li class="active">新增其他設施通報</li>
             </ol>
@@ -21,46 +21,60 @@
                             <h3 class="box-title">新增其他設施通報</h3>
                         </div>
                         <br />
-                        <form class="form-horizontal">
+                        <form class="form-horizontal" method="post" action="@Url.Action("Addother")">
+                            @if (!string.IsNullOrEmpty(ViewBag.ErrorMsg))
+                            {
+                                <div class="form-group has-error">
+                                    <label class="col-sm-2"></label>
+                                    <label class="col-sm-10">@ViewBag.ErrorMsg</label>
+                                </div>
+                            }
                             <div class="box-body">
-                                <div id="nameDiv" class="form-group">
+                                <div class="form-group">
                                     <label for="account" class="col-md-2 control-label">設施名稱</label>
                                     <div class="col-md-7">
-                                        <input id="account" type="text" class="form-control" name="account" placeholder="名稱">
+                                        <input type="text" class="form-control" name="name" placeholder="名稱">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-md-2" for="exhibitionSelect">故障來源</label>
-                                    <select class="form-control" id="exhibitionSelect" style="width: 50%;">
-                                        <option value="exhibition2">巡檢填單</option>
-                                        <option value="exhibition2">6000填單</option>
-                                        <option value="exhibition2">NM</option>
-                                        <option value="exhibition1">通報按鈕</option>
-                                        <option value="exhibition2">監控軟體</option>
-                                        <option value="exhibition2">app</option>
-                                        <option value="exhibition3">其它</option>
-                                    </select>
+                                    <div class="col-md-7">
+                                        <select class="form-control" id="exhibitionSelect" name="sourceId">
+                                            <option value="#">----請選擇一個故障來源----</option>
+                                            @foreach (var item in ViewBag.reportSources)
+                                            {
+                                                <option value="@item.sourceId">@item.sourceName</option>
+                                            }
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-md-2" for="exhibitionSelect">異常狀況</label>
-                                    <select class="form-control" id="exhibitionSelect" style="width: 50%;">
-                                        <option value="exhibition1">異常狀況-1</option>
-                                        <option value="exhibition2">異常狀況-2</option>
-                                        <option value="exhibition3">異常狀況-3</option>
-                                    </select>
+                                    <div class="col-md-7">
+                                        <select class="form-control" id="exhibitionSelect" name="abnormalId">
+                                            <option value="#">----請選擇一個異常狀況----</option>
+                                            @foreach (var item in ViewBag.abnormals)
+                                            {
+                                                <option value="@item.abnormalId">@item.abnormalName</option>
+                                            }
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-md-2" for="exhibitionSelect">通報者</label>
-                                    <select class="form-control" id="exhibitionSelect" style="width: 50%;">
-                                        <option value="exhibition1">保全</option>
-                                        <option value="exhibition2">志工</option>
-                                        <option value="exhibition3">館員</option>
-                                        <option value="exhibition3">其他</option>
-                                    </select>
+                                    <div class="col-md-7">
+                                        <select class="form-control" id="exhibitionSelect" name="reporter">
+                                            <option value="#">----請選擇一個通報者----</option>
+                                            <option value="保全">保全</option>
+                                            <option value="志工">志工</option>
+                                            <option value="館員">館員</option>
+                                            <option value="其他">其他</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-success pull-left">確定新增</button>
+                                <button type="submit" class="btn btn-success pull-right">確定新增</button>
                             </div>
                         </form>
                     </div>

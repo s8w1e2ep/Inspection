@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using InspectionWeb.Services.Misc;
 using InspectionWeb.Models;
 
@@ -8,6 +9,8 @@ namespace InspectionWeb.Services.Interface
     {
 
         IResult Create(exhibitionRoom instance);
+
+        IResult Create(string exhibitRoomName);
 
         IResult Update(exhibitionRoom instance);
 

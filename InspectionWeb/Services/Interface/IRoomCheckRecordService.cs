@@ -17,5 +17,7 @@ namespace InspectionWeb.Services.Interface
 
         IEnumerable<roomInspectionDispatchDetail> GetAllByDate(System.DateTime date);
 
+        IEnumerable<roomCheckRecord> GetAllByDateRange(string startDate, string endDate, string roomId);
+
     }
 }

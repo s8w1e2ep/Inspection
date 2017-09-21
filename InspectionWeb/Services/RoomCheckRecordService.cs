@@ -116,5 +116,20 @@ namespace InspectionWeb.Services
                 return filterData;
             }
         }
+
+        public IEnumerable<roomCheckRecord> GetAllByDateRange(string startDate, string endDate, string roomId)
+        {
+
+            string sqlString = "SELECT * FROM roomCheckRecord WHERE roomId = '" + roomId 
+                             + "' AND CAST(checkDate AS date) >= '" + startDate
+                             + "' AND CAST(checkDate AS date) <= '" + endDate
+                             + "' ORDER BY checkDate ASC";
+
+            using (inspectionEntities db = new inspectionEntities())
+            {
+                var roomCheckRecordList = db.Database.SqlQuery<roomCheckRecord>(sqlString).ToList();
+                return roomCheckRecordList;
+            }
+        }
     }
 }

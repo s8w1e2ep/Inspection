@@ -4,6 +4,12 @@
     ViewBag.Title = "群組檢視/修改";
 }
 
+<!-- x-editable component, Note to include x-editable after core library (bootstrap, jquery-ui)!-->
+<link href="~/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+<script src="~/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<!-- date format -->
+<script src="~/Scripts/jquery-dateFormat.min.js"></script>
+
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
         <ol class="breadcrumb">
@@ -17,7 +23,7 @@
         <div class="row">
             <!-- left column -->
             <div class="col-md-12">
-                <div class="box box-info">
+                <div class="box box-success">
                     <div class="box-header with-border">
                         <h3 class="box-title">群組檢視/修改</h3>
                     </div>
@@ -80,4 +86,41 @@
         </div>     
     </section>
 </div>
-<script src="~/Scripts/editGroup.js"></script>
+<script>
+    function setSwitchEditable(tag, state) {
+        $(tag).editable({
+            value: [state],
+            source: { 1: '是' },
+            emptytext: '否',
+            params: function (params) {
+                var data = {};
+                data['name'] = params.name;
+                data['pk'] = params.pk;
+                data['value'] = params.value.join(",");
+
+                return data;
+            },
+            success: function (response) {
+                $('#last').html(response.lastUpdateTime);
+            }
+        });
+    }
+
+    $.fn.editable.defaults.mode = 'inline';
+
+    $(document).ready(function () {
+        // x-editable for user table
+        $('#groupName').editable({
+            emptytext: '""',
+            success: function (response) {
+                $('#last').html(response.lastUpdateTime);
+            }
+        });
+
+        setSwitchEditable('#superUserOnly', '@Model.superUser');
+        setSwitchEditable('#systemManagement', '@Model.system');
+        setSwitchEditable('#userManagement', '@Model.user');
+        setSwitchEditable('#dispatchManagement', '@Model.dispatch');
+        setSwitchEditable('#normalUser', '@Model.normal');
+    });
+</script>

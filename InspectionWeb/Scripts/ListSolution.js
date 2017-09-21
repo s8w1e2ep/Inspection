@@ -1,4 +1,22 @@
-﻿$(document).ready(function () {
+﻿var toDeletesolutionId;
+
+function deleteUser() {
+    $.ajax({
+        type: "DELETE",
+        url: 'DeleteSolution',
+        data: $.param({ "solutionId": toDeletesolutionId })
+    }).done(function (msg) {
+        $("#" + toDeletesolutionId).remove();
+    });
+}
+
+// 設定刪除的 solutionId
+function setId(solutionId) {
+    toDeletesolutionId = solutionId;
+}
+
+
+$(document).ready(function () {
     $('#SolutionTable').DataTable({
         "paging": false,
         "info": false,
@@ -6,15 +24,13 @@
         "columnDefs": [
             { "targets": 0, "width": "70%", "orderable": true },
             { "targets": 1, "width": "20%", "orderable": true },
-            { "targets": 2, "width": "10%", "orderable": false },
+            { "targets": 2, "width": "10%", "orderable": false }
             
-        ],
+        ]
     });
 
-    $('#myModal .modal-footer button').on('click', function (e) {
-        var $target = $(e.target);
-        if ($target.index() == 1) {
-            deleteUser();
-        }
+    // delete dialog 確定事件
+    $('#modalYes').click(function () {
+        deleteUser();
     });
 });

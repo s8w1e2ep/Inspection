@@ -4,17 +4,24 @@
     ViewBag.Title = "群組列表";
 }
 
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
         <ol class="breadcrumb">
-            <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>home</a></li>
+            <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>Home</a></li>
             <li class="active">群組列表</li>
         </ol>
     </section>
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-                <div class="box box-info">
+                <div class="box box-success">
                     <div class="box-header">
                         <h3 class="box-title">群組列表</h3>
                     </div>
@@ -23,6 +30,7 @@
                             <thead>
                                 <tr>
                                     <th>群組名稱</th>
+                                    <th>超級使用者</th>
                                     <th>系統管理</th>
                                     <th>使用者管理</th>
                                     <th>巡檢管理</th>
@@ -37,6 +45,7 @@
                                 {
                                     <tr id="@item.groupId">
                                         <td>@item.groupName</td>
+                                        <td>@item.superUser</td>
                                         <td>@item.system</td>
                                         <td>@item.user</td>
                                         <td>@item.dispatch</td>
@@ -77,4 +86,50 @@
         </div>
     </section>
 </div>
-<script src="~/Scripts/listGroup.js"></script>
+<script>
+    var toDeleteGroupId;
+
+    function deleteGroup() {
+        $.ajax({
+            type: "DELETE",
+            url: 'DeleteGroup',
+            data: $.param({ "groupId": toDeleteGroupId })
+        }).done(function (data) {
+            if (data.success) {
+                $("#" + toDeleteGroupId).remove();
+                alert(data.msg);
+            } else {
+                alert(data.msg);
+            }
+        });
+    }
+
+    // 設定刪除的 groupId
+    function setId(groupId) {
+        toDeleteGroupId = groupId;
+    }
+
+    $(document).ready(function () {
+        $('#groupTable').DataTable({
+            "paging": true,
+            "info": false,
+            "searching": true,
+            "columnDefs": [
+                { "targets": 0, "width": "10%", "orderable": true },
+                { "targets": 1, "width": "10%", "orderable": true },
+                { "targets": 2, "width": "10%", "orderable": true },
+                { "targets": 3, "width": "10%", "orderable": true },
+                { "targets": 4, "width": "10%", "orderable": true },
+                { "targets": 5, "width": "15%", "orderable": true },
+                { "targets": 6, "width": "10%", "orderable": true },
+                { "targets": 7, "width": "10%", "orderable": true },
+                { "targets": 8, "width": "15%", "orderable": false }
+            ]
+        });
+
+        // delete dialog 確定事件
+        $('#modalYes').click(function () {
+            deleteGroup();
+        });
+    });
+</script>

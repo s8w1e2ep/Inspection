@@ -67,6 +67,11 @@ namespace InspectionWeb.Services
                     newUser.userId = userId;
                     newUser.userCode = account;
                     newUser.password = encodePassword;
+                    newUser.userName = "";
+                    newUser.groupId = "";
+                    newUser.agent = "";
+                    newUser.tel = "";
+                    newUser.email = "";
                     newUser.active = 0;
                     newUser.isDelete = 0;
                     newUser.createTime = nowTime;

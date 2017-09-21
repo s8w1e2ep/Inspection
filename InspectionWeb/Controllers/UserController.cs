@@ -1,114 +1,28 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Web.Security;
 using System.Web;
 using System.Web.Mvc;
 using InspectionWeb.Models.ViewModel;
 using InspectionWeb.Models;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
-
+using System.IO;
 
 namespace InspectionWeb.Controllers
 {
-    [AuthorizeUser(Normal = true)]
+    [AuthorizeUser(Super = true, Manager = true, User = true)]
     public class UserController : Controller
     {
         private IUserService _userService;
         private IUserGroupService _userGroupService;
+        private IExhibitionRoomService _exhibitionRoomService;
 
-        public UserController(IUserService service, IUserGroupService service2)
+        public UserController(IUserService service, IUserGroupService service2, IExhibitionRoomService service3)
         {
             this._userService = service;
             this._userGroupService = service2;
-        }
-
-        // GET: /User/Login
-        [AllowAnonymous]
-        public ActionResult Login()
-        {
-            return View();
-        }
-
-        // POST: /User/Login/account/password
-        [AllowAnonymous]
-        [HttpPost]
-        public ActionResult Login(string account, string password)
-        {
-            user user = this._userService.Login(account, password);
-
-            if (user != null)
-            {
-                Session["authenticated"] = true;
-                Session["account"] = user.userCode;
-                Session["userId"] = user.userId;
-                //TODO: 依照 groupId 設定權限
-
-                //使用 MVC 內建登入並利用自訂權限 [AuthorizeUser] 功能
-                LoginProcess(user, false);
-
-                //取得權限寫法
-                if (System.Web.HttpContext.Current.User.Identity.IsAuthenticated == true)
-                {
-                    FormsIdentity id = (FormsIdentity)User.Identity;
-                    FormsAuthenticationTicket ticket = id.Ticket;
-                    var userData = ticket.UserData.Split(',');
-                }
-
-                return RedirectToAction("Index", "Home");
-            }
-
-            return View();
-        }
-
-        private void LoginProcess(user loginUser, bool isRemember)
-        {
-            var now = DateTime.Now;
-            string roles = "Normal";
-            // TODO: 依照 groupId 設定角色名稱，Ex: roles = roles + ",Manager";
-            
-
-            FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
-                1,                          // version
-                loginUser.userId,           // 使用者ID
-                DateTime.Now,               // 核發日期
-                DateTime.Now.AddMinutes(10),// 到期時間 10 分鐘 
-                isRemember,                 // 永續性
-                roles,                      // 使用者定義的資料
-                FormsAuthentication.FormsCookiePath
-            );
-
-            var encryptedTicket = FormsAuthentication.Encrypt(ticket);
-            var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
-            cookie.Expires = ticket.Expiration;
-            Response.Cookies.Add(cookie);
-        }
-
-        // GET: /User/Logout
-        [AllowAnonymous]
-        public ActionResult Logout()
-        {
-            //使用者登出
-            FormsAuthentication.SignOut();
-
-            //清除所有的 session
-            Session.RemoveAll();
-
-            //建立一個同名的 Cookie 來覆蓋原本的 Cookie
-            HttpCookie cookie1 = new HttpCookie(FormsAuthentication.FormsCookieName, "");
-            cookie1.Expires = DateTime.Now.AddYears(-1);
-            Response.Cookies.Add(cookie1);
-
-            //建立 ASP.NET 的 Session Cookie 同樣是為了覆蓋
-            HttpCookie cookie2 = new HttpCookie("ASP.NET_SessionId", "");
-            cookie2.Expires = DateTime.Now.AddYears(-1);
-            Response.Cookies.Add(cookie2);
-
-            //Session.Clear();
-            Session.Abandon();
-
-            return RedirectToAction("Login");
+            this._exhibitionRoomService = service3;
         }
 
         // GET: /User
@@ -183,9 +97,9 @@ namespace InspectionWeb.Controllers
                 if (result.Success == false)
                 {
                     UserAddViewModel vm = new UserAddViewModel();
-                    vm.Account = account;
-                    vm.Password = password;
-                    vm.ErrorMsg = result.ErrorMsg;
+                    vm.account = account;
+                    vm.password = password;
+                    vm.errorMsg = result.ErrorMsg;
 
                     return View("Add", vm);
                 }
@@ -195,9 +109,9 @@ namespace InspectionWeb.Controllers
             else
             {
                 UserAddViewModel vm = new UserAddViewModel();
-                vm.Account = account;
-                vm.Password = password;
-                vm.ErrorMsg = "帳號或密碼空白";
+                vm.account = account;
+                vm.password = password;
+                vm.errorMsg = "帳號或密碼空白";
 
                 return View("Add", vm);
             }
@@ -233,26 +147,32 @@ namespace InspectionWeb.Controllers
         {
             if (string.IsNullOrEmpty(userId))
             {
-                return RedirectToAction("List");
+                return Json(new { success = false, msg = "使用者ID為空" });
             }
 
             var user = _userService.GetByID(userId);
 
             if (user == null)
             {
-                return RedirectToAction("List");
+                return Json(new { success = false, msg = "無此使用者" });
             }
 
             try
             {
-                this._userService.Update(user, "isDelete", "1");
+                if (this._userService.GetAll().Any(x => x.agent == userId))
+                {
+                    return Json(new { success = false, msg = "無法刪除，此使用者為其他使用者的代理人" });
+                }
+                else
+                {
+                    this._userService.Update(user, "isDelete", "1");
+                    return Json(new { success = true, msg = "刪除成功" });
+                }    
             }
             catch (Exception)
             {
-                return RedirectToAction("List");
+                return Json(new { success = false, msg = "刪除錯誤" });
             }
-
-            return RedirectToAction("List");
         }
 
         // GET: /User/AddGroup
@@ -368,14 +288,21 @@ namespace InspectionWeb.Controllers
                     {
                         fileName += ".png";
                     }
-                    
-                    var path = System.IO.Path.Combine(Server.MapPath("~/media/user"), fileName);
+
+                    var path = Server.MapPath("~/media/user/");
+
+                    if (!Directory.Exists(path))
+                    {                    
+                        Directory.CreateDirectory(path);
+                    }
+                    System.Diagnostics.Debug.WriteLine("GG: \n\n" + path);
+                    path = Path.Combine(path, fileName);
                     upload.SaveAs(path);
 
                     user instance = _userService.GetByID(userId);
 
                     var result = _userService.Update(instance, "picture", fileName);
-
+ 
                     if (result.Success)
                     {
                         result.Message = fileName;
@@ -399,25 +326,33 @@ namespace InspectionWeb.Controllers
         {
             if (string.IsNullOrEmpty(groupId))
             {
-                return RedirectToAction("ListGroup");
+                return Json(new { success = false, msg = "群組ID為空" });
             }
 
             var group = _userGroupService.GetByID(groupId);
 
             if (group == null)
             {
-                return RedirectToAction("ListGroup");
+                return Json(new { success = false, msg = "無此群組" });
             }
 
             try
             {
-                this._userGroupService.Update(group, "isDelete", "1");
+                if (this._userService.GetAll().Any(x => x.groupId == groupId))
+                {
+                    return Json(new { success = false, msg = "請先刪除群組內的使用者" });
+                }
+                else
+                {
+                    this._userGroupService.Update(group, "isDelete", "1");
+                    return Json(new { success = true, msg = "刪除成功" });
+                }
+                
             }
             catch (Exception)
             {
-                return RedirectToAction("ListGroup");
+                return Json(new { success = false, msg = "刪除錯誤" });
             }
-            return RedirectToAction("ListGroup");
         }
 
         private UserDetailViewModel User2ViewModel(user instance)
@@ -459,8 +394,9 @@ namespace InspectionWeb.Controllers
         private UserEditViewModel User2EditViewModel(user instance)
         {
             UserEditViewModel vm = new UserEditViewModel();
-            var groups = this._userGroupService.GetAll().Where(x => x.isDelete == 0 && x.groupId != instance.userId).ToList();
+            var groups = this._userGroupService.GetAll().Where(x => x.isDelete == 0 && x.superUserOnly == 0).ToList();
             var agents = this._userService.GetAll().Where(x => x.isDelete == 0 && x.userId != instance.userId).ToList();
+            var rooms = this._exhibitionRoomService.GetAll().Where(x => x.inspectionUserId == instance.userId);
 
             vm.user = User2ViewModel(instance);
 
@@ -472,6 +408,22 @@ namespace InspectionWeb.Controllers
             {
                 vm.agents.Add(User2ViewModel(agent));
             }
+            foreach (var room in rooms)
+            {
+                vm.rooms.Add(Room2ViewModel(room));
+            }
+
+            return vm;
+        }
+
+        private ExhibitionRoomListViewModel Room2ViewModel(exhibitionRoom instance)
+        {
+            ExhibitionRoomListViewModel vm = new ExhibitionRoomListViewModel();
+
+            vm.roomId = instance.roomId;
+            vm.roomName = instance.roomName;
+            vm.createTime = instance.createTime;
+            vm.lastUpdateTime = instance.lastUpdateTime;
 
             return vm;
         }

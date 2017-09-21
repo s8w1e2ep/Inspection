@@ -2,6 +2,25 @@
     ViewBag.Title = "異常排行-展項";
 }
 
+<!-- datepicker -->
+<link rel="stylesheet" href="../../theme/adminlte/plugins/datepicker/datepicker3.css">
+<script src="../../theme/adminlte/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="../../theme/adminlte/plugins/datepicker/locales/bootstrap-datepicker.zh-TW.js"></script>
+
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+
+<!-- FLOT CHARTS -->
+<script src="../../theme/AdminLTE/plugins/flot/jquery.flot.min.js"></script>
+<!-- FLOT RESIZE PLUGIN - allows the chart to redraw when the window is resized -->
+<script src="../../theme/AdminLTE/plugins/flot/jquery.flot.resize.min.js"></script>
+<!-- FLOT PIE PLUGIN - also used to draw donut charts -->
+<script src="../../theme/AdminLTE/plugins/flot/jquery.flot.pie.min.js"></script>
+
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
         <ol class="breadcrumb">
@@ -12,12 +31,11 @@
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-                <div class="box box-info" style="padding: 5px;">
+                <div class="box box-success" style="padding: 5px;">
                     <div class="box-header with-border">
                         <h3 class="box-title">篩選條件</h3>
                     </div>
-                    <br />
-                    <div class="row">
+                    <div class="box-body row">
                         <div class="col-md-6 form-group">
                             <label class="control-label col-md-2" for="startDatePicker">開始日期</label>
                             <div class="input-group col-md-8">
@@ -37,6 +55,9 @@
                             </div>
                         </div>
                     </div>
+                    <div class="box-footer">
+                        <button class="btn btn-primary" onclick="query()">確定</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -44,11 +65,11 @@
         <div class="row">
             <div class="col-xs-12">
                 <h4>前10名異常比例</h4>
-                <hr />
+                <div id="chart" class="col-md-12" style="height: 200px;"></div>
                 <h4>展項</h4>
-                <div class="box" style="border-top-color: #0094ff;">
+                <div class="box box-success">
                     <div class="box-body">
-                        <table id="fieldTable" class="row-border" cellspacing="0" width="100%">
+                        <table id="abnormalTable" class="row-border" cellspacing="0" style="width:100%;">
                             <thead>
                                 <tr>
                                     <th>展項</th>
@@ -61,28 +82,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="t1">
-                                    <td>a</td>
-                                    <td>b</td>
-                                    <td>c</td>
-                                    <td>d</td>
-                                    <td>b</td>
-                                    <td>c</td>
-                                    <td>
-                                        <a href="#" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                    </td>
-                                </tr>
-                                <tr id="t2">
-                                    <td>gg</td>
-                                    <td>h</td>
-                                    <td>r</td>
-                                    <td>a</td>
-                                    <td>b</td>
-                                    <td>c</td>
-                                    <td>
-                                        <a href="#" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                    </td>
-                                </tr>
+                                
                             </tbody>
                         </table>
                     </div>
@@ -91,4 +91,118 @@
         </div>
     </section>
 </div>
-<script src="~/Scripts/rankItem.js"></script>
+<script>
+    var startDate = null;
+    var endDate = null;
+
+    $(document).ready(function () {
+        $('#abnormalTable').DataTable({
+            "paging": true,
+            "info": false,
+            "searching": true,
+            "columnDefs": [
+                { "targets": 0, "width": "10%", "orderable": true },
+                { "targets": 1, "width": "10%", "orderable": true },
+                { "targets": 2, "width": "15%", "orderable": true },
+                { "targets": 3, "width": "15%", "orderable": true },
+                { "targets": 4, "width": "15%", "orderable": true },
+                { "targets": 5, "width": "15%", "orderable": true },
+                { "targets": 6, "width": "20%", "orderable": false }
+            ]
+        });
+
+        // single Date picker
+        $('#startDatePicker, #endDatePicker').datepicker({
+            language: 'zh-TW',
+            format: 'yyyy/mm/dd',
+            autoclose: true
+        }).on('changeDate', function (ev) {
+            startDate = $('#startDatePicker').val();
+            endDate = $('#endDatePicker').val();
+            if (ev.target.id === 'startDatePicker') {
+                $('#endDatePicker').datepicker('setStartDate', startDate);
+            } else {
+                $('#startDatePicker').datepicker('setEndDate', endDate);
+            }
+        });
+    });
+
+    function query() {
+        if (startDate === null || startDate === "") {
+            alert('請選擇開始日期!');
+        } else if (endDate === null || endDate === "") {
+            alert('請選擇結束日期!');
+        } else {
+            setAbnormalTable();
+        }
+    }
+
+    function setAbnormalTable() {
+        $('#abnormalTable').DataTable().clear().draw(true);
+        $.plot($('#chart'), '', {});
+        $.get(
+            'QueryRankItem',
+            {
+                startDate: startDate,
+                endDate: endDate
+            },
+            function (res) {
+                if (res.data.length != 0) {
+                    var chartSet = [];
+                    var total = res.total;
+                    var proba;
+                    res.data.forEach(function (record, index) {
+                        var sum = record.manNum + record.autoNum;
+                        var itemId = record.itemId;
+
+                        if (total == 0) {
+                            proba = total;
+                        } else {
+                            proba = sum / total * 100;
+                        }
+                        chartSet.push({ label: record.itemName, data: proba });
+
+                        $('#abnormalTable').DataTable().row.add([
+                            record.itemName,
+                            record.roomName,
+                            record.manNum,
+                            record.autoNum,
+                            sum,
+                            proba + "%",
+                            '<button class="btn btn-sm btn-primary" onclick="itemList(\'' + itemId + '\', \'' + startDate + '\', \'' + endDate + '\')"><i class="glyphicon glyphicon-menu-hamburger"></i></button>'
+                        ]).draw(false);
+                    });
+
+                    chartSet.sort(function (a, b) { return a.proba - b.proba; });
+                    var topTen = chartSet.splice(0, 10);
+                    // 畫圖
+                    $.plot($('#chart'), topTen, {
+                        series: {
+                            pie: {
+                                show: true,
+                                combine: {
+                                    color: '#999',
+                                    threshold: 0.1
+                                }
+                            }
+                        },
+                        legend: {
+                            show: false
+                        }
+                    });
+
+                    $('#errDiv').css('display', 'none');
+                } else {
+                    $('#errDiv').css('display', 'block');
+                }
+            },
+            'json'
+        ).fail(function () {
+            alert("抱歉! 伺服器無法接受您的查詢!");
+        });
+    }
+
+    function itemList(itemId, start, end) {
+        location.replace("/Statistic/RankItemList?itemId=" + itemId + "&start=" + start + "&end=" + end);
+    }
+</script>

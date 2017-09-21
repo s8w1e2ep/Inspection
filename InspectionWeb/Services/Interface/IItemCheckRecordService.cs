@@ -16,5 +16,7 @@ namespace InspectionWeb.Services.Interface
         IEnumerable<itemCheckRecord> GetAll();
 
         IEnumerable<itemInspectionDispatchDetail> GetAllByDate(System.DateTime date);
+
+        IEnumerable<itemCheckRecord> GetAllByDateRange(string startDate, string endDate, string itemId);
     }
 }

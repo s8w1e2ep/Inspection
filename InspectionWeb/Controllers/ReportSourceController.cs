@@ -13,6 +13,7 @@ using System.IO;
 
 namespace InspectionWeb.Controllers
 {
+    [AuthorizeUser(Normal = true)]
     public class ReportSourceController : Controller
     {
         private IReportSourceService _ReportSourceService;

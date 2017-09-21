@@ -1,0 +1,74 @@
+﻿@model IEnumerable<InspectionWeb.Models.ViewModel.UserDetailViewModel>
+
+@{
+    ViewBag.Title = "展項 - 詳細異常列表";
+}
+
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+
+<div class="content-wrapper">
+    <section class="content-header" style="margin-bottom: 15px;">
+        <ol class="breadcrumb">
+            <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>Home</a></li>
+            <li>
+                <a href="@Url.Action("RankItem")">異常排行-展項</a>
+            </li>
+            <li class="active">展項 - @ViewBag.item.itemName</li>
+        </ol>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-success">
+                    <div class="box-header">
+                        <h3 class="box-title">異常列表</h3>
+                    </div>
+                    <div class="box-body">
+                        <table id="abnormalTable" class="row-border" cellspacing="0" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>異常名稱</th>
+                                    <th>異常附加描述</th>
+                                    <th>通報來源</th>
+                                    <th>是否結案</th>
+                                    <th>異常發生日期</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var ele in ViewBag.lists)
+                                {
+                                    <tr>
+                                        <td>@ele.abName</td>
+                                        <td>@ele.desc</td>
+                                        <td>@ele.sourceName</td>
+                                        <td>@ele.isClose</td>
+                                        <td>@ele.happen</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    $('#abnormalTable').DataTable({
+        "paging": true,
+        "info": false,
+        "searching": true,
+        "columnDefs": [
+            { "targets": 0, "width": "20%", "orderable": true },
+            { "targets": 1, "width": "30%", "orderable": true },
+            { "targets": 2, "width": "20%", "orderable": true },
+            { "targets": 3, "width": "10%", "orderable": true },
+            { "targets": 4, "width": "20%", "orderable": true }
+        ]
+    });
+</script>

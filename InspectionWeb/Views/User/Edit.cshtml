@@ -4,6 +4,19 @@
     ViewBag.Title = "人員檢視/修改";
 }
 
+<!-- data table -->
+<script src="~/theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="~/theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="~/theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="~/theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+
+<!-- x-editable component, Note to include x-editable after core library (bootstrap, jquery-ui)!-->
+<link href="~/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+<script src="~/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<!-- date format -->
+<script src="~/Scripts/jquery-dateFormat.min.js"></script>
+
 <script>
     var userId = '@Model.user.userId';
     var newPassword;
@@ -14,6 +27,7 @@
     $(document).ready(function () {
         // x-editable for user table
         $('#userName, #email, #tel').editable({
+            emptytext: '""',
             success: function (response) {
                 $('#last').html(response.lastUpdateTime);
             }
@@ -22,7 +36,7 @@
         $('#active').editable({
             value: ['@Model.user.active'],
             source: {
-                1: '是',
+                1: '是'
             },
             emptytext: '否',
             params: function (params) {
@@ -40,6 +54,7 @@
 
         $('#agent').editable({
             value: 'Select status',
+            emptytext: '""',
             source: [
                 @foreach(var item in Model.agents)
                 {
@@ -53,6 +68,7 @@
 
         $('#groupId').editable({
             value: 'Select status',
+            emptytext: '""',
             source: [
                 @foreach(var item in Model.groups)
                 {
@@ -82,12 +98,11 @@
         $('#exhibtionTable').DataTable({
             "paging": false,
             "info": false,
-            "searching": false,
+            "searching": true,
             "columnDefs": [
-                { "targets": 0, "width": "25%", "orderable": true },
-                { "targets": 1, "width": "25%", "orderable": true },
-                { "targets": 2, "width": "25%", "orderable": true },
-                { "targets": 3, "width": "25%", "orderable": false }
+                { "targets": 0, "width": "40%", "orderable": true },
+                { "targets": 1, "width": "30%", "orderable": true },
+                { "targets": 2, "width": "30%", "orderable": true }
             ],
         });
     });
@@ -110,7 +125,7 @@
         <div class="row">
             <!-- left column -->
             <div class="col-md-12">
-                <div class="box box-info">
+                <div class="box box-success">
                     <div class="box-header with-border">
                         <h3 class="box-title">
                             人員檢視/修改
@@ -193,33 +208,28 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <div class="box box-info">
+                <div class="box box-success">
                     <div class="box-header with-border">
-                        <h3 class="box-title">
-                            負責展示廳
-                            <button class="btn btn-sm btn-success" style="margin-left: 10px;" onclick="addExhibition()"><span class="glyphicon glyphicon-plus-sign"></span></button>
-                        </h3>
+                        <h3 class="box-title">負責展示廳</h3>
                     </div>
                     <div class="box-body">
                         <table id="exhibtionTable" class="table table-striped table-hover table-bordered" cellspacing="0" style="width: 100%;">
                             <thead>
                                 <tr>
-                                    <th class="col-md-3">展示廳名稱</th>
-                                    <th class="col-md-3">建立日期</th>
-                                    <th class="col-md-3">最後更新日期</th>
-                                    <th class="col-md-3">操作選項</th>
+                                    <th>展示廳名稱</th>
+                                    <th>建立日期</th>
+                                    <th>最後更新日期</th>
                                 </tr>
                             </thead>
                             <tbody id="exhibitionList">
-                                <tr>
-                                    <td>地球</td>
-                                    <td>2017-08-08 00:00:00</td>
-                                    <td>2017-08-08 00:00:00</td>
-                                    <td>
-                                        <a href="#" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-menu-hamburger"></i></a>
-                                        <a href="#" class="btn btn-sm btn-danger" data-toggle=modal data-target=#myModal><i class="glyphicon glyphicon-remove"></i></a>
-                                    </td>
-                                </tr>
+                                @foreach (var item in Model.rooms)
+                                {
+                                    <tr>
+                                        <td>@item.roomName</td>
+                                        <td>@Html.DisplayFor(modelItem => item.createTime)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.lastUpdateTime)</td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -365,9 +375,5 @@
         }).fail(function () {
             alert("抱歉! 伺服器無法接受您的照片!");
         });
-    }
-
-    function addExhibition() {
-
     }
 </script>

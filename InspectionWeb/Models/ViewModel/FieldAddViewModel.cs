@@ -7,7 +7,7 @@ namespace InspectionWeb.Models.ViewModel
 {
     public class FieldAddViewModel
     {
-        public string fieldId { get; set; }
+        public string FieldId { get; set; }
 
         [Required]
         [Display(Name = "場域名稱")]
@@ -15,6 +15,8 @@ namespace InspectionWeb.Models.ViewModel
 
         [Display(Name = "說明")]
         public string Description { get; set; }
+
+        public string Floor { get; set; }
 
         public string MapFileName { get; set; }
 

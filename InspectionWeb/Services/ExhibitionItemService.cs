@@ -31,11 +31,25 @@ namespace InspectionWeb.Services
 
             try
             {
+                IdGenerator idg = new IdGenerator();
+                instance.itemId = idg.GetID("exhibitionItem");
+                
+
+                instance.createTime = DateTime.Now;
+                instance.lastUpdateTime = instance.createTime;
+                instance.isDelete = 0;
+                instance.x = 0;
+                instance.y = 0;
+
                 this._repository.Create(instance);
                 result.Success = true;
+                result.Message = instance.itemId;
+                
             }
             catch (Exception ex)
             {
+                result.Success= false;
+                result.ErrorMsg = "新增展項失敗";
                 result.Exception = ex;
             }
             return result;
@@ -52,6 +66,7 @@ namespace InspectionWeb.Services
 
             try
             {
+                instance.lastUpdateTime = DateTime.Now;
                 this._repository.Update(instance);
                 result.Success = true;
             }
