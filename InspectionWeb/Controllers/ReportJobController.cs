@@ -57,31 +57,31 @@ namespace InspectionWeb.Controllers
         }
 
         // GET: /ReportJob/AddExhibitionItem
-        public ActionResult AddExhibitionItem()
+        public ActionResult AddExhibitionItem(string sourceCode)
         {
             //取出展示廳資料
             
             ViewBag.exhibitionRooms = this._exhibitionRoomService.GetAll().Where(x => x.active == 1);
-            ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+            ViewBag.reportSource = this._reportSourceService.GetBySourceCode(sourceCode);
             ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
 
             return View();
         }
 
         // GET: /ReportJob/AddExperience
-        public ActionResult AddExperience()
+        public ActionResult AddExperience(string sourceCode)
         {
             ViewBag.exhibitionRooms = this._exhibitionRoomService.GetAll().Where(x => x.active == 1);
-            ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+            ViewBag.reportSource = this._reportSourceService.GetBySourceCode(sourceCode);
             ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
 
             return View();
         }
 
         // GET: /ReportJob/AddOther
-        public ActionResult AddOther()
+        public ActionResult AddOther(string sourceCode)
         {
-            ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+            ViewBag.reportSource = this._reportSourceService.GetBySourceCode(sourceCode);
             ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
             return View();
         }
@@ -111,7 +111,7 @@ namespace InspectionWeb.Controllers
                 {
                     //取出展示廳資料
                     ViewBag.exhibitionRooms = this._exhibitionRoomService.GetAll().Where(x => x.active == 1);
-                    ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+                    ViewBag.reportSource = this._reportSourceService.GetById(sourceId);
                     ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
                     ViewBag.ErrorMsg = result.ErrorMsg;
                     
@@ -124,9 +124,9 @@ namespace InspectionWeb.Controllers
             {
                 //取出展示廳資料
                 ViewBag.exhibitionRooms = this._exhibitionRoomService.GetAll().Where(x => x.active == 1);
-                ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+                ViewBag.reportSource = this._reportSourceService.GetById(sourceId);
                 ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
-                ViewBag.ErrorMsg = "尚有欄位尚未選擇";
+                ViewBag.ErrorMsg = "尚有欄位未選擇";
                 return View("AddExhibitionItem");
             }
         }
@@ -164,7 +164,7 @@ namespace InspectionWeb.Controllers
                 {
                     //取出展示廳資料
                     ViewBag.exhibitionRooms = this._exhibitionRoomService.GetAll().Where(x => x.active == 1);
-                    ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+                    ViewBag.reportSource = this._reportSourceService.GetById(sourceId);
                     ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
                     ViewBag.ErrorMsg = result.ErrorMsg;
 
@@ -177,7 +177,7 @@ namespace InspectionWeb.Controllers
             {
                 //取出展示廳資料
                 ViewBag.exhibitionRooms = this._exhibitionRoomService.GetAll().Where(x => x.active == 1);
-                ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+                ViewBag.reportSource = this._reportSourceService.GetById(sourceId);
                 ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
                 ViewBag.ErrorMsg = "尚有欄位尚未選擇";
                 return View("AddExperience");
@@ -216,7 +216,7 @@ namespace InspectionWeb.Controllers
                 if (result.Success == false)
                 {
                     //取出展示廳資料
-                    ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+                    ViewBag.reportSource = this._reportSourceService.GetById(sourceId);
                     ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
                     ViewBag.ErrorMsg = result.ErrorMsg;
 
@@ -228,7 +228,7 @@ namespace InspectionWeb.Controllers
             else
             {
                 //取出展示廳資料
-                ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+                ViewBag.reportSource = this._reportSourceService.GetById(sourceId);
                 ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
                 ViewBag.ErrorMsg = "尚有欄位未填選";
                 return View("AddOther");

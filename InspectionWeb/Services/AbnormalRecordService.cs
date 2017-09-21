@@ -53,7 +53,7 @@ namespace InspectionWeb.Services
 
             if (IsRepeat(itemId))
             {
-                result.ErrorMsg = "該項目已申請過, 可至檢修頁面查看";
+                result.ErrorMsg = "該項目已申請過, 可至查詢頁面查看";
             }
             else
             {
