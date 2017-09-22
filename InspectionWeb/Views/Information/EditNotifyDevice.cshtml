@@ -2,6 +2,16 @@
 @{
     ViewBag.Title = "通報裝置檢視/修改";
 }
+<!-- x-editable component, Note to include x-editable after core library (bootstrap, jquery-ui)!-->
+<link href="~/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+<script src="~/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<!-- column order -->
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+
 <script>
     $.fn.editable.defaults.mode = 'inline';
     $(document).ready(function () {
@@ -16,26 +26,78 @@
                 {
                     <text>{value: '@item.sourceId', text: '@item.sourceName'},</text>
                 }
+
             ],
             emptytext: '未設定',
             success: function (response) {
-                $('#lastUpdateTime').html(response.lastUpdateTime)
+                $('#lastUpdateTime').html(response.lastUpdateTime);
             }
         });
 
-        $('#itemId').editable({
-            value: ["@if (@Model.Item != null) {<text>@Model.Item.itemId</text>}"],
+        $('#roomId').editable({
             source: [
-                @foreach (var item in Model.Items)
+                @foreach (var item in Model.Rooms)
                 {
-                    <text>{value: '@item.itemId', text: '@item.itemName'},</text>
+                    <text>{ value: '@item.roomId', text: '@item.roomName' },</text>
                 }
+                {value: 'experience', text: '體驗設施'},
             ],
-            emptytext: '未設定',
+            emptytext: '請選擇展示廳',
             success: function (response) {
-                $('#lastUpdateTime').html(response.lastUpdateTime)
+                $('#lastUpdateTime').html(response.lastUpdateTime);
             }
+        }).on('save', function (e, params) {
+            var roomId = params.newValue;
+            var items = [
+                     @foreach (var item in Model.Items)
+                    {
+                        <text>{ value: '@item.itemId', text: '@item.itemName', room: '@item.roomId' },</text>
+                    }
+            ];
+            if (params.newValue == 'expreience') {
+                items = items.filter(x => x.value == 'experience');
+
+            } else {
+                items = items.filter(x => x.room == roomId);
+            }
+            if (items.length == 0) {
+                $('#itemId').html('<option value="#">展示廳中並無展項</option>');
+            } else {
+                $('#itemId').html('');
+                $.each(items, function (i, item) {
+                    $('#itemId').append($('<option>', {
+                        value: item.value,
+                        text: item.text
+                    }));
+                });
+            }
+            $('#itemId').prop('disabled', false);
         });
+        $('#itemId').val("@if (@Model.Item != null) {<text>@Model.Item.itemName</text>}");
+        $('#itemId').change(function () {
+            console.log('YOYO');
+            var itemId = this.value;
+            var formData = new FormData();
+            formData.append('name', 'itemId');
+            formData.append('pk', '@Model.DeviceId');
+            formData.append('value', itemId);
+            $.ajax({
+                url: "@Url.Content("~/Information/EditNotifyDevice")",
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                cache: false,
+                data: formData,
+                dataType: 'json',
+            }).done(function (data) {
+                $('#lastUpdateTime').html(data.lastUpdateTime);
+            })
+
+        });
+
+
+
+
 
         $('#fieldId').editable({
             value: ["@if (@Model.Field != null) {<text>@Model.Field.fieldId</text>}"],
@@ -164,7 +226,7 @@
                 alert("Sorry, Server unavailable. ");
             });
     }
-    
+
 </script>
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
@@ -231,7 +293,7 @@
                                 <tr>
                                     <td>展示廳</td>
                                     <td>
-                                        <a href="#" id="" data-type="select" data-pk="@Model.DeviceId" data-url="@Url.Action("EditNotifyDevice")" data-title="選擇展示廳"></a>
+                                        <a href="#" id="roomId" data-type="select" data-pk="@Model.DeviceId" data-url="@Url.Action("EditNotifyDevice")" data-title="選擇展示廳"></a>
                                     </td>
                                 </tr>
 
@@ -239,17 +301,17 @@
                                 <tr>
                                     <td>關聯展項</td>
                                     <td>
-                                        <a href="#" id="itemId" data-type="select" data-pk="@Model.DeviceId" data-url="@Url.Action("EditNotifyDevice")" data-title="選擇展項"></a>
+                                        <select class="form-control" id="itemId" style="width: 40%;" disable>
+                                            @if(Model.Item != null)
+                                            {
+                                                <option>@Model.Item.itemName</option>
+                                            }
+
+                                        </select>
                                     </td>
                                 </tr>
 
-                                @*所屬場域*@
-                                <tr>
-                                    <td>所屬場域</td>
-                                    <td>
-                                        <a href="#" id="fieldId" data-type="select" data-pk="@Model.DeviceId" data-url="@Url.Action("EditNotifyDevice")" data-title="選擇場域"></a>
-                                    </td>
-                                </tr>
+                              
 
                                 @*安裝位置示意圖*@
                                 <tr>
