@@ -23,11 +23,16 @@ namespace InspectionWeb.Controllers
         private IOtherAbnormalRecordService _otherAbnormalRecordService;
         private IUserService _userService;
         private IManRepairRecordService _manRepairRecordService;
+        private IMailService _mailService;
+        private IRoomInspectionDispatchService _roomInspectionDispatchService;
+        private IItemInspectionDispatchService _itemInspectionDispatchService;
+        private MailController _mailController;
         private ISolutionService _solutionService;
 
         public ReportJobController(IExhibitionRoomService service, IExhibitionItemService service2, IReportSourceService service3,
             IAbnormalDefinitionService service4, IAbnormalRecordService service5, IOtherAbnormalRecordService service6, IUserService service7,
-            IManRepairRecordService service8, ISolutionService service9)
+            IManRepairRecordService service8, ISolutionService service9, IMailService service10, IRoomInspectionDispatchService service11, 
+            IItemInspectionDispatchService service12,   MailController controller)
         {
             this._exhibitionRoomService = service;
             this._exhibitionItemService = service2;
@@ -38,8 +43,13 @@ namespace InspectionWeb.Controllers
             this._userService = service7;
             this._manRepairRecordService = service8;
             this._solutionService = service9;
+            this._mailService = service10;
+            this._roomInspectionDispatchService = service11;
+            this._itemInspectionDispatchService = service12;
+            this._mailController = controller;
         }
 
+        
         // GET: /ReportJob/EditExhibitionItem
         public ActionResult EditExhibitionItem()
         {
@@ -118,8 +128,10 @@ namespace InspectionWeb.Controllers
                     
                     return View("AddExhibitionItem");
                 }
+                //沒有派工會出錯，正常執行會認證錯誤
+                //autoSendMail(itemId);
+
                 return RedirectToAction("ItemDetailedData", new { id = result.Message });
-                
             }
             else
             {
@@ -171,6 +183,8 @@ namespace InspectionWeb.Controllers
 
                     return View("AddExperience");
                 }
+                //沒有派工會出錯，正常執行會認證錯誤
+                //autoSendMail(itemId);
 
                 return RedirectToAction("ItemDetailedData", new { id = result.Message });           
             }
@@ -204,6 +218,50 @@ namespace InspectionWeb.Controllers
             //for loop convert items to ItemviewModel
 
             return Json(vms);
+        }
+
+        //郵件傳送
+        public void autoSendMail(string itemId) {
+            var now = DateTime.Now;
+            var startDate = now.ToString("yyyy/MM/dd");
+            var endDate = now.ToString("yyyy/MM/dd");
+            var roomId = _exhibitionItemService.GetById(itemId).roomId;
+            var systemSettings = _mailService.GetAll().ToList(); // get systemSettings<list> to 'from' value.
+            var roominspectionList = _roomInspectionDispatchService.GetAll().ToList();
+            var nowtime = Convert.ToDateTime(now.ToString("hh:mm:ss"));
+            var time = Convert.ToDateTime("12:00:00");
+            var userId = string.Empty;
+            roomInspectionDispatch roomInspection = new roomInspectionDispatch();
+
+            foreach (var item in roominspectionList)
+            {
+                if (item.checkDate?.ToString("yyyy-MM-dd") == now.ToString("yyyy-MM-dd"))
+                {
+                    if (item.roomId == roomId)
+                    {
+                        roomInspection = item;
+                        break;
+                    }
+                }
+            }
+
+            if (DateTime.Compare(nowtime, time) < 0)   // am inspectionuser
+                userId = roomInspection.inspectorId1;
+            else
+                userId = roomInspection.inspectorId2;
+
+            var inspectordata = _userService.GetByID(userId);
+            // get inspectionUser<list> to 'to' value.
+            var emailJson = new MailController.EmailJson()
+            {
+                from = systemSettings[0].keyName,
+                to = inspectordata.email,
+                subject = "單元故障通知，故障單元：" + this._exhibitionItemService.GetById(itemId).itemName,
+                msg = "您好：\n\n" + DateTime.Now.ToString("yyyy/MM/dd") + "通報故障之「" +
+                    this._exhibitionItemService.GetById(itemId).itemName + "」，已派" + inspectordata.userName +
+                    "處理。\n系統在此告知。"
+            };
+            _mailController.SendEmail(emailJson);
         }
 
         //新增通報 : 其他設施通報

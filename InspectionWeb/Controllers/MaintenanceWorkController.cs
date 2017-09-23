@@ -6,6 +6,8 @@ using InspectionWeb.Models.ViewModel;
 using InspectionWeb.Models;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
+using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace InspectionWeb.Controllers
 {
@@ -15,12 +17,21 @@ namespace InspectionWeb.Controllers
         private IAbnormalRecordService _abnormalRecordService;
         private IExhibitionItemService _exhibitionItemService;
         private IReportSourceService _reportSourceService;
+        private IExhibitionRoomService _exhibitionRoomService;
+        private IAbnormalDefinitionService _abnormalDefinitionService;
+        private IOtherAbnormalRecordService _otherAbnormalRecordService;
 
-        public MaintenanceWorkController(IAbnormalRecordService service, IExhibitionItemService service2, IReportSourceService service3)
+        public MaintenanceWorkController(IAbnormalRecordService abnormalRecordService, 
+            IExhibitionItemService exhibitionItemService, IReportSourceService reportSourceService,
+            IExhibitionRoomService exhibitionRoomService, IAbnormalDefinitionService abnormalDefinitionService, 
+            IOtherAbnormalRecordService otherAbnormalRecordService)
         {
-            this._abnormalRecordService = service;
-            this._exhibitionItemService = service2;
-            this._reportSourceService = service3;
+            this._abnormalRecordService = abnormalRecordService;
+            this._exhibitionItemService = exhibitionItemService;
+            this._reportSourceService = reportSourceService;
+            this._exhibitionRoomService = exhibitionRoomService;
+            this._abnormalDefinitionService = abnormalDefinitionService;
+            this._otherAbnormalRecordService = otherAbnormalRecordService;
         }
 
         // GET: MaintenanceWork
@@ -28,8 +39,8 @@ namespace InspectionWeb.Controllers
         {
             return View();
         }
-        // GET: /ReportJob/PendingList
-        
+        // GET: /MaintenanceWork/PendingList
+
         public ActionResult PendingList()
         {
             var vms = new List<MaintenanceWorkDetailViewModel>();
@@ -46,9 +57,9 @@ namespace InspectionWeb.Controllers
             return View(vms);
         }
 
-        // POST: /ReportJob/PendingList
+        // POST: /MaintenanceWork/updateDate
         [HttpPost]
-        public ActionResult PendingList1(string recordId, string fixDate)
+        public ActionResult ExtendedWorkUpdateDate(string recordId, string fixDate)
         {
             abnormalRecord record = this._abnormalRecordService.GetById(recordId);
             IResult result = this._abnormalRecordService.Update(record, "fixDate", DateTime.ParseExact(fixDate, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture));
@@ -56,7 +67,7 @@ namespace InspectionWeb.Controllers
             return Json(new { Success = result.Success });
         }
 
-        // GET: /ReportJob/ExtendedWork
+        // GET: /MaintenanceWork/ExtendedWork
         public ActionResult ExtendedWork()
         {
             var vms = new List<MaintenanceWorkDetailViewModel>();
@@ -71,84 +82,85 @@ namespace InspectionWeb.Controllers
             return View(vms);
         }
 
-        // GET: /ReportJob/Query
+        // GET: /MaintenanceWork/Query
         public ActionResult Query()
         {
+            ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+            ViewBag.abnormalDefinition = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
+            return View();
+        }
+
+        // GET: /MaintenanceWork/GetQuery
+        public ActionResult GetQuery(string startDate, string endDate, string sourceId, string abnormalId)
+        {
+            var queryStartDate = DateTime.ParseExact(startDate, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+            var queryEndDate = DateTime.ParseExact(endDate, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+            var success = true;
             var vms = new List<MaintenanceWorkDetailViewModel>();
-            var lists = this._abnormalRecordService.GetAll().ToList();
-
-            foreach (var item in lists)
+            var abnormalLists = this._abnormalRecordService.GetAll().ToList();
+            var otherLists = this._otherAbnormalRecordService.GetAll().ToList();
+            foreach (var item in abnormalLists)
             {
-                if (item.isClose == 0)
-                {
-
+                if (item.createTime >= queryStartDate && item.createTime <= queryEndDate && item.sourceId == sourceId && item.abnormalId == abnormalId)
                     vms.Add(this.MaintenanceWorkDetailViewModule(item));
-                }
             }
-            return View(vms);
-        }
-
-        // GET: /ReportJob/DetailedData
-        public ActionResult DetailedData()
-        {
-            return View();
-        }
-
-        // GET: /ReportJob/WriteDetailedData
-        public ActionResult WriteDetailedData()
-        {
-            return View();
-        }
-
-        // POST: /User/UpdateUser
-        [HttpPost]
-        public ActionResult Updatedate(PendingJson pendingJson)
-        {
-            var id = pendingJson.pk;
-            var item = this._abnormalRecordService.GetById(id);
-            if (item != null && ModelState.IsValid)
+            foreach (var item in otherLists)
             {
-                IResult result = this._abnormalRecordService.Update(item, pendingJson.name, pendingJson.value);
-                if (result.Success)
-                {
-                    return Json(result);
-                }
-                else
-                {
-                    return RedirectToAction("ExtendedWork");
-                }
+                if (item.createTime >= queryStartDate && item.createTime <= queryEndDate && item.sourceId == sourceId && item.abnormalId == abnormalId)
+                    vms.Add(this.MaintenanceWorkDetailViewModule(item));
             }
-            else
-            {
-                return RedirectToAction("PendingList");
-            }
+            if (vms.Count == 0)
+                success = false;
+            return Json(new { Success = success, vms  },JsonRequestBehavior.AllowGet);
         }
 
         private MaintenanceWorkDetailViewModel MaintenanceWorkDetailViewModule(abnormalRecord instance)
         {
-            MaintenanceWorkDetailViewModel vm = new MaintenanceWorkDetailViewModel();
-            vm.recordId = instance.recordId;
-            vm.itemName = this._exhibitionItemService.GetById(instance.itemId).itemName;
-            //vm.roomName = this._exhibitionRoomService.GetById(this._exhibitionItemService.GetById(instance.itemId).roomId).roomName;
-            vm.sourceName = this._reportSourceService.GetBySourceCode(instance.sourceId).sourceName;
-            vm.deviceId = instance.deviceId;
-            vm.abnormalId = instance.abnormalId;
-            vm.happendedTime = instance.happenedTime;
-            vm.description = instance.description;
-            //vm.fixMethod = instance.fixMethod;
-            vm.isClose = instance.isClose;
-            vm.isDelete = instance.isDelete;
-            vm.createTime = instance.createTime;
-            vm.lastUpdateTime = instance.lastUpdateTime;
-            vm.fixDate = instance.fixDate;
+            MaintenanceWorkDetailViewModel vm = new MaintenanceWorkDetailViewModel()
+            {
+                recordId = instance.recordId,
+                itemName = this._exhibitionItemService.GetById(instance.itemId).itemName,
+                roomName = this._exhibitionRoomService.GetById(this._exhibitionItemService.GetById(instance.itemId).roomId).roomName,
+                sourceName = this._reportSourceService.GetById(instance.sourceId).sourceName,
+                deviceId = instance.deviceId,
+                abnormalId = instance.abnormalId,
+                happendedTime = instance.happenedTime.HasValue ? instance.happenedTime?.ToString("yyyy-MM-dd hh:mm:ss") : "",
+                description = instance.description,
+                fixMethod = instance.fixMethod,
+                isClose = instance.isClose,
+                isDelete = instance.isDelete,
+                createTime = instance.createTime.HasValue ? instance.createTime?.ToString("yyyy-MM-dd hh:mm:ss") : "",
+                lastUpdateTime = instance.lastUpdateTime.HasValue ? instance.lastUpdateTime?.ToString("yyyy-MM-dd hh:mm:ss") : "",
+                fixDate = instance.fixDate.HasValue ? instance.fixDate?.ToString("yyyy-MM-dd hh:mm:ss") : ""
+            };
+            if (this._exhibitionItemService.GetById(instance.itemId).itemType == 0)
+                vm.listName = "Item";
+            else
+                vm.listName = "Experience";
             return vm;
         }
-
-        public class PendingJson
+        
+            private MaintenanceWorkDetailViewModel MaintenanceWorkDetailViewModule(otherAbnormalRecord instance)
         {
-            public string pk { get; set; }
-            public string name { get; set; }
-            public string value { get; set; }
+            MaintenanceWorkDetailViewModel vm = new MaintenanceWorkDetailViewModel()
+            {
+                recordId = instance.recordId,
+                itemName = instance.name,
+                roomName = "",
+                sourceName = this._reportSourceService.GetById(instance.sourceId).sourceName,
+                deviceId = instance.deviceId,
+                abnormalId = instance.abnormalId,
+                happendedTime = instance.happenedTime.HasValue ? instance.happenedTime?.ToString("yyyy-MM-dd hh:mm:ss") : "",
+                description = instance.description,
+                fixMethod = instance.fixMethod,
+                isClose = instance.isClose,
+                isDelete = instance.isDelete,
+                createTime = instance.createTime.HasValue ? instance.createTime?.ToString("yyyy-MM-dd hh:mm:ss") : "",
+                lastUpdateTime = instance.lastUpdateTime.HasValue ? instance.lastUpdateTime?.ToString("yyyy-MM-dd hh:mm:ss") : "",
+                fixDate = instance.fixDate.HasValue ? instance.fixDate?.ToString("yyyy-MM-dd hh:mm:ss") : "",
+                listName = "Other"
+            };
+            return vm;
         }
     }
 }
