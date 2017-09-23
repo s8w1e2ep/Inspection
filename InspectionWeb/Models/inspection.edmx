@@ -72,7 +72,7 @@
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
-          <Property Name="inspectionUserId" Type="nvarchar" MaxLength="32" />
+          <Property Name="inspectionUserId" Type="nchar" MaxLength="32" />
         </EntityType>
         <EntityType Name="exhibitionRoom">
           <Key>
@@ -108,7 +108,7 @@
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
-          <Property Name="floor" Type="nvarchar" MaxLength="32" />
+          <Property Name="floor" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="itemCheckRecord">
           <Key>
@@ -197,7 +197,6 @@
             <PropertyRef Name="solutionId" />
           </Key>
           <Property Name="solutionId" Type="nvarchar" MaxLength="32" Nullable="false" />
-          <Property Name="name" Type="nvarchar" MaxLength="64" />
           <Property Name="description" Type="nvarchar" MaxLength="128" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
@@ -299,6 +298,22 @@
           <Property Name="createTime" Type="datetime" />
           <Property Name="lastUpdateTime" Type="datetime" />
         </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'inspection.dbo.temp' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="temp">
+          <Key>
+            <PropertyRef Name="dispatchId" />
+            <PropertyRef Name="roomId" />
+          </Key>
+          <Property Name="dispatchId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="roomId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="roomName" Type="nvarchar" MaxLength="64" />
+          <Property Name="checkDate" Type="date" />
+          <Property Name="inspectorId1" Type="nvarchar" MaxLength="32" />
+          <Property Name="inspectorCode1" Type="nvarchar" MaxLength="64" />
+          <Property Name="inspectorName1" Type="nvarchar" MaxLength="64" />
+          <Property Name="inspectorId2" Type="nvarchar" MaxLength="32" />
+        </EntityType>
         <EntityType Name="user">
           <Key>
             <PropertyRef Name="userId" />
@@ -354,6 +369,18 @@
           <EntitySet Name="systemSettings" EntityType="Self.systemSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="userGroup" EntityType="Self.userGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="temp" EntityType="Self.temp" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [temp].[dispatchId] AS [dispatchId], 
+    [temp].[roomId] AS [roomId], 
+    [temp].[roomName] AS [roomName], 
+    [temp].[checkDate] AS [checkDate], 
+    [temp].[inspectorId1] AS [inspectorId1], 
+    [temp].[inspectorCode1] AS [inspectorCode1], 
+    [temp].[inspectorName1] AS [inspectorName1], 
+    [temp].[inspectorId2] AS [inspectorId2]
+    FROM [dbo].[temp] AS [temp]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -371,6 +398,7 @@
           <EntitySet Name="manRepairRecord" EntityType="inspectionModel.manRepairRecord" />
           <EntitySet Name="noCheckDate" EntityType="inspectionModel.noCheckDate" />
           <EntitySet Name="otherAbnormalRecord" EntityType="inspectionModel.otherAbnormalRecord" />
+          <EntitySet Name="quickSolution" EntityType="inspectionModel.quickSolution" />
           <EntitySet Name="reportDevice" EntityType="inspectionModel.reportDevice" />
           <EntitySet Name="reportSource" EntityType="inspectionModel.reportSource" />
           <EntitySet Name="roomActiveRecord" EntityType="inspectionModel.roomActiveRecord" />
@@ -381,7 +409,6 @@
           <EntitySet Name="user" EntityType="inspectionModel.user" />
           <EntitySet Name="userGroup" EntityType="inspectionModel.userGroup" />
           <EntitySet Name="temp" EntityType="inspectionModel.temp" />
-          <EntitySet Name="quickSolution" EntityType="inspectionModel.quickSolution" />
         </EntityContainer>
         <EntityType Name="abnormalDefinition">
           <Key>
@@ -450,7 +477,7 @@
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
-          <Property Name="inspectionUserId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="inspectionUserId" Type="String" MaxLength="32" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="exhibitionRoom">
           <Key>
@@ -486,7 +513,7 @@
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
-          <Property Name="floor" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="floor" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="itemCheckRecord">
           <Key>
@@ -566,6 +593,16 @@
           <Property Name="fixDate" Type="DateTime" Precision="3" />
           <Property Name="fixMethod" Type="Int16" />
           <Property Name="isClose" Type="Byte" />
+          <Property Name="isDelete" Type="Byte" />
+          <Property Name="createTime" Type="DateTime" Precision="3" />
+          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="quickSolution">
+          <Key>
+            <PropertyRef Name="solutionId" />
+          </Key>
+          <Property Name="solutionId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
@@ -712,17 +749,6 @@
           <Property Name="inspectorCode1" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
           <Property Name="inspectorName1" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
           <Property Name="inspectorId2" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="quickSolution">
-          <Key>
-            <PropertyRef Name="solutionId" />
-          </Key>
-          <Property Name="solutionId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="isDelete" Type="Byte" />
-          <Property Name="createTime" Type="DateTime" Precision="3" />
-          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -928,6 +954,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="quickSolution">
+            <EntityTypeMapping TypeName="inspectionModel.quickSolution">
+              <MappingFragment StoreEntitySet="quickSolution">
+                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+                <ScalarProperty Name="createTime" ColumnName="createTime" />
+                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="solutionId" ColumnName="solutionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="reportDevice">
             <EntityTypeMapping TypeName="inspectionModel.reportDevice">
               <MappingFragment StoreEntitySet="reportDevice">
@@ -1066,15 +1103,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="quickSolution">
-            <EntityTypeMapping TypeName="inspectionModel.quickSolution">
-              <MappingFragment StoreEntitySet="quickSolution">
-                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
-                <ScalarProperty Name="createTime" ColumnName="createTime" />
-                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="solutionId" ColumnName="solutionId" />
+          <EntitySetMapping Name="temp">
+            <EntityTypeMapping TypeName="inspectionModel.temp">
+              <MappingFragment StoreEntitySet="temp">
+                <ScalarProperty Name="inspectorId2" ColumnName="inspectorId2" />
+                <ScalarProperty Name="inspectorName1" ColumnName="inspectorName1" />
+                <ScalarProperty Name="inspectorCode1" ColumnName="inspectorCode1" />
+                <ScalarProperty Name="inspectorId1" ColumnName="inspectorId1" />
+                <ScalarProperty Name="checkDate" ColumnName="checkDate" />
+                <ScalarProperty Name="roomName" ColumnName="roomName" />
+                <ScalarProperty Name="roomId" ColumnName="roomId" />
+                <ScalarProperty Name="dispatchId" ColumnName="dispatchId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
