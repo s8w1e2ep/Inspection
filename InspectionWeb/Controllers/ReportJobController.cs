@@ -605,7 +605,9 @@ namespace InspectionWeb.Controllers
 
             vm.recordId = instance.recordId;
             vm.sourceName = this._reportSourceService.GetById(instance.sourceId).sourceName;
-            vm.roomName = this._exhibitionRoomService.GetById(this._exhibitionItemService.GetById(instance.itemId).roomId).roomName;
+            var roomId = this._exhibitionItemService.GetById(instance.itemId).roomId;
+            if (roomId == "experience") { vm.roomName = "不屬於任何展示廳"; }
+            else { vm.roomName = this._exhibitionRoomService.GetById(roomId).roomName; }
             vm.itemName = this._exhibitionItemService.GetById(instance.itemId).itemName;
             vm.happenedTime = instance.happenedTime?.ToString("yyyy-MM-dd HH:mm:ss");
             vm.fixDate = instance.fixDate?.ToString("yyyy-MM-dd HH:mm:ss");
