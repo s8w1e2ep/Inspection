@@ -357,6 +357,7 @@
     <Compile Include="Models\ViewModel\ListRoomInspectionDispatchViewModel.cs" />
     <Compile Include="Models\ViewModel\userListForInspectionViewModel.cs" />
     <Compile Include="Services\Interface\IManRepairRecordService.cs" />
+    <Compile Include="Services\Interface\IRoomActiveRecordService.cs" />
     <Compile Include="Services\ManRepairRecordService.cs" />
     <Compile Include="Services\CompanyService.cs" />
     <Compile Include="Services\Interface\ICompanyService.cs" />
@@ -408,6 +409,7 @@
     <Compile Include="Services\Misc\IResult.cs" />
     <Compile Include="Services\Misc\Result.cs" />
     <Compile Include="Services\OtherAbnormalRecordService.cs" />
+    <Compile Include="Services\RoomActiveRecordService.cs" />
     <Compile Include="Services\SolutionService.cs" />
     <Compile Include="Services\SystemArgService.cs" />
     <Compile Include="Services\UserGroupService.cs" />
