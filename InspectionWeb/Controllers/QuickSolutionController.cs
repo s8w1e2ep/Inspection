@@ -72,6 +72,7 @@ namespace InspectionWeb.Controllers
                 return RedirectToAction("List");
             }
             var data = this._solutionService.GetByID(id);
+            ViewBag.solutionName = data.name;
             ViewBag.description = data.description;
 
             ViewBag.createTime = data.createTime?.ToString("yyyy-MM-dd HH:mm:ss");
