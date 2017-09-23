@@ -537,9 +537,6 @@ namespace InspectionWeb.Controllers
                 vmm.imgFixDesc1 = instanceM.imgFixDesc1;
                 vmm.createTime = instanceM.createTime?.ToString("yyyy-MM-dd HH:mm:ss");
                 vmm.lastUpdateTime = instanceM.lastUpdateTime?.ToString("yyyy-MM-dd HH:mm:ss");
-
-                //封裝
-                vmD.ManRecord = vmm;
             }
             
 
@@ -548,7 +545,7 @@ namespace InspectionWeb.Controllers
             vmD.sources = sources;
             vmD.abnormals = abnormals;
             vmD.repairUsers = users;
-            
+            vmD.ManRecord = vmm;
             return vmD;
         }
 

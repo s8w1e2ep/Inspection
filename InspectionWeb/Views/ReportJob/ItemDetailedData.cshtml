@@ -11,6 +11,7 @@
     var isfixDateSet = false;
     var isfixMethodSet = false;
     var isclose = false;
+    var hasManRecord = false;
     var closeValue = '@Model.reportRecord.isClose_s';
     $.fn.editable.defaults.mode = 'inline';
 
@@ -22,6 +23,8 @@
             isfixMethodSet = true;
         if (closeValue == 1)
             isclose = true;
+        if ('@Model.ManRecord.filluserName' != '')
+            hasManRecord = true;
 
         $('#happenedTime, #fixDate').daterangepicker({
             timePicker: true,
@@ -159,25 +162,34 @@
         controllClose();
     });
 
-
-    //function examCanClose()
-    //{
-
-    //}
+    
     function controllerAllEdit()
     {
+        if (hasManRecord)
+        {
+            $('#ManRecord').removeClass('hide');
+        }
+        else
+        {
+            $('#ManRecord').addClass('hide');
+        }
         if (isclose)
         {
             $('.editable').editable('option', 'disabled', true);
             $('#happenedTime, #fixDate, #expectDate, #imgButton1, #imgButton2, #imgButton3, #imgButton4').attr('disabled', true);
             $('#isClose').editable('option', 'disabled', false);
-            $('#AddButton').css('display', 'none');
+            $('#AddButton').addClass('hide');
         }
         else
         {
             $('#happenedTime, #fixDate, #expectDate, #imgButton1, #imgButton2, #imgButton3, #imgButton4').attr('disabled', false);
             $('.editable').editable('option', 'disabled', false);
-            $('#AddButton').css('display', 'block');
+            if (!hasManRecord) {
+                $('#AddButton').removeClass('hide');        //出現 "+"  
+            }
+            else {
+                $('#AddButton').addClass('hide');           //去除 "+"
+            }
         }
     }
     function controllClose()
@@ -229,9 +241,6 @@
         });
     }
     function AddManRepair() {
-        $('#ManRecord').css('display', 'block');
-        $('#AddButton').css('display', 'none');
-
         $.post(
             '/ReportJob/AddFixRecord',
             {
@@ -241,6 +250,9 @@
                 $('#fillUser').html(data.filluserName);
                 $('#ManCreate').html(data.createTime);
                 $('#ManLast').html(data.lastUpdateTime);
+                hasManRecord = true;
+                $('#ManRecord').removeClass('hide');           //出現
+                $('#AddButton').addClass('hide');
             },
             'json'
         ).fail(function () {
@@ -248,7 +260,7 @@
             alert("抱歉! 伺服器無法接受您的資料!");
         });
 
-        location.reload()
+       // location.reload()
     }
 
     //======照片上傳======
@@ -433,16 +445,9 @@
                 <div class="box box-info">
                     <div class="box-header with-border">
                         <h3 class="box-title">人工排除故障完工紀錄</h3>
+                        <a id="AddButton" onclick="AddManRepair()" class="btn btn-sm btn-primary" ><i class="glyphicon glyphicon-plus"></i></a>
                     </div>
-                    @if (Model.ManRecord == null)
-                    {
-                        
-                        <a href="#" id="AddButton" onclick="AddManRepair()" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
-                        
-                       
-                    }else
-                    {
-                        <div id="ManRecord" class="box-body">
+                    <div id="ManRecord" class="box-body">
                             <table class="table table-striped table-hover table-bordered" cellspacing="0" style="width: 100%;">
                                 <thead>
                                     <tr>
@@ -566,7 +571,6 @@
                                 </tbody>
                             </table>
                         </div>
-                    }
                 </div>
             </div>
         </div>
