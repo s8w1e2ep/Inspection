@@ -7,7 +7,7 @@ using InspectionWeb.Models.ViewModel;
 using InspectionWeb.Models;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
-
+using System.IO;
 
 
 namespace InspectionWeb.Controllers
@@ -463,7 +463,15 @@ namespace InspectionWeb.Controllers
                         fileName += ".png";
                     }
 
-                    var path = System.IO.Path.Combine(Server.MapPath("~/media/manRepairRecord"), fileName);
+
+                    var path = Server.MapPath("~/media/manRepairRecord/");
+
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    path = Path.Combine(path, fileName);
+
                     upload.SaveAs(path);
 
                     manRepairRecord instance = _manRepairRecordService.GetByID(recordId);
