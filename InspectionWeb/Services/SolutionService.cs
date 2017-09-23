@@ -40,9 +40,9 @@ namespace InspectionWeb.Services
             return result;
         }
 
-        public IResult Create(string name, string description)
+        public IResult Create(string description)
         {
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(description))
+            if (string.IsNullOrEmpty(description))
             {
                 throw new ArgumentNullException();
             }
@@ -50,9 +50,9 @@ namespace InspectionWeb.Services
             IResult result = new Result(false);
             quickSolution newSolution = new quickSolution();
 
-            if (IsRepeat(name))
+            if (IsRepeat(description))
             {
-                result.ErrorMsg = "該名稱已使用過";
+                result.ErrorMsg = "該方法已建立過";
             }
             else
             {
@@ -63,7 +63,6 @@ namespace InspectionWeb.Services
                     DateTime nowTime = DateTime.Now;
 
                     newSolution.solutionId = solutionId;
-                    newSolution.name = name;
                     newSolution.description = description;
                     newSolution.isDelete = 0;
                     newSolution.createTime = nowTime;
@@ -229,9 +228,9 @@ namespace InspectionWeb.Services
       
 
 
-        public bool IsRepeat(string name)
+        public bool IsRepeat(string description)
         {
-            return this._repository.GetAll().Any(x => x.isDelete == 0 && x.name == name);
+            return this._repository.GetAll().Any(x => x.isDelete == 0 && x.description == description);
         }
     }
 }

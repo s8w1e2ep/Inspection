@@ -7,7 +7,7 @@ namespace InspectionWeb.Services.Interface
     public interface ISolutionService
     {
         IResult Create(quickSolution instance);
-        IResult Create(string name, string description);
+        IResult Create(string description);
         //IResult Update(quickSolution instance);
         IResult Update(quickSolution instance, string key, object value);
         //IResult Delete(string userId);

@@ -42,15 +42,16 @@ namespace InspectionWeb.Controllers
 
         //function
         [HttpPost]
-        public ActionResult AddSolution(string name, string description)
+        public ActionResult AddSolution(string description)
         {
             if (!string.IsNullOrEmpty(description) && ModelState.IsValid)
             {
-                IResult result = this._solutionService.Create(name, description);
+                IResult result = this._solutionService.Create(description);
 
                 if (result.Success == false)
                 {
                     ViewBag.ErrorMsg = result.ErrorMsg;
+
                     return View("Add");
                 }
 
@@ -58,7 +59,7 @@ namespace InspectionWeb.Controllers
             }
             else
             {
-                ViewBag.ErrorMsg = "尚有欄位未填寫";
+                ViewBag.ErrorMsg = "方法說明空白";
                 return View("Add");
             }
             
