@@ -19,5 +19,6 @@ namespace InspectionWeb.Models
         public Nullable<short> active { get; set; }
         public string description { get; set; }
         public Nullable<System.DateTime> createTime { get; set; }
+        public Nullable<byte> isDelete { get; set; }
     }
 }

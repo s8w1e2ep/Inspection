@@ -26,7 +26,6 @@
         <EntityTypeShape EntityType="inspectionModel.systemSettings" Width="1.5" PointX="12.75" PointY="4.75" />
         <EntityTypeShape EntityType="inspectionModel.user" Width="1.5" PointX="12.75" PointY="8.75" />
         <EntityTypeShape EntityType="inspectionModel.userGroup" Width="1.5" PointX="4.75" PointY="13.75" />
-        <EntityTypeShape EntityType="inspectionModel.temp" Width="1.5" PointX="12.75" PointY="13.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
