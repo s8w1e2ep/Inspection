@@ -29,7 +29,7 @@
           <Property Name="happenedTime" Type="datetime" />
           <Property Name="description" Type="nvarchar" MaxLength="128" />
           <Property Name="fixDate" Type="datetime" />
-          <Property Name="fixMethod" Type="smallint" />
+          <Property Name="fixMethod" Type="nvarchar" MaxLength="128" />
           <Property Name="isClose" Type="tinyint" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
@@ -186,7 +186,7 @@
           <Property Name="happenedTime" Type="datetime" />
           <Property Name="description" Type="nvarchar" MaxLength="128" />
           <Property Name="fixDate" Type="datetime" />
-          <Property Name="fixMethod" Type="smallint" />
+          <Property Name="fixMethod" Type="nvarchar" MaxLength="128" />
           <Property Name="isClose" Type="tinyint" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
@@ -420,7 +420,6 @@
       <Schema Namespace="inspectionModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="inspectionEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="abnormalDefinition" EntityType="inspectionModel.abnormalDefinition" />
-          <EntitySet Name="abnormalRecord" EntityType="inspectionModel.abnormalRecord" />
           <EntitySet Name="company" EntityType="inspectionModel.company" />
           <EntitySet Name="exhibitionItem" EntityType="inspectionModel.exhibitionItem" />
           <EntitySet Name="exhibitionRoom" EntityType="inspectionModel.exhibitionRoom" />
@@ -429,7 +428,6 @@
           <EntitySet Name="itemInspectionDispatch" EntityType="inspectionModel.itemInspectionDispatch" />
           <EntitySet Name="manRepairRecord" EntityType="inspectionModel.manRepairRecord" />
           <EntitySet Name="noCheckDate" EntityType="inspectionModel.noCheckDate" />
-          <EntitySet Name="otherAbnormalRecord" EntityType="inspectionModel.otherAbnormalRecord" />
           <EntitySet Name="quickSolution" EntityType="inspectionModel.quickSolution" />
           <EntitySet Name="reportDevice" EntityType="inspectionModel.reportDevice" />
           <EntitySet Name="reportSource" EntityType="inspectionModel.reportSource" />
@@ -442,6 +440,8 @@
           <EntitySet Name="userGroup" EntityType="inspectionModel.userGroup" />
           <EntitySet Name="temp" EntityType="inspectionModel.temp" />
           <EntitySet Name="temp2" EntityType="inspectionModel.temp2" />
+          <EntitySet Name="abnormalRecord" EntityType="inspectionModel.abnormalRecord" />
+          <EntitySet Name="otherAbnormalRecord" EntityType="inspectionModel.otherAbnormalRecord" />
         </EntityContainer>
         <EntityType Name="abnormalDefinition">
           <Key>
@@ -451,24 +451,6 @@
           <Property Name="abnormalCode" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
           <Property Name="abnormalName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
           <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="isDelete" Type="Byte" />
-          <Property Name="createTime" Type="DateTime" Precision="3" />
-          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="abnormalRecord">
-          <Key>
-            <PropertyRef Name="recordId" />
-          </Key>
-          <Property Name="recordId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="itemId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="sourceId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="deviceId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="abnormalId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="happenedTime" Type="DateTime" Precision="3" />
-          <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="fixDate" Type="DateTime" Precision="3" />
-          <Property Name="fixMethod" Type="Int16" />
-          <Property Name="isClose" Type="Byte" />
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
@@ -608,24 +590,6 @@
           <Property Name="pm" Type="Byte" />
           <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="setupUserId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="isDelete" Type="Byte" />
-          <Property Name="createTime" Type="DateTime" Precision="3" />
-          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="otherAbnormalRecord">
-          <Key>
-            <PropertyRef Name="recordId" />
-          </Key>
-          <Property Name="recordId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="sourceId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="deviceId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="abnormalId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="happenedTime" Type="DateTime" Precision="3" />
-          <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="fixDate" Type="DateTime" Precision="3" />
-          <Property Name="fixMethod" Type="Int16" />
-          <Property Name="isClose" Type="Byte" />
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
@@ -800,6 +764,42 @@
           <Property Name="inspectorId2" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
           <Property Name="iidStatus" Type="Byte" />
         </EntityType>
+        <EntityType Name="abnormalRecord">
+          <Key>
+            <PropertyRef Name="recordId" />
+          </Key>
+          <Property Name="recordId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="itemId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="sourceId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="deviceId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="abnormalId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="happenedTime" Type="DateTime" Precision="3" />
+          <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="fixDate" Type="DateTime" Precision="3" />
+          <Property Name="fixMethod" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="isClose" Type="Byte" />
+          <Property Name="isDelete" Type="Byte" />
+          <Property Name="createTime" Type="DateTime" Precision="3" />
+          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="otherAbnormalRecord">
+          <Key>
+            <PropertyRef Name="recordId" />
+          </Key>
+          <Property Name="recordId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="sourceId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="deviceId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="abnormalId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="happenedTime" Type="DateTime" Precision="3" />
+          <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="fixDate" Type="DateTime" Precision="3" />
+          <Property Name="fixMethod" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="isClose" Type="Byte" />
+          <Property Name="isDelete" Type="Byte" />
+          <Property Name="createTime" Type="DateTime" Precision="3" />
+          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -816,25 +816,6 @@
                 <ScalarProperty Name="abnormalName" ColumnName="abnormalName" />
                 <ScalarProperty Name="abnormalCode" ColumnName="abnormalCode" />
                 <ScalarProperty Name="abnormalId" ColumnName="abnormalId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="abnormalRecord">
-            <EntityTypeMapping TypeName="inspectionModel.abnormalRecord">
-              <MappingFragment StoreEntitySet="abnormalRecord">
-                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
-                <ScalarProperty Name="createTime" ColumnName="createTime" />
-                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
-                <ScalarProperty Name="isClose" ColumnName="isClose" />
-                <ScalarProperty Name="fixMethod" ColumnName="fixMethod" />
-                <ScalarProperty Name="fixDate" ColumnName="fixDate" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="happenedTime" ColumnName="happenedTime" />
-                <ScalarProperty Name="abnormalId" ColumnName="abnormalId" />
-                <ScalarProperty Name="deviceId" ColumnName="deviceId" />
-                <ScalarProperty Name="sourceId" ColumnName="sourceId" />
-                <ScalarProperty Name="itemId" ColumnName="itemId" />
-                <ScalarProperty Name="recordId" ColumnName="recordId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -982,25 +963,6 @@
                 <ScalarProperty Name="am" ColumnName="am" />
                 <ScalarProperty Name="noCheckDate1" ColumnName="noCheckDate" />
                 <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="otherAbnormalRecord">
-            <EntityTypeMapping TypeName="inspectionModel.otherAbnormalRecord">
-              <MappingFragment StoreEntitySet="otherAbnormalRecord">
-                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
-                <ScalarProperty Name="createTime" ColumnName="createTime" />
-                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
-                <ScalarProperty Name="isClose" ColumnName="isClose" />
-                <ScalarProperty Name="fixMethod" ColumnName="fixMethod" />
-                <ScalarProperty Name="fixDate" ColumnName="fixDate" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="happenedTime" ColumnName="happenedTime" />
-                <ScalarProperty Name="abnormalId" ColumnName="abnormalId" />
-                <ScalarProperty Name="deviceId" ColumnName="deviceId" />
-                <ScalarProperty Name="sourceId" ColumnName="sourceId" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="recordId" ColumnName="recordId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1181,6 +1143,44 @@
                 <ScalarProperty Name="itemName" ColumnName="itemName" />
                 <ScalarProperty Name="itemId" ColumnName="itemId" />
                 <ScalarProperty Name="dispatchId" ColumnName="dispatchId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="abnormalRecord">
+            <EntityTypeMapping TypeName="inspectionModel.abnormalRecord">
+              <MappingFragment StoreEntitySet="abnormalRecord">
+                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+                <ScalarProperty Name="createTime" ColumnName="createTime" />
+                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+                <ScalarProperty Name="isClose" ColumnName="isClose" />
+                <ScalarProperty Name="fixMethod" ColumnName="fixMethod" />
+                <ScalarProperty Name="fixDate" ColumnName="fixDate" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="happenedTime" ColumnName="happenedTime" />
+                <ScalarProperty Name="abnormalId" ColumnName="abnormalId" />
+                <ScalarProperty Name="deviceId" ColumnName="deviceId" />
+                <ScalarProperty Name="sourceId" ColumnName="sourceId" />
+                <ScalarProperty Name="itemId" ColumnName="itemId" />
+                <ScalarProperty Name="recordId" ColumnName="recordId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="otherAbnormalRecord">
+            <EntityTypeMapping TypeName="inspectionModel.otherAbnormalRecord">
+              <MappingFragment StoreEntitySet="otherAbnormalRecord">
+                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+                <ScalarProperty Name="createTime" ColumnName="createTime" />
+                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+                <ScalarProperty Name="isClose" ColumnName="isClose" />
+                <ScalarProperty Name="fixMethod" ColumnName="fixMethod" />
+                <ScalarProperty Name="fixDate" ColumnName="fixDate" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="happenedTime" ColumnName="happenedTime" />
+                <ScalarProperty Name="abnormalId" ColumnName="abnormalId" />
+                <ScalarProperty Name="deviceId" ColumnName="deviceId" />
+                <ScalarProperty Name="sourceId" ColumnName="sourceId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="recordId" ColumnName="recordId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

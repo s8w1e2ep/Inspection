@@ -23,11 +23,11 @@ namespace InspectionWeb.Controllers
         private IOtherAbnormalRecordService _otherAbnormalRecordService;
         private IUserService _userService;
         private IManRepairRecordService _manRepairRecordService;
-
+        private ISolutionService _solutionService;
 
         public ReportJobController(IExhibitionRoomService service, IExhibitionItemService service2, IReportSourceService service3,
             IAbnormalDefinitionService service4, IAbnormalRecordService service5, IOtherAbnormalRecordService service6, IUserService service7,
-            IManRepairRecordService service8)
+            IManRepairRecordService service8, ISolutionService service9)
         {
             this._exhibitionRoomService = service;
             this._exhibitionItemService = service2;
@@ -37,6 +37,7 @@ namespace InspectionWeb.Controllers
             this._otherAbnormalRecordService = service6;
             this._userService = service7;
             this._manRepairRecordService = service8;
+            this._solutionService = service9;
         }
 
         // GET: /ReportJob/EditExhibitionItem
@@ -313,7 +314,7 @@ namespace InspectionWeb.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("ItemDetailedData");
+                    return RedirectToAction("ItemDetailedData", new { id = pk});
                 }
             }
             else
@@ -452,6 +453,7 @@ namespace InspectionWeb.Controllers
             List<user> users = new List<user>();
             List<reportSource> sources = new List<reportSource>();
             List<abnormalDefinition> abnormals = new List<abnormalDefinition>();
+            List<quickSolution> solutions = new List<quickSolution>();
 
             //紀錄詳細資料物件
             
@@ -462,6 +464,7 @@ namespace InspectionWeb.Controllers
             sources = this._reportSourceService.GetAll().ToList();
             abnormals = this._abnormalDefinitionService.GetAll().ToList();
             users = this._userService.GetAll().ToList();
+            solutions = this._solutionService.GetAll().ToList();
 
             //其他異常通報
             if (id[0] == 'O')
@@ -479,11 +482,7 @@ namespace InspectionWeb.Controllers
                 vm.happenedTime = instanceO.happenedTime?.ToString("yyyy/MM/dd HH:mm:ss");
                 vm.description = instanceO.description;
                 vm.fixDate = instanceO.fixDate?.ToString("yyyy/MM/dd HH:mm:ss");
-                if (instanceO.fixMethod == 1)
-                    vm.fixMethod = "人員排除";
-                else if (instanceO.fixMethod == 0)
-                    vm.fixMethod = "自動排除";
-
+                vm.fixMethod = instanceO.fixMethod;
                 vm.isClose_s = instanceO.isClose;
                 vm.createTime = instanceO.createTime?.ToString("yyyy-MM-dd HH:mm:ss");
                 vm.lastUpdateTime = instanceO.lastUpdateTime?.ToString("yyyy-MM-dd HH:mm:ss");
@@ -506,11 +505,7 @@ namespace InspectionWeb.Controllers
                 vm.happenedTime = instance.happenedTime?.ToString("yyyy/MM/dd HH:mm:ss");
                 vm.description = instance.description;
                 vm.fixDate = instance.fixDate?.ToString("yyyy/MM/dd HH:mm:ss");
-                if (instance.fixMethod == 1)
-                    vm.fixMethod = "人員排除";
-                else if (instance.fixMethod == 0)
-                    vm.fixMethod = "自動排除";
-
+                vm.fixMethod = instance.fixMethod;
                 vm.isClose_s = instance.isClose;
                 vm.createTime = instance.createTime?.ToString("yyyy-MM-dd HH:mm:ss");
                 vm.lastUpdateTime = instance.lastUpdateTime?.ToString("yyyy-MM-dd HH:mm:ss");
@@ -545,6 +540,7 @@ namespace InspectionWeb.Controllers
             vmD.sources = sources;
             vmD.abnormals = abnormals;
             vmD.repairUsers = users;
+            vmD.solutions = solutions;
             vmD.ManRecord = vmm;
             return vmD;
         }

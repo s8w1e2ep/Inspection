@@ -141,10 +141,6 @@ namespace InspectionWeb.Services
                 {
                     value = Convert.ToDateTime(value);
                 }
-                else if(propertyName == "fixMethod")
-                {
-                    value = Convert.ToInt16(value);
-                }
 
                 DateTime now = DateTime.Now;
                 string lastUpdateTime = now.ToString("yyyy-MM-dd HH:mm:ss");

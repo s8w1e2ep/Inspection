@@ -135,7 +135,7 @@ namespace InspectionWeb.Controllers
             vm.abnormalId = instance.abnormalId;
             vm.happendedTime = instance.happenedTime;
             vm.description = instance.description;
-            vm.fixMethod = instance.fixMethod;
+            //vm.fixMethod = instance.fixMethod;
             vm.isClose = instance.isClose;
             vm.isDelete = instance.isDelete;
             vm.createTime = instance.createTime;

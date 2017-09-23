@@ -86,21 +86,34 @@
                 $('#lastUpdateTime').html(response.lastUpdateTime);
             }
         });
+            
+        
 
         $('#fixMethod').editable({
-            value: 'Select status',
-            source: [
-                {value: '0', text: '自動排除' },
-                {value: '1', text: '人員排除' }
-            ],
             success: function (response) {
-
-                $('#lastUpdateTime').html(response.lastUpdateTime);
                 isfixMethodSet = true;
+                $('#lastUpdateTime').html(response.lastUpdateTime);
                 controllClose();
             }
         });
 
+
+        //$('#oftenWay').editable({
+        //    success: function () {
+        //        isfixMethodSet = true;
+        //        $('#lastUpdateTime').html(response.lastUpdateTime);
+        //        controllClose();
+        //    }
+        //});
+
+        $('#oftenWay').on('change', function () {
+            var val = this.value;
+            if (val != '#')
+            {
+                $('#fixMethod').editable('setValue', val, true);
+                $('#fixMethod').editable('submit');
+            }
+        });
         $('#isClose').editable({
             value: ['@Model.reportRecord.isClose_s'],
             source: [
@@ -155,6 +168,8 @@
             });
         });
 
+
+        
         //控制受否可編輯
         controllerAllEdit();
 
@@ -162,7 +177,7 @@
         controllClose();
     });
 
-    
+
     function controllerAllEdit()
     {
         if (hasManRecord)
@@ -176,16 +191,19 @@
         if (isclose)
         {
             $('.editable').editable('option', 'disabled', true);
-            $('#happenedTime, #fixDate, #expectDate, #imgButton1, #imgButton2, #imgButton3, #imgButton4').attr('disabled', true);
+            $('#oftenWay, #happenedTime, #fixDate, #expectDate, #imgButton1, #imgButton2, #imgButton3, #imgButton4').attr('disabled', true);
             $('#isClose').editable('option', 'disabled', false);
             $('#AddButton').addClass('hide');
+            
+          
+            
         }
         else
         {
-            $('#happenedTime, #fixDate, #expectDate, #imgButton1, #imgButton2, #imgButton3, #imgButton4').attr('disabled', false);
+            $('#oftenWay, #happenedTime, #fixDate, #expectDate, #imgButton1, #imgButton2, #imgButton3, #imgButton4').attr('disabled', false);
             $('.editable').editable('option', 'disabled', false);
             if (!hasManRecord) {
-                $('#AddButton').removeClass('hide');        //出現 "+"  
+                $('#AddButton').removeClass('hide');        //出現 "+"
             }
             else {
                 $('#AddButton').addClass('hide');           //去除 "+"
@@ -421,7 +439,20 @@
                                         故障排除方法
                                     </td>
                                     <td>
-                                        <a href="#" id="fixMethod" data-type="select" data-pk="@Model.reportRecord.recordId" data-url="@Url.Action("UpdateRecord")" data-title="選擇故障排除方法">@Model.reportRecord.fixMethod</a>
+                                            常用方法 : 
+                                        <div>
+                                            <select class="col-md-3" id="oftenWay">
+                                                <option value="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---------可選一個常用方法---------</option>
+                                                @foreach (var item in Model.solutions)
+                                                {
+                                                    <option value="@item.description">@item.name</option>
+                                                }
+                                            </select>
+                                        </div>
+                                                
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" id="fixMethod" data-type="textarea" data-pk="@Model.reportRecord.recordId" data-url="@Url.Action("UpdateRecord")" >@Model.reportRecord.fixMethod</a>
+                                        
+                                        
                                     </td>
                                 </tr>
                                 <tr>
@@ -493,13 +524,16 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>照片1</td>
+                                        <td>
+                                            照片1
+                                            <button class="btn btn-sm btn-primary pull-right" style="margin-left: 10px;" onclick="upload('_1')" id="imgButton1"><i class="fa fa-camera"></i> 上傳照片</button>
+                                        </td>
                                         <td>
                                             <div class="progress" style="margin-bottom: 10px; display: none;">
                                                 <div id="imgProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                                             </div>
                                             <input id="uploadImage_1" type='file' onchange="uploadImage(this, '_1')" style="display: none;">
-                                            <button class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="upload('_1')" id="imgButton1"><i class="fa fa-camera"></i> 上傳照片</button>
+                                            
                                             <img id="photo_1" class="img-responsive" src="@if (Model.ManRecord.imgFile1 != null) { @Url.Content("~/media/manRepairRecord/" + Model.ManRecord.imgFile1) } " alt="manRepair image 1">
                                         </td>
                                     </tr>
@@ -510,13 +544,15 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>照片2</td>
+                                        <td>
+                                            照片2
+                                            <button class="btn btn-sm btn-primary pull-right" style="margin-left: 10px;" onclick="upload('_2')" id="imgButton2"><i class="fa fa-camera"></i> 上傳照片</button>
+                                        </td>
                                         <td>
                                             <div class="progress" style="margin-bottom: 10px; display: none;">
                                                 <div id="imgProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                                             </div>
                                             <input id="uploadImage_2" type='file' onchange="uploadImage(this, '_2')" style="display: none;">
-                                            <button class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="upload('_2')" id="imgButton2"><i class="fa fa-camera"></i> 上傳照片</button>
                                             <img id="photo_2" class="img-responsive" src="@if (Model.ManRecord.imgFile2 != null) { @Url.Content("~/media/manRepairRecord/" + Model.ManRecord.imgFile2) } " alt="manRepair image 2">
                                         </td>
                                     </tr>
@@ -527,13 +563,16 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>照片3</td>
+                                        <td>
+                                            照片3
+                                            <button class="btn btn-sm btn-primary pull-right" style="margin-left: 10px;" onclick="upload('_3')" id="imgButton3"><i class="fa fa-camera"></i> 上傳照片</button>
+                                        </td>
                                         <td>
                                             <div class="progress" style="margin-bottom: 10px; display: none;">
                                                 <div id="imgProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                                             </div>
                                             <input id="uploadImage_3" type='file' onchange="uploadImage(this, '_3')" style="display: none;">
-                                            <button class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="upload('_3')" id="imgButton3" ><i class="fa fa-camera"></i> 上傳照片</button>
+                                            
                                             <img id="photo_3" class="img-responsive" src="@if (Model.ManRecord.imgFile3 != null) { @Url.Content("~/media/manRepairRecord/" + Model.ManRecord.imgFile3) }" alt="manRepair image 3">
                                         </td>
                                     </tr>
@@ -544,13 +583,16 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>完修照片</td>
+                                        <td>
+                                            完修照片
+                                            <button class="btn btn-sm btn-primary pull-right" style="margin-left: 10px;" onclick="upload('_4')" id="imgButton4"><i class="fa fa-camera"></i> 上傳照片</button>
+                                        </td>
                                         <td>
                                             <div class="progress" style="margin-bottom: 10px; display: none;">
                                                 <div id="imgProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                                             </div>
                                             <input id="uploadImage_4" type='file' onchange="uploadImage(this, '_4')" style="display: none;">
-                                            <button class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="upload('_4')" id="imgButton4" ><i class="fa fa-camera"></i> 上傳照片</button>
+                                            
                                             <img id="photo_4" class="img-responsive" src="@if (Model.ManRecord.imgFixFile1 != null) { @Url.Content("~/media/manRepairRecord/" + Model.ManRecord.imgFixFile1) } " alt="manRepair image 4">
                                         </td>
                                     </tr>
