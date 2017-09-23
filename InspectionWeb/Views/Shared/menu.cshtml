@@ -94,17 +94,17 @@
                                 </ul>
                             </li>
                             @*常用解決方法*@
-                            <li class="treeview @Html.isActive(controller3: "QuickSolution")">
+                            <li class="treeview @Html.isActive(controller: "QuickSolution")">
                                 <a href="#">
                                     <i class="fa fa-edit"></i>
                                     <span>常用解決方法</span>
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </a>
                                 <ul class="treeview-menu">
-                                    <li class="@Html.isActive(controller3: "QuickSolution", action: "Add")">
+                                    <li class="@Html.isActive(controller: "QuickSolution", action: "Add")">
                                         <a href="@Url.Action("Add", "QuickSolution")"><i class="fa fa-circle-o"></i>新增常用解決方法</a>
                                     </li>
-                                    <li class="@Html.isActive(controller3: "QuickSolution", action: "List")">
+                                    <li class="@Html.isActive(controller: "QuickSolution", action: "List")">
                                         <a href="@Url.Action("List", "QuickSolution")"><i class="fa fa-circle-o"></i>常用解決方法列表</a>
                                     </li>
                                 </ul>
