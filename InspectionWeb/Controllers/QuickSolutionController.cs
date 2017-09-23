@@ -135,6 +135,7 @@ namespace InspectionWeb.Controllers
             SolutionViewModel vm = new SolutionViewModel();
 
             vm.solutionId = instance.solutionId;
+            vm.solutionName = instance.name;
             vm.description = instance.description;
             vm.lastUpdateTime = instance.lastUpdateTime;
 

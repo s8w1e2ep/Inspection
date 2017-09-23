@@ -31,6 +31,7 @@
                                 @foreach (var data in Model)
                                 {
                                     <tr id="@data.solutionId">
+                                        <td>@data.solutionName</td>
                                         <td>@data.description</td>
                                         <td>@Html.DisplayFor(modelItem => data.lastUpdateTime)</td>
                                         <td>
