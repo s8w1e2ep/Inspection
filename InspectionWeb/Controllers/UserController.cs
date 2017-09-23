@@ -7,7 +7,7 @@ using InspectionWeb.Models.ViewModel;
 using InspectionWeb.Models;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
-
+using System.IO;
 
 namespace InspectionWeb.Controllers
 {
@@ -288,14 +288,21 @@ namespace InspectionWeb.Controllers
                     {
                         fileName += ".png";
                     }
-                    
-                    var path = System.IO.Path.Combine(Server.MapPath("~/media/user"), fileName);
+
+                    var path = Server.MapPath("~/media/user/");
+
+                    if (!Directory.Exists(path))
+                    {                    
+                        Directory.CreateDirectory(path);
+                    }
+                    System.Diagnostics.Debug.WriteLine("GG: \n\n" + path);
+                    path = Path.Combine(path, fileName);
                     upload.SaveAs(path);
 
                     user instance = _userService.GetByID(userId);
 
                     var result = _userService.Update(instance, "picture", fileName);
-
+ 
                     if (result.Success)
                     {
                         result.Message = fileName;
@@ -387,7 +394,7 @@ namespace InspectionWeb.Controllers
         private UserEditViewModel User2EditViewModel(user instance)
         {
             UserEditViewModel vm = new UserEditViewModel();
-            var groups = this._userGroupService.GetAll().Where(x => x.isDelete == 0 && x.groupId != instance.userId).ToList();
+            var groups = this._userGroupService.GetAll().Where(x => x.isDelete == 0 && x.superUserOnly == 0).ToList();
             var agents = this._userService.GetAll().Where(x => x.isDelete == 0 && x.userId != instance.userId).ToList();
             var rooms = this._exhibitionRoomService.GetAll().Where(x => x.inspectionUserId == instance.userId);
 

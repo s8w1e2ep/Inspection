@@ -1,90 +1,49 @@
-﻿
-$('#startDatePicker, #endDatePicker').timepicker({
-    minuteStep: 1,
-    showSeconds: true,
-    showMeridian: false,
-    defaultTime: false
-});
-
-$('#startDatePicker, #endDatePicker').datepicker({
+﻿$('i[name="DateRangePicker"]').daterangepicker({
     singleDatePicker: true,
-    language: 'zh-TW',
-    "setDate": new Date(),
-    format: 'yyyy-mm-dd'
+    timePicker: true,
+    timePicker12Hour: false,
+    timePickerSeconds: true,
+    timePickerIncrement: 1,
+    autoApply: true,
+    format: 'YYYY-MM-DD HH:mm:ss',
+    locale: {
+        applyLabel: '確定',
+        cancelLabel: '取消',
+        fromLabel: '從',
+        toLabel: '到',
+        weekLabel: 'W',
+        customRangeLabel: 'Custom Range',
+        daysOfWeek: ["日", "一", "二", "三", "四", "五", "六"],
+        monthNames: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+    }
 });
-
 
 $(document).ready(function () {
 
-    // single Date picker
+    $('#PendingList').DataTable({
+        "paging": false,
+        "info": false,
+        "searching": true,
+        "columnDefs": [
+            { "targets": 0, "width": "10%", "orderable": true },
+            { "targets": 1, "width": "10%", "orderable": true },
+            { "targets": 2, "width": "15%", "orderable": true },
+            { "targets": 3, "width": "15%", "orderable": true },
+            { "targets": 4, "width": "15%", "orderable": true },
+            { "targets": 5, "width": "15%", "orderable": true },
+            { "targets": 6, "width": "10%", "orderable": false }
+        ],
+    });
 
-    var st = 1;
-    var date = "";
-    var time = "";
-    var obj;
-    var recordId;
-
-    $('#startDatePicker, #endDatePicker').on('click', function (ev) {
-        $(this).timepicker('hideWidget');
-        $(this).datepicker('hide');
+    $('i[name="DateRangePicker"]').on('apply.daterangepicker', function (ev, picker) {
         recordId = $(this).attr("data-pk");
-        if ($(this).val() == "")
-            date = "";
-        if (st == 1) {
-            obj = $(this);
-            $(this).datepicker('show');
-            var tt = document.getElementsByClassName('table table-condensed')[0];
-            if (tt.lastElementChild.className == "") {
-                date = "";
-                var text2 = document.createElement("tfoot");
-                text2.className = "timebutton";
-                text2.innerHTML = '<div class="col-md-8" ><tr><td colspan="7" ><i class="fa fa-clock-o" id="timebutton" ></i></td></tr></div>';
-                tt.lastElementChild.after(text2);
-            }
-            $('#timebutton').on('click', function (ev) {
-                if (date == "") {
-                }
-                else{
-                    obj.datepicker('hide');
-                    st = 0;
-                    obj.timepicker('showWidget');
-                }
-            })
-        }
-        else {
-            $(this).timepicker('showWidget');
-        }
-        //obj.val(date);
-    })
-
-    $('#startDatePicker, #endDatePicker').on('changeDate', function (ev) {
-        date = $(this).val();
-        $(this).val(date);
+        changedatetime(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
     });
-
-    $('#startDatePicker, #endDatePicker').on('show.timepicker', function (e) {
-        if (st == 0) {
-            time = '00:00:00';
-            $(this).val(date + " " + time);
-        }
-    });
-
-    $('#startDatePicker, #endDatePicker').on('changeTime.timepicker', function (ev) {
-        time = $(this).val();
-    });
-    $('#startDatePicker, #endDatePicker').on('hide.timepicker', function (ev) {
-        if (st === 0) {
-            $(this).val(date + " " + time);
-            time = "";
-            st = 1;
-            changedatetime();
-        }
-    });
-
-    function changedatetime() {
-        var newdatetime = obj.val();
+    
+    function changedatetime(date) {
+        var newdatetime = date;
         $.post(
-            'PendingList1',
+            'ExtendedWorkUpdateDate',
             {
                 recordId: recordId,
                 fixDate: newdatetime
