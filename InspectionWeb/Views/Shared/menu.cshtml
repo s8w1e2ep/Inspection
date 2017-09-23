@@ -16,7 +16,7 @@
                      (Session["userManager"] != null && (bool)Session["userManager"]))
                 {
                     @*基本資料管理*@
-                    <li class="treeview @Html.isActive(controller: "User", controller2: "AbnormalDefinition")">
+                    <li class="treeview @Html.isActive(controller: "User", controller2: "AbnormalDefinition", controller3: "QuickSolution")">
                         <a href="#">
                             <i class="fa fa-dashboard"></i>
                             <span>基本資料管理</span>
@@ -94,17 +94,17 @@
                                 </ul>
                             </li>
                             @*常用解決方法*@
-                            <li class="treeview">
+                            <li class="treeview @Html.isActive(controller3: "QuickSolution")">
                                 <a href="#">
                                     <i class="fa fa-edit"></i>
                                     <span>常用解決方法</span>
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </a>
                                 <ul class="treeview-menu">
-                                    <li>
+                                    <li class="@Html.isActive(controller3: "QuickSolution", action: "Add")">
                                         <a href="@Url.Action("Add", "QuickSolution")"><i class="fa fa-circle-o"></i>新增常用解決方法</a>
                                     </li>
-                                    <li>
+                                    <li class="@Html.isActive(controller3: "QuickSolution", action: "List")">
                                         <a href="@Url.Action("List", "QuickSolution")"><i class="fa fa-circle-o"></i>常用解決方法列表</a>
                                     </li>
                                 </ul>
@@ -250,23 +250,23 @@
                 if (Session["normal"] != null && (bool)Session["normal"])
                 {
                     @*通報作業*@
-                    <li class="treeview">
+                    <li class="treeview @Html.isActive(controller: "ReportJob")">
                         <a href="#">
                             <i class="fa fa-dashboard"></i>
                             <span>6000 通報作業</span>
                             <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li>
+                            <li class="@Html.isActive(controller: "ReportJob", action: "AddExhibitionItem")">
                                 <a href="@Url.Action("AddExhibitionItem", "ReportJob", new { sourceCode = "02"})"><i class="fa fa-circle-o"></i>新增展項通報</a>
                             </li>
-                            <li>
+                            <li class="@Html.isActive(controller: "ReportJob", action: "AddExperience")">
                                 <a href="@Url.Action("AddExperience", "ReportJob", new { sourceCode = "02"})"><i class="fa fa-circle-o"></i>新增體驗設施通報</a>
                             </li>
-                            <li>
+                            <li class="@Html.isActive(controller: "ReportJob", action: "AddOther")">
                                 <a href="@Url.Action("AddOther", "ReportJob", new { sourceCode = "02"})"><i class="fa fa-circle-o"></i>新增其他設施通報</a>
                             </li>
-                            <li>
+                            <li class="@Html.isActive(controller: "ReportJob", action: "Query")">
                                 <a href="@Url.Action("Query", "ReportJob")"><i class="fa fa-circle-o"></i>整體通報查詢</a>
                             </li>
                         </ul>
