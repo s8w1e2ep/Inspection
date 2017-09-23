@@ -15,8 +15,8 @@ namespace InspectionWeb.Models
     public partial class temp
     {
         public string dispatchId { get; set; }
-        public string roomId { get; set; }
-        public string roomName { get; set; }
+        public string itemId { get; set; }
+        public string itemName { get; set; }
         public Nullable<System.DateTime> checkDate { get; set; }
         public string inspectorId1 { get; set; }
         public string inspectorCode1 { get; set; }

@@ -36,6 +36,7 @@ namespace InspectionWeb.Models
         public virtual DbSet<manRepairRecord> manRepairRecord { get; set; }
         public virtual DbSet<noCheckDate> noCheckDate { get; set; }
         public virtual DbSet<otherAbnormalRecord> otherAbnormalRecord { get; set; }
+        public virtual DbSet<quickSolution> quickSolution { get; set; }
         public virtual DbSet<reportDevice> reportDevice { get; set; }
         public virtual DbSet<reportSource> reportSource { get; set; }
         public virtual DbSet<roomActiveRecord> roomActiveRecord { get; set; }
@@ -46,6 +47,6 @@ namespace InspectionWeb.Models
         public virtual DbSet<user> user { get; set; }
         public virtual DbSet<userGroup> userGroup { get; set; }
         public virtual DbSet<temp> temp { get; set; }
-        public virtual DbSet<quickSolution> quickSolution { get; set; }
+        public virtual DbSet<temp2> temp2 { get; set; }
     }
 }
