@@ -808,7 +808,9 @@ namespace InspectionWeb.Controllers
         //GET: /Information/AddNotifyDevice
         public ActionResult AddNotifyDevice()
         {
-            return View();
+            NotifyDeviceAddViewModel vm = new NotifyDeviceAddViewModel();
+            vm.sources = _reportSourceService.GetAll().ToList();
+            return View(vm);
         }
 
         [HttpPost]

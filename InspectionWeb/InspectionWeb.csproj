@@ -345,6 +345,7 @@
     <Compile Include="Models\ViewModel\ListItemCheckRecordViewModel.cs" />
     <Compile Include="Models\ViewModel\MailViewModel.cs" />
     <Compile Include="Models\ViewModel\ManRepairViewModel.cs" />
+    <Compile Include="Models\ViewModel\NotifyDeviceAddViewModel.cs" />
     <Compile Include="Models\ViewModel\reportDetailedViewModel.cs" />
     <Compile Include="Models\ViewModel\ReportDeviceEditViewModel.cs" />
     <Compile Include="Models\ViewModel\ReportDeviceListViewModel.cs" />
