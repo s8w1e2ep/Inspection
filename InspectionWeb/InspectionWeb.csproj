@@ -469,6 +469,7 @@
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\editPendingListDetailedData.js" />
+    <Content Include="Scripts\Query.js" />
     <Content Include="Scripts\extendedWork.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
