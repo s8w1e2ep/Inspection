@@ -4,6 +4,24 @@
 @{
     ViewBag.Title = "通報及人工維修資料";
 }
+
+<!-- daterange picker -->
+<link rel="stylesheet" href="~/Content/daterangepicker.css">
+<!-- daterange picker -->
+<script src="../../theme/adminlte/plugins/daterangepicker/moment.min.js"></script>
+<script src="../../theme/adminlte/plugins/daterangepicker/daterangepicker.js"></script>
+<!-- x-editable component, Note to include x-editable after core library (bootstrap, jquery-ui)!-->
+<link href="../../plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+<script src="../../plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+
+<!-- datepicker -->
+<link rel="stylesheet" href="../../theme/adminlte/plugins/datepicker/datepicker3.css">
+<script src="../../theme/adminlte/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="../../theme/adminlte/plugins/datepicker/locales/bootstrap-datepicker.zh-TW.js"></script>
+
+<!-- date format -->
+<script src="~/Scripts/jquery-dateFormat.min.js"></script>
+
 <script>
 
     var fixDate = '@Model.reportRecord.fixDate';
