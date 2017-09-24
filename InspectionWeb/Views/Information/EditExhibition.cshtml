@@ -16,7 +16,14 @@
 <!--svg-->
 <script src="~/Scripts/d3.min.js"></script>
 <script src="~/Scripts/rect.js"></script>
-
+<style>
+    .parkingBlock {
+        fill: lightblue;
+        stroke: blue;
+        stroke-width: 2px;
+        fill-opacity: 0.5
+    }
+</style>
 
 <script>
     $.fn.editable.defaults.mode = 'inline';
@@ -152,7 +159,7 @@
         toDeleteItemId = itemId;
     }
     function deleteExhibitionItem() {
-        
+
         $.ajax({
             type: "DELETE",
             url: '@Url.Action("DeleteExhibitionItem", "Information")',
@@ -223,40 +230,29 @@
     }
 
     // variables for d3
-    var svg;
-    var dragBehavior;
-    var attributesText;
+
 
     function loadMap(mapName) {
         $('#fieldMap').load(mapName, status, function () {
             if (status != 'error') {
                 svg = d3.select("svg");
-                attributesText = d3.select("#attributestext");
-                getSvgChangeFromServer();
-                dragBehavior = d3.behavior.drag()
-                    .on("drag", dragMove)
-                    .on("dragstart", dragStart)
-                    .on("dragend", dragEnd);
-                svg.call(dragBehavior);
+                var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                g.setAttributeNS(null, 'id', 'parkingBlock_g');
+                $('svg').append(g);
+                new OldRectangle('', '', @Model.X, @Model.Y, @Model.Width, @Model.Height);
+
             }
         });
     }
 
-    function getSvgChangeFromServer() {
-        selectionRect.init(@Model.X, @Model.Y);
-        selectionRect.update(@Model.X + @Model.Width,@Model.Y + @Model.Height);
-    }
-
-    function saveSvgChangeToServer(){
-
+    function updateParkingBlockRangeToServer(parkingBlockGraphicObject, x, y, width, height) {
         var formData = new FormData();
-        var rect = selectionRect.getNewAttributes();
 
         formData.append('roomId', '@Model.RoomId');
-        formData.append('x', parseInt(rect.x, 10));
-        formData.append('y', parseInt(rect.y, 10));
-        formData.append('width', parseInt(rect.width, 10));
-        formData.append('height', parseInt(rect.height, 10));
+        formData.append('x', parseInt(x, 10));
+        formData.append('y', parseInt(y, 10));
+        formData.append('width', parseInt(width, 10));
+        formData.append('height', parseInt(height, 10));
 
         $.ajax({
             url: "@Url.Content("~/Information/SaveRoomSvgChangeToServer")",
