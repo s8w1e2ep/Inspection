@@ -469,6 +469,7 @@
       <DependentUpon>inspection.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\d3.min.js" />
     <Content Include="Scripts\editPendingListDetailedData.js" />
     <Content Include="Scripts\extendedWork.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -476,6 +477,7 @@
     <Content Include="Scripts\ListSolution.js" />
     <Content Include="Scripts\MaintenanceQuery.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\rect.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\showpedningList.js" />
