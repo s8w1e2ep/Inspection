@@ -236,9 +236,13 @@
         $('#fieldMap').load(mapName, status, function () {
             if (status != 'error') {
                 svg = d3.select("svg");
+
+                // 圖層
                 var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
                 g.setAttributeNS(null, 'id', 'parkingBlock_g');
                 $('svg').append(g);
+
+                //區塊
                 new OldRectangle('', '', @Model.X, @Model.Y, @Model.Width, @Model.Height);
 
             }
