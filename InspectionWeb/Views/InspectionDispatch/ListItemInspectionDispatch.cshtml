@@ -24,7 +24,8 @@
             format: "yyyy/mm/dd",
             language: 'zh-TW',
             todayHighlight: true
-        });
+        }).datepicker("setDate", new Date());
+
         $('#modalYes').on('click', function (e) {
             deleteDispatch();
         });
@@ -60,7 +61,6 @@
     }
 
     function updateInspector(dispatchId, inspectorType, inspectionId) {
-
         $.ajax({
             url: '@Url.Action("UpdateItemInspectionDispatch")',
             data: $.param({ 'pk': dispatchId, 'name': inspectorType, 'value': inspectionId }),
@@ -72,9 +72,23 @@
 
     }
 
+    function redispatch(dispatchId) {
+        $.ajax({
+            url: '@Url.Action("ResetItemInspectionDispatch")',
+            data: $.param({ 'pk': dispatchId, 'name': "isDelete", 'value': 0 }),
+            type: 'UPDATE',
+        }).done(function (msg) {
+            if (msg.result == 1) {
+                $('#remove_' + dispatchId).css("display", "block");
+                $('#reset_' + dispatchId).css("display", "none");
+            }
+        });
+    }
+
     function storeId(dispatchId,Date) {
         toDispatchId = dispatchId;
         theDate = Date;
+        console.log(toDispatchId);
     }
 
     function deleteDispatch() {
@@ -83,10 +97,10 @@
             data: $.param({ 'dispatchId': toDispatchId, 'date': theDate }),
         type: 'POST',
         }).done(function (msg) {
-            console.log(msg);
             if (msg.result == 1) {
-                $('#' + toDispatchId).remove();
-            }  
+                $('#remove_' + toDispatchId).css("display", "none");
+                $('#reset_' + toDispatchId).css("display", "block");
+            }
         });
     }
 </script>
@@ -148,7 +162,7 @@
                                 <table id="itemInspectionTable" class="row-border" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
-                                            <th>展示廳</th>
+                                            <th>體驗設施</th>
                                             <th>上午巡檢人員</th>
                                             <th>下午巡檢人員</th>
                                             <th>操作選項</th>
@@ -223,7 +237,16 @@
                                                          }
                                                     </td>
                                                     <td>
-                                                        <a href="#" data-toggle=modal data-target=#myModal><button class="btn btn-sm btn-danger" onclick="storeId('@item.dispatchId','@Model.checkDate')"><i class="glyphicon glyphicon-remove"></i></button></a>
+                                                        @if (@item.iidStatus == 0)
+                                                        {
+                                                            <a href="#" data-toggle=modal data-target=#myModal id="remove_@item.dispatchId"><button class="btn btn-sm btn-danger" onclick="storeId('@item.dispatchId','@Model.checkDate')"><i class="glyphicon glyphicon-remove"></i></button></a>
+                                                            <a style="display:none;" href="#" id="reset_@item.dispatchId"><button class="btn btn-sm btn-primary" onclick="redispatch('@item.dispatchId')"><i class="glyphicon glyphicon-plus"></i></button></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a style="display:none;" href="#" data-toggle=modal data-target=#myModal id="remove_@item.dispatchId"><button class="btn btn-sm btn-danger" onclick="storeId('@item.dispatchId','@Model.checkDate')"><i class="glyphicon glyphicon-remove"></i></button></a>
+                                                            <a href="#" id="reset_@item.dispatchId"><button class="btn btn-sm btn-primary" onclick="redispatch('@item.dispatchId')"><i class="glyphicon glyphicon-plus"></i></button></a>
+                                                        }
                                                     </td>
                                                 </tr>
                                             }
