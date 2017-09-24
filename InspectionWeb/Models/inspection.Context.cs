@@ -25,8 +25,8 @@ namespace InspectionWeb.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<abnormalDefinition> abnormalDefinition { get; set; }
         public virtual DbSet<company> company { get; set; }
+        public virtual DbSet<abnormalDefinition> abnormalDefinition { get; set; }
         public virtual DbSet<exhibitionItem> exhibitionItem { get; set; }
         public virtual DbSet<exhibitionRoom> exhibitionRoom { get; set; }
         public virtual DbSet<fieldMap> fieldMap { get; set; }
@@ -34,6 +34,7 @@ namespace InspectionWeb.Models
         public virtual DbSet<itemInspectionDispatch> itemInspectionDispatch { get; set; }
         public virtual DbSet<manRepairRecord> manRepairRecord { get; set; }
         public virtual DbSet<noCheckDate> noCheckDate { get; set; }
+        public virtual DbSet<otherAbnormalRecord> otherAbnormalRecord { get; set; }
         public virtual DbSet<quickSolution> quickSolution { get; set; }
         public virtual DbSet<reportDevice> reportDevice { get; set; }
         public virtual DbSet<reportSource> reportSource { get; set; }
@@ -44,9 +45,8 @@ namespace InspectionWeb.Models
         public virtual DbSet<systemSettings> systemSettings { get; set; }
         public virtual DbSet<user> user { get; set; }
         public virtual DbSet<userGroup> userGroup { get; set; }
+        public virtual DbSet<temp> temp { get; set; }
         public virtual DbSet<temp2> temp2 { get; set; }
         public virtual DbSet<abnormalRecord> abnormalRecord { get; set; }
-        public virtual DbSet<temp> temp { get; set; }
-        public virtual DbSet<otherAbnormalRecord> otherAbnormalRecord { get; set; }
     }
 }

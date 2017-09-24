@@ -7,7 +7,7 @@ using InspectionWeb.Models.ViewModel;
 using InspectionWeb.Models;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
-
+using System.IO;
 
 
 namespace InspectionWeb.Controllers
@@ -27,11 +27,12 @@ namespace InspectionWeb.Controllers
         private IRoomInspectionDispatchService _roomInspectionDispatchService;
         private IItemInspectionDispatchService _itemInspectionDispatchService;
         private MailController _mailController;
+        private ISolutionService _solutionService;
 
         public ReportJobController(IExhibitionRoomService service, IExhibitionItemService service2, IReportSourceService service3,
             IAbnormalDefinitionService service4, IAbnormalRecordService service5, IOtherAbnormalRecordService service6, IUserService service7,
-            IManRepairRecordService service8, IMailService service9, IRoomInspectionDispatchService service10, IItemInspectionDispatchService service11,
-            MailController controller)
+            IManRepairRecordService service8, ISolutionService service9, IMailService service10, IRoomInspectionDispatchService service11, 
+            IItemInspectionDispatchService service12,   MailController controller)
         {
             this._exhibitionRoomService = service;
             this._exhibitionItemService = service2;
@@ -41,9 +42,10 @@ namespace InspectionWeb.Controllers
             this._otherAbnormalRecordService = service6;
             this._userService = service7;
             this._manRepairRecordService = service8;
-            this._mailService = service9;
-            this._roomInspectionDispatchService = service10;
-            this._itemInspectionDispatchService = service11;
+            this._solutionService = service9;
+            this._mailService = service10;
+            this._roomInspectionDispatchService = service11;
+            this._itemInspectionDispatchService = service12;
             this._mailController = controller;
         }
 
@@ -66,31 +68,31 @@ namespace InspectionWeb.Controllers
         }
 
         // GET: /ReportJob/AddExhibitionItem
-        public ActionResult AddExhibitionItem()
+        public ActionResult AddExhibitionItem(string sourceCode)
         {
             //取出展示廳資料
             
             ViewBag.exhibitionRooms = this._exhibitionRoomService.GetAll().Where(x => x.active == 1);
-            ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+            ViewBag.reportSource = this._reportSourceService.GetBySourceCode(sourceCode);
             ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
 
             return View();
         }
 
         // GET: /ReportJob/AddExperience
-        public ActionResult AddExperience()
+        public ActionResult AddExperience(string sourceCode)
         {
             ViewBag.exhibitionRooms = this._exhibitionRoomService.GetAll().Where(x => x.active == 1);
-            ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+            ViewBag.reportSource = this._reportSourceService.GetBySourceCode(sourceCode);
             ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
 
             return View();
         }
 
         // GET: /ReportJob/AddOther
-        public ActionResult AddOther()
+        public ActionResult AddOther(string sourceCode)
         {
-            ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+            ViewBag.reportSource = this._reportSourceService.GetBySourceCode(sourceCode);
             ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
             return View();
         }
@@ -120,7 +122,7 @@ namespace InspectionWeb.Controllers
                 {
                     //取出展示廳資料
                     ViewBag.exhibitionRooms = this._exhibitionRoomService.GetAll().Where(x => x.active == 1);
-                    ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+                    ViewBag.reportSource = this._reportSourceService.GetById(sourceId);
                     ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
                     ViewBag.ErrorMsg = result.ErrorMsg;
                     
@@ -135,9 +137,9 @@ namespace InspectionWeb.Controllers
             {
                 //取出展示廳資料
                 ViewBag.exhibitionRooms = this._exhibitionRoomService.GetAll().Where(x => x.active == 1);
-                ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+                ViewBag.reportSource = this._reportSourceService.GetById(sourceId);
                 ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
-                ViewBag.ErrorMsg = "尚有欄位尚未選擇";
+                ViewBag.ErrorMsg = "尚有欄位未選擇";
                 return View("AddExhibitionItem");
             }
         }
@@ -175,7 +177,7 @@ namespace InspectionWeb.Controllers
                 {
                     //取出展示廳資料
                     ViewBag.exhibitionRooms = this._exhibitionRoomService.GetAll().Where(x => x.active == 1);
-                    ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+                    ViewBag.reportSource = this._reportSourceService.GetById(sourceId);
                     ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
                     ViewBag.ErrorMsg = result.ErrorMsg;
 
@@ -190,7 +192,7 @@ namespace InspectionWeb.Controllers
             {
                 //取出展示廳資料
                 ViewBag.exhibitionRooms = this._exhibitionRoomService.GetAll().Where(x => x.active == 1);
-                ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+                ViewBag.reportSource = this._reportSourceService.GetById(sourceId);
                 ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
                 ViewBag.ErrorMsg = "尚有欄位尚未選擇";
                 return View("AddExperience");
@@ -273,7 +275,7 @@ namespace InspectionWeb.Controllers
                 if (result.Success == false)
                 {
                     //取出展示廳資料
-                    ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+                    ViewBag.reportSource = this._reportSourceService.GetById(sourceId);
                     ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
                     ViewBag.ErrorMsg = result.ErrorMsg;
 
@@ -285,7 +287,7 @@ namespace InspectionWeb.Controllers
             else
             {
                 //取出展示廳資料
-                ViewBag.reportSources = this._reportSourceService.GetAll().Where(x => x.isDelete == 0);
+                ViewBag.reportSource = this._reportSourceService.GetById(sourceId);
                 ViewBag.abnormals = this._abnormalDefinitionService.GetAll().Where(x => x.isDelete == 0);
                 ViewBag.ErrorMsg = "尚有欄位未填選";
                 return View("AddOther");
@@ -370,7 +372,7 @@ namespace InspectionWeb.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("ItemDetailedData");
+                    return RedirectToAction("ItemDetailedData", new { id = pk});
                 }
             }
             else
@@ -461,7 +463,15 @@ namespace InspectionWeb.Controllers
                         fileName += ".png";
                     }
 
-                    var path = System.IO.Path.Combine(Server.MapPath("~/media/manRepairRecord"), fileName);
+
+                    var path = Server.MapPath("~/media/manRepairRecord/");
+
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    path = Path.Combine(path, fileName);
+
                     upload.SaveAs(path);
 
                     manRepairRecord instance = _manRepairRecordService.GetByID(recordId);
@@ -509,6 +519,7 @@ namespace InspectionWeb.Controllers
             List<user> users = new List<user>();
             List<reportSource> sources = new List<reportSource>();
             List<abnormalDefinition> abnormals = new List<abnormalDefinition>();
+            List<quickSolution> solutions = new List<quickSolution>();
 
             //紀錄詳細資料物件
             
@@ -519,6 +530,7 @@ namespace InspectionWeb.Controllers
             sources = this._reportSourceService.GetAll().ToList();
             abnormals = this._abnormalDefinitionService.GetAll().ToList();
             users = this._userService.GetAll().ToList();
+            solutions = this._solutionService.GetAll().ToList();
 
             //其他異常通報
             if (id[0] == 'O')
@@ -536,11 +548,7 @@ namespace InspectionWeb.Controllers
                 vm.happenedTime = instanceO.happenedTime?.ToString("yyyy/MM/dd HH:mm:ss");
                 vm.description = instanceO.description;
                 vm.fixDate = instanceO.fixDate?.ToString("yyyy/MM/dd HH:mm:ss");
-                if (instanceO.fixMethod == "1")
-                    vm.fixMethod = "人員排除";
-                else if (instanceO.fixMethod == "0")
-                    vm.fixMethod = "自動排除";
-
+                vm.fixMethod = instanceO.fixMethod;
                 vm.isClose_s = instanceO.isClose;
                 vm.createTime = instanceO.createTime?.ToString("yyyy-MM-dd HH:mm:ss");
                 vm.lastUpdateTime = instanceO.lastUpdateTime?.ToString("yyyy-MM-dd HH:mm:ss");
@@ -551,7 +559,9 @@ namespace InspectionWeb.Controllers
                 
                 vm.recordId = instance.recordId;
                 vm.deviceId = instance.deviceId;
-                vm.roomName = this._exhibitionRoomService.GetById(this._exhibitionItemService.GetById(instance.itemId).roomId).roomName;
+                var roomId = this._exhibitionItemService.GetById(instance.itemId).roomId;
+                if( roomId == "experience") { vm.roomName = "不屬於任何展示廳"; }
+                else { vm.roomName = this._exhibitionRoomService.GetById(roomId).roomName; }
                 vm.itemName = this._exhibitionItemService.GetById(instance.itemId).itemName;
                 vm.itemtypeName = (this._exhibitionItemService.GetById(instance.itemId).itemType == 0) ? "展項" : "體驗設施";
                 vm.sourceName = this._reportSourceService.GetById(instance.sourceId).sourceName;
@@ -561,11 +571,7 @@ namespace InspectionWeb.Controllers
                 vm.happenedTime = instance.happenedTime?.ToString("yyyy/MM/dd HH:mm:ss");
                 vm.description = instance.description;
                 vm.fixDate = instance.fixDate?.ToString("yyyy/MM/dd HH:mm:ss");
-                if (instance.fixMethod == "1")
-                    vm.fixMethod = "人員排除";
-                else if (instance.fixMethod == "0")
-                    vm.fixMethod = "自動排除";
-
+                vm.fixMethod = instance.fixMethod;
                 vm.isClose_s = instance.isClose;
                 vm.createTime = instance.createTime?.ToString("yyyy-MM-dd HH:mm:ss");
                 vm.lastUpdateTime = instance.lastUpdateTime?.ToString("yyyy-MM-dd HH:mm:ss");
@@ -592,9 +598,6 @@ namespace InspectionWeb.Controllers
                 vmm.imgFixDesc1 = instanceM.imgFixDesc1;
                 vmm.createTime = instanceM.createTime?.ToString("yyyy-MM-dd HH:mm:ss");
                 vmm.lastUpdateTime = instanceM.lastUpdateTime?.ToString("yyyy-MM-dd HH:mm:ss");
-
-                //封裝
-                vmD.ManRecord = vmm;
             }
             
 
@@ -603,7 +606,8 @@ namespace InspectionWeb.Controllers
             vmD.sources = sources;
             vmD.abnormals = abnormals;
             vmD.repairUsers = users;
-            
+            vmD.solutions = solutions;
+            vmD.ManRecord = vmm;
             return vmD;
         }
 
@@ -660,7 +664,9 @@ namespace InspectionWeb.Controllers
 
             vm.recordId = instance.recordId;
             vm.sourceName = this._reportSourceService.GetById(instance.sourceId).sourceName;
-            vm.roomName = this._exhibitionRoomService.GetById(this._exhibitionItemService.GetById(instance.itemId).roomId).roomName;
+            var roomId = this._exhibitionItemService.GetById(instance.itemId).roomId;
+            if (roomId == "experience") { vm.roomName = "不屬於任何展示廳"; }
+            else { vm.roomName = this._exhibitionRoomService.GetById(roomId).roomName; }
             vm.itemName = this._exhibitionItemService.GetById(instance.itemId).itemName;
             vm.happenedTime = instance.happenedTime?.ToString("yyyy-MM-dd HH:mm:ss");
             vm.fixDate = instance.fixDate?.ToString("yyyy-MM-dd HH:mm:ss");

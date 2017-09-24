@@ -42,16 +42,15 @@ namespace InspectionWeb.Controllers
 
         //function
         [HttpPost]
-        public ActionResult AddSolution(string description)
+        public ActionResult AddSolution(string name, string description)
         {
             if (!string.IsNullOrEmpty(description) && ModelState.IsValid)
             {
-                IResult result = this._solutionService.Create(description);
+                IResult result = this._solutionService.Create(name, description);
 
                 if (result.Success == false)
                 {
                     ViewBag.ErrorMsg = result.ErrorMsg;
-
                     return View("Add");
                 }
 
@@ -59,7 +58,7 @@ namespace InspectionWeb.Controllers
             }
             else
             {
-                ViewBag.ErrorMsg = "方法說明空白";
+                ViewBag.ErrorMsg = "尚有欄位未填寫";
                 return View("Add");
             }
             
@@ -73,6 +72,7 @@ namespace InspectionWeb.Controllers
                 return RedirectToAction("List");
             }
             var data = this._solutionService.GetByID(id);
+            ViewBag.solutionName = data.name;
             ViewBag.description = data.description;
 
             ViewBag.createTime = data.createTime?.ToString("yyyy-MM-dd HH:mm:ss");
@@ -135,6 +135,7 @@ namespace InspectionWeb.Controllers
             SolutionViewModel vm = new SolutionViewModel();
 
             vm.solutionId = instance.solutionId;
+            vm.solutionName = instance.name;
             vm.description = instance.description;
             vm.lastUpdateTime = instance.lastUpdateTime;
 

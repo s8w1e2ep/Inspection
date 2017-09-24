@@ -7,6 +7,14 @@
     ViewBag.solutionList = "active";
 }
 
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+ <!-- column order --> 
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+
+
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
         <ol class="breadcrumb">
@@ -17,7 +25,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-                <div class="box box-info">
+                <div class="box box-success">
                     <div class="box-header">
                         <h3 class="box-title">常用解決方法列表</h3>
                     </div>
@@ -25,6 +33,7 @@
                         <table id="SolutionTable" class="row-border" cellspacing="0" style="width: 100%;">
                             <thead>
                                 <tr>
+                                    <th>方法名稱</th>
                                     <th>方法說明</th>
                                     <th>最後更新日期</th>
                                     <th>操作選項</th>
@@ -34,6 +43,7 @@
                                 @foreach (var data in Model)
                                 {
                                     <tr id="@data.solutionId">
+                                        <td>@data.solutionName</td>
                                         <td>@data.description</td>
                                         <td>@Html.DisplayFor(modelItem => data.lastUpdateTime)</td>
                                         <td>

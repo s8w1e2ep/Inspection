@@ -14,7 +14,8 @@ namespace InspectionWeb.Models.ViewModel
         //用途 : 異常狀況選單
         public List<abnormalDefinition> abnormals = new List<abnormalDefinition>();
 
-        //用途 : 人工維修紀錄
+        //用途 : 故障排除方法選單
+        public List<quickSolution> solutions = new List<quickSolution>();
 
         //用途 : 維修人員選單
         public List<user> repairUsers = new List<user>();
