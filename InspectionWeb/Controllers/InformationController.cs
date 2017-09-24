@@ -135,7 +135,12 @@ namespace InspectionWeb.Controllers
             {
                 string fileName = fieldId;
                 fileName = fileName + Path.GetExtension(upload.FileName);
-                string savePath = System.IO.Path.Combine(Server.MapPath("~/media/field"), fileName);
+                string folder = Server.MapPath("~/media/field");
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+                string savePath = System.IO.Path.Combine(folder, fileName);
                 upload.SaveAs(savePath);
 
                 fieldMap field = _fieldMapService.GetById(fieldId);
@@ -162,7 +167,12 @@ namespace InspectionWeb.Controllers
                 {
                     //var fileName = System.IO.Path.GetFileName(upload.FileName);
                     var fileName = fieldId + ".svg";
-                    var path = System.IO.Path.Combine(Server.MapPath("~/media/map"), fileName);
+                    string folder = Server.MapPath("~/media/map");
+                    if (!Directory.Exists(folder))
+                    {
+                        Directory.CreateDirectory(folder);
+                    }
+                    var path = System.IO.Path.Combine(folder, fileName);
                     upload.SaveAs(path);
 
                     fieldMap field = _fieldMapService.GetById(fieldId);
@@ -388,7 +398,12 @@ namespace InspectionWeb.Controllers
             {
                 string fileName = roomId;
                 fileName = fileName + Path.GetExtension(upload.FileName);
-                string savePath = System.IO.Path.Combine(Server.MapPath("~/media/exhibition"), fileName);
+                string folder = Server.MapPath("~/media/exhibition");
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+                string savePath = System.IO.Path.Combine(folder, fileName);
                 upload.SaveAs(savePath);
 
                 exhibitionRoom room = _exhibitionRoomService.GetById(roomId);
@@ -621,7 +636,12 @@ namespace InspectionWeb.Controllers
             {
                 string fileName = itemId;
                 fileName = fileName + Path.GetExtension(upload.FileName);
-                string savePath = System.IO.Path.Combine(Server.MapPath("~/media/exhibitionItem"), fileName);
+                string folder = Server.MapPath("~/media/exhibitionItem");
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+                string savePath = System.IO.Path.Combine(folder, fileName);
                 upload.SaveAs(savePath);
 
                 exhibitionItem item = _exhibitionItemService.GetById(itemId);
@@ -1066,7 +1086,12 @@ namespace InspectionWeb.Controllers
             {
                 string fileName = deviceId;
                 fileName = fileName + Path.GetExtension(upload.FileName);
-                string savePath = System.IO.Path.Combine(Server.MapPath("~/media/reportDevice"), fileName);
+                string folder = Server.MapPath("~/media/reportDevice");
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+                string savePath = System.IO.Path.Combine(folder, fileName);
                 upload.SaveAs(savePath);
 
                 reportDevice device = _reportDeviceService.GetById(deviceId);
