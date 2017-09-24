@@ -163,7 +163,7 @@ namespace InspectionWeb.Controllers
                 // Check item if abnormal
                 if (type == "man")
                 {
-                    if (this._abnormalService.GetAll().Any(x => x.itemId == item.itemId &&
+                    if (this._abnormalService.GetAll().Any(x => x.itemId == itemId &&
                                                            x.happenedTime == record.checkDate &&
                                                            x.sourceId == "01" || x.sourceId == "02"))
                     {

@@ -16,7 +16,7 @@
                      (Session["userManager"] != null && (bool)Session["userManager"]))
                 {
                     @*基本資料管理*@
-                    <li class="treeview">
+                    <li class="treeview @Html.isActive(controller: "User", controller2: "AbnormalDefinition")">
                         <a href="#">
                             <i class="fa fa-dashboard"></i>
                             <span>基本資料管理</span>
@@ -24,32 +24,23 @@
                         </a>
                         <ul class="treeview-menu">
                             @*人員與群組管理*@
-                            <li class="">
+                            <li class="@Html.isActive(controller: "User")">
                                 <a href="#">
                                     <i class="fa fa-edit"></i>
-                                    <span>人員基本資料管理</span>
+                                    <span>人員資料管理</span>
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </a>
                                 <ul class="treeview-menu">
-                                    <li>
+                                    <li class="@Html.isActive(controller: "User", action: "Add")">
                                         <a href="@Url.Action("Add", "User")"><i class="fa fa-circle-o"></i>新增人員</a>
                                     </li>
-                                    <li>
+                                    <li class="@Html.isActive(controller: "User", action: "List")">
                                         <a href="@Url.Action("List", "User")"><i class="fa fa-circle-o"></i>人員列表</a>
                                     </li>
-                                </ul>
-                            </li>
-                            <li class="">
-                                <a href="#">
-                                    <i class="fa fa-edit"></i>
-                                    <span>人員群組管理</span>
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul class="treeview-menu">
-                                    <li>
+                                    <li class="@Html.isActive(controller: "User", action: "AddGroup")">
                                         <a href="@Url.Action("AddGroup", "User")"><i class="fa fa-circle-o"></i>新增群組</a>
                                     </li>
-                                    <li>
+                                    <li class="@Html.isActive(controller: "User", action: "ListGroup")">
                                         <a href="@Url.Action("ListGroup", "User")"><i class="fa fa-circle-o"></i>群組列表</a>
                                     </li>
                                 </ul>
@@ -90,7 +81,6 @@
                                     </li>
                                 </ul>
                             </li>
-
                             @*軟體版本管理*@
                             <li>
                                 <a href="#"><i class="fa fa-edit"></i> <span>軟體版本管理</span> <i class="fa fa-angle-left pull-right"></i></a>
@@ -282,26 +272,26 @@
                         </ul>
                     </li>
                     @*統計資料*@
-                    <li class="treeview">
+                    <li class="treeview @Html.isActive(controller: "Statistic")">
                         <a href="#">
                             <i class="fa fa-dashboard"></i>
                             <span>統計資料</span>
                             <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li>
+                            <li class="@Html.isActive(controller: "Statistic", action: "Exhibition")">
                                 <a href="@Url.Action("Exhibition", "Statistic")"><i class="fa fa-circle-o"></i>展示廳正常率</a>
                             </li>
-                            <li>
+                            <li class="@Html.isActive(controller: "Statistic", action: "ExhibitionItem")">
                                 <a href="@Url.Action("ExhibitionItem", "Statistic")"><i class="fa fa-circle-o"></i>展項正常率</a>
                             </li>
-                            <li>
+                            <li class="@Html.isActive(controller: "Statistic", action: "Facility")">
                                 <a href="@Url.Action("Facility", "Statistic")"><i class="fa fa-circle-o"></i>體驗設施正常率</a>
                             </li>
-                            <li>
+                            <li class="@Html.isActive(controller: "Statistic", action: "RankItem")">
                                 <a href="@Url.Action("RankItem", "Statistic")"><i class="fa fa-circle-o"></i>異常排行-展項</a>
                             </li>
-                            <li>
+                            <li class="@Html.isActive(controller: "Statistic", action: "RankReport")">
                                 <a href="@Url.Action("RankReport", "Statistic")"><i class="fa fa-circle-o"></i>異常排行-通報來源</a>
                             </li>
                         </ul>

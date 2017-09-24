@@ -1,11 +1,10 @@
-﻿using System.Net;
-using System.Net.Mail;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Net.Mail;
 using System.Web.Mvc;
+using InspectionWeb.Models;
 
 namespace InspectionWeb.Controllers
 {
+    [AuthorizeUser(Super = true, Manager = true, Dispatch = true)]
     public class MailController : Controller
     {
         // GET: Mail
@@ -24,8 +23,8 @@ namespace InspectionWeb.Controllers
         public ActionResult SendEmail(EmailJson data)
         {
             // set smtp server
-            SmtpClient smtpClient = new SmtpClient("mail.MyWebsiteDomainName.com", 25);
-            smtpClient.Credentials = new System.Net.NetworkCredential("info@MyWebsiteDomainName.com", "myIDPassword");
+            SmtpClient smtpClient = new SmtpClient("mail.nstm.gov.tw", 25);
+            //smtpClient.Credentials = new System.Net.NetworkCredential("infomation@MyWebsiteDomainName.com", "myIDPassword");
             smtpClient.UseDefaultCredentials = true;
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.EnableSsl = true;

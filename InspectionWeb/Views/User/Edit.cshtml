@@ -4,6 +4,19 @@
     ViewBag.Title = "人員檢視/修改";
 }
 
+<!-- data table -->
+<script src="~/theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="~/theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="~/theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="~/theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+
+<!-- x-editable component, Note to include x-editable after core library (bootstrap, jquery-ui)!-->
+<link href="~/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+<script src="~/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<!-- date format -->
+<script src="~/Scripts/jquery-dateFormat.min.js"></script>
+
 <script>
     var userId = '@Model.user.userId';
     var newPassword;
@@ -14,6 +27,7 @@
     $(document).ready(function () {
         // x-editable for user table
         $('#userName, #email, #tel').editable({
+            emptytext: '""',
             success: function (response) {
                 $('#last').html(response.lastUpdateTime);
             }
@@ -22,7 +36,7 @@
         $('#active').editable({
             value: ['@Model.user.active'],
             source: {
-                1: '是',
+                1: '是'
             },
             emptytext: '否',
             params: function (params) {
@@ -40,6 +54,7 @@
 
         $('#agent').editable({
             value: 'Select status',
+            emptytext: '""',
             source: [
                 @foreach(var item in Model.agents)
                 {
@@ -53,6 +68,7 @@
 
         $('#groupId').editable({
             value: 'Select status',
+            emptytext: '""',
             source: [
                 @foreach(var item in Model.groups)
                 {
