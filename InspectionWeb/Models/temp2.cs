@@ -12,13 +12,16 @@ namespace InspectionWeb.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class quickSolution
+    public partial class temp2
     {
-        public string solutionId { get; set; }
-        public string description { get; set; }
-        public Nullable<byte> isDelete { get; set; }
-        public Nullable<System.DateTime> createTime { get; set; }
-        public Nullable<System.DateTime> lastUpdateTime { get; set; }
-        public string name { get; set; }
+        public string dispatchId { get; set; }
+        public string itemId { get; set; }
+        public string itemName { get; set; }
+        public Nullable<System.DateTime> checkDate { get; set; }
+        public string inspectorId1 { get; set; }
+        public string inspectorCode1 { get; set; }
+        public string inspectorName1 { get; set; }
+        public string inspectorId2 { get; set; }
+        public Nullable<byte> iidStatus { get; set; }
     }
 }
