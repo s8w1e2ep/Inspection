@@ -532,7 +532,6 @@
     <Content Include="Views\MaintenanceWork\ExtendedWork.cshtml" />
     <Content Include="Views\MaintenanceWork\PendingList.cshtml" />
     <Content Include="Views\MaintenanceWork\Query.cshtml" />
-    <Content Include="Views\MaintenanceWork\WriteDetailedData.cshtml" />
     <Content Include="Views\AbnormalDefinition\AddAbnormalDefinition.cshtml" />
     <Content Include="Views\AbnormalDefinition\EditAbnormalDefinition.cshtml" />
     <Content Include="Views\AbnormalDefinition\ListAbnormalDefinition.cshtml" />
