@@ -1,5 +1,7 @@
 ﻿@{
     ViewBag.Title = "維修綜合查詢";
+    ViewBag.maintain = "active";
+    ViewBag.maintainQuery = "active";
 }
 <div class="wrapper">
     <div class="content-wrapper">
@@ -42,7 +44,7 @@
                                 <label class="control-label col-md-2">通報來源</label>
                                 <select class="form-control select2" id="reportSource" style="width: 50%;">
                                     <option value="">----請選擇一個通報來源----</option>
-                                    @foreach(var item in ViewBag.reportSources)
+                                    @foreach (var item in ViewBag.reportSources)
                                     {
                                         <option value="@item.sourceId">@item.sourceName</option>
                                     }

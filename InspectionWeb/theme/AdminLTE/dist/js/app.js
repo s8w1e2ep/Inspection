@@ -146,8 +146,8 @@ $(function () {
   //Extend options if external options exist
   if (typeof AdminLTEOptions !== "undefined") {
     $.extend(true,
-            $.AdminLTE.options,
-            AdminLTEOptions);
+      $.AdminLTE.options,
+      AdminLTEOptions);
   }
 
   //Easy access to options
@@ -279,7 +279,7 @@ function _init() {
       //Make sure the body tag has the .fixed class
       if (!$("body").hasClass("fixed")) {
         if (typeof $.fn.slimScroll != 'undefined') {
-          $(".sidebar").slimScroll({destroy: true}).height("auto");
+          $(".sidebar").slimScroll({ destroy: true }).height("auto");
         }
         return;
       } else if (typeof $.fn.slimScroll == 'undefined' && window.console) {
@@ -289,7 +289,7 @@ function _init() {
       if ($.AdminLTE.options.sidebarSlimScroll) {
         if (typeof $.fn.slimScroll != 'undefined') {
           //Destroy if it exists
-          $(".sidebar").slimScroll({destroy: true}).height("auto");
+          $(".sidebar").slimScroll({ destroy: true }).height("auto");
           //Add slimscroll
           $(".sidebar").slimscroll({
             height: ($(window).height() - $(".main-header").height()) + "px",
@@ -344,8 +344,8 @@ function _init() {
 
       //Enable expand on hover for sidebar mini
       if ($.AdminLTE.options.sidebarExpandOnHover
-              || ($('body').hasClass('fixed')
-                      && $('body').hasClass('sidebar-mini'))) {
+        || ($('body').hasClass('fixed')
+          && $('body').hasClass('sidebar-mini'))) {
         this.expandOnHover();
       }
     },
@@ -355,14 +355,14 @@ function _init() {
       //Expand sidebar on hover
       $('.main-sidebar').hover(function () {
         if ($('body').hasClass('sidebar-mini')
-                && $("body").hasClass('sidebar-collapse')
-                && $(window).width() > screenWidth) {
+          && $("body").hasClass('sidebar-collapse')
+          && $(window).width() > screenWidth) {
           _this.expand();
         }
       }, function () {
         if ($('body').hasClass('sidebar-mini')
-                && $('body').hasClass('sidebar-expanded-on-hover')
-                && $(window).width() > screenWidth) {
+          && $('body').hasClass('sidebar-expanded-on-hover')
+          && $(window).width() > screenWidth) {
           _this.collapse();
         }
       });
@@ -388,47 +388,33 @@ function _init() {
   $.AdminLTE.tree = function (menu) {
     var _this = this;
     var animationSpeed = $.AdminLTE.options.animationSpeed;
-    $(document).on('click', menu + ' li a', function (e) {
-      //Get the clicked link and the next element
-      var $this = $(this);
-      var checkElement = $this.next();
+    $(document).off('click', menu + ' li a')
+      .on('click', menu + ' li a', function (e) {
+        //Get the clicked link and the next element
+        var $this = $(this);
+        var checkElement = $this.next();
 
-      //Check if the next element is a menu and is visible
-      if ((checkElement.is('.treeview-menu')) && (checkElement.is(':visible'))) {
-        //Close the menu
-        checkElement.slideUp(animationSpeed, function () {
-          checkElement.removeClass('menu-open');
-          //Fix the layout in case the sidebar stretches over the height of the window
-          //_this.layout.fix();
-        });
-        checkElement.parent("li").removeClass("active");
-      }
-      //If the menu is not visible
-      else if ((checkElement.is('.treeview-menu')) && (!checkElement.is(':visible'))) {
-        //Get the parent menu
-        var parent = $this.parents('ul').first();
-        //Close all open menus within the parent
-        var ul = parent.find('ul:visible').slideUp(animationSpeed);
-        //Remove the menu-open class from the parent
-        ul.removeClass('menu-open');
-        //Get the parent li
-        var parent_li = $this.parent("li");
+        //If the menu is not visible open it
+        if ((checkElement.is('.treeview-menu')) && (!checkElement.is(':visible'))) {
+          //Get the parent menu
+          var parent = $this.parents('ul').first();
+          //Get the parent li
+          var parent_li = $this.parent("li");
 
-        //Open the target menu and add the menu-open class
-        checkElement.slideDown(animationSpeed, function () {
-          //Add the class active to the parent li
-          checkElement.addClass('menu-open');
-          parent.find('li.active').removeClass('active');
-          parent_li.addClass('active');
-          //Fix the layout in case the sidebar stretches over the height of the window
-          _this.layout.fix();
-        });
-      }
-      //if this isn't a link, prevent the page from being redirected
-      if (checkElement.is('.treeview-menu')) {
-        e.preventDefault();
-      }
-    });
+          //Open the target menu and add the menu-open class
+          checkElement.slideDown(animationSpeed, function () {
+            //Add the class active to the parent li
+            checkElement.addClass('menu-open');
+            parent_li.addClass('active');
+            //Fix the layout in case the sidebar stretches over the height of the window
+            _this.layout.fix();
+          });
+        }
+        //if this isn't a link, prevent the page from being redirected
+        if (checkElement.is('.treeview-menu')) {
+          e.preventDefault();
+        }
+      });
   };
 
   /* ControlSidebar
@@ -455,7 +441,7 @@ function _init() {
         e.preventDefault();
         //If the sidebar is not open
         if (!sidebar.hasClass('control-sidebar-open')
-                && !$('body').hasClass('control-sidebar-open')) {
+          && !$('body').hasClass('control-sidebar-open')) {
           //Open the sidebar
           _this.open(sidebar, o.slide);
         } else {
@@ -563,8 +549,8 @@ function _init() {
       if (!box.hasClass("collapsed-box")) {
         //Convert minus into plus
         element.children(":first")
-                .removeClass(_this.icons.collapse)
-                .addClass(_this.icons.open);
+          .removeClass(_this.icons.collapse)
+          .addClass(_this.icons.open);
         //Hide the content
         box_content.slideUp(_this.animationSpeed, function () {
           box.addClass("collapsed-box");
@@ -572,8 +558,8 @@ function _init() {
       } else {
         //Convert plus into minus
         element.children(":first")
-                .removeClass(_this.icons.open)
-                .addClass(_this.icons.collapse);
+          .removeClass(_this.icons.open)
+          .addClass(_this.icons.collapse);
         //Show the content
         box_content.slideDown(_this.animationSpeed, function () {
           box.removeClass("collapsed-box");
