@@ -58,7 +58,7 @@ namespace InspectionWeb.Services
 
             try
             {
-
+                this._repository.Update(instance);
                 result.Success = true;
             }
             catch (Exception ex)

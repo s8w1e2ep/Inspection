@@ -38,6 +38,7 @@ namespace InspectionWeb.Models.ViewModel
         public List<company> Companys;
 
         public List<exhibitionItem> ExhibitionItems;
+        public List<roomActiveRecord> RoomActiveRecords;
 
         public string ErrorMsg;
 

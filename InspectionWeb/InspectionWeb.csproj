@@ -349,6 +349,7 @@
     <Compile Include="Models\ViewModel\reportDetailedViewModel.cs" />
     <Compile Include="Models\ViewModel\ReportDeviceEditViewModel.cs" />
     <Compile Include="Models\ViewModel\ReportDeviceListViewModel.cs" />
+    <Compile Include="Models\ViewModel\RoomActiveRecordAddViewModel.cs" />
     <Compile Include="Models\ViewModel\SoftwareVersionAddViewModel.cs" />
     <Compile Include="Models\ViewModel\SoftwareVersionListViewModel.cs" />
     <Compile Include="Models\ViewModel\SystemArgAddViewModel.cs" />
@@ -565,6 +566,7 @@
     <Content Include="Views\System\AddSystemArg.cshtml" />
     <Content Include="Views\System\EditSystemArg.cshtml" />
     <Content Include="Views\System\ListSystemArg.cshtml" />
+    <Content Include="Views\Information\EditRoomActiveRecord.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

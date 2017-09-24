@@ -21,6 +21,7 @@ namespace InspectionWeb.Controllers
         private IReportDeviceService _reportDeviceService;
         private IReportSourceService _reportSourceService;
         private ICompanyService _companyService;
+        private IRoomActiveRecordService _roomActiveRecordService;
 
         public InformationController(IFieldMapService fieldMapService,
                                      IExhibitionRoomService exhibitionRoomService,
@@ -28,7 +29,9 @@ namespace InspectionWeb.Controllers
                                      IExhibitionItemService exhibitionItemService,
                                      IReportDeviceService reportDeviceService,
                                      IReportSourceService reportSourceService,
-                                     ICompanyService companyService)
+                                     ICompanyService companyService,
+                                     IRoomActiveRecordService roomActiveRecordService)
+
         {
             this._fieldMapService = fieldMapService;
             this._exhibitionRoomService = exhibitionRoomService;
@@ -37,6 +40,7 @@ namespace InspectionWeb.Controllers
             this._reportDeviceService = reportDeviceService;
             this._reportSourceService = reportSourceService;
             this._companyService = companyService;
+            this._roomActiveRecordService = roomActiveRecordService;
 
             //TODO: add company service
         }
@@ -293,6 +297,7 @@ namespace InspectionWeb.Controllers
             vm.Fields = this._fieldMapService.GetAll().ToList();
             vm.Inspectors = this._userService.GetAll().ToList();
             vm.Companys = this._companyService.GetAll().ToList();
+            vm.RoomActiveRecords = this._roomActiveRecordService.GetAll().Where(x => x.roomId == roomId).ToList();
             // }}}
 
             return View(vm);
@@ -302,6 +307,8 @@ namespace InspectionWeb.Controllers
         public ActionResult EditExhibition(FormCollection fc)
         {
             string roomId = fc["pk"];
+            bool activeStateChange = false;
+            string recordId = "";
             exhibitionRoom room = this._exhibitionRoomService.GetById(roomId);
             if (room != null && ModelState.IsValid)
             {
@@ -310,6 +317,17 @@ namespace InspectionWeb.Controllers
                 if (fc["name"] == "active")
                 {
                     room.GetType().GetProperty(fc["name"]).SetValue(room, Convert.ToInt16(fc["value"]), null);
+                    roomActiveRecord record = new roomActiveRecord();
+                    record.roomId = roomId;
+                    record.active = Convert.ToInt16(fc["value"]);
+                    IResult resu = _roomActiveRecordService.Create(record);
+                    if (resu.Success)
+                    {
+                        recordId = resu.Message;
+                    }
+                    activeStateChange = true;
+                    
+
                 }
                 else
                 {
@@ -320,6 +338,18 @@ namespace InspectionWeb.Controllers
                 if (result.Success)
                 {
                     fieldMap field = this._fieldMapService.GetById(room.fieldId);
+                    if (activeStateChange == true)
+                    {
+
+                        return Json(new
+                        {
+                            lastUpdateTime = room.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                            recordId = recordId,
+                            recordCreateTiime = _roomActiveRecordService.GetById(recordId).createTime
+
+                        });
+                    }
+
                     if (field == null)
                     {
                         return Json(new
@@ -336,6 +366,8 @@ namespace InspectionWeb.Controllers
                             mapFileName = field.mapFileName
                         });
                     }
+
+                    
                 }
                 else
                 {
@@ -625,6 +657,84 @@ namespace InspectionWeb.Controllers
             }
 
             return Json(null);
+        }
+
+        [HttpPost]
+        public ActionResult AddRoomActiveRecord(FormCollection fc)
+        {
+            exhibitionRoom room = _exhibitionRoomService.GetById(fc["pk"]);
+            room.active = Convert.ToInt16(fc["value"]);
+            _exhibitionRoomService.Update(room);
+
+            roomActiveRecord record = new roomActiveRecord();
+            record.roomId = fc["pk"];
+            record.active = Convert.ToInt16(fc["value"]);
+            IResult result = _roomActiveRecordService.Create(record);
+            if(result.Success == false)
+            {
+                return RedirectToAction("EditExhibition", new { id = record.roomId });
+
+            }
+            RoomActiveRecordAddViewModel vm = new RoomActiveRecordAddViewModel();
+            vm.Active = record.active;
+            vm.ActivityId = result.Message;
+            vm.Description = record.description;
+            vm.CreateTime = record.createTime;
+            return Json(new { id = record.roomId });
+
+        }
+        public ActionResult EditRoomActiveRecord(string id)
+        {
+
+            string recordId = id;
+            roomActiveRecord record = _roomActiveRecordService.GetById(recordId);
+            string roomName = _exhibitionRoomService.GetById(record.roomId).roomName;
+
+            RoomActiveRecordAddViewModel vm = new RoomActiveRecordAddViewModel();
+
+            if (record != null && ModelState.IsValid)
+            {
+                vm.ActivityId = recordId;
+                vm.Description = record.description;
+                vm.Active = record.active;
+                vm.RoomName = roomName;
+                vm.CreateTime = record.createTime;
+            }
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult EditRoomActiveRecord()
+        {
+
+            return Json(null);
+        }
+
+        public ActionResult DeleteRecord(string recordId)
+        {
+            if (string.IsNullOrEmpty(recordId))
+            {
+                return RedirectToAction("EditExhibition");
+            }
+
+
+            roomActiveRecord record = this._roomActiveRecordService.GetById(recordId);
+            if (record == null)
+            {
+                return RedirectToAction("EditExhibition");
+            }
+
+            record.isDelete = 1;
+            try
+            {
+                this._roomActiveRecordService.Update(record);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("EditExhibition");
+            }
+
+            return RedirectToAction("EditExhibition");
         }
         //GET: /Information/AddDevice
         public ActionResult AddDevice()
