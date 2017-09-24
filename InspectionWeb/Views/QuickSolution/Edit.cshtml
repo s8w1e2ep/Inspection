@@ -20,7 +20,7 @@
         <div class="row">
             <!-- left column -->
             <div class="col-md-12">
-                <div class="box box-info">
+                <div class="box box-success">
                     <div class="box-header with-border">
                         <h3 class="box-title">常用解決方法檢視/修改</h3>
                     </div>
@@ -58,33 +58,13 @@
     </section>
 </div>
 <script>
-    //function setSwitchEditable(tag, state) {
-    //    $(tag).editable({
-    //        value: [state],
-    //        source: { 1: 'Yes' },
-    //        emptytext: 'No',
-
-    //        params: function (params) {
-    //            var data = {};
-    //            data['name'] = params.name;
-    //            data['pk'] = params.pk;
-    //            data['value'] = params.value.join(",");
-
-    //            return data;
-    //        },
-    //    });
-    //}
+    
 
     $.fn.editable.defaults.mode = 'inline';
 
     $(document).ready(function () {
         // x-editable for user table
         $('#description').editable();
-
-        //setSwitchEditable('#system', '1');
-        //setSwitchEditable('#manager', '0');
-        //setSwitchEditable('#general', '0');
-        //setSwitchEditable('#inspect', '0');
-        //setSwitchEditable('#active', '0');
+    
     });
 </script>
