@@ -2,6 +2,9 @@
 
 @{
     ViewBag.Title = "AddItemCheckRecord";
+    ViewBag.inspectWork = "active";
+    ViewBag.inspecthRecord = "active";
+    ViewBag.facilityInspectRecord = "active";
 }
 
 
@@ -73,7 +76,7 @@
             if (msg.result == 1) {
                 alert("資訊更新成功");
                 if (status == 3)
-                    window.location = "@Url.Action("AddExperience", "ReportJob", , new { sourceCode = "02" })";
+                    window.location = "@Url.Action("AddExperience", "ReportJob", new { sourceCode = "02" })";
             } else {
                 alert(msg.ErrorMsg);
             }

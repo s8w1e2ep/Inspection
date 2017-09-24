@@ -68,25 +68,25 @@
                                 </ul>
                             </li>
                             @*異常定義管理*@
-                            <li>
+                            <li class="@ViewBag.abnormalDefine">
                                 <a href="#"><i class="fa fa-edit"></i> <span>異常定義</span> <i class="fa fa-angle-left pull-right"></i></a>
                                 <ul class="treeview-menu">
-                                    <li>
+                                    <li class="@ViewBag.abnormalAdd">
                                         <a href="@Url.Action("AddAbnormalDefinition", "AbnormalDefinition")"><i class="fa fa-circle-o"></i>新增異常定義</a>
                                     </li>
-                                    <li>
+                                    <li class="@ViewBag.abnormalList">
                                         <a href="@Url.Action("ListAbnormalDefinition", "AbnormalDefinition")"><i class="fa fa-circle-o"></i>異常定義列表</a>
                                     </li>
                                 </ul>
                             </li>
                             @*故障來源定義管理*@
-                            <li>
+                            <li class="@ViewBag.sourceDefine">
                                 <a href="#"><i class="fa fa-edit"></i> <span>故障來源定義</span> <i class="fa fa-angle-left pull-right"></i></a>
                                 <ul class="treeview-menu">
-                                    <li>
+                                    <li class="@ViewBag.sourceAdd">
                                         <a href="@Url.Action("AddReportSource", "ReportSource")"><i class="fa fa-circle-o"></i>新增故障來源定義</a>
                                     </li>
-                                    <li>
+                                    <li class="@ViewBag.sourceList">
                                         <a href="@Url.Action("ListReportSource", "ReportSource")"><i class="fa fa-circle-o"></i>故障來源定義列表</a>
                                     </li>
                                 </ul>
@@ -201,36 +201,36 @@
                      (Session["dispatch"] != null && (bool)Session["dispatch"]))
                 {
                     @*巡檢作業*@
-                    <li>
+                    <li class="treeview @ViewBag.inspectWork">
                         <a href="#"><i class="fa fa-dashboard"></i> <span>巡檢作業</span> <i class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
-                            <li>
+                            <li class="@ViewBag.dispatch">
                                 <a href="#"><i class="fa fa-edit"></i> <span>派工</span> <i class="fa fa-angle-left pull-right"></i></a>
                                 <ul class="treeview-menu">
-                                    <li>
+                                    <li class="@ViewBag.roomDispatch">
                                         <a href="@Url.Action("ListRoomInspectionDispatch", "InspectionDispatch")"><i class="fa fa-circle-o"></i>展示廳派工</a>
                                     </li>
-                                    <li>
+                                    <li class="@ViewBag.facilityDispatch">
                                         <a href="@Url.Action("ListItemInspectionDispatch", "InspectionDispatch")"><i class="fa fa-circle-o"></i>體驗設施派工</a>
                                     </li>
-                                    <li>
+                                    <li class="@ViewBag.inspectAdd">
                                         <a href="@Url.Action("AddNonInspectionDispatchDate", "InspectionDispatch")"><i class="fa fa-circle-o"></i>新增非巡檢日期</a>
                                     </li>
-                                    <li>
+                                    <li class="@ViewBag.inspectEdit">
                                         <a href="@Url.Action("ListNonInspectionDispatchDate", "InspectionDispatch")"><i class="fa fa-circle-o"></i>非巡檢日期檢視/修改</a>
                                     </li>
-                                    <li>
+                                    <li class="@ViewBag.inspectQuery">
                                         <a href="@Url.Action("QueryInspectionByRoom", "InspectionDispatch")"><i class="fa fa-circle-o"></i>巡檢查詢</a>
                                     </li>
                                 </ul>
                             </li>
-                            <li>
+                            <li class="@ViewBag.inspecthRecord">
                                 <a href="#"><i class="fa fa-edit"></i> <span>巡檢紀錄</span> <i class="fa fa-angle-left pull-right"></i></a>
                                 <ul class="treeview-menu">
-                                    <li>
+                                    <li class="@ViewBag.roomInspectRecord">
                                         <a href="@Url.Action("AddRoomCheckRecord", "CheckRecord")"><i class="fa fa-circle-o"></i>展示廳巡檢紀錄</a>
                                     </li>
-                                    <li>
+                                    <li class="@ViewBag.facilityInspectRecord">
                                         <a href="@Url.Action("AddItemCheckRecord", "CheckRecord")"><i class="fa fa-circle-o"></i>體驗設施巡檢紀錄</a>
                                     </li>
                                 </ul>
@@ -260,7 +260,7 @@
                 if (Session["normal"] != null && (bool)Session["normal"])
                 {
                     @*通報作業*@
-                    <li class="treeview @ViewBag.dispatchWork">
+                    <li class="treeview @ViewBag.reportWork">
                         <a href="#">
                             <i class="fa fa-dashboard"></i>
                             <span>6000 通報作業</span>
