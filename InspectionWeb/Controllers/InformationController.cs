@@ -818,6 +818,7 @@ namespace InspectionWeb.Controllers
         {
             string deviceId = fc["pk"];
             exhibitionItem device = _exhibitionItemService.GetById(deviceId);
+            fieldMap field = null;
             if (device != null && ModelState.IsValid)
             {
                 switch (fc["name"])
@@ -836,6 +837,7 @@ namespace InspectionWeb.Controllers
                         break;
                     case "fieldId":
                         device.fieldId = fc["value"];
+                        field = _fieldMapService.GetById(device.fieldId);
                         break;
 
                     default:
@@ -845,7 +847,14 @@ namespace InspectionWeb.Controllers
                 IResult result = _exhibitionItemService.Update(device);
                 if (result.Success)
                 {
-                    return Json(new { lastUpdateTime = device.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+
+                    if (field != null)
+                    {
+                        return Json(new { mapFileName = field.mapFileName, lastUpdateTime = device.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+                    }
+                    else {
+                        return Json(new {  lastUpdateTime = device.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+                    }
                 }
             }
             else
