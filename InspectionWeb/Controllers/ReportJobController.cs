@@ -536,9 +536,9 @@ namespace InspectionWeb.Controllers
                 vm.happenedTime = instanceO.happenedTime?.ToString("yyyy/MM/dd HH:mm:ss");
                 vm.description = instanceO.description;
                 vm.fixDate = instanceO.fixDate?.ToString("yyyy/MM/dd HH:mm:ss");
-                if (instanceO.fixMethod == 1)
+                if (instanceO.fixMethod == "1")
                     vm.fixMethod = "人員排除";
-                else if (instanceO.fixMethod == 0)
+                else if (instanceO.fixMethod == "0")
                     vm.fixMethod = "自動排除";
 
                 vm.isClose_s = instanceO.isClose;
@@ -561,9 +561,9 @@ namespace InspectionWeb.Controllers
                 vm.happenedTime = instance.happenedTime?.ToString("yyyy/MM/dd HH:mm:ss");
                 vm.description = instance.description;
                 vm.fixDate = instance.fixDate?.ToString("yyyy/MM/dd HH:mm:ss");
-                if (instance.fixMethod == 1)
+                if (instance.fixMethod == "1")
                     vm.fixMethod = "人員排除";
-                else if (instance.fixMethod == 0)
+                else if (instance.fixMethod == "0")
                     vm.fixMethod = "自動排除";
 
                 vm.isClose_s = instance.isClose;

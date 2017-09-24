@@ -535,7 +535,7 @@ namespace InspectionWeb.Controllers
                     case "periodReportTime":
                         item.periodReportTime = Convert.ToInt32(fc["value"]);
                         break;
-                        defualt:
+                    default:
                         break;
                 }
 

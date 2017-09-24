@@ -88,53 +88,92 @@ namespace InspectionWeb.Controllers
                 // 取得展示廳紀錄內當天所有展項
                 var items = this._itemService.GetAll().Where(x => x.roomId == roomId && x.lastUpdateTime <= record.checkDate).ToList();
                 // 取得展項數量
-                int num = items.Count;
                 int normal = items.Count;
+
+                RecordJson re = new RecordJson();
+                re.dispatchDate = record.checkDate.ToString();
+                re.total = normal;
+
                 // ∀ item, check it if abnormal
                 if (type == "man")
                 {
-                    foreach (var item in items)
+                    if (record.status == 1)
                     {
-                        if (this._abnormalService.GetAll().Any(x => x.itemId == item.itemId &&
-                                                               x.happenedTime == record.checkDate &&
-                                                               x.sourceId == "01" || x.sourceId == "02"))
+                        re.normal = normal;
+                        if (re.total == 0)
                         {
-                            normal--;
+                            re.prob = 0;
                         }
+                        else
+                        {
+                            re.prob = 100;
+                        }
+                        records.Add(re);
+                    }
+                    else
+                    {
+                        var source1 = this._reportService.GetAll().Where(x => x.sourceCode == "01").First();
+                        var source2 = this._reportService.GetAll().Where(x => x.sourceCode == "02").First();
+
+                        foreach (var item in items)
+                        {
+                            if (this._abnormalService.GetAll().Any(x => x.itemId == item.itemId &&
+                                                                   x.happenedTime == record.checkDate &&
+                                                                   x.sourceId == source1.sourceId || x.sourceId == source2.sourceId))
+                            {
+                                normal--;
+                            }
+                        }
+
+                        re.normal = normal;
+                        if (re.total == 0)
+                        {
+                            re.prob = 0;
+                        }
+                        else
+                        {
+                            re.prob = (int)((float)re.normal / re.total * 100);
+                        }
+                        records.Add(re);
                     }
                 }
                 else if (type == "auto")
                 {
+                    var source0 = this._reportService.GetAll().Where(x => x.sourceCode == "00").First();
+                    var source3 = this._reportService.GetAll().Where(x => x.sourceCode == "03").First();
+                    var source4 = this._reportService.GetAll().Where(x => x.sourceCode == "04").First();
+                    var source5 = this._reportService.GetAll().Where(x => x.sourceCode == "05").First();
+                    var source6 = this._reportService.GetAll().Where(x => x.sourceCode == "06").First();
+
                     foreach (var item in items)
                     {
                         if (this._abnormalService.GetAll().Any(x => x.itemId == item.itemId &&
                                                                x.happenedTime == record.checkDate &&
-                                                               x.sourceId == "00" || x.sourceId == "03" ||
-                                                               x.sourceId == "04" || x.sourceId == "05" ||
-                                                               x.sourceId == "06"))
+                                                               x.sourceId == source0.sourceId || x.sourceId == source3.sourceId ||
+                                                               x.sourceId == source4.sourceId || x.sourceId == source5.sourceId ||
+                                                               x.sourceId == source6.sourceId))
                         {
                             normal--;
                         }
                     }
+
+                    re.normal = normal;
+                    if (re.total == 0)
+                    {
+                        re.prob = 0;
+                    }
+                    else
+                    {
+                        re.prob = (int)((float)re.normal / re.total * 100);
+                    }
+                    records.Add(re);
                 }
                 else
                 {
                     return Json(null, JsonRequestBehavior.AllowGet);
                 }
                 
-                RecordJson re = new RecordJson();
-                re.dispatchDate = record.checkDate.ToString();
-                re.total = num;
-                re.normal = normal;
-                if (re.total == 0)
-                {
-                    re.prob = 0;
-                }
-                else
-                {
-                    re.prob = (int)((float)re.normal / re.total * 100);
-                }
-                records.Add(re);
+                
             }
 
             if (records.Count == 0)
@@ -155,28 +194,41 @@ namespace InspectionWeb.Controllers
             List<RecordJson> records = new List<RecordJson>();
             // 取得展項
             var item = this._itemService.GetById(itemId);
-            //確認異常數量
+            // 取得展項數量
             int normal = 1;
 
             foreach (var record in roomRecords)
             {
+                RecordJson re = new RecordJson();
+                re.dispatchDate = record.checkDate.ToString();
+                re.total = 1;
+
                 // Check item if abnormal
                 if (type == "man")
                 {
+                    var source1 = this._reportService.GetAll().Where(x => x.sourceCode == "01").First();
+                    var source2 = this._reportService.GetAll().Where(x => x.sourceCode == "02").First();
+
                     if (this._abnormalService.GetAll().Any(x => x.itemId == itemId &&
                                                            x.happenedTime == record.checkDate &&
-                                                           x.sourceId == "01" || x.sourceId == "02"))
+                                                           x.sourceId == source1.sourceId || x.sourceId == source2.sourceId))
                     {
                         normal--;
                     }
                 }
                 else if (type == "auto")
                 {
+                    var source0 = this._reportService.GetAll().Where(x => x.sourceCode == "00").First();
+                    var source3 = this._reportService.GetAll().Where(x => x.sourceCode == "03").First();
+                    var source4 = this._reportService.GetAll().Where(x => x.sourceCode == "04").First();
+                    var source5 = this._reportService.GetAll().Where(x => x.sourceCode == "05").First();
+                    var source6 = this._reportService.GetAll().Where(x => x.sourceCode == "06").First();
+
                     if (this._abnormalService.GetAll().Any(x => x.itemId == item.itemId &&
                                                                x.happenedTime == record.checkDate &&
-                                                               x.sourceId == "00" || x.sourceId == "03" ||
-                                                               x.sourceId == "04" || x.sourceId == "05" ||
-                                                               x.sourceId == "06"))
+                                                               x.sourceId == source0.sourceId || x.sourceId == source3.sourceId ||
+                                                               x.sourceId == source4.sourceId || x.sourceId == source5.sourceId ||
+                                                               x.sourceId == source6.sourceId))
                     {
                         normal--;
                     }
@@ -185,13 +237,16 @@ namespace InspectionWeb.Controllers
                 {
                     return Json("", JsonRequestBehavior.AllowGet);
                 }
-
-                RecordJson re = new RecordJson();
-                re.dispatchDate = record.checkDate.ToString();
-                re.total = 1;
+     
                 re.normal = normal;
-                re.prob = (int)((float)re.normal / re.total * 100);
-
+                if (re.total == 0)
+                {
+                    re.prob = 0;
+                }
+                else
+                {
+                    re.prob = (int)((float)re.normal / re.total * 100);
+                }
                 records.Add(re);
             }
 
@@ -218,23 +273,36 @@ namespace InspectionWeb.Controllers
 
             foreach (var record in itemRecords)
             {
+                RecordJson re = new RecordJson();
+                re.dispatchDate = record.checkDate.ToString();
+                re.total = 1;
+
                 // Check item if abnormal
-                if(type == "man")
+                if (type == "man")
                 {
+                    var source1 = this._reportService.GetAll().Where(x => x.sourceCode == "01").First();
+                    var source2 = this._reportService.GetAll().Where(x => x.sourceCode == "02").First();
+
                     if (this._abnormalService.GetAll().Any(x => x.itemId == item.itemId &&
                                                             x.happenedTime == record.checkDate &&
-                                                            x.sourceId == "01" || x.sourceId == "02"))
+                                                            x.sourceId == source1.sourceId || x.sourceId == source2.sourceId))
                     {
                         normal--;
                     }
                 }
                 else if(type == "auto")
                 {
+                    var source0 = this._reportService.GetAll().Where(x => x.sourceCode == "00").First();
+                    var source3 = this._reportService.GetAll().Where(x => x.sourceCode == "03").First();
+                    var source4 = this._reportService.GetAll().Where(x => x.sourceCode == "04").First();
+                    var source5 = this._reportService.GetAll().Where(x => x.sourceCode == "05").First();
+                    var source6 = this._reportService.GetAll().Where(x => x.sourceCode == "06").First();
+
                     if (this._abnormalService.GetAll().Any(x => x.itemId == item.itemId &&
                                                                 x.happenedTime == record.checkDate &&
-                                                                x.sourceId == "00" || x.sourceId == "03" ||
-                                                                x.sourceId == "04" || x.sourceId == "05" ||
-                                                                x.sourceId == "06"))
+                                                                x.sourceId == source0.sourceId || x.sourceId == source3.sourceId ||
+                                                                x.sourceId == source4.sourceId || x.sourceId == source5.sourceId ||
+                                                                x.sourceId == source6.sourceId))
                     {
                         normal--;
                     }
@@ -243,13 +311,15 @@ namespace InspectionWeb.Controllers
                 {
                     return Json("", JsonRequestBehavior.AllowGet);
                 }
-                
-                RecordJson re = new RecordJson();
-                re.dispatchDate = record.checkDate.ToString();
-                re.total = 1;
-                re.normal = normal;
-                re.prob = (int)((float)re.normal / re.total * 100);
 
+                if (re.total == 0)
+                {
+                    re.prob = 0;
+                }
+                else
+                {
+                    re.prob = (int)((float)re.normal / re.total * 100);
+                }
                 records.Add(re);
             }
 
