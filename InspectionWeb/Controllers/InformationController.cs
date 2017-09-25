@@ -1024,6 +1024,8 @@ namespace InspectionWeb.Controllers
         {
             string deviceId = fc["pk"];
             reportDevice device = _reportDeviceService.GetById(deviceId);
+            fieldMap field = null;
+            System.Diagnostics.Debug.WriteLine("YOYOYOYOYO" + fc["name"]);
             if (device != null && ModelState.IsValid)
             {
                 switch (fc["name"])
@@ -1042,29 +1044,34 @@ namespace InspectionWeb.Controllers
                         break;
                     case "itemId":
                         device.itemId = fc["value"];
+                        _reportDeviceService.Update(device);
+                        break;
+                    case "roomId":
+                        string roomId = fc["value"];
+                        List<exhibitionItem> items = _exhibitionItemService.GetAll().Where(x => x.roomId == roomId).ToList();
+
+                        return Json(new { items = items });
+
                         break;
                     case "fieldId":
                         device.fieldId = fc["value"];
+                        field = _fieldMapService.GetById(device.fieldId);
+                        List<exhibitionRoom> rooms = _exhibitionRoomService.GetAll().ToList().Where(x => x.fieldId == field.fieldId).ToList();
+                        _reportDeviceService.Update(device);
+                        return Json(new
+                        {
+                            lastUpdateTime = device.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                            mapFileName = field?.mapFileName,
+                            rooms = rooms
+                        });
                         break;
                     default:
+
                         break;
                 }
 
-
-                IResult result = _reportDeviceService.Update(device);
-                fieldMap field = _fieldMapService.GetById(device.fieldId);
-                if (result.Success)
-                {
-                    return Json(new { lastUpdateTime = device.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
-                                      mapFileName = field?.mapFileName});
-                }
             }
-            else
-            {
-                return RedirectToAction("EditNotifyDevice");
-            }
-
-            return RedirectToAction("ListNotifyDevice");
+                return RedirectToAction("ListNotifyDevice");
         }
 
         //GET: /Information/ListNotifyDevice

@@ -26,6 +26,9 @@
 
 <script>
     $.fn.editable.defaults.mode = 'inline';
+    var allRooms = [];
+    var allItems = [];
+    var fieldIsChoosed = false;
     $(document).ready(function () {
         $('#name, #description, #deviceCode').editable({
             emptytext: "未設定",
@@ -46,66 +49,7 @@
             }
         });
 
-        $('#roomId').editable({
-            source: [
-                @foreach (var item in Model.Rooms)
-                {
-                    <text>{ value: '@item.roomId', text: '@item.roomName' },</text>
-                }
-                {value: 'experience', text: '體驗設施'},
-            ],
-            emptytext: '請選擇展示廳',
-            success: function (response) {
-                $('#lastUpdateTime').html(response.lastUpdateTime);
-            }
-        }).on('save', function (e, params) {
-            var roomId = params.newValue;
-            var items = [
-                     @foreach (var item in Model.Items)
-                    {
-                        <text>{ value: '@item.itemId', text: '@item.itemName', room: '@item.roomId' },</text>
-                    }
-            ];
-            if (params.newValue == 'expreience') {
-                items = items.filter(x => x.value == 'experience');
-
-            } else {
-                items = items.filter(x => x.room == roomId);
-            }
-            if (items.length == 0) {
-                $('#itemId').html('<option value="#">展示廳中並無展項</option>');
-            } else {
-                $('#itemId').html('');
-                $.each(items, function (i, item) {
-                    $('#itemId').append($('<option>', {
-                        value: item.value,
-                        text: item.text
-                    }));
-                });
-            }
-            $('#itemId').prop('disabled', false);
-        });
-        $('#itemId').val("@if (@Model.Item != null) {<text>@Model.Item.itemName</text>}");
-        $('#itemId').change(function () {
-            console.log('YOYO');
-            var itemId = this.value;
-            var formData = new FormData();
-            formData.append('name', 'itemId');
-            formData.append('pk', '@Model.DeviceId');
-            formData.append('value', itemId);
-            $.ajax({
-                url: "@Url.Content("~/Information/EditNotifyDevice")",
-                type: 'POST',
-                contentType: false,
-                processData: false,
-                cache: false,
-                data: formData,
-                dataType: 'json',
-            }).done(function (data) {
-                $('#lastUpdateTime').html(data.lastUpdateTime);
-            })
-
-        });
+       
 
 
 
@@ -119,17 +63,53 @@
                     <text>{value: '@item.fieldId', text: '@item.fieldName'},</text>
                 }
             ],
-            emptytext: '未設定',
-            success: function (response) {
+            emptytext:'未設定',
+            success: function(response) {
                 $('#lastUpdateTime').html(response.lastUpdateTime)
                 if (response.mapFileName) {
                     loadMap("@Url.Content("~/media/map/")" + response.mapFileName);
                 } else {
-                    console.log("YOYOYO");
                     $('#fieldMap').html('');
                 }
+
+                allRooms = response.rooms.map(function (obj) {
+                    var robj = {};
+                    robj.value = obj.roomId;
+                    robj.text = obj.roomName;
+                    return robj;
+                });
             }
         });
+
+        $('#roomId').editable({
+            source: function () {
+                return allRooms;
+            },
+            emptytext: '選擇展示廳',
+            success: function (response) {
+                $('#lastUpdateTime').html(response.lastUpdateTime);
+                console.log(allItems);
+                allItems = response.items.map(function (obj) {
+                    var robj = {};
+                    robj.value = obj.itemId;
+                    robj.text = obj.itemName;
+                    return robj;
+
+                });
+            }
+        });
+
+        $('#itemId').editable({
+            source: function () {
+                return allItems;
+            },
+            emptytext: '選擇展項',
+            success: function (response) {
+                $('#lastUpdateTime').html(response.lastUpdateTime);
+            }
+        });
+
+       
 
          @if (!string.IsNullOrEmpty(Model.MapFileName))
         {
@@ -303,7 +283,7 @@
                                 </tr>
 
                                 @*展示廳*@
-                                <tr>
+                                <tr id="roomTr"j>
                                     <td>展示廳</td>
                                     <td>
                                         <a href="#" id="roomId" data-type="select" data-pk="@Model.DeviceId" data-url="@Url.Action("EditNotifyDevice")" data-title="選擇展示廳"></a>
@@ -314,13 +294,12 @@
                                 <tr>
                                     <td>關聯展項</td>
                                     <td>
-                                        <select class="form-control" id="itemId" style="width: 40%;" disable>
+                                        <a href="#" id="itemId" data-type="select" data-pk="@Model.DeviceId" data-url="@Url.Action("EditNotifyDevice")" data-title="選擇展項">
                                             @if(Model.Item != null)
                                             {
-                                                <option>@Model.Item.itemName</option>
+                                                <text>@Model.Item.itemName</text>
                                             }
-
-                                        </select>
+                                        </a>
                                     </td>
                                 </tr>
 
