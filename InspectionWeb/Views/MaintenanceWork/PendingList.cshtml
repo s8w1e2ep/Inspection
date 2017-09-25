@@ -5,6 +5,14 @@
     ViewBag.maintain = "active";
     ViewBag.maintainPend = "active";
 }
+
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+
 <div class="wrapper">
     <div class="content-wrapper">
         <section class="content-header" style="margin-bottom: 15px;">
@@ -18,7 +26,7 @@
         <section class="content">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="box box-info">
+                    <div class="box box-success">
                         <div class="box-body">
                             <table id="PendingList" class="row-border" cellspacing="0" style="width: 100%;">
                                 <thead>

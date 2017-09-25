@@ -3,6 +3,19 @@
     ViewBag.maintain = "active";
     ViewBag.maintainQuery = "active";
 }
+
+<!-- daterange picker -->
+<script src="~/theme/adminlte/plugins/daterangepicker/moment.min.js"></script>
+<script src="~/theme/adminlte/plugins/daterangepicker/daterangepicker.js"></script>
+<link rel="stylesheet" href="~/Content/daterangepicker.css">
+
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+
 <div class="wrapper">
     <div class="content-wrapper">
         <section class="content-header" style="margin-bottom: 15px;">
@@ -16,7 +29,7 @@
         <section class="content">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="box box-info" style="padding: 5px;">
+                    <div class="box box-success" style="padding: 5px;">
                         <div class="box-header with-border">
                             <h3 class="box-title">篩選條件</h3>
                         </div>
@@ -72,7 +85,7 @@
             <!-- list -->
             <div class="row">
                 <div class="col-md-12">
-                    <div class="box box-info">
+                    <div class="box box-success">
                         <!-- ExhibitionItem List-->
                         <div class="box-header">
                             <h3 class="box-title">維修列表-展項</h3>
@@ -98,7 +111,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="box box-info">
+                    <div class="box box-success">
                         <!-- Experience List-->
                         <div class="box-header">
                             <h3 class="box-title">體驗設施維修列表</h3>
@@ -124,7 +137,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="box box-info">
+                    <div class="box box-success">
                         <!-- Other List-->
                         <div class="box-header">
                             <h3 class="box-title">維修列表-其他設施</h3>
