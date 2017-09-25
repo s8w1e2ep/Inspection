@@ -3,6 +3,28 @@
     ViewBag.Title = "展項管理";
 }
 
+<!-- x-editable component, Note to include x-editable after core library (bootstrap, jquery-ui)!-->
+<link href="~/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+<script src="~/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<!-- column order -->
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+
+<!--svg-->
+<script src="~/Scripts/d3.min.js"></script>
+<script src="~/Scripts/rect.js"></script>
+<style>
+    .parkingBlock {
+        fill: lightblue;
+        stroke: blue;
+        stroke-width: 2px;
+        fill-opacity: 0.5
+    }
+</style>
+
 <script>
     $.fn.editable.defaults.mode = 'inline';
 
@@ -129,31 +151,25 @@
         $('#fieldMap').load(mapName, status, function () {
             if (status != 'error') {
                 svg = d3.select("svg");
-                attributesText = d3.select("#attributestext");
-                getSvgChangeFromServer();
-                dragBehavior = d3.behavior.drag()
-                    .on("drag", dragMove)
-                    .on("dragstart", dragStart)
-                    .on("dragend", dragEnd);
-                svg.call(dragBehavior);
-                scalable = false;
+                 var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                g.setAttributeNS(null, 'id', 'parkingBlock_g');
+                $('svg').append(g);
+
+                //區塊
+                new FixRectangle('', '', @Model.X, @Model.Y, 15, 15);
             }
         });
     }
 
-    function getSvgChangeFromServer() {
-        selectionRect.init(@Model.X, @Model.Y);
-        selectionRect.update(@Model.X + 15,@Model.Y + 15);
-    }
+   
 
-    function saveSvgChangeToServer() {
+    function updateParkingBlockRangeToServer(parkingBlockGraphicObject, x, y, width, height) {
 
         var formData = new FormData();
-        var rect = selectionRect.getNewAttributes();
 
         formData.append('itemId', '@Model.ItemId');
-        formData.append('x', parseInt(rect.x, 10));
-        formData.append('y', parseInt(rect.y, 10));
+        formData.append('x', parseInt(x, 10));
+        formData.append('y', parseInt(y, 10));
 
         $.ajax({
             url: "@Url.Content("~/Information/SaveItemSvgChangeToServer")",

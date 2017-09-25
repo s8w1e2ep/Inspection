@@ -61,10 +61,10 @@ namespace InspectionWeb.Services
                     newExhibitionRoom.roomName = exhibitRoomName;
                     newExhibitionRoom.createTime = nowTime;
 
-                    newExhibitionRoom.x = 0;
-                    newExhibitionRoom.y = 0;
-                    newExhibitionRoom.width = 0;
-                    newExhibitionRoom.height = 0;
+                    newExhibitionRoom.x = 30;
+                    newExhibitionRoom.y = 30;
+                    newExhibitionRoom.width = 30;
+                    newExhibitionRoom.height = 30;
 
                     newExhibitionRoom.active = 0;
                     newExhibitionRoom.isDelete = 0;

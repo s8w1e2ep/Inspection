@@ -21,6 +21,7 @@ namespace InspectionWeb.Controllers
         private IReportDeviceService _reportDeviceService;
         private IReportSourceService _reportSourceService;
         private ICompanyService _companyService;
+        private IRoomActiveRecordService _roomActiveRecordService;
 
         public InformationController(IFieldMapService fieldMapService,
                                      IExhibitionRoomService exhibitionRoomService,
@@ -28,7 +29,9 @@ namespace InspectionWeb.Controllers
                                      IExhibitionItemService exhibitionItemService,
                                      IReportDeviceService reportDeviceService,
                                      IReportSourceService reportSourceService,
-                                     ICompanyService companyService)
+                                     ICompanyService companyService,
+                                     IRoomActiveRecordService roomActiveRecordService)
+
         {
             this._fieldMapService = fieldMapService;
             this._exhibitionRoomService = exhibitionRoomService;
@@ -37,6 +40,7 @@ namespace InspectionWeb.Controllers
             this._reportDeviceService = reportDeviceService;
             this._reportSourceService = reportSourceService;
             this._companyService = companyService;
+            this._roomActiveRecordService = roomActiveRecordService;
 
             //TODO: add company service
         }
@@ -131,7 +135,12 @@ namespace InspectionWeb.Controllers
             {
                 string fileName = fieldId;
                 fileName = fileName + Path.GetExtension(upload.FileName);
-                string savePath = System.IO.Path.Combine(Server.MapPath("~/media/field"), fileName);
+                string folder = Server.MapPath("~/media/field");
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+                string savePath = System.IO.Path.Combine(folder, fileName);
                 upload.SaveAs(savePath);
 
                 fieldMap field = _fieldMapService.GetById(fieldId);
@@ -158,7 +167,12 @@ namespace InspectionWeb.Controllers
                 {
                     //var fileName = System.IO.Path.GetFileName(upload.FileName);
                     var fileName = fieldId + ".svg";
-                    var path = System.IO.Path.Combine(Server.MapPath("~/media/map"), fileName);
+                    string folder = Server.MapPath("~/media/map");
+                    if (!Directory.Exists(folder))
+                    {
+                        Directory.CreateDirectory(folder);
+                    }
+                    var path = System.IO.Path.Combine(folder, fileName);
                     upload.SaveAs(path);
 
                     fieldMap field = _fieldMapService.GetById(fieldId);
@@ -293,6 +307,7 @@ namespace InspectionWeb.Controllers
             vm.Fields = this._fieldMapService.GetAll().ToList();
             vm.Inspectors = this._userService.GetAll().ToList();
             vm.Companys = this._companyService.GetAll().ToList();
+            vm.RoomActiveRecords = this._roomActiveRecordService.GetAll().Where(x => x.roomId == roomId).ToList();
             // }}}
 
             return View(vm);
@@ -302,6 +317,8 @@ namespace InspectionWeb.Controllers
         public ActionResult EditExhibition(FormCollection fc)
         {
             string roomId = fc["pk"];
+            bool activeStateChange = false;
+            string recordId = "";
             exhibitionRoom room = this._exhibitionRoomService.GetById(roomId);
             if (room != null && ModelState.IsValid)
             {
@@ -310,6 +327,17 @@ namespace InspectionWeb.Controllers
                 if (fc["name"] == "active")
                 {
                     room.GetType().GetProperty(fc["name"]).SetValue(room, Convert.ToInt16(fc["value"]), null);
+                    roomActiveRecord record = new roomActiveRecord();
+                    record.roomId = roomId;
+                    record.active = Convert.ToInt16(fc["value"]);
+                    IResult resu = _roomActiveRecordService.Create(record);
+                    if (resu.Success)
+                    {
+                        recordId = resu.Message;
+                    }
+                    activeStateChange = true;
+                    
+
                 }
                 else
                 {
@@ -320,6 +348,18 @@ namespace InspectionWeb.Controllers
                 if (result.Success)
                 {
                     fieldMap field = this._fieldMapService.GetById(room.fieldId);
+                    if (activeStateChange == true)
+                    {
+
+                        return Json(new
+                        {
+                            lastUpdateTime = room.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                            recordId = recordId,
+                            recordCreateTiime = _roomActiveRecordService.GetById(recordId).createTime
+
+                        });
+                    }
+
                     if (field == null)
                     {
                         return Json(new
@@ -336,6 +376,8 @@ namespace InspectionWeb.Controllers
                             mapFileName = field.mapFileName
                         });
                     }
+
+                    
                 }
                 else
                 {
@@ -356,7 +398,12 @@ namespace InspectionWeb.Controllers
             {
                 string fileName = roomId;
                 fileName = fileName + Path.GetExtension(upload.FileName);
-                string savePath = System.IO.Path.Combine(Server.MapPath("~/media/exhibition"), fileName);
+                string folder = Server.MapPath("~/media/exhibition");
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+                string savePath = System.IO.Path.Combine(folder, fileName);
                 upload.SaveAs(savePath);
 
                 exhibitionRoom room = _exhibitionRoomService.GetById(roomId);
@@ -589,7 +636,12 @@ namespace InspectionWeb.Controllers
             {
                 string fileName = itemId;
                 fileName = fileName + Path.GetExtension(upload.FileName);
-                string savePath = System.IO.Path.Combine(Server.MapPath("~/media/exhibitionItem"), fileName);
+                string folder = Server.MapPath("~/media/exhibitionItem");
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+                string savePath = System.IO.Path.Combine(folder, fileName);
                 upload.SaveAs(savePath);
 
                 exhibitionItem item = _exhibitionItemService.GetById(itemId);
@@ -625,6 +677,84 @@ namespace InspectionWeb.Controllers
             }
 
             return Json(null);
+        }
+
+        [HttpPost]
+        public ActionResult AddRoomActiveRecord(FormCollection fc)
+        {
+            exhibitionRoom room = _exhibitionRoomService.GetById(fc["pk"]);
+            room.active = Convert.ToInt16(fc["value"]);
+            _exhibitionRoomService.Update(room);
+
+            roomActiveRecord record = new roomActiveRecord();
+            record.roomId = fc["pk"];
+            record.active = Convert.ToInt16(fc["value"]);
+            IResult result = _roomActiveRecordService.Create(record);
+            if(result.Success == false)
+            {
+                return RedirectToAction("EditExhibition", new { id = record.roomId });
+
+            }
+            RoomActiveRecordAddViewModel vm = new RoomActiveRecordAddViewModel();
+            vm.Active = record.active;
+            vm.ActivityId = result.Message;
+            vm.Description = record.description;
+            vm.CreateTime = record.createTime;
+            return Json(new { id = record.roomId });
+
+        }
+        public ActionResult EditRoomActiveRecord(string id)
+        {
+
+            string recordId = id;
+            roomActiveRecord record = _roomActiveRecordService.GetById(recordId);
+            string roomName = _exhibitionRoomService.GetById(record.roomId).roomName;
+
+            RoomActiveRecordAddViewModel vm = new RoomActiveRecordAddViewModel();
+
+            if (record != null && ModelState.IsValid)
+            {
+                vm.ActivityId = recordId;
+                vm.Description = record.description;
+                vm.Active = record.active;
+                vm.RoomName = roomName;
+                vm.CreateTime = record.createTime;
+            }
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult EditRoomActiveRecord()
+        {
+
+            return Json(null);
+        }
+
+        public ActionResult DeleteRecord(string recordId)
+        {
+            if (string.IsNullOrEmpty(recordId))
+            {
+                return RedirectToAction("EditExhibition");
+            }
+
+
+            roomActiveRecord record = this._roomActiveRecordService.GetById(recordId);
+            if (record == null)
+            {
+                return RedirectToAction("EditExhibition");
+            }
+
+            record.isDelete = 1;
+            try
+            {
+                this._roomActiveRecordService.Update(record);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("EditExhibition");
+            }
+
+            return RedirectToAction("EditExhibition");
         }
         //GET: /Information/AddDevice
         public ActionResult AddDevice()
@@ -688,6 +818,7 @@ namespace InspectionWeb.Controllers
         {
             string deviceId = fc["pk"];
             exhibitionItem device = _exhibitionItemService.GetById(deviceId);
+            fieldMap field = null;
             if (device != null && ModelState.IsValid)
             {
                 switch (fc["name"])
@@ -706,6 +837,7 @@ namespace InspectionWeb.Controllers
                         break;
                     case "fieldId":
                         device.fieldId = fc["value"];
+                        field = _fieldMapService.GetById(device.fieldId);
                         break;
 
                     default:
@@ -715,7 +847,14 @@ namespace InspectionWeb.Controllers
                 IResult result = _exhibitionItemService.Update(device);
                 if (result.Success)
                 {
-                    return Json(new { lastUpdateTime = device.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+
+                    if (field != null)
+                    {
+                        return Json(new { mapFileName = field.mapFileName, lastUpdateTime = device.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+                    }
+                    else {
+                        return Json(new {  lastUpdateTime = device.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") });
+                    }
                 }
             }
             else
@@ -808,7 +947,9 @@ namespace InspectionWeb.Controllers
         //GET: /Information/AddNotifyDevice
         public ActionResult AddNotifyDevice()
         {
-            return View();
+            NotifyDeviceAddViewModel vm = new NotifyDeviceAddViewModel();
+            vm.sources = _reportSourceService.GetAll().ToList();
+            return View(vm);
         }
 
         [HttpPost]
@@ -883,6 +1024,8 @@ namespace InspectionWeb.Controllers
         {
             string deviceId = fc["pk"];
             reportDevice device = _reportDeviceService.GetById(deviceId);
+            fieldMap field = null;
+            System.Diagnostics.Debug.WriteLine("YOYOYOYOYO" + fc["name"]);
             if (device != null && ModelState.IsValid)
             {
                 switch (fc["name"])
@@ -901,29 +1044,34 @@ namespace InspectionWeb.Controllers
                         break;
                     case "itemId":
                         device.itemId = fc["value"];
+                        _reportDeviceService.Update(device);
+                        break;
+                    case "roomId":
+                        string roomId = fc["value"];
+                        List<exhibitionItem> items = _exhibitionItemService.GetAll().Where(x => x.roomId == roomId).ToList();
+
+                        return Json(new { items = items });
+
                         break;
                     case "fieldId":
                         device.fieldId = fc["value"];
+                        field = _fieldMapService.GetById(device.fieldId);
+                        List<exhibitionRoom> rooms = _exhibitionRoomService.GetAll().ToList().Where(x => x.fieldId == field.fieldId).ToList();
+                        _reportDeviceService.Update(device);
+                        return Json(new
+                        {
+                            lastUpdateTime = device.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                            mapFileName = field?.mapFileName,
+                            rooms = rooms
+                        });
                         break;
                     default:
+
                         break;
                 }
 
-
-                IResult result = _reportDeviceService.Update(device);
-                fieldMap field = _fieldMapService.GetById(device.fieldId);
-                if (result.Success)
-                {
-                    return Json(new { lastUpdateTime = device.lastUpdateTime.Value.ToString("yyyy-MM-dd HH:mm:ss"),
-                                      mapFileName = field?.mapFileName});
-                }
             }
-            else
-            {
-                return RedirectToAction("EditNotifyDevice");
-            }
-
-            return RedirectToAction("ListNotifyDevice");
+                return RedirectToAction("ListNotifyDevice");
         }
 
         //GET: /Information/ListNotifyDevice
@@ -954,7 +1102,12 @@ namespace InspectionWeb.Controllers
             {
                 string fileName = deviceId;
                 fileName = fileName + Path.GetExtension(upload.FileName);
-                string savePath = System.IO.Path.Combine(Server.MapPath("~/media/reportDevice"), fileName);
+                string folder = Server.MapPath("~/media/reportDevice");
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+                string savePath = System.IO.Path.Combine(folder, fileName);
                 upload.SaveAs(savePath);
 
                 reportDevice device = _reportDeviceService.GetById(deviceId);

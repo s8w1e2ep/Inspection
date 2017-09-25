@@ -145,8 +145,12 @@ namespace InspectionWeb.Controllers
             {
                 string fileName = softwareId;
                 fileName = fileName + Path.GetExtension(upload.FileName);
-
-                string savePath = System.IO.Path.Combine(Server.MapPath("~/media/software"), fileName);
+                string folder = Server.MapPath("~/media/software");
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+                string savePath = System.IO.Path.Combine(folder, fileName);
                 upload.SaveAs(savePath);
 
                 softwareVersion software = _softwareVersionService.GetById(softwareId);

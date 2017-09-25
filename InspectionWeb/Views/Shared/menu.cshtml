@@ -92,13 +92,13 @@
                                 </ul>
                             </li>
                             @*軟體版本管理*@
-                            <li>
+                            <li class="@ViewBag.softwareVersion">
                                 <a href="#"><i class="fa fa-edit"></i> <span>軟體版本管理</span> <i class="fa fa-angle-left pull-right"></i></a>
                                 <ul class="treeview-menu">
-                                    <li>
+                                    <li class="@ViewBag.softwareAdd">
                                         <a href="@Url.Action("AddSoftware", "SoftwareVersion")"><i class="fa fa-circle-o"></i>新增軟體</a>
                                     </li>
-                                    <li>
+                                    <li class="@ViewBag.softwareList">
                                         <a href="@Url.Action("ListSoftware", "SoftwareVersion")"><i class="fa fa-circle-o"></i>軟體列表</a>
                                     </li>
                                 </ul>
@@ -122,7 +122,7 @@
                         </ul>
                     </li>
                     @*圖資與設備管理*@
-                    <li class="treeview">
+                    <li class="treeview @ViewBag.imgManage">
                         <a href="#">
                             <i class="fa fa-dashboard"></i>
                             <span>圖資與設備管理</span>
@@ -130,65 +130,65 @@
                         </a>
                         <ul class="treeview-menu">
                             @*圖資館理*@
-                            <li class="">
+                            <li class="@ViewBag.imgManage2">
                                 <a href="#">
                                     <i class="fa fa-edit"></i>
                                     <span>圖資管理</span>
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </a>
                                 <ul class="treeview-menu">
-                                    <li>
+                                    <li class="@ViewBag.infoAdd">
                                         <a href="@Url.Action("AddField", "Information")"><i class="fa fa-circle-o"></i>新增場域</a>
                                     </li>
-                                    <li>
+                                    <li class="@ViewBag.infoList">
                                         <a href="@Url.Action("ListField", "Information")"><i class="fa fa-circle-o"></i>場域列表</a>
                                     </li>
                                 </ul>
                             </li>
                             @*展示廳管理*@
-                            <li class="">
+                            <li class="@ViewBag.roomManage">
                                 <a href="#">
                                     <i class="fa fa-edit"></i>
                                     <span>展示廳管理</span>
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </a>
                                 <ul class="treeview-menu">
-                                    <li>
+                                    <li class="@ViewBag.roomAdd">
                                         <a href="@Url.Action("AddExhibition", "Information")"><i class="fa fa-circle-o"></i>新增展示廳</a>
                                     </li>
-                                    <li>
+                                    <li class="@ViewBag.roomList">
                                         <a href="@Url.Action("ListExhibition", "Information")"><i class="fa fa-circle-o"></i>展示廳列表</a>
                                     </li>
                                 </ul>
                             </li>
                             @*體驗設施管理*@
-                            <li class="">
+                            <li class="@ViewBag.deviceManage">
                                 <a href="#">
                                     <i class="fa fa-edit"></i>
                                     <span>體驗設施管理</span>
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </a>
                                 <ul class="treeview-menu">
-                                    <li>
+                                    <li class="@ViewBag.deviceAdd">
                                         <a href="@Url.Action("AddDevice", "Information")"><i class="fa fa-circle-o"></i>新增體驗設施</a>
                                     </li>
-                                    <li>
+                                    <li class="@ViewBag.deviceList">
                                         <a href="@Url.Action("ListDevice", "Information")"><i class="fa fa-circle-o"></i>體驗設施列表</a>
                                     </li>
                                 </ul>
                             </li>
                             @*通報裝置管理*@
-                            <li class="">
+                            <li class="@ViewBag.notifyManage">
                                 <a href="#">
                                     <i class="fa fa-edit"></i>
                                     <span>通報裝置管理</span>
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </a>
                                 <ul class="treeview-menu">
-                                    <li>
+                                    <li class="@ViewBag.notifyAdd">
                                         <a href="@Url.Action("AddNotifyDevice", "Information")"><i class="fa fa-circle-o"></i>新增通報裝置</a>
                                     </li>
-                                    <li>
+                                    <li class="@ViewBag.notifyList">
                                         <a href="@Url.Action("ListNotifyDevice", "Information")"><i class="fa fa-circle-o"></i>通報裝置列表</a>
                                     </li>
                                 </ul>
@@ -268,13 +268,13 @@
                         </a>
                         <ul class="treeview-menu">
                             <li class="@ViewBag.itemReport">
-                                <a href="@Url.Action("AddExhibitionItem", "ReportJob")"><i class="fa fa-circle-o"></i>新增展項通報</a>
+                                <a href="@Url.Action("AddExhibitionItem", "ReportJob", new { sourceCode = "02"})"><i class="fa fa-circle-o"></i>新增展項通報</a>
                             </li>
                             <li class="@ViewBag.facilityReport">
-                                <a href="@Url.Action("AddExperience", "ReportJob")"><i class="fa fa-circle-o"></i>新增體驗設施通報</a>
+                                <a href="@Url.Action("AddExperience", "ReportJob", new { sourceCode = "02"})"><i class="fa fa-circle-o"></i>新增體驗設施通報</a>
                             </li>
                             <li class="@ViewBag.otherReport">
-                                <a href="@Url.Action("AddOther", "ReportJob")"><i class="fa fa-circle-o"></i>新增其他設施通報</a>
+                                <a href="@Url.Action("AddOther", "ReportJob", new { sourceCode = "02"})"><i class="fa fa-circle-o"></i>新增其他設施通報</a>
                             </li>
                             <li class="@ViewBag.allReport">
                                 <a href="@Url.Action("Query", "ReportJob")"><i class="fa fa-circle-o"></i>整體通報查詢</a>

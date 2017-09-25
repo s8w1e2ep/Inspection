@@ -1,13 +1,18 @@
 ﻿@model IEnumerable<InspectionWeb.Models.ViewModel.ExhibitionRoomListViewModel>
 @{
     ViewBag.Title = "展示廳列表";
+    ViewBag.imgManage = "active";
+    ViewBag.roomManage = "active";
+    ViewBag.roomList = "active";
 }
 
 
-
-@{
-    ViewBag.Title = "展示廳列表";
-}
+<!-- data table -->
+<script src="/theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="/theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="/theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="/theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
 
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
@@ -21,7 +26,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="box box-info">
+                <div class="box box-success">
                     <div class="box-header with-border">
                         <h3 class="box-title">展示廳列表</h3>
                     </div>

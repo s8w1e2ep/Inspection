@@ -2,7 +2,16 @@
 
 @{
     ViewBag.Title = "通報裝置列表";
+    ViewBag.imgManage = "active";
+    ViewBag.notifyManage = "active";
+    ViewBag.notifyList = "active";
 }
+<!-- data table -->
+<script src="/theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="/theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="/theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="/theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
 
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
@@ -16,7 +25,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="box box-info">
+                <div class="box box-success">
                     <div class="box-header with-border">
                         <h3 class="box-title">通報裝置列表</h3>
                     </div>
@@ -27,7 +36,7 @@
                                     <th>名稱</th>
                                     <th>裝置代碼</th>
                                     <th>所屬場域</th>
-                                    <th>展示廳</th>
+                                    <th>關聯展項</th>
                                     <th>建立日期</th>
                                     <th>最後更新日期</th>
                                     <th>操作選項</th>
@@ -38,8 +47,8 @@
                                 {
                                     <tr id="@item.DeviceId">
                                         <td>@item.DeviceName</td>
+                                        <td>@item.DeviceCode</td>
                                         <td>@item.FieldName</td>
-                                        <td></td>
                                         <td>@item.ItemName</td>
                                         <td>@item.CreateTime</td>
                                         <td>@item.LastUpdateTime</td>
