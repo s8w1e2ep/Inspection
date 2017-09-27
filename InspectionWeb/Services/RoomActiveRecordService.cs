@@ -78,5 +78,10 @@ namespace InspectionWeb.Services
         {
             return this._repository.GetAll().Where(x => x.isDelete == 0);
         }
+
+        public IEnumerable<roomActiveRecord> GetEvery()
+        {
+            return this._repository.GetAll();
+        }
     }
 }
