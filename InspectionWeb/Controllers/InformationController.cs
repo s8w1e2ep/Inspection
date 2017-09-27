@@ -22,7 +22,6 @@ namespace InspectionWeb.Controllers
         private IReportSourceService _reportSourceService;
         private ICompanyService _companyService;
         private IRoomActiveRecordService _roomActiveRecordService;
-
         public InformationController(IFieldMapService fieldMapService,
                                      IExhibitionRoomService exhibitionRoomService,
                                      IUserService userService,
@@ -308,6 +307,17 @@ namespace InspectionWeb.Controllers
             vm.Inspectors = this._userService.GetAll().ToList();
             vm.Companys = this._companyService.GetAll().ToList();
             vm.RoomActiveRecords = this._roomActiveRecordService.GetAll().Where(x => x.roomId == roomId).ToList();
+            if(_roomActiveRecordService.GetEvery().Where(x=> x.roomId == roomId).Count() == 0)
+            {
+                roomActiveRecord newRecord = new roomActiveRecord();
+                newRecord.active = 1;
+                newRecord.roomId = roomId;
+                IResult result = this._roomActiveRecordService.Create(newRecord);
+                if (result.Success)
+                {
+                    vm.RoomActiveRecords.Add(newRecord);
+                }
+            }
             // }}}
 
             return View(vm);
@@ -763,10 +773,11 @@ namespace InspectionWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddDevice(string itemName)
+        public ActionResult AddDevice(FormCollection fc)
         {
             exhibitionItem item = new exhibitionItem();
-            item.itemName = itemName;
+            item.itemName = fc["itemName"];
+            item.itemCode = fc["itemCode"];
             item.itemType = 1;
             item.roomId = "experience";
             IResult result = _exhibitionItemService.Create(item);
@@ -800,6 +811,7 @@ namespace InspectionWeb.Controllers
             vm.ItemName = item.itemName;
             vm.IsLock = item.isLock;
             vm.Active = item.active;
+            vm.ItemCode = item.itemCode;
             vm.Inspector = _userService.GetByID(item.inspectionUserId);
             vm.CreateTime = item.createTime;
             vm.LastUpdateTime = item.lastUpdateTime;
@@ -823,6 +835,9 @@ namespace InspectionWeb.Controllers
             {
                 switch (fc["name"])
                 {
+                    case "itemCode":
+                        device.itemCode = fc["value"];
+                        break;
                     case "itemName":
                         device.itemName = fc["value"];
                         break;

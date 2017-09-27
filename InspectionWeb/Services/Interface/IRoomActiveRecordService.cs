@@ -15,5 +15,7 @@ namespace InspectionWeb.Services.Interface
         IResult Update(roomActiveRecord instance);
         roomActiveRecord GetById(string id);
         IEnumerable<roomActiveRecord> GetAll();
+        IEnumerable<roomActiveRecord> GetEvery();
+
     }
 }

@@ -66,7 +66,7 @@ namespace InspectionWeb.Services
                     newExhibitionRoom.width = 30;
                     newExhibitionRoom.height = 30;
 
-                    newExhibitionRoom.active = 0;
+                    newExhibitionRoom.active = 1;
                     newExhibitionRoom.isDelete = 0;
                     newExhibitionRoom.lastUpdateTime = nowTime;
 

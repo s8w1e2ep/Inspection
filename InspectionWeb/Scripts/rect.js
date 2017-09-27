@@ -26,7 +26,7 @@ function OldRectangle(dataId, parkingBlockId, x, y, width, height) {
 
   svg.on('mousedown', function () {
       console.log('mousedown1');
-      if (selectedParkingBlock !== null) {
+      if (selectedParkingBlock != null) {
           selectedParkingBlock.selectAll('.pointC').style('visibility', 'hidden');
       }
   })
@@ -43,7 +43,7 @@ function OldRectangle(dataId, parkingBlockId, x, y, width, height) {
       .on('mousedown', function () {
           console.log('mousedown2');
           // hide four corner black block
-          if (selectedParkingBlock !== null) {
+          if (selectedParkingBlock != null) {
               selectedParkingBlock.selectAll('.pointC').style('visibility', 'hidden');
           }
           self.graphicElement.selectAll('.pointC').style('visibility', '');
@@ -172,7 +172,7 @@ function FixRectangle(dataId, parkingBlockId, x, y, width, height) {
 
     svg.on('mousedown', function () {
         console.log('mousedown1');
-        if (selectedParkingBlock !== null) {
+        if (selectedParkingBlock != null) {
             selectedParkingBlock.selectAll('.pointC').style('visibility', 'hidden');
         }
     })
@@ -189,7 +189,7 @@ function FixRectangle(dataId, parkingBlockId, x, y, width, height) {
         .on('mousedown', function () {
             console.log('mousedown2');
             // hide four corner black blocks
-            if (selectedParkingBlock !== null) {
+            if (selectedParkingBlock != null) {
                 selectedParkingBlock.selectAll('.pointC').style('visibility', 'hidden');
             }
             self.graphicElement.selectAll('.pointC').style('visibility', '');
@@ -291,7 +291,7 @@ function Rectangle() {
       self.rectangleElement
           .on('mousedown', function () {
               // select rectangle
-              if (selectedParkingBlock !== null) {
+              if (selectedParkingBlock != null) {
                   selectedParkingBlock.selectAll('.pointC').style('visibility', 'hidden');
               }
               self.graphicElement.selectAll('.pointC').style('visibility', '');
@@ -325,7 +325,7 @@ function Rectangle() {
                 self.rectangleElement.attr('width'), self.rectangleElement.attr('height'));
         selectedParkingBlock = self.graphicElement;
         } else {
-            if (selectedParkingBlock !== null) {
+            if (selectedParkingBlock != null) {
                 selectedParkingBlock.selectAll('.pointC').style('visibility', 'hidden');
             }
         }

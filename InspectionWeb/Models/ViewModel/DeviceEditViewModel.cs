@@ -10,6 +10,7 @@ namespace InspectionWeb.Models.ViewModel
         public string ItemId;
         public string ItemName;
         public string FieldId;
+        public string ItemCode;
         public Nullable<byte> IsLock;
         public Nullable<short> Active;
         public user Inspector;
