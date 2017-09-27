@@ -23,34 +23,39 @@ namespace InspectionWeb.Services
             IResult result = new Result(false);
             noCheckDate noCheckDate = new noCheckDate();
 
-            try
+            if (this.IsExists(date) == 0)
             {
-                DateTime now = DateTime.Now;
-                IdGenerator idGen = new IdGenerator();
-                noCheckDate.id = idGen.GetID("noCheckDate");
-                noCheckDate.noCheckDate1 = date;
-                noCheckDate.am = Convert.ToByte(am);
-                noCheckDate.pm = Convert.ToByte(pm);
-                noCheckDate.description = description;
-                noCheckDate.setupUserId = setupId;
-                noCheckDate.isDelete = Convert.ToByte(0);
-                noCheckDate.createTime = now;
-                noCheckDate.lastUpdateTime = now;
-
-                this._repository.Create(noCheckDate);
-                result.Success = true;
-            }
-            catch (Exception ex)
-            {
-                result.Exception = ex;
-
-                if (((System.Data.SqlClient.SqlException)((ex.InnerException).InnerException)).Number == 2627)
+                try
                 {
-                    result.ErrorMsg = ex.ToString();
-                }
-            }
+                    DateTime now = DateTime.Now;
+                    IdGenerator idGen = new IdGenerator();
+                    noCheckDate.id = idGen.GetID("noCheckDate");
+                    noCheckDate.noCheckDate1 = date;
+                    noCheckDate.am = Convert.ToByte(am);
+                    noCheckDate.pm = Convert.ToByte(pm);
+                    noCheckDate.description = description;
+                    noCheckDate.setupUserId = setupId;
+                    noCheckDate.isDelete = Convert.ToByte(0);
+                    noCheckDate.createTime = now;
+                    noCheckDate.lastUpdateTime = now;
 
+                    this._repository.Create(noCheckDate);
+                    result.Success = true;
+                }
+                catch (Exception ex)
+                {
+                    result.Exception = ex;
+                    if (((System.Data.SqlClient.SqlException)((ex.InnerException).InnerException)).Number == 2627)
+                    {
+                        result.ErrorMsg = ex.ToString();
+                    }
+                }
+
+                return result;
+            }
+            result.ErrorMsg = "新增的非巡檢日期重複";
             return result;
+
         }
 
         public IResult Create(noCheckDate instance)

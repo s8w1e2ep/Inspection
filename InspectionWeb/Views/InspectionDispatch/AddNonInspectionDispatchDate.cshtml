@@ -119,6 +119,13 @@
                             </form>
                          </div><!-- /.box-header -->
                         <div class="box-body">
+                        @if (@Model != null && @Model.GetType() == typeof(InspectionWeb.Models.ViewModel.NoCheckDateViewModel))
+                        {
+                            <div class="form-group has-error">
+                                <label class="col-sm-2"></label>
+                                <label class="col-sm-10">@Model.ErrorMsg</label>
+                            </div>
+                        } else {
                             <table id="nonCheckDateTable" class="row-border" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
@@ -128,7 +135,7 @@
                                         <th>原因</th>
                                     </tr>
                                 </thead>
-                                @if (@Model != null ){
+                                @if (@Model != null) {
                                 <tbody>
                                 @foreach (var item in @Model)
                                 {
@@ -152,10 +159,11 @@
                                         }
                                          <td>@item.description</td>
                                     </tr>
-                                 }
+                                }
                                  </tbody>
                                 }
                             </table>
+                        }
                         </div>
                     </div><!-- /.box -->
                 </div>

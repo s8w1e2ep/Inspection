@@ -543,9 +543,8 @@ namespace InspectionWeb.Controllers
                 return View(vm);
             }
 
-
             var TotalViewModel = new List<NoCheckDateViewModel>();
-            var noCheckDates = this._noCheckDateService.GetAll().ToList();
+            var noCheckDates = this._noCheckDateService.GetAll().ToList(); 
             foreach (var item in noCheckDates)
             {
                 NoCheckDateViewModel noCheckDateViewModel = this.Data2NoChekDateViewModel(item);
