@@ -103,6 +103,18 @@
                                     </li>
                                 </ul>
                             </li>
+                            @*系統參數管理*@
+                            <li class="@ViewBag.sysarg">
+                                <a href="#"><i class="fa fa-edit"></i> <span>系統參數管理</span> <i class="fa fa-angle-left pull-right"></i></a>
+                                <ul class="treeview-menu">
+                                    <li class="@ViewBag.sysargAdd">
+                                        <a href="@Url.Action("AddSystemArg", "System")"><i class="fa fa-circle-o"></i>新增系統參數</a>
+                                    </li>
+                                    <li class="@ViewBag.sysargList">
+                                        <a href="@Url.Action("ListSystemArg", "System")"><i class="fa fa-circle-o"></i>系統參數列表</a>
+                                    </li>
+                                </ul>
+                            </li>
                             @*常用解決方法*@
                             <li class="@ViewBag.solutionManage">
                                 <a href="#">

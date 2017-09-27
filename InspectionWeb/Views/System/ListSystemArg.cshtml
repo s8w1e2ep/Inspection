@@ -1,7 +1,17 @@
 ﻿@model IEnumerable<InspectionWeb.Models.ViewModel.SystemArgAddViewModel>
 @{
     ViewBag.Title = "系統參數";
+    ViewBag.basicData = "active";
+    ViewBag.sysarg = "active";
+    ViewBag.sysargList = "active";
 }
+
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
 
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
@@ -15,7 +25,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="box box-info">
+                <div class="box box-success">
                     <div class="box-header with-border">
                         <h3 class="box-title">系統參數</h3>
                     </div>
