@@ -32,7 +32,7 @@
 <script>
     $.fn.editable.defaults.mode = 'inline';
     $(document).ready(function () {
-        $('#itemName, #description #itemCode').editable({
+        $('#itemName, #description, #itemCode').editable({
             emptytext: "未設定",
             success: function (response) {
                 $('#lastUpdateTime').html(response.lastUpdateTime);
@@ -198,9 +198,10 @@
                                         <a href="#" id="itemName" data-type="text" data-pk="@Model.ItemId" data-url="@Url.Action("EditDevice")" data-title="輸入體驗設施名稱">@Model.ItemName</a>
                                     </td>
                                 </tr>
+
                                 @* 體驗設施代碼 *@
                                 <tr>
-                                    <td>體驗設施名稱</td>
+                                    <td>體驗設施代碼</td>
                                     <td>
                                         <a href="#" id="itemCode" data-type="text" data-pk="@Model.ItemId" data-url="@Url.Action("EditDevice")" data-title="輸入體驗設施代碼">@Model.ItemCode</a>
                                     </td>
