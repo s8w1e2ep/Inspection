@@ -183,7 +183,7 @@ namespace InspectionWeb.Services
 
         public IEnumerable<noCheckDate> GetAllWithTimeInterval(System.DateTime start, System.DateTime end)
         {
-            return this._repository.GetAll().Where(x => x.noCheckDate1 <= end && x.noCheckDate1 >= start).OrderBy(x => x.noCheckDate1);
+            return this._repository.GetAll().Where(x => x.noCheckDate1 <= end && x.noCheckDate1 >= start && x.isDelete == 0).OrderBy(x => x.noCheckDate1);
         }
 
         public IEnumerable<noCheckDate> GetAll()

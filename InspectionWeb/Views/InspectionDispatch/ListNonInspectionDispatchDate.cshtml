@@ -16,8 +16,9 @@
 <!-- column order -->
 <script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+
 <script>
-    var toDispatchId, ns, ne, ls, le;
+    var toDispatchId, nextYear, nextMonth, lastYear, lastMonth;
 
     $(function () {
         setNonInspectionTable();
@@ -90,10 +91,6 @@
         var now = new Date();
         var year = now.getFullYear();
         var month = now.getMonth();
-        var lastMonth = 0;
-        var lastYear = 0;
-        var nextMonth = 0;
-        var nextYear = 0;
         if (month == 0) {
             lastMonth = 12;
             lastYear = year - 1;
@@ -110,26 +107,15 @@
             nextMonth = month + 2;
             nextYear = year;
         }
-        ns = lastYear + "/" + lastMonth + "/01";
-        ne = lastYear + "/" + lastMonth + "/31";
-        ls = nextYear + "/" + nextMonth + "/01";
-        le = nextYear + "/" + nextMonth + "/31";
     }
     
     function getLastMonth() {
-        window.location = "ListNonInspectionDispatchDate2?nonCheckDateEnd=2017/08/31&nonCheckDateStart=2017/08/01";
+        window.location = "ListNonInspectionDispatchDate2?year=" + lastYear + "&month=" + lastMonth;
     }
     function getNextMonth() {
-        window.location = "ListNonInspectionDispatchDate2?nonCheckDateEnd=2017/08/31&nonCheckDateStart=2017/08/01";
-        window.location = "@Url.Action("ListNonInspectionDispatchDate2", "InspectionDispatch", new { nonCheckDateStart = " + ns + ", nonCheckDateEnd = " + ne + " })";
+        window.location = "ListNonInspectionDispatchDate2?year=" + nextYear + "&month=" + nextMonth;
     }
 
-    $("a[data-form-method='post']").click(function (event) {
-        event.preventDefault();
-        var element = $(this);
-        var action = element.attr("href");
-    }
-    )
 </script>
 
 
@@ -141,7 +127,7 @@
         <section class="content-header">
             <h1>非巡檢日期</h1>
             <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+                <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i>Home</a></li>
                 <li class="active">非巡檢日期列表</li>
             </ol>
         </section>

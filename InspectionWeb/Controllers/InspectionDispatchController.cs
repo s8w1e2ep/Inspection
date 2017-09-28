@@ -502,12 +502,10 @@ namespace InspectionWeb.Controllers
             return View(TotalViewModel);
         }
 
-        public ActionResult ListNonInspectionDispatchDate2(string nonCheckDateStart, string nonCheckDateEnd)
+        public ActionResult ListNonInspectionDispatchDate2(int year, int month)
         {
-            System.DateTime start = Convert.ToDateTime(nonCheckDateStart);
-            System.DateTime end = Convert.ToDateTime(nonCheckDateEnd);
             var TotalViewModel = new List<NoCheckDateViewModel>();
-            var noCheckDates = this._noCheckDateService.GetAllWithTimeInterval(start, end).ToList();
+            var noCheckDates = this._noCheckDateService.GetAll().Where(x => x.noCheckDate1.Value.Month == month && x.noCheckDate1.Value.Year == year && x.isDelete == 0).ToList();
             foreach (var item in noCheckDates)
             {
                 NoCheckDateViewModel noCheckDateViewModel = this.Data2NoChekDateViewModel(item);
