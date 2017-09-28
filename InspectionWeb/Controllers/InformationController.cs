@@ -979,7 +979,7 @@ namespace InspectionWeb.Controllers
             IResult result = _reportDeviceService.Create(report);
             ReportDeviceEditViewModel vm = new ReportDeviceEditViewModel();
             vm.DeviceId = result.Message;
-            vm.SourceId = report.sourceId;
+            vm.Source = _reportSourceService.GetById(report.sourceId);
             vm.DeviceCode = report.deviceCode;
             vm.Name = report.name;
 
@@ -1013,7 +1013,7 @@ namespace InspectionWeb.Controllers
             vm.DeviceId = device.deviceId;
             vm.DeviceCode = device.deviceCode;
             vm.Description = device.description;
-            vm.SourceId = device.sourceId;
+            vm.Source = _reportSourceService.GetById(device.sourceId);
             vm.Photo = device.photo;
             vm.Item = _exhibitionItemService.GetById(device.itemId);
             vm.X = device.x;
@@ -1050,6 +1050,7 @@ namespace InspectionWeb.Controllers
                         break;
                     case "sourceId":
                         device.sourceId = fc["value"];
+                        _reportDeviceService.Update(device);
                         break;
                     case "deviceCode":
                         device.deviceCode = fc["value"];

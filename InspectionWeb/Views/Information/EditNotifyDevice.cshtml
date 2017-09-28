@@ -38,7 +38,7 @@
         });
 
         $('#sourceId').editable({
-            value: ["@Model.SourceId"],
+            value: ["@if (@Model.Source != null) {<text>@Model.Source.sourceId</text>}"],
             source: [
                 @foreach (var item in Model.ReportSources)
                 {

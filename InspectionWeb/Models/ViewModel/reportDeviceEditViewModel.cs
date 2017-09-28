@@ -9,7 +9,7 @@ namespace InspectionWeb.Models.ViewModel
     {
         public string DeviceId;
         public string DeviceCode;
-        public string SourceId;
+        public reportSource Source;
         public string Name;
         public string Photo;
         public string MapFileName;
