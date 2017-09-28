@@ -2,6 +2,9 @@
 
 @{
     ViewBag.Title = "ListRoomInspetionDispatch";
+    ViewBag.inspectWork = "active";
+    ViewBag.dispatch = "active";
+    ViewBag.roomDispatch = "active";
 }
 <!-- datepicker -->
 <link href="../../Scripts/datepicker3.css" rel="stylesheet" type="text/css" />
@@ -20,11 +23,12 @@
 
     $(function () {
         setRoomInspectionTable();
+
         $('#dispatchDate').datepicker({
             format: "yyyy/mm/dd",
             language: 'zh-TW',
             todayHighlight: true
-        });
+        }).datepicker("setDate", new Date());
         $('#modalYes').on('click', function (e) {
             deleteDispatch();
         });
@@ -68,14 +72,24 @@
              //console.log(msg);
              //$('#' + inspectorType + '_' + dispatchId).value = inspectionId;
          });
+    }
 
+    function redispatch(dispatchId) {
+        $.ajax({
+            url: '@Url.Action("ResetRoomInspectionDispatch")',
+            data: $.param({ 'pk': dispatchId, 'name': "isDelete", 'value': 0 }),
+            type: 'UPDATE',
+        }).done(function (msg) {
+            if (msg.result == 1) {
+                $('#remove_' + dispatchId).css("display", "block");
+                $('#reset_' + dispatchId).css("display", "none");
+            }
+        });
     }
 
     function storeId(dispatchId, theDate) {
         toDispatchId = dispatchId;
         theDate = theDate;
-        console.log(toDispatchId);
-        console.log(theDate);
     }
 
     function deleteDispatch() {
@@ -85,10 +99,11 @@
         data: $.param({ 'dispatchId': toDispatchId, 'date': theDate}),
         type: 'DELETE',
     }).done(function (msg) {
-        console.log(msg);
+        //console.log(msg);
             if (msg.result == 1) {
-                $('#' + toDispatchId).remove();
-            }             
+                $('#remove_' + toDispatchId).css("display", "none");
+                $('#reset_' + toDispatchId).css("display", "block");
+            }
         });
     }
 
@@ -164,7 +179,16 @@
                                     @foreach (var item in @Model.roomInspectionDispatch)
                                     {
                                     <tr id="@item.dispatchId">
-                                            <td>@item.roomName</td>
+                                            <td>@item.roomName
+                                            @if (@item.roomStatus == 1)
+                                            {
+                                                <label>(啟用中)</label>
+                                            }
+                                            else
+                                            {
+                                                <label>(維護中)</label>
+                                            }
+                                            </td>
                                             <td>
                                                 @if(@Model.ErrorType != 2 ){
                                                 <select class="form-control" id="inspectorId1_@item.dispatchId" onChange="updateInspector('@item.dispatchId','inspectorId1',this.value)">
@@ -220,7 +244,16 @@
                                                 }
                                             </td>
                                             <td>
-                                                <a href="#" data-toggle=modal data-target=#myModal><button class="btn btn-sm btn-danger" onclick="storeId('@item.dispatchId','@Model.checkDate')" ><i class="glyphicon glyphicon-remove"></i></button></a>
+                                                @if (@item.ridStatus == 0)
+                                                {
+                                                    <a href="#" data-toggle=modal data-target=#myModal id="remove_@item.dispatchId"><button class="btn btn-sm btn-danger" onclick="storeId('@item.dispatchId','@Model.checkDate')"><i class="glyphicon glyphicon-remove"></i></button></a>
+                                                    <a style="display:none;" href="#" id="reset_@item.dispatchId"><button class="btn btn-sm btn-primary" onclick="redispatch('@item.dispatchId')"><i class="glyphicon glyphicon-plus"></i></button></a>
+                                                }
+                                                else
+                                                {
+                                                    <a style="display:none;" href="#" data-toggle=modal data-target=#myModal id="remove_@item.dispatchId"><button class="btn btn-sm btn-danger" onclick="storeId('@item.dispatchId','@Model.checkDate')"><i class="glyphicon glyphicon-remove"></i></button></a>
+                                                    <a href="#" id="reset_@item.dispatchId"><button class="btn btn-sm btn-primary" onclick="redispatch('@item.dispatchId')"><i class="glyphicon glyphicon-plus"></i></button></a>
+                                                }
                                             </td>
                                         </tr>
                                     }

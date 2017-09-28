@@ -29,7 +29,7 @@
           <Property Name="happenedTime" Type="datetime" />
           <Property Name="description" Type="nvarchar" MaxLength="128" />
           <Property Name="fixDate" Type="datetime" />
-          <Property Name="fixMethod" Type="smallint" />
+          <Property Name="fixMethod" Type="nvarchar" MaxLength="128" />
           <Property Name="isClose" Type="tinyint" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
@@ -186,7 +186,7 @@
           <Property Name="happenedTime" Type="datetime" />
           <Property Name="description" Type="nvarchar" MaxLength="128" />
           <Property Name="fixDate" Type="datetime" />
-          <Property Name="fixMethod" Type="smallint" />
+          <Property Name="fixMethod" Type="nvarchar" MaxLength="128" />
           <Property Name="isClose" Type="tinyint" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
@@ -197,6 +197,7 @@
             <PropertyRef Name="solutionId" />
           </Key>
           <Property Name="solutionId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
           <Property Name="description" Type="nvarchar" MaxLength="128" />
           <Property Name="isDelete" Type="tinyint" />
           <Property Name="createTime" Type="datetime" />
@@ -242,6 +243,7 @@
           <Property Name="active" Type="smallint" />
           <Property Name="description" Type="text" />
           <Property Name="createTime" Type="datetime" />
+          <Property Name="isDelete" Type="tinyint" />
         </EntityType>
         <EntityType Name="roomCheckRecord">
           <Key>
@@ -314,6 +316,23 @@
           <Property Name="inspectorName1" Type="nvarchar" MaxLength="64" />
           <Property Name="inspectorId2" Type="nvarchar" MaxLength="32" />
         </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'inspection.dbo.temp2' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="temp2">
+          <Key>
+            <PropertyRef Name="dispatchId" />
+            <PropertyRef Name="itemId" />
+          </Key>
+          <Property Name="dispatchId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="itemId" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="itemName" Type="nvarchar" MaxLength="64" />
+          <Property Name="checkDate" Type="date" />
+          <Property Name="inspectorId1" Type="nvarchar" MaxLength="32" />
+          <Property Name="inspectorCode1" Type="nvarchar" MaxLength="64" />
+          <Property Name="inspectorName1" Type="nvarchar" MaxLength="64" />
+          <Property Name="inspectorId2" Type="nvarchar" MaxLength="32" />
+          <Property Name="iidStatus" Type="tinyint" />
+        </EntityType>
         <EntityType Name="user">
           <Key>
             <PropertyRef Name="userId" />
@@ -381,15 +400,43 @@
     [temp].[inspectorId2] AS [inspectorId2]
     FROM [dbo].[temp] AS [temp]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="temp2" EntityType="Self.temp2" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [temp2].[dispatchId] AS [dispatchId], 
+    [temp2].[itemId] AS [itemId], 
+    [temp2].[itemName] AS [itemName], 
+    [temp2].[checkDate] AS [checkDate], 
+    [temp2].[inspectorId1] AS [inspectorId1], 
+    [temp2].[inspectorCode1] AS [inspectorCode1], 
+    [temp2].[inspectorName1] AS [inspectorName1], 
+    [temp2].[inspectorId2] AS [inspectorId2], 
+    [temp2].[iidStatus] AS [iidStatus]
+    FROM [dbo].[temp2] AS [temp2]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="inspectionModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="company">
+          <Key>
+            <PropertyRef Name="companyId" />
+          </Key>
+          <Property Name="companyId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="companyName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="logo" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="tel" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="fax" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="website" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="invoiceId" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="isDelete" Type="Byte" />
+          <Property Name="createTime" Type="DateTime" Precision="3" />
+          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityContainer Name="inspectionEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="company" EntityType="Self.company" />
           <EntitySet Name="abnormalDefinition" EntityType="inspectionModel.abnormalDefinition" />
-          <EntitySet Name="abnormalRecord" EntityType="inspectionModel.abnormalRecord" />
-          <EntitySet Name="company" EntityType="inspectionModel.company" />
           <EntitySet Name="exhibitionItem" EntityType="inspectionModel.exhibitionItem" />
           <EntitySet Name="exhibitionRoom" EntityType="inspectionModel.exhibitionRoom" />
           <EntitySet Name="fieldMap" EntityType="inspectionModel.fieldMap" />
@@ -408,7 +455,9 @@
           <EntitySet Name="systemSettings" EntityType="inspectionModel.systemSettings" />
           <EntitySet Name="user" EntityType="inspectionModel.user" />
           <EntitySet Name="userGroup" EntityType="inspectionModel.userGroup" />
+          <EntitySet Name="abnormalRecord" EntityType="inspectionModel.abnormalRecord" />
           <EntitySet Name="temp" EntityType="inspectionModel.temp" />
+          <EntitySet Name="temp2" EntityType="inspectionModel.temp2" />
         </EntityContainer>
         <EntityType Name="abnormalDefinition">
           <Key>
@@ -418,40 +467,6 @@
           <Property Name="abnormalCode" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
           <Property Name="abnormalName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
           <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="isDelete" Type="Byte" />
-          <Property Name="createTime" Type="DateTime" Precision="3" />
-          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="abnormalRecord">
-          <Key>
-            <PropertyRef Name="recordId" />
-          </Key>
-          <Property Name="recordId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="itemId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="sourceId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="deviceId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="abnormalId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="happenedTime" Type="DateTime" Precision="3" />
-          <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="fixDate" Type="DateTime" Precision="3" />
-          <Property Name="fixMethod" Type="Int16" />
-          <Property Name="isClose" Type="Byte" />
-          <Property Name="isDelete" Type="Byte" />
-          <Property Name="createTime" Type="DateTime" Precision="3" />
-          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="company">
-          <Key>
-            <PropertyRef Name="companyId" />
-          </Key>
-          <Property Name="companyId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="companyName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="logo" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="tel" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="fax" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="website" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="invoiceId" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
-          <Property Name="email" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
@@ -591,7 +606,7 @@
           <Property Name="happenedTime" Type="DateTime" Precision="3" />
           <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="fixDate" Type="DateTime" Precision="3" />
-          <Property Name="fixMethod" Type="Int16" />
+          <Property Name="fixMethod" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="isClose" Type="Byte" />
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
@@ -602,6 +617,7 @@
             <PropertyRef Name="solutionId" />
           </Key>
           <Property Name="solutionId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="isDelete" Type="Byte" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
@@ -647,6 +663,7 @@
           <Property Name="active" Type="Int16" />
           <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="createTime" Type="DateTime" Precision="3" />
+          <Property Name="isDelete" Type="Byte" />
         </EntityType>
         <EntityType Name="roomCheckRecord">
           <Key>
@@ -736,6 +753,24 @@
           <Property Name="createTime" Type="DateTime" Precision="3" />
           <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="abnormalRecord">
+          <Key>
+            <PropertyRef Name="recordId" />
+          </Key>
+          <Property Name="recordId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="itemId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="sourceId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="deviceId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="abnormalId" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="happenedTime" Type="DateTime" Precision="3" />
+          <Property Name="description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="fixDate" Type="DateTime" Precision="3" />
+          <Property Name="fixMethod" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="isClose" Type="Byte" />
+          <Property Name="isDelete" Type="Byte" />
+          <Property Name="createTime" Type="DateTime" Precision="3" />
+          <Property Name="lastUpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="temp">
           <Key>
             <PropertyRef Name="dispatchId" />
@@ -750,12 +785,44 @@
           <Property Name="inspectorName1" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
           <Property Name="inspectorId2" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
         </EntityType>
-        </Schema>
+        <EntityType Name="temp2">
+          <Key>
+            <PropertyRef Name="dispatchId" />
+            <PropertyRef Name="itemId" />
+          </Key>
+          <Property Name="dispatchId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="itemId" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="itemName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="checkDate" Type="DateTime" Precision="0" />
+          <Property Name="inspectorId1" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="inspectorCode1" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="inspectorName1" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="inspectorId2" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="iidStatus" Type="Byte" />
+        </EntityType>
+      </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="inspectionModelStoreContainer" CdmEntityContainer="inspectionEntities">
+          <EntitySetMapping Name="company">
+            <EntityTypeMapping TypeName="inspectionModel.company">
+              <MappingFragment StoreEntitySet="company">
+                <ScalarProperty Name="companyId" ColumnName="companyId" />
+                <ScalarProperty Name="companyName" ColumnName="companyName" />
+                <ScalarProperty Name="logo" ColumnName="logo" />
+                <ScalarProperty Name="tel" ColumnName="tel" />
+                <ScalarProperty Name="fax" ColumnName="fax" />
+                <ScalarProperty Name="website" ColumnName="website" />
+                <ScalarProperty Name="invoiceId" ColumnName="invoiceId" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+                <ScalarProperty Name="createTime" ColumnName="createTime" />
+                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="abnormalDefinition">
             <EntityTypeMapping TypeName="inspectionModel.abnormalDefinition">
               <MappingFragment StoreEntitySet="abnormalDefinition">
@@ -766,42 +833,6 @@
                 <ScalarProperty Name="abnormalName" ColumnName="abnormalName" />
                 <ScalarProperty Name="abnormalCode" ColumnName="abnormalCode" />
                 <ScalarProperty Name="abnormalId" ColumnName="abnormalId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="abnormalRecord">
-            <EntityTypeMapping TypeName="inspectionModel.abnormalRecord">
-              <MappingFragment StoreEntitySet="abnormalRecord">
-                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
-                <ScalarProperty Name="createTime" ColumnName="createTime" />
-                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
-                <ScalarProperty Name="isClose" ColumnName="isClose" />
-                <ScalarProperty Name="fixMethod" ColumnName="fixMethod" />
-                <ScalarProperty Name="fixDate" ColumnName="fixDate" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="happenedTime" ColumnName="happenedTime" />
-                <ScalarProperty Name="abnormalId" ColumnName="abnormalId" />
-                <ScalarProperty Name="deviceId" ColumnName="deviceId" />
-                <ScalarProperty Name="sourceId" ColumnName="sourceId" />
-                <ScalarProperty Name="itemId" ColumnName="itemId" />
-                <ScalarProperty Name="recordId" ColumnName="recordId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="company">
-            <EntityTypeMapping TypeName="inspectionModel.company">
-              <MappingFragment StoreEntitySet="company">
-                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
-                <ScalarProperty Name="createTime" ColumnName="createTime" />
-                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="invoiceId" ColumnName="invoiceId" />
-                <ScalarProperty Name="website" ColumnName="website" />
-                <ScalarProperty Name="fax" ColumnName="fax" />
-                <ScalarProperty Name="tel" ColumnName="tel" />
-                <ScalarProperty Name="logo" ColumnName="logo" />
-                <ScalarProperty Name="companyName" ColumnName="companyName" />
-                <ScalarProperty Name="companyId" ColumnName="companyId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -961,6 +992,7 @@
                 <ScalarProperty Name="createTime" ColumnName="createTime" />
                 <ScalarProperty Name="isDelete" ColumnName="isDelete" />
                 <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="solutionId" ColumnName="solutionId" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1001,6 +1033,7 @@
           <EntitySetMapping Name="roomActiveRecord">
             <EntityTypeMapping TypeName="inspectionModel.roomActiveRecord">
               <MappingFragment StoreEntitySet="roomActiveRecord">
+                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
                 <ScalarProperty Name="createTime" ColumnName="createTime" />
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="active" ColumnName="active" />
@@ -1103,6 +1136,25 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="abnormalRecord">
+            <EntityTypeMapping TypeName="inspectionModel.abnormalRecord">
+              <MappingFragment StoreEntitySet="abnormalRecord">
+                <ScalarProperty Name="lastUpdateTime" ColumnName="lastUpdateTime" />
+                <ScalarProperty Name="createTime" ColumnName="createTime" />
+                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+                <ScalarProperty Name="isClose" ColumnName="isClose" />
+                <ScalarProperty Name="fixMethod" ColumnName="fixMethod" />
+                <ScalarProperty Name="fixDate" ColumnName="fixDate" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="happenedTime" ColumnName="happenedTime" />
+                <ScalarProperty Name="abnormalId" ColumnName="abnormalId" />
+                <ScalarProperty Name="deviceId" ColumnName="deviceId" />
+                <ScalarProperty Name="sourceId" ColumnName="sourceId" />
+                <ScalarProperty Name="itemId" ColumnName="itemId" />
+                <ScalarProperty Name="recordId" ColumnName="recordId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="temp">
             <EntityTypeMapping TypeName="inspectionModel.temp">
               <MappingFragment StoreEntitySet="temp">
@@ -1113,6 +1165,21 @@
                 <ScalarProperty Name="checkDate" ColumnName="checkDate" />
                 <ScalarProperty Name="roomName" ColumnName="roomName" />
                 <ScalarProperty Name="roomId" ColumnName="roomId" />
+                <ScalarProperty Name="dispatchId" ColumnName="dispatchId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="temp2">
+            <EntityTypeMapping TypeName="inspectionModel.temp2">
+              <MappingFragment StoreEntitySet="temp2">
+                <ScalarProperty Name="iidStatus" ColumnName="iidStatus" />
+                <ScalarProperty Name="inspectorId2" ColumnName="inspectorId2" />
+                <ScalarProperty Name="inspectorName1" ColumnName="inspectorName1" />
+                <ScalarProperty Name="inspectorCode1" ColumnName="inspectorCode1" />
+                <ScalarProperty Name="inspectorId1" ColumnName="inspectorId1" />
+                <ScalarProperty Name="checkDate" ColumnName="checkDate" />
+                <ScalarProperty Name="itemName" ColumnName="itemName" />
+                <ScalarProperty Name="itemId" ColumnName="itemId" />
                 <ScalarProperty Name="dispatchId" ColumnName="dispatchId" />
               </MappingFragment>
             </EntityTypeMapping>

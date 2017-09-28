@@ -1,11 +1,8 @@
 ﻿@{
     ViewBag.Title = "智慧巡檢管理系統";
+    ViewBag.reportWork = "active";
+    ViewBag.itemReport = "active";
 }
-
-
-<ul>
-    
-</ul>
 
 <div class="wrapper">
     <div class="content-wrapper">
@@ -21,7 +18,7 @@
         <section class="content">
             <div class="row">
                 <div class="col-md-6">
-                    <div class="box box-info">
+                    <div class="box box-success">
                         <div class="box-header with-border">
                             <h3 class="box-title">新增展項通報</h3>
                         </div>
@@ -58,13 +55,8 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-2" for="exhibitionSelect">故障來源</label>
                                     <div class="col-md-7">
-                                        <select class="form-control" id="exhibitionSelect" name="sourceId" >
-                                            <option value="empty">----請選擇一個故障來源----</option>
-                                            @foreach (var item in ViewBag.reportSources)
-                                            {
-                                                <option value="@item.sourceId">@item.sourceName</option>
-                                            }
-                                        </select>
+                                        <text class="form-control">@ViewBag.reportSource.sourceName</text>
+                                        <input value ="@ViewBag.reportSource.sourceId" type="hidden" name="sourceId">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -82,7 +74,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-2" for="exhibitionSelect">通報者</label>
                                     <div class="col-md-7">
-                                        <select class="form-control" id="exhibitionSelect" name="reporter">
+                                        <select class="form-control" id="exhibitionSelect2" name="reporter">
                                             <option value="empty">----請選擇一個通報者----</option>
                                             <option value="保全">保全</option>
                                             <option value="志工">志工</option>

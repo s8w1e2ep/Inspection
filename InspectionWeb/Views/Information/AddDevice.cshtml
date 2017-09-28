@@ -1,6 +1,9 @@
 ﻿
 @{
     ViewBag.Title = "AddDevice";
+    ViewBag.imgManage = "active";
+    ViewBag.deviceManage = "active";
+    ViewBag.deviceAdd = "active";
 }
 
 <div class="content-wrapper">
@@ -22,9 +25,15 @@
                     <form class="form-horizontal" method="post" action="@Url.Action("AddDevice")" onsubmit="return formValidation();">
                         <div class="box-body">
                             <div id="itemNameDiv" class="form-group">
-                                <label for="itemName" class="col-md-2 control-label">新增體驗設施</label>
+                                <label for="itemName" class="col-md-2 control-label">體驗設施名稱</label>
                                 <div class="col-md-10">
                                     <input id="itemName" type="text" class="form-control" name="itemName" placeholder="輸入體驗設施名稱">
+                                </div>
+                            </div>
+                            <div id="itemCodeDiv" class="form-group">
+                                <label for="itemCode" class="col-md-2 control-label">體驗設施代碼</label>
+                                <div class="col-md-10">
+                                    <input id="itemCode" type="text" class="form-control" name="itemCode" placeholder="輸入體驗設施代碼">
                                 </div>
                             </div>
                         </div>

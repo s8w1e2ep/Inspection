@@ -6,6 +6,7 @@ using InspectionWeb.Models.ViewModel;
 using InspectionWeb.Services.Interface;
 using InspectionWeb.Services.Misc;
 using System.Linq;
+using System.IO;
 
 namespace InspectionWeb.Controllers
 {
@@ -161,7 +162,13 @@ namespace InspectionWeb.Controllers
                         fileName += ".png";
                     }
 
-                    var path = System.IO.Path.Combine(Server.MapPath("~/media/company"), fileName);
+                    var path = Server.MapPath("~/media/company/");
+
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    path = Path.Combine(path, fileName);
                     upload.SaveAs(path);
 
                     company instance = _companyService.GetByID(companyId);

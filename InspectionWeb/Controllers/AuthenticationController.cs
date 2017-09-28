@@ -42,7 +42,7 @@ namespace InspectionWeb.Controllers
         // POST: /User/Login/account/password
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Login(string account, string password)
+        public ActionResult Login(string account, string password, string remember)
         {
             user user = this._userService.Login(account, password);
 
@@ -54,15 +54,14 @@ namespace InspectionWeb.Controllers
                 Session["picture"] = user.picture;
                 
                 // 使用 MVC 內建登入並利用自訂權限 [AuthorizeUser] 功能
-                LoginProcess(user, false);
-
-                // 取得自訂的 userData
-                /*if (System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+                if(remember == "on")
                 {
-                    FormsIdentity id = (FormsIdentity)User.Identity;
-                    FormsAuthenticationTicket ticket = id.Ticket;
-                    var userData = ticket.UserData.Split(',');
-                }*/
+                    LoginProcess(user, true);
+                }
+                else
+                {
+                    LoginProcess(user, false);
+                }
 
                 return RedirectToAction("Index", "Home");
             }

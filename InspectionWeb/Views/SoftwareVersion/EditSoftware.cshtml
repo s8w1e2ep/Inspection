@@ -1,7 +1,23 @@
 ﻿@model InspectionWeb.Models.ViewModel.SoftwareVersionAddViewModel
 @{
     ViewBag.Title = "軟體版本檢視/修改";
+    ViewBag.basicData = "active";
+    ViewBag.softwareVersion = "active";
+    ViewBag.softwareList = "active";
 }
+
+<!-- data table -->
+<script src="~/theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="~/theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="~/theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="~/theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+
+<!-- x-editable component, Note to include x-editable after core library (bootstrap, jquery-ui)!-->
+<link href="~/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+<script src="~/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<!-- date format -->
+<script src="~/Scripts/jquery-dateFormat.min.js"></script>
 
 <script>
     $.fn.editable.defaults.mode = 'inline';

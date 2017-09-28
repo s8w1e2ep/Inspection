@@ -1,7 +1,21 @@
 ﻿@model IEnumerable<InspectionWeb.Models.ViewModel.MaintenanceWorkDetailViewModel>
 @{
     ViewBag.Title = "展延作業";
+    ViewBag.maintain = "active";
+    ViewBag.maintainExtend = "active";
 }
+
+<!-- daterange picker -->
+<script src="~/theme/adminlte/plugins/daterangepicker/moment.min.js"></script>
+<script src="~/theme/adminlte/plugins/daterangepicker/daterangepicker.js"></script>
+<link rel="stylesheet" href="~/Content/daterangepicker.css">
+
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
 
 <div class="wrapper">
     <div class="content-wrapper">
@@ -16,7 +30,7 @@
         <section class="content">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="box box-info">
+                    <div class="box box-success">
                         <div class="box-body">
                             <table id="PendingList" class="row-border" cellspacing="0" style="width: 100%;">
                                 <thead>

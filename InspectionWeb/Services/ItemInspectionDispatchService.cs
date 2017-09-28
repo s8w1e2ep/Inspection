@@ -126,6 +126,27 @@ namespace InspectionWeb.Services
             return result;
         }
 
+        public IResult Reset(itemInspectionDispatch instance)
+        {
+            IResult result = new Result(false);
+            if (instance == null)
+            {
+                throw new ArgumentNullException();
+            }
+            try
+            {
+                instance.isDelete = Convert.ToByte(0);
+                this._repository.Update(instance);
+                result.Success = true;
+            }
+            catch (Exception ex)
+            {
+                result.Exception = ex;
+            }
+
+            return result;
+        }
+
         public IResult Delete(string dispatchId)
         {
             IResult result = new Result(false);
@@ -191,17 +212,16 @@ namespace InspectionWeb.Services
         public IEnumerable<itemInspectionDispatchDetail> GetAllByDate(System.DateTime date)
         {
             System.Diagnostics.Debug.WriteLine(date.Date.ToString());
-            string sqlString = "IF OBJECT_ID('temp','U') IS NOT NULL DROP TABLE temp;"
+            string sqlString = "IF OBJECT_ID('temp2','U') IS NOT NULL DROP TABLE temp2;"
                                 + "SELECT IID.dispatchId, I.itemId, I.itemName, IID.checkDate, IID.inspectorId1, "
-                                + "U1.userCode AS inspectorCode1, U1.userName AS inspectorName1, IID.inspectorId2 "
-                                + "INTO temp "
+                                + "U1.userCode AS inspectorCode1, U1.userName AS inspectorName1, IID.inspectorId2, IID.isDelete AS iidStatus "
+                                + "INTO temp2 "
                                 + "FROM exhibitionItem I, itemInspectionDispatch IID LEFT OUTER JOIN[user] U1 on IID.inspectorId1 = U1.userId "
                                 + "WHERE IID.itemId = I.itemId "
                                 + "AND IID.checkDate = '" + date.ToString("d") + "' "
-                                + "AND IID.isDelete = 0 "
-                                + "SELECT temp.*, U2.userCode AS inspectorCode2, U2.userName AS inspectorName2 "
-                                + "FROM temp LEFT OUTER JOIN[user] U2 on temp.inspectorId2 = U2.userId "
-                                + "ORDER BY temp.dispatchId;";
+                                + "SELECT temp2.*, U2.userCode AS inspectorCode2, U2.userName AS inspectorName2 "
+                                + "FROM temp2 LEFT OUTER JOIN[user] U2 on temp2.inspectorId2 = U2.userId "
+                                + "ORDER BY temp2.dispatchId;";
 
             using (inspectionEntities db = new inspectionEntities())
             {

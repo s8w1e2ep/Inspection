@@ -1,6 +1,22 @@
 ﻿@{
     ViewBag.Title = "公司檢視/修改";
+    ViewBag.basicData = "active";
+    ViewBag.companyManage = "active";
+    ViewBag.companyList = "active";
 }
+
+<!-- data table -->
+<script src="~/theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="~/theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="~/theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="~/theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+
+<!-- x-editable component, Note to include x-editable after core library (bootstrap, jquery-ui)!-->
+<link href="~/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+<script src="~/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<!-- date format -->
+<script src="~/Scripts/jquery-dateFormat.min.js"></script>
 
 <div class="content-wrapper">
     <section class="content-header" style="margin-bottom: 15px;">
@@ -33,13 +49,15 @@
                                     <td><a href="#" id="companyName" data-type="text" data-pk="@ViewBag.company.companyId" data-url="@Url.Action("UpdateCompany")" data-title="輸入公司名稱">@ViewBag.company.companyName</a></td>
                                 </tr>
                                 <tr>
-                                    <td>公司logo</td>
+                                    <td>
+                                        公司logo&nbsp;
+                                        <input id="uploadImage" type='file' onchange="uploadImage(this)" style="display: none;">
+                                        <button class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="upload()"><i class="fa fa-camera"></i> 上傳照片</button>
+                                    </td>
                                     <td>
                                         <div class="progress" style="margin-bottom: 10px; display: none;">
                                             <div id="imgProgress" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                                         </div>
-                                        <input id="uploadImage" type='file' onchange="uploadImage(this)" style="display: none;">
-                                        <button class="btn btn-sm btn-primary" style="margin-left: 10px;" onclick="upload()"><i class="fa fa-camera"></i> 上傳照片</button>
                                         <img id="photo" class="img-responsive" src="@if (ViewBag.company.logo != null) { @Url.Content("~/media/company/" + ViewBag.company.logo) } else { @Url.Content("~/theme/AdminLTE/dist/img/avatar.png") }" alt="Company logo">
                                     </td>
                                 </tr>

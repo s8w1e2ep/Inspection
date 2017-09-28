@@ -54,7 +54,7 @@ namespace InspectionWeb.Services
 
             if (IsRepeat(name))
             {
-                result.ErrorMsg = "該設施已申請過, 可至檢修頁面查看";
+                result.ErrorMsg = "該設施已申請過, 可至查詢頁面查看";
             }
             else
             {
@@ -189,10 +189,6 @@ namespace InspectionWeb.Services
                 else if (propertyName == "happenedTime" || propertyName == "fixDate")
                 {
                     value = Convert.ToDateTime(value);
-                }
-                else if (propertyName == "fixMethod")
-                {
-                    value = Convert.ToInt16(value);
                 }
 
                 DateTime now = DateTime.Now;

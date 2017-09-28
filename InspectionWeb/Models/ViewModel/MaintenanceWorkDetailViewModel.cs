@@ -13,7 +13,6 @@ namespace InspectionWeb.Models.ViewModel
         public string roomName { get; set; }
         public string happendedTime { get; set; }
         public string description { get; set; }
-        public Nullable<short> fixMethod { get; set; }
         public Nullable<byte> isClose { get; set; }
         public Nullable<byte> isDelete { get; set; }
         public string createTime { get; set; }

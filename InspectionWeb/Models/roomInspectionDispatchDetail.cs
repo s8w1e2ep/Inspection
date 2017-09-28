@@ -15,6 +15,8 @@ namespace InspectionWeb.Models
 
         public string roomName { get; set; }
 
+        public short roomStatus { get; set; }
+
         public string inspectorId1 { get; set; }
 
         public string inspectorCode1 { get; set; }
@@ -27,5 +29,6 @@ namespace InspectionWeb.Models
 
         public string inspectorName2 { get; set; }
 
+        public byte ridStatus { get; set; }
     }
 }

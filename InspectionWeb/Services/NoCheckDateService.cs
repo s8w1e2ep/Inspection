@@ -55,6 +55,7 @@ namespace InspectionWeb.Services
             }
             result.ErrorMsg = "新增的非巡檢日期重複";
             return result;
+
         }
 
         public IResult Create(noCheckDate instance)

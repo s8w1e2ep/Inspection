@@ -5,28 +5,29 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="cea723bfe120417b935960ff16b092be" Name="Diagram1">
-        <EntityTypeShape EntityType="inspectionModel.abnormalDefinition" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="inspectionModel.abnormalRecord" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="inspectionModel.company" Width="1.5" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="inspectionModel.exhibitionItem" Width="1.5" PointX="4.75" PointY="4.75" />
-        <EntityTypeShape EntityType="inspectionModel.exhibitionRoom" Width="1.5" PointX="0.75" PointY="5.75" />
-        <EntityTypeShape EntityType="inspectionModel.fieldMap" Width="1.5" PointX="6.75" PointY="0.75" />
-        <EntityTypeShape EntityType="inspectionModel.itemCheckRecord" Width="1.5" PointX="6.75" PointY="4.75" />
-        <EntityTypeShape EntityType="inspectionModel.itemInspectionDispatch" Width="1.5" PointX="8.75" PointY="0.75" />
-        <EntityTypeShape EntityType="inspectionModel.manRepairRecord" Width="1.5" PointX="8.75" PointY="4.75" />
-        <EntityTypeShape EntityType="inspectionModel.noCheckDate" Width="1.5" PointX="6.75" PointY="9.75" />
-        <EntityTypeShape EntityType="inspectionModel.otherAbnormalRecord" Width="1.5" PointX="8.75" PointY="9.75" />
-        <EntityTypeShape EntityType="inspectionModel.quickSolution" Width="1.5" PointX="10.75" PointY="0.75" />
-        <EntityTypeShape EntityType="inspectionModel.reportDevice" Width="1.5" PointX="0.75" PointY="10.75" />
-        <EntityTypeShape EntityType="inspectionModel.reportSource" Width="1.5" PointX="2.75" PointY="10.75" />
-        <EntityTypeShape EntityType="inspectionModel.roomActiveRecord" Width="1.5" PointX="10.75" PointY="3.75" />
-        <EntityTypeShape EntityType="inspectionModel.roomCheckRecord" Width="1.5" PointX="10.75" PointY="6.75" />
-        <EntityTypeShape EntityType="inspectionModel.roomInspectionDispatch" Width="1.5" PointX="10.75" PointY="10.75" />
-        <EntityTypeShape EntityType="inspectionModel.softwareVersion" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="inspectionModel.company" Width="1.5" PointX="0.5" PointY="0.5" />
         <EntityTypeShape EntityType="inspectionModel.systemSettings" Width="1.5" PointX="12.75" PointY="4.75" />
-        <EntityTypeShape EntityType="inspectionModel.user" Width="1.5" PointX="12.75" PointY="8.75" />
-        <EntityTypeShape EntityType="inspectionModel.userGroup" Width="1.5" PointX="4.75" PointY="13.75" />
-        <EntityTypeShape EntityType="inspectionModel.temp" Width="1.5" PointX="12.75" PointY="13.75" />
+        <EntityTypeShape EntityType="inspectionModel.otherAbnormalRecord" Width="1.5" PointX="15.375" PointY="0.75" />
+        <EntityTypeShape EntityType="inspectionModel.abnormalDefinition" Width="1.5" PointX="3.75" PointY="0.75" />
+        <EntityTypeShape EntityType="inspectionModel.exhibitionItem" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="inspectionModel.exhibitionRoom" Width="1.5" PointX="2.75" PointY="4.75" />
+        <EntityTypeShape EntityType="inspectionModel.fieldMap" Width="1.5" PointX="4.75" PointY="4.75" />
+        <EntityTypeShape EntityType="inspectionModel.itemCheckRecord" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="inspectionModel.itemInspectionDispatch" Width="1.5" PointX="6.75" PointY="4.75" />
+        <EntityTypeShape EntityType="inspectionModel.manRepairRecord" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="inspectionModel.noCheckDate" Width="1.5" PointX="4.75" PointY="8.75" />
+        <EntityTypeShape EntityType="inspectionModel.quickSolution" Width="1.5" PointX="8.75" PointY="5.75" />
+        <EntityTypeShape EntityType="inspectionModel.reportDevice" Width="1.5" PointX="6.75" PointY="8.75" />
+        <EntityTypeShape EntityType="inspectionModel.reportSource" Width="1.5" PointX="8.75" PointY="8.75" />
+        <EntityTypeShape EntityType="inspectionModel.roomActiveRecord" Width="1.5" PointX="10.75" PointY="0.75" />
+        <EntityTypeShape EntityType="inspectionModel.roomCheckRecord" Width="1.5" PointX="0.75" PointY="10.75" />
+        <EntityTypeShape EntityType="inspectionModel.roomInspectionDispatch" Width="1.5" PointX="10.75" PointY="3.75" />
+        <EntityTypeShape EntityType="inspectionModel.softwareVersion" Width="1.5" PointX="10.75" PointY="7.75" />
+        <EntityTypeShape EntityType="inspectionModel.user" Width="1.5" PointX="10.75" PointY="11.75" />
+        <EntityTypeShape EntityType="inspectionModel.userGroup" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="inspectionModel.abnormalRecord" Width="1.5" PointX="3.375" PointY="12.75" />
+        <EntityTypeShape EntityType="inspectionModel.temp" Width="1.5" PointX="5.375" PointY="13.75" />
+        <EntityTypeShape EntityType="inspectionModel.temp2" Width="1.5" PointX="7.375" PointY="13.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

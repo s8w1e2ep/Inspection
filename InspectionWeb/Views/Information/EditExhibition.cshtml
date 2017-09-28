@@ -1,13 +1,37 @@
 ﻿@model InspectionWeb.Models.ViewModel.ExhibitionRoomAddViewModel
 @{
     ViewBag.Title = "展示廳管理";
+    ViewBag.imgManage = "active";
+    ViewBag.roomManage = "active";
+    ViewBag.roomList = "active";
 }
 
+<!-- x-editable component, Note to include x-editable after core library (bootstrap, jquery-ui)!-->
+<link href="~/plugins/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+<script src="~/plugins/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<!-- column order -->
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
 
+<!--svg-->
+<script src="~/Scripts/d3.min.js"></script>
+<script src="~/Scripts/rect.js"></script>
+<style>
+    .parkingBlock {
+        fill: lightblue;
+        stroke: blue;
+        stroke-width: 2px;
+        fill-opacity: 0.5
+    }
+</style>
 
 <script>
     $.fn.editable.defaults.mode = 'inline';
 
+    var deleteItemOrRecord = "";
     $(document).ready(function () {
 
         $('#infoExhibitItem').DataTable({
@@ -21,6 +45,19 @@
                 { "targets": 3, "width": "25%", "orderable": true },
             ],
         });
+
+        $('#infoActiveRecord').DataTable({
+            "paging": false,
+            "info": false,
+            "searching": false,
+            "columnDefs": [
+                { "targets": 0, "width": "40%", "orderable": true },
+                { "targets": 1, "width": "40%", "orderable": true },
+                { "targets": 2, "width": "20%", "orderable": true },
+            ],
+        });
+
+
 
 
         $('#roomName, #description').editable({
@@ -40,8 +77,10 @@
             emptytext: '未設定',
             success: function (response) {
                 $('#lastUpdateTime').html(response.lastUpdateTime)
+                location.reload();
             }
         });
+
         $('#inspectionUserId').editable({
             value: ["@if (@Model.Inspector != null) {<text>@Model.Inspector.userId</text>}"],
             emptytext: '未設定',
@@ -96,7 +135,12 @@
         });
 
         $('#modalYes').on('click', function (e) {
-            deleteExhibitionItem();
+            if (deleteItemOrRecord == "item") {
+                deleteExhibitionItem();
+            } else if (deleteItemOrRecord == "record") {
+                console.log('YOYOYO');
+                deleteRecord();
+            }
         });
 
 
@@ -111,12 +155,14 @@
 
 
     });
-    // delete exhibtionItem {{{
+    // delete  {{{
     var toDeleteItemId;
     function setId(itemId) {
+        deleteItemOrRecord = "item";
         toDeleteItemId = itemId;
     }
     function deleteExhibitionItem() {
+
         $.ajax({
             type: "DELETE",
             url: '@Url.Action("DeleteExhibitionItem", "Information")',
@@ -124,6 +170,22 @@
         }).done(function (msg) {
             $("#" + toDeleteItemId).remove();
         });
+    }
+
+    var toDeleteRecordId;
+    function setRecordId(recordId) {
+        deleteItemOrRecord = "record";
+        toDeleteRecordId = recordId;
+    }
+    function deleteRecord() {
+        $.ajax({
+            type: "DELETE",
+            url: '@Url.Action("DeleteRecord", "Information")',
+            data: $.param({ "recordId": toDeleteRecordId })
+        }).done(function (msg) {
+            $("#" + toDeleteRecordId).remove();
+        });
+
     }
     // }}}
 
@@ -171,40 +233,33 @@
     }
 
     // variables for d3
-    var svg;
-    var dragBehavior;
-    var attributesText;
+
 
     function loadMap(mapName) {
         $('#fieldMap').load(mapName, status, function () {
             if (status != 'error') {
                 svg = d3.select("svg");
-                attributesText = d3.select("#attributestext");
-                getSvgChangeFromServer();
-                dragBehavior = d3.behavior.drag()
-                    .on("drag", dragMove)
-                    .on("dragstart", dragStart)
-                    .on("dragend", dragEnd);
-                svg.call(dragBehavior);
+
+                // 圖層
+                var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                g.setAttributeNS(null, 'id', 'parkingBlock_g');
+                $('svg').append(g);
+
+                //區塊
+                new OldRectangle('', '', @Model.X, @Model.Y, @Model.Width, @Model.Height);
+
             }
         });
     }
 
-    function getSvgChangeFromServer() {
-        selectionRect.init(@Model.X, @Model.Y);
-        selectionRect.update(@Model.X + @Model.Width,@Model.Y + @Model.Height);
-    }
-
-    function saveSvgChangeToServer(){
-
+    function updateParkingBlockRangeToServer(parkingBlockGraphicObject, x, y, width, height) {
         var formData = new FormData();
-        var rect = selectionRect.getNewAttributes();
 
         formData.append('roomId', '@Model.RoomId');
-        formData.append('x', parseInt(rect.x, 10));
-        formData.append('y', parseInt(rect.y, 10));
-        formData.append('width', parseInt(rect.width, 10));
-        formData.append('height', parseInt(rect.height, 10));
+        formData.append('x', parseInt(x, 10));
+        formData.append('y', parseInt(y, 10));
+        formData.append('width', parseInt(width, 10));
+        formData.append('height', parseInt(height, 10));
 
         $.ajax({
             url: "@Url.Content("~/Information/SaveRoomSvgChangeToServer")",
@@ -319,7 +374,7 @@
                                 @*啟用*@
                                 <tr>
                                     <td>啟用</td>
-                                    <td>
+                                    <td> @* TODO *@
                                         <a href="#" id="active" data-type="select" data-pk="@Model.RoomId" data-url="@Url.Action("EditExhibition")" data-title="選擇啟用狀態"></a>
                                     </td>
                                 </tr>
@@ -363,7 +418,7 @@
         @*展項列表*@
         <div class="row">
             <div class="col-md-12">
-                <div class="box box-info">
+                <div class="box box-success">
                     <div class="box-header with-border">
                         <h3 class="box-title">
                             展項新增
@@ -411,6 +466,62 @@
                 </div>
             </div>
         </div>
+
+       @*啟用記錄列表*@ 
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-success">
+                    <div class="box-body">
+                        <table id="infoActiveRecord" class="row-border" cellspacing="0" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>啟用狀態</th>
+                                    <th>建立日期</th>
+                                    <th>操作選項</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.RoomActiveRecords)
+                                {
+                                    <tr id="@item.activityId">
+                                        @switch (item.active)
+                                        {
+                                            case 0:
+                                            <td>結束啟用</td>
+                                                break;
+                                            case 1:
+                                            <td>啟用</td>
+                                                break;
+                                            case 2:
+                                            <td>封廳中</td>
+                                            break;
+                                            default:
+                                                <td></td>
+                                                break;
+                                        }
+                                        <td>@item.createTime</td>
+
+                                        <td>
+                                            @*檢視按鈕*@
+                                            <a href="@Url.Action("EditRoomActiveRecord", new { id = item.activityId })" class="btn btn-sm btn-primary">
+                                                <i class="glyphicon glyphicon-menu-hamburger"></i>
+                                            </a>
+
+                                            @*刪除按鈕*@
+                                            <a href="#" class="btn btn-sm btn-danger" onclick="setRecordId('@item.activityId')" data-toggle=modal data-target=#myModal>
+                                                <i class="glyphicon glyphicon-remove"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </section>
 </div>
 
@@ -426,7 +537,7 @@
                 <h4 class="modal-title">刪除確認</h4>
             </div>
             <div class="modal-body">
-                <p>是否刪除此展項?刪除此展項會將一併刪除所有的相關資料。</p>
+                <p>是否刪除此展項?刪除將一併刪除所有的相關資料。</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">否</button>

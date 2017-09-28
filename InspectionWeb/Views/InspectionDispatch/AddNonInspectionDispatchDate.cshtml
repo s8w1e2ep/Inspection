@@ -2,6 +2,9 @@
 
 @{
     ViewBag.Title = "AddNonInspetionDispatchDate";
+    ViewBag.inspectWork = "active";
+    ViewBag.dispatch = "active";
+    ViewBag.inspectAdd = "active";
 }
 <!-- datepicker -->
 <link href="../../Scripts/datepicker3.css" rel="stylesheet" type="text/css" />
@@ -58,7 +61,7 @@
 
     function checkNonCheckDateRepeat() {
         var theDate = $('#nonCheckDate').val();
-        var m = @model;
+        //var m = @model;
         m.forEach(function (item, index) {
                 if (item.noCheckDate == theDate) {
                     alert("match");
@@ -178,6 +181,7 @@
                                  </tbody>
                                 }
                             </table>
+                        }
                         </div>
                     </div><!-- /.box -->
                 </div>

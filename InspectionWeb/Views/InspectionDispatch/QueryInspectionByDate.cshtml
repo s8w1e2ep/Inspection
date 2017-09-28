@@ -2,6 +2,9 @@
 
 @{
     ViewBag.Title = "QueryInspectionDispatchByDate";
+    ViewBag.inspectWork = "active";
+    ViewBag.dispatch = "active";
+    ViewBag.inspectQuery = "active";
 }
 
 <!-- datepicker -->
@@ -146,7 +149,7 @@
                                         @for(int i=0; i<@Model.roomInspectionDispatch.Count() ;i++)
                                          {
                                          <tr id="@Model.roomInspectionDispatch.ElementAt(i).dispatchId">
-                                             <td>@Model.roomInspectionDispatch.ElementAt(i).roomName (@Model.inspectionStatus.ElementAt(i).abnormalNum/@Model.inspectionStatus.ElementAt(i).solveNum/@Model.inspectionStatus.ElementAt(i).hasInspection/@Model.inspectionStatus.ElementAt(i).allItemNum)
+                                             <td>@Model.roomInspectionDispatch.ElementAt(i).roomName ( @Model.inspectionStatus.ElementAt(i).abnormalNum / @Model.inspectionStatus.ElementAt(i).solveNum / @Model.inspectionStatus.ElementAt(i).hasInspection / @Model.inspectionStatus.ElementAt(i).allItemNum)
                                              </td>
 
                                              <td>

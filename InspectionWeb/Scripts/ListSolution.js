@@ -22,10 +22,10 @@ $(document).ready(function () {
         "info": false,
         "searching": true,
         "columnDefs": [
-            { "targets": 0, "width": "70%", "orderable": true },
-            { "targets": 1, "width": "20%", "orderable": true },
-            { "targets": 2, "width": "10%", "orderable": false }
-            
+            { "targets": 0, "width": "25%", "orderable": true },
+            { "targets": 1, "width": "55%", "orderable": true },
+            { "targets": 2, "width": "10%", "orderable": true },
+            { "targets": 3, "width": "10%", "orderable": false }
         ]
     });
 

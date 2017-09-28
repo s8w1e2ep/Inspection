@@ -1,6 +1,9 @@
 ﻿@Model InspectionWeb.Models.ViewModel.ListReportSourceViewModel
 @{
     ViewBag.Title = "ListReportSource";
+    ViewBag.basicData = "active";
+    ViewBag.sourceDefine = "active";
+    ViewBag.sourceList = "active";
 }
 
 <!-- data table -->
@@ -84,7 +87,7 @@
                             <table id="sourceTable" class="row-border" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>來源編號</th>
+                                        <th>來源代碼</th>
                                         <th>來源名稱</th>
                                         <th>說明</th>
                                         <th>建立時間</th>

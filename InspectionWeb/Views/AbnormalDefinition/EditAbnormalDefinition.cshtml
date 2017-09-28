@@ -1,6 +1,9 @@
 ﻿
 @{
     ViewBag.Title = "EditAbnormalDefinition";
+    ViewBag.basicData = "active";
+    ViewBag.abnormalDefine = "active";
+    ViewBag.abnormalList = "active";
 }
 
 <!-- data table -->
@@ -81,7 +84,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr><td>異常編號</td><td><a href="#" id="abnormalCode" data-type="text" data-name="abnormalCode" data-pk="@Model.abnormalDefinitionId" data-url="@Url.Action("UpdateAbnormalDefinition")">@Model.abnormalDefinitionCode</a></td></tr>
+                                    <tr><td>異常代碼</td><td><a href="#" id="abnormalCode" data-type="text" data-name="abnormalCode" data-pk="@Model.abnormalDefinitionId" data-url="@Url.Action("UpdateAbnormalDefinition")">@Model.abnormalDefinitionCode</a></td></tr>
                                     <tr><td>異常名稱</td><td><a href="#" id="abnormalName" data-type="text" data-name="abnormalName" data-pk="@Model.abnormalDefinitionId" data-url="@Url.Action("UpdateAbnormalDefinition")">@Model.abnormalDefinitionName</a></td></tr>
                                     <tr><td>說明</td><td><a href="#" id="description" data-type="text" data-name="description" data-pk="@Model.abnormalDefinitionId" data-url="@Url.Action("UpdateAbnormalDefinition")">@Model.abnormalDefinitionDescription</a></td></tr>
                                     <tr><td>建立時間</td><td>@Model.createTime</td></tr>

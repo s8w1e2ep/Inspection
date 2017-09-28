@@ -14,6 +14,8 @@ namespace InspectionWeb.Services.Interface
 
         IResult Update(itemInspectionDispatch instance, string propertyName, object value);
 
+        IResult Reset(itemInspectionDispatch instance);
+
         IResult Delete(string dispatchId);
 
         bool IsExists(System.DateTime date);

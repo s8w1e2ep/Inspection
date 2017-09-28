@@ -38,8 +38,8 @@ namespace InspectionWeb.Services
                 instance.createTime = DateTime.Now;
                 instance.lastUpdateTime = instance.createTime;
                 instance.isDelete = 0;
-                instance.x = 0;
-                instance.y = 0;
+                instance.x = 30;
+                instance.y = 30;
 
                 this._repository.Create(instance);
                 result.Success = true;

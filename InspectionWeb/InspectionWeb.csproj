@@ -322,6 +322,9 @@
     <Compile Include="Models\temp.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\temp2.cs">
+      <DependentUpon>inspection.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\user.cs">
       <DependentUpon>inspection.tt</DependentUpon>
     </Compile>
@@ -345,9 +348,11 @@
     <Compile Include="Models\ViewModel\ListItemCheckRecordViewModel.cs" />
     <Compile Include="Models\ViewModel\MailViewModel.cs" />
     <Compile Include="Models\ViewModel\ManRepairViewModel.cs" />
+    <Compile Include="Models\ViewModel\NotifyDeviceAddViewModel.cs" />
     <Compile Include="Models\ViewModel\reportDetailedViewModel.cs" />
     <Compile Include="Models\ViewModel\ReportDeviceEditViewModel.cs" />
     <Compile Include="Models\ViewModel\ReportDeviceListViewModel.cs" />
+    <Compile Include="Models\ViewModel\RoomActiveRecordAddViewModel.cs" />
     <Compile Include="Models\ViewModel\SoftwareVersionAddViewModel.cs" />
     <Compile Include="Models\ViewModel\SoftwareVersionListViewModel.cs" />
     <Compile Include="Models\ViewModel\SystemArgAddViewModel.cs" />
@@ -356,6 +361,7 @@
     <Compile Include="Models\ViewModel\ListRoomInspectionDispatchViewModel.cs" />
     <Compile Include="Models\ViewModel\userListForInspectionViewModel.cs" />
     <Compile Include="Services\Interface\IManRepairRecordService.cs" />
+    <Compile Include="Services\Interface\IRoomActiveRecordService.cs" />
     <Compile Include="Services\ManRepairRecordService.cs" />
     <Compile Include="Services\CompanyService.cs" />
     <Compile Include="Services\Interface\ICompanyService.cs" />
@@ -407,6 +413,7 @@
     <Compile Include="Services\Misc\IResult.cs" />
     <Compile Include="Services\Misc\Result.cs" />
     <Compile Include="Services\OtherAbnormalRecordService.cs" />
+    <Compile Include="Services\RoomActiveRecordService.cs" />
     <Compile Include="Services\SolutionService.cs" />
     <Compile Include="Services\SystemArgService.cs" />
     <Compile Include="Services\UserGroupService.cs" />
@@ -465,13 +472,16 @@
       <DependentUpon>inspection.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\d3.min.js" />
     <Content Include="Scripts\editPendingListDetailedData.js" />
+    <Content Include="Scripts\Query.js" />
     <Content Include="Scripts\extendedWork.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\ListSolution.js" />
     <Content Include="Scripts\MaintenanceQuery.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\rect.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\showpedningList.js" />
@@ -523,7 +533,6 @@
     <Content Include="Views\Information\ListNotifyDevice.cshtml" />
     <Content Include="Views\ReportJob\AddExperience.cshtml" />
     <Content Include="Views\ReportJob\AddOther.cshtml" />
-    <Content Include="Views\ReportJob\EditExhibitionItem.cshtml" />
     <Content Include="Views\ReportJob\Query.cshtml" />
     <Content Include="Views\ReportJob\ItemDetailedData.cshtml" />
     <Content Include="Views\QuickSolution\Add.cshtml" />
@@ -532,7 +541,6 @@
     <Content Include="Views\MaintenanceWork\ExtendedWork.cshtml" />
     <Content Include="Views\MaintenanceWork\PendingList.cshtml" />
     <Content Include="Views\MaintenanceWork\Query.cshtml" />
-    <Content Include="Views\MaintenanceWork\WriteDetailedData.cshtml" />
     <Content Include="Views\AbnormalDefinition\AddAbnormalDefinition.cshtml" />
     <Content Include="Views\AbnormalDefinition\EditAbnormalDefinition.cshtml" />
     <Content Include="Views\AbnormalDefinition\ListAbnormalDefinition.cshtml" />
@@ -562,6 +570,7 @@
     <Content Include="Views\System\AddSystemArg.cshtml" />
     <Content Include="Views\System\EditSystemArg.cshtml" />
     <Content Include="Views\System\ListSystemArg.cshtml" />
+    <Content Include="Views\Information\EditRoomActiveRecord.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

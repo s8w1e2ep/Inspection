@@ -1,8 +1,18 @@
 ﻿@{
     ViewBag.Title = "整體通報查詢";
+    ViewBag.reportWork = "active";
+    ViewBag.allReport = "active";
 }
-<!-- daterange picker -->
-<link rel="stylesheet" href="~/theme/AdminLTE/plugins/daterangepicker/daterangepicker-bs3.css">
+<!-- datepicker -->
+<link rel="stylesheet" href="../../theme/adminlte/plugins/datepicker/datepicker3.css">
+<script src="../../theme/adminlte/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="../../theme/adminlte/plugins/datepicker/locales/bootstrap-datepicker.zh-TW.js"></script>
+<!-- data table -->
+<script src="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/jquery.dataTables.min.css">
+<!-- column order -->
+<script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
 
 <div class="wrapper">
     <div class="content-wrapper">
@@ -20,7 +30,7 @@
             <!--query condition-->
             <div class="row">
                 <div class="col-md-12">
-                    <div class="box box-info" style="padding: 5px;">
+                    <div class="box box-success" style="padding: 5px;">
                         <div class="box-header with-border">
                             <h3 class="box-title">篩選條件</h3>
                         </div>
@@ -87,7 +97,7 @@
             <!--list -->
             <div class="row">
                 <div class="col-md-12">
-                    <div class="box box-info">
+                    <div class="box box-success">
                         <!--ExhibitionItem  List-->
                         <div class="box-header">
                             <h3 class="box-title">通報列表-展項</h3>
@@ -112,7 +122,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="box box-info">
+                    <div class="box box-success">
                         <!--Experience  List-->
                         <div class="box-header">
                             <h3 class="box-title">通報列表-體驗設施</h3>
@@ -137,7 +147,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="box box-info">
+                    <div class="box box-success">
                         <!--Other  List-->
                         <div class="box-header">
                             <h3 class="box-title">通報列表-其他設施</h3>

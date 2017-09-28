@@ -199,6 +199,31 @@ namespace InspectionWeb.Controllers
             }
         }
 
+        public ActionResult ResetRoomInspectionDispatch(inspectionDispatchJson dispatchJson)
+        {
+            var roomDispatchId = dispatchJson.pk;
+            var roomDispatch = this._RoomInspectionDispatchService.GetById(roomDispatchId);
+            if (roomDispatch != null && ModelState.IsValid)
+            {
+                IResult result = this._RoomInspectionDispatchService.Reset(roomDispatch);
+                roomDispatch = this._RoomInspectionDispatchService.GetById(roomDispatchId);
+                if (result.Success)
+                {
+                    string lastUpdateTime = roomDispatch.lastUpdateTime.ToString();
+                    return Json(new { result = 1, roomDispatchId = roomDispatchId });
+                }
+                else
+                {
+                    return Json(new { result = 0, roomDispatchId = roomDispatchId });
+                }
+            }
+            else
+            {
+                return Json(new { result = 0, roomDispatchId = roomDispatchId });
+                //return RedirectToAction("ListReportSource");
+            }
+        }
+
         private ListRoomInspectionDispatchViewModel Data2RoomViewModel(List<roomInspectionDispatchDetail> dispatchList, List<userListForInspectionViweModel> userList, IResult result,System.DateTime checkDate)
         {
             ListRoomInspectionDispatchViewModel viewModel = new ListRoomInspectionDispatchViewModel();
@@ -362,6 +387,30 @@ namespace InspectionWeb.Controllers
             if (itemDispatch != null && ModelState.IsValid)
             {
                 IResult result = this._ItemInspectionDispatchService.Update(itemDispatch, dispatchJson.name, dispatchJson.value);
+                itemDispatch = this._ItemInspectionDispatchService.GetById(itemDispatchId);
+                if (result.Success)
+                {
+                    string lastUpdateTime = itemDispatch.lastUpdateTime.ToString();
+                    return Json(new { result = 1, itemDispatchId = itemDispatchId });
+                }
+                else
+                {
+                    return Json(new { result = 0, itemDispatchId = itemDispatchId });
+                }
+            }
+            else
+            {
+                return Json(new { result = 0, itemDispatchId = itemDispatchId });
+            }
+        }
+
+        public ActionResult ResetItemInspectionDispatch(inspectionDispatchJson dispatchJson)
+        {
+            var itemDispatchId = dispatchJson.pk;
+            var itemDispatch = this._ItemInspectionDispatchService.GetById(itemDispatchId);
+            if (itemDispatch != null && ModelState.IsValid)
+            {
+                IResult result = this._ItemInspectionDispatchService.Reset(itemDispatch);
                 itemDispatch = this._ItemInspectionDispatchService.GetById(itemDispatchId);
                 if (result.Success)
                 {
