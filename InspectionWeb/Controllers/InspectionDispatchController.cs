@@ -428,7 +428,8 @@ namespace InspectionWeb.Controllers
         public ActionResult ListNonInspectionDispatchDate()
         {
             var TotalViewModel = new List<NoCheckDateViewModel>();
-            var noCheckDates = this._noCheckDateService.GetAll().ToList();
+            DateTime today = DateTime.Now;
+            var noCheckDates = this._noCheckDateService.GetAll().Where(x => x.noCheckDate1.Value.Month == today.Month && x.noCheckDate1.Value.Year == today.Year);
             foreach (var item in noCheckDates)
             {
                 NoCheckDateViewModel noCheckDateViewModel = this.Data2NoChekDateViewModel(item);
@@ -450,6 +451,20 @@ namespace InspectionWeb.Controllers
                 TotalViewModel.Add(noCheckDateViewModel);
             }
             return View(TotalViewModel);
+        }
+
+        public ActionResult ListNonInspectionDispatchDate2(string nonCheckDateStart, string nonCheckDateEnd)
+        {
+            System.DateTime start = Convert.ToDateTime(nonCheckDateStart);
+            System.DateTime end = Convert.ToDateTime(nonCheckDateEnd);
+            var TotalViewModel = new List<NoCheckDateViewModel>();
+            var noCheckDates = this._noCheckDateService.GetAllWithTimeInterval(start, end).ToList();
+            foreach (var item in noCheckDates)
+            {
+                NoCheckDateViewModel noCheckDateViewModel = this.Data2NoChekDateViewModel(item);
+                TotalViewModel.Add(noCheckDateViewModel);
+            }
+            return View("ListNonInspectionDispatchDate",TotalViewModel);
         }
 
         private List<userListForInspectionViweModel> GetUserListForInspection()
@@ -486,16 +501,14 @@ namespace InspectionWeb.Controllers
         {
             System.DateTime noCheckDate = Convert.ToDateTime(nonCheckDate);
             IResult result = this._noCheckDateService.Create(noCheckDate, description, morning, afternoon,setupId);
-            System.Diagnostics.Debug.WriteLine("msg: " + result.ErrorMsg);
+            var TotalViewModel = new List<NoCheckDateViewModel>();
             if (result.Success == false)
             {
                 NoCheckDateViewModel vm = new NoCheckDateViewModel();
                 vm.ErrorMsg = result.ErrorMsg;
-                return View(vm);
+                TotalViewModel.Add(vm);
             }
 
-
-            var TotalViewModel = new List<NoCheckDateViewModel>();
             var noCheckDates = this._noCheckDateService.GetAll().ToList();
             foreach (var item in noCheckDates)
             {

@@ -54,7 +54,38 @@ namespace InspectionWeb.Controllers
         [HttpGet]
         public ActionResult AddRoomCheckRecord()
         {
-            return View();
+            System.DateTime checkDate = DateTime.Today; ;
+            //檢查非巡檢日
+            IResult nonCkeck = new Result(false);
+            int isNonCheckDate = this._NoCheckDateService.IsExists(checkDate);
+            if (isNonCheckDate == 1)
+            {
+                nonCkeck.ErrorMsg = "此日非巡檢日";
+                nonCkeck.Message = "1";
+                return View(Data2RoomViewModel(null, nonCkeck, checkDate));
+            }
+            else if (isNonCheckDate == 2)
+            {
+                nonCkeck.ErrorMsg = "上午非巡檢日";
+                nonCkeck.Message = "2";
+            }
+            else if (isNonCheckDate == 3)
+            {
+                nonCkeck.ErrorMsg = "下午非巡檢日";
+                nonCkeck.Message = "3";
+            }
+            else
+            {
+                nonCkeck.ErrorMsg = "";
+                nonCkeck.Message = "0";
+            }
+            List<roomInspectionDispatchDetail> allDetailData = new List<roomInspectionDispatchDetail>();
+            var allData = this._RoomCheckRecordService.GetAllByDate(checkDate);
+            foreach (var item in allData)
+            {
+                allDetailData.Add(item);
+            }
+            return View(Data2RoomViewModel(allDetailData, nonCkeck, checkDate));
         }
 
         [HttpPost]
@@ -135,7 +166,38 @@ namespace InspectionWeb.Controllers
         [HttpGet]
         public ActionResult AddItemCheckRecord()
         {
-            return View();
+            System.DateTime checkDate = DateTime.Today;
+            //檢查非巡檢日
+            IResult nonCkeck = new Result(false);
+            int isNonCheckDate = this._NoCheckDateService.IsExists(checkDate);
+            if (isNonCheckDate == 1)
+            {
+                nonCkeck.ErrorMsg = "此日非巡檢日";
+                nonCkeck.Message = "1";
+                return View(Data2ItemViewModel(null, nonCkeck, checkDate));
+            }
+            else if (isNonCheckDate == 2)
+            {
+                nonCkeck.ErrorMsg = "上午非巡檢日";
+                nonCkeck.Message = "2";
+            }
+            else if (isNonCheckDate == 3)
+            {
+                nonCkeck.ErrorMsg = "下午非巡檢日";
+                nonCkeck.Message = "3";
+            }
+            else
+            {
+                nonCkeck.ErrorMsg = "";
+                nonCkeck.Message = "0";
+            }
+            List<itemInspectionDispatchDetail> allDetailData = new List<itemInspectionDispatchDetail>();
+            var allData = this._ItemCheckRecordServices.GetAllByDate(checkDate);
+            foreach (var item in allData)
+            {
+                allDetailData.Add(item);
+            }
+            return View(Data2ItemViewModel(allDetailData, nonCkeck, checkDate));
         }
 
         [HttpPost]

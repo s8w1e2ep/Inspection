@@ -14,7 +14,7 @@
 <script src="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <link rel="stylesheet" href="../../theme/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
 <script>
-    var toDispatchId, theDate;
+    var toDispatchId, ns, ne, ls, le;
 
     $(function () {
         setNonInspectionTable();
@@ -29,8 +29,11 @@
             todayHighlight: true
         });
         $('#modalYes').on('click', function (e) {
-           deleteNonCheckDate();
+            deleteNonCheckDate();
         });
+
+        $('#year').html(new Date().getFullYear());
+        setMonthButton();
     });
 
     function fieldValidation(field) {
@@ -67,19 +70,63 @@
         toDispatchId = id;
     }
 
-    function deleteNonCheckDate(){
-    $.ajax({
-        url: '@Url.Action("DeleteNonCheckDateDispatch")',
-        data: $.param({ 'id': toDispatchId }),
-        type: 'DELETE',
-    }).done(function (msg) {
+    function deleteNonCheckDate() {
+        $.ajax({
+            url: '@Url.Action("DeleteNonCheckDateDispatch")',
+            data: $.param({ 'id': toDispatchId }),
+            type: 'DELETE',
+        }).done(function (msg) {
         //console.log(msg);
             if (msg.result == 1) {
                 $('#' + toDispatchId).remove();
-            }  
+            }
         });
     }
 
+    function setMonthButton() {
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = now.getMonth();
+        var lastMonth = 0;
+        var lastYear = 0;
+        var nextMonth = 0;
+        var nextYear = 0;
+        if (month == 0) {
+            lastMonth = 12;
+            lastYear = year - 1;
+            nextMonth = month += 2;
+            nextYear = year;
+        } else if (month == 11) {
+            lastMonth = 11;
+            lastYear = year;
+            nextMonth = 1;
+            nextYear = year + 1;
+        } else {
+            lastMonth = month;
+            lastYear = year;
+            nextMonth = month + 2;
+            nextYear = year;
+        }
+        ns = lastYear + "/" + lastMonth + "/01";
+        ne = lastYear + "/" + lastMonth + "/31";
+        ls = nextYear + "/" + nextMonth + "/01";
+        le = nextYear + "/" + nextMonth + "/31";
+    }
+    
+    function getLastMonth() {
+        window.location = "ListNonInspectionDispatchDate2?nonCheckDateEnd=2017/08/31&nonCheckDateStart=2017/08/01";
+    }
+    function getNextMonth() {
+        window.location = "ListNonInspectionDispatchDate2?nonCheckDateEnd=2017/08/31&nonCheckDateStart=2017/08/01";
+        window.location = "@Url.Action("ListNonInspectionDispatchDate2", "InspectionDispatch", new { nonCheckDateStart = " + ns + ", nonCheckDateEnd = " + ne + " })";
+    }
+
+    $("a[data-form-method='post']").click(function (event) {
+        event.preventDefault();
+        var element = $(this);
+        var action = element.attr("href");
+    }
+    )
 </script>
 
 
@@ -103,81 +150,90 @@
                 <div class="col-md-10">
                     <!-- general form elements -->
                     <div class="box box-success">
-                    <form class="form-horizontal" method="post" action="@Url.Action("ListNonInspectionDispatchDate")" onsubmit="return formValidation();">
-                        <div class="box-header with-border">
-                            <div id="nonCheckDateStartDiv" class="form-group">
-                                <div class="col-sm-2">
-                                    <label for="dispatchDate" class="control-label">非巡檢開始日期</label>
-                                </div>
-                                <div class="input-group col-sm-3">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-clock-o"></i>
+                        <form class="form-horizontal" method="post" action="@Url.Action("ListNonInspectionDispatchDate")" onsubmit="return formValidation();">
+                            <div class="box-header with-border">
+                                <div id="nonCheckDateStartDiv" class="form-group">
+                                    <div class="col-sm-2">
+                                        <label for="dispatchDate" class="control-label">非巡檢開始日期</label>
                                     </div>
-                                    <input type="text" class="form-control pull-right" id="nonCheckDateStart" name="nonCheckDateStart">
-                                </div>
-                            </div>
-                            <div id="nonCheckDateEndDiv" class="form-group">
-                                <div class="col-sm-2">
-                                    <label for="dispatchDate" class="control-label">非巡檢結束日期</label>
-                                </div>
-                                <div class="input-group col-sm-3">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-clock-o"></i>
+                                    <div class="input-group col-sm-3">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" id="nonCheckDateStart" name="nonCheckDateStart">
                                     </div>
-                                    <input type="text" class="form-control pull-right" id="nonCheckDateEnd" name="nonCheckDateEnd">
                                 </div>
-                                <br/>
-                                <div class="col-sm-12">
-                                    <button type="submit" class="btn btn-success">搜尋</button>
-                                </div>
-                            </div>                           
-                        </div><!-- /.box-header -->
+                                <div id="nonCheckDateEndDiv" class="form-group">
+                                    <div class="col-sm-2">
+                                        <label for="dispatchDate" class="control-label">非巡檢結束日期</label>
+                                    </div>
+                                    <div class="input-group col-sm-3">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" id="nonCheckDateEnd" name="nonCheckDateEnd">
+                                    </div>
+                                    <br />
+                                    <div class="col-sm-12">
+                                        <button type="submit" class="btn btn-success">搜尋</button>
+                                    </div>
+                                </div>  
+                            </div><!-- /.box-header -->  
                         </form>
-                        <div class="box-body">
-                            <table id="nonCheckDateTable" class="row-border" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>非巡檢日期</th>
-                                        <th>上午</th>
-                                        <th>下午</th>
-                                        <th>原因</th>
-                                        <th>操作選項</th>
-                                    </tr>
-                                </thead>
-                               @if (@Model != null)
-                               {
-                                <tbody>
-                                    @foreach (var item in @Model)
-                                    {
-                                        <tr id="@item.id">
-                                            <td>@item.noCheckDate</td>
-                                            @if (item.am == Convert.ToInt16(true))
-                                            {
-                                                <td>V</td>
-                                            }
-                                            else
-                                            {
-                                                <td>X</td>
-                                            }
-                                            @if (item.pm == Convert.ToInt16(true))
-                                            {
-                                                <td>V</td>
-                                            }
-                                            else
-                                            {
-                                                <td>X</td>
-                                            }
-                                            <td>@item.description</td>
-                                            <td>
-                                                <a href="#" data-toggle=modal data-target=#myModal><button class="btn btn-sm btn-danger" onclick="storeId('@item.id')"><i class="glyphicon glyphicon-remove"></i></button></a>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                               }
-                            </table>
+                        <br />
+                        <div class="col-md-4">
+                            <button class="btn btn-default" onclick="getLastMonth()">上個月</button>
+                            &nbsp;&nbsp;<label id="year"></label>&nbsp;&nbsp;
+                            <button class="btn btn-default" onclick="getNextMonth()">下個月</button>
                         </div>
-                    </div><!-- /.box -->
+                        <br />
+                        <br />
+                        <br />
+                        <div class="box-body">
+                                <table id="nonCheckDateTable" class="row-border" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>非巡檢日期</th>
+                                            <th>上午</th>
+                                            <th>下午</th>
+                                            <th>原因</th>
+                                            <th>操作選項</th>
+                                        </tr>
+                                    </thead>
+                                    @if (@Model != null)
+                                    {
+                                        <tbody>
+                                            @foreach (var item in @Model)
+                                            {
+                                                <tr id="@item.id">
+                                                    <td>@item.noCheckDate</td>
+                                                    @if (item.am == Convert.ToInt16(true))
+                                                    {
+                                                        <td>V</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>X</td>
+                                                    }
+                                                    @if (item.pm == Convert.ToInt16(true))
+                                                    {
+                                                        <td>V</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>X</td>
+                                                    }
+                                                    <td>@item.description</td>
+                                                    <td>
+                                                        <a href="#" data-toggle=modal data-target=#myModal><button class="btn btn-sm btn-danger" onclick="storeId('@item.id')"><i class="glyphicon glyphicon-remove"></i></button></a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    }
+                                </table>
+                            </div>
+                        </div><!-- /.box -->
                 </div>
             </div>
 

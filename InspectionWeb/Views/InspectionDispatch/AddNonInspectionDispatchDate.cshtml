@@ -1,4 +1,5 @@
-﻿
+﻿@model IEnumerable<InspectionWeb.Models.ViewModel.NoCheckDateViewModel>
+
 @{
     ViewBag.Title = "AddNonInspetionDispatchDate";
 }
@@ -24,7 +25,6 @@
             language: 'zh-TW',
             todayHighlight: true
         })
-
     });
 
     function fieldValidation(field) {
@@ -55,7 +55,19 @@
             ]
         });
     }
-    
+
+    function checkNonCheckDateRepeat() {
+        var theDate = $('#nonCheckDate').val();
+        var m = @model;
+        m.forEach(function (item, index) {
+                if (item.noCheckDate == theDate) {
+                    alert("match");
+                    break;
+                }
+        });
+
+    }
+
 </script>
 
 <style>
@@ -92,7 +104,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-clock-o"></i>
                                         </div>
-                                        <input type="text" class="form-control pull-right" id="nonCheckDate" name="nonCheckDate">
+                                        <input type="text" class="form-control pull-right" id="nonCheckDate" name="nonCheckDate" onchange="checkNonCheckDateRepeat()">
                                     </div>
                                 </div>
                                 <div id="typeDiv" class="form-group">
@@ -119,7 +131,14 @@
                             </form>
                          </div><!-- /.box-header -->
                         <div class="box-body">
-                            <table id="nonCheckDateTable" class="row-border" cellspacing="0" width="100%">
+                            @if (@Model != null && !string.IsNullOrEmpty(@Model.First().ErrorMsg))
+                            {
+                                <div class="form-group has-error">
+                                    <label class="col-sm-2"></label>
+                                    <label class="col-sm-10">@Model.First().ErrorMsg</label>
+                                </div>
+                            }
+                            <table id="nonCheckDateTable" class="row-border" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>非巡檢日期</th>
@@ -128,31 +147,34 @@
                                         <th>原因</th>
                                     </tr>
                                 </thead>
-                                @if (@Model != null ){
+                                @if (@Model != null)
+                                {
                                 <tbody>
                                 @foreach (var item in @Model)
                                 {
-                                    <tr id="@item.id">
-                                         <td>@item.noCheckDate</td>
-                                         @if (item.am == Convert.ToInt16(true))
-                                         {
-                                            <td>V</td>
-                                         }
-                                         else
-                                         {
-                                            <td>X</td>
-                                         }
-                                        @if (item.pm == Convert.ToInt16(true))
-                                        {
-                                            <td>V</td>
-                                        }
-                                        else
-                                        {
-                                            <td>X</td>
-                                        }
-                                         <td>@item.description</td>
-                                    </tr>
-                                 }
+                                    if (string.IsNullOrEmpty(@item.ErrorMsg)) {
+                                        <tr id="@item.id">
+                                            <td>@item.noCheckDate</td>
+                                             @if (item.am == Convert.ToInt16(true))
+                                             {
+                                                <td>V</td>
+                                             }
+                                             else
+                                             {
+                                                <td>X</td>
+                                             }
+                                            @if (item.pm == Convert.ToInt16(true))
+                                            {
+                                                <td>V</td>
+                                            }
+                                            else
+                                            {
+                                                <td>X</td>
+                                            }
+                                             <td>@item.description</td>
+                                        </tr>
+                                    }
+                                }
                                  </tbody>
                                 }
                             </table>
