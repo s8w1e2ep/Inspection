@@ -714,9 +714,9 @@ namespace InspectionWeb.Controllers
             return Json(new { id = record.roomId });
 
         }
-        public ActionResult EditRoomActiveRecord(string id)
-        {
 
+        public ActionResult EditRoomActiveRecord(string id)
+        {            
             string recordId = id;
             roomActiveRecord record = _roomActiveRecordService.GetById(recordId);
             string roomName = _exhibitionRoomService.GetById(record.roomId).roomName;
@@ -735,10 +735,28 @@ namespace InspectionWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditRoomActiveRecord()
+        public ActionResult EditRoomActiveRecord(FormCollection fc)
         {
+            string recordId = fc["pk"];
+            roomActiveRecord record = this._roomActiveRecordService.GetById(recordId);
+            switch (fc["name"])
+            {
+                case "description":
+                    record.description = fc["value"];
+                    break;
+                case "createTime":
+                    record.createTime = Convert.ToDateTime(fc["value"]);
+                    break;
+                case "active":
+                    record.active = Convert.ToInt16(fc["value"]);
+                    break;
 
-            return Json(null);
+                default:
+                    break;
+            }
+
+            this._roomActiveRecordService.Update(record);
+            return Json("[]");
         }
 
         public ActionResult DeleteRecord(string recordId)
