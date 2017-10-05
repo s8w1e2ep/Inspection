@@ -66,7 +66,7 @@
     function AddCheckRecord(roomId, inspectorId, date, status, type) {
         $.ajax({
             url: '@Url.Action("AddNewRoomRecord")',
-            data: $.param({ 'roomId': roomId, 'inspectorId': inspectorId, 'checkDate': date, 'status': status, 'checkTimeType': type }),
+            data: $.param({ 'roomId': roomId, 'inspectorId': inspectorId, 'checkDate': date, 'dispatchId': dispatchId, 'status': status, 'checkTimeType': type }),
             type: 'UPDATE',
         }).done(function (msg) {
             console.log(msg);
@@ -154,7 +154,7 @@
                                                 <td>@item.roomName</td>
                                                 <td>@item.inspectorCode1 @item.inspectorName1</td>
                                                 <td>
-                                                    <a href="#"><button class="btn btn-lg btn-success" onclick="AddCheckRecord('@item.roomId', '@item.inspectorId1', '@Model.checkDate', 4, 1)">正常</button></a>
+                                                    <a href="#"><button class="btn btn-lg btn-success" onclick="AddCheckRecord('@item.roomId', '@item.inspectorId1', '@Model.checkDate',4, 1)">正常</button></a>
                                                     <a href="#"><button class="btn btn-lg btn-danger" onclick="AddCheckRecord('@item.roomId', '@item.inspectorId1', '@Model.checkDate', 3, 1)">異常通報</button></a>
                                                 </td>
                                             </tr>

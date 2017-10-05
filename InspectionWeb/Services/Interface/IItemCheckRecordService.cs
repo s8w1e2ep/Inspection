@@ -9,7 +9,7 @@ namespace InspectionWeb.Services.Interface
 
         IResult Create(itemCheckRecord instance);
 
-        IResult Create(string itemId, string inspectorId, string date, int status, int type);
+        IResult Create(string itemId, string inspectorId, string date, string dispatchId, int status, int type);
 
         itemCheckRecord GetById(string checkId);
 

@@ -21,6 +21,7 @@ namespace InspectionWeb.Controllers
 
         public class newItemRecordDataJson
         {
+            public string dispatchId { get; set; }
             public string itemId { get; set; }
             public string checkDate { get; set; }
             public string inspectorId { get; set; }
@@ -30,6 +31,7 @@ namespace InspectionWeb.Controllers
 
         public class newRoomRecordDataJson
         {
+            public string dispatchId { get; set; }
             public string roomId { get; set; }
             public string checkDate { get; set; }
             public string inspectorId { get; set; }
@@ -147,10 +149,11 @@ namespace InspectionWeb.Controllers
             string roomId = json.roomId;
             string inspectorId = json.inspectorId;
             string checkDate = json.checkDate;
+            string dispatchId = json.dispatchId;
             int status = json.status;
             int checkTimeType = json.checkTimeType;
 
-            IResult result = this._RoomCheckRecordService.Create(roomId, inspectorId, checkDate, status, checkTimeType);
+            IResult result = this._RoomCheckRecordService.Create(roomId, inspectorId, checkDate, dispatchId, status, checkTimeType);
             if (result.Success == false)
             {
                 System.Diagnostics.Debug.WriteLine("insert error");
@@ -259,10 +262,11 @@ namespace InspectionWeb.Controllers
             string itemId = json.itemId;
             string inspectorId = json.inspectorId;
             string checkDate = json.checkDate;
+            string dispatchId = json.dispatchId;
             int status = json.status;
             int checkTimeType = json.checkTimeType;
 
-            IResult result = this._ItemCheckRecordServices.Create(itemId, inspectorId, checkDate, status, checkTimeType);
+            IResult result = this._ItemCheckRecordServices.Create(itemId, inspectorId, checkDate, dispatchId, status, checkTimeType);
             if (result.Success == false)
             {
                 System.Diagnostics.Debug.WriteLine("insert error");

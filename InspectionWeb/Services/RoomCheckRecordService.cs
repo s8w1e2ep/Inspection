@@ -40,7 +40,7 @@ namespace InspectionWeb.Services
             return result;
         }
 
-        public IResult Create(string roomId, string inspectorId, string date, int status, int type)
+        public IResult Create(string roomId, string inspectorId, string date, string dispatchId, int status, int type)
         {
             IResult result = new Result(false);
             try
@@ -49,6 +49,7 @@ namespace InspectionWeb.Services
                 IdGenerator idGen = new IdGenerator();
                 roomCheckRecord record = new roomCheckRecord();
                 record.checkId = idGen.GetID("itemCheck");
+                record.dispatchId = dispatchId;
                 record.checkDate = Convert.ToDateTime(date);
                 record.roomId = roomId;
                 record.status = Convert.ToInt16(status);
