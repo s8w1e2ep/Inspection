@@ -280,6 +280,7 @@ namespace InspectionWeb.Controllers
             // setting viewModel {{{
             vm.RoomId = roomId;
             vm.RoomName = room.roomName;
+            vm.RoomCode = room.roomCode;
             vm.Description = room.description;
             vm.Floor = room.floor;
             vm.Picture = room.picture;

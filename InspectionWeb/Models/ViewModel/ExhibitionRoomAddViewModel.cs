@@ -9,6 +9,7 @@ namespace InspectionWeb.Models.ViewModel
     public class ExhibitionRoomAddViewModel
     {
         public string RoomId;
+        public string RoomCode;
         public string RoomName;
         public string Description;
         public string Floor;

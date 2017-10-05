@@ -60,7 +60,7 @@
 
 
 
-        $('#roomName, #description').editable({
+        $('#roomName, #description, #roomCode').editable({
             emptytext: "未設定",
             success: function (response) {
                 $('#lastUpdateTime').html(response.lastUpdateTime);
@@ -315,7 +315,15 @@
                                 <tr>
                                     <td>名稱</td>
                                     <td>
-                                        <a href="#" id="roomName" data-type="text" data-pk="@Model.RoomId" data-url="@Url.Action("EditExhibition")" data-title="輸入場域名稱">@Model.RoomName</a>
+                                        <a href="#" id="roomName" data-type="text" data-pk="@Model.RoomId" data-url="@Url.Action("EditExhibition")" data-title="輸入展示廳名稱">@Model.RoomName</a>
+                                    </td>
+                                </tr>
+
+                                @*代碼*@
+                                <tr>
+                                    <td>代碼</td>
+                                    <td>
+                                        <a href="#" id="roomCode" data-type="text" data-pk="@Model.RoomId" data-url="@Url.Action("EditExhibition")" data-title="輸入展示廳代碼">@Model.RoomCode</a>
                                     </td>
                                 </tr>
 
