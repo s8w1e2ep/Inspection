@@ -108,7 +108,7 @@
                 if (data) {
                     $('#photoProgress').css('display', 'none');
                     $('#lastUpdateTime').html(data.lastUpdateTime);
-                    loadMap("~/media/map/" + data.mapName + '? timestamp =' + new Date().getTime());
+                    loadMap("@Url.Content("~/media/map/")" + data.mapName);
 
                 }
             })
@@ -119,11 +119,7 @@
     }
 
     function loadMap(mapName) {
-        $('#fieldMap').load(mapName, status, function () {
-            if (status != 'error') {
-                svg = d3.select('svg');
-            }
-        });
+        $('#fieldMap').load(mapName, status);
     }
 </script>
 <div class="content-wrapper">
