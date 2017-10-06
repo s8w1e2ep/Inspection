@@ -62,6 +62,8 @@ namespace InspectionWeb.Controllers
             vm.KeyName = setting.keyName;
             vm.Description = setting.description;
             vm.Value = setting.value;
+            vm.CreateTime = setting.createTime;
+            vm.LastUpdateTime = setting.lastUpdateTime;
 
             return View(vm);
         }

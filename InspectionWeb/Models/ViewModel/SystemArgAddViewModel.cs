@@ -11,6 +11,8 @@ namespace InspectionWeb.Models.ViewModel
         public string KeyName;
         public string Description;
         public string Value;
+        public DateTime? CreateTime;
+        public DateTime? LastUpdateTime;
       
     }
 }
