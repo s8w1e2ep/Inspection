@@ -86,6 +86,13 @@
 
         $('#roomId').editable({
             source: function () {
+                @if(Model.Field != null) {
+                    foreach (var room in Model.Rooms.Where(x => x.fieldId == Model.Field.fieldId)) {
+                        <text>
+                        allRooms.push({value: '@room.roomId', text: '@room.roomName'});
+                        </text>
+                    }
+                }
                 return allRooms;
             },
             emptytext: '選擇展示廳',
